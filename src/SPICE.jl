@@ -1,5 +1,9 @@
 module SPICE
 
-# package code goes here
+using BinDeps
+
+@BinDeps.load_dependencies
+
+print(:cspice)
 
 end # module
