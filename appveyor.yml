@@ -17,6 +17,7 @@ notifications:
     on_build_status_changed: false
 
 install:
+  - cinst cmake
 # Download most recent Julia Windows binary
   - ps: (new-object net.webclient).DownloadFile(
         $("http://s3.amazonaws.com/"+$env:JULIAVERSION),
