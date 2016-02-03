@@ -17,7 +17,9 @@ notifications:
     on_build_status_changed: false
 
 install:
-  - cinst cmake
+  - cinst cmake msys2
+  - msystem msys
+  - pacman -S gcc make
 # Download most recent Julia Windows binary
   - ps: (new-object net.webclient).DownloadFile(
         $("http://s3.amazonaws.com/"+$env:JULIAVERSION),
