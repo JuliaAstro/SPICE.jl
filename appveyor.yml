@@ -19,8 +19,7 @@ notifications:
 install:
   - cinst cmake
   - C:\msys64\usr\bin\bash -lc "pacman --noconfirm -S gcc"
-  - dir C:\msys64\usr\bin
-  - C:\msys64\usr\bin\gcc --version
+  - cmake --help
 # Download most recent Julia Windows binary
   - ps: (new-object net.webclient).DownloadFile(
         $("http://s3.amazonaws.com/"+$env:JULIAVERSION),
