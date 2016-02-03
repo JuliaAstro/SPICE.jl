@@ -17,7 +17,7 @@ end
         if !isempty(get(ENV, "MSYS2_ROOT", ""))
             ENV["PATH"] = ENV["PATH"]*";$(ENV["MSYS2_ROOT"])"
         elseif isdir(MSYS2_ROOT)
-            ENV["PATH"] = ENV["PATH"]*";$MSYS2_ROOT"
+            ENV["PATH"] = "$MSYS2_ROOT;"*ENV["PATH"]
         else
             error("MSYS2 must be installed.")
         end
