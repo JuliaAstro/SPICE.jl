@@ -18,7 +18,7 @@ notifications:
 
 install:
   - cinst cmake msys2
-  # - msystem msys
+  - cmd: echo %PATH%
   - pacman -S gcc make
 # Download most recent Julia Windows binary
   - ps: (new-object net.webclient).DownloadFile(
