@@ -41,7 +41,7 @@ provides(SimpleBuild, (@build_steps begin
     CreateDirectory(build)
     @build_steps begin
         ChangeDirectory(build)
-        `cmake -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$prefix -DARCH=$WORD_SIZE ..`
+        `cmake -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$prefix ..`
         `cmake --build .`
         `cmake --build . --target install`
     end
