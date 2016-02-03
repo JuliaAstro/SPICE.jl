@@ -1,13 +1,27 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8.1)
 
 project(cspice C)
-enable_language(C)
+enable_language(C CXX)
 
 include(CMakeSrc.txt)
+if(WIN32)
+  include(GenerateExportHeader)
+endif()
 
-set(CMAKE_C_FLAGS "-m64 -fPIC -DNON_UNIX_STDIO -ansi")
+set(CMAKE_C_FLAGS "-m64 -DNON_UNIX_STDIO -ansi")
 
 add_library(cspice SHARED ${SRCS})
+if(WIN32)
+  GENERATE_EXPORT_HEADER(cspice
+             BASE_NAME cspice
+             EXPORT_MACRO_NAME cspice_EXPORT
+             EXPORT_FILE_NAME cspice_Export.h
+             STATIC_DEFINE cspice_BUILT_AS_STATIC)
+endif()
 target_link_libraries(cspice m)
 
-install(TARGETS cspice LIBRARY DESTINATION lib)
+INSTALL(
+  TARGETS cspice
+  RUNTIME DESTINATION lib
+  LIBRARY DESTINATION lib
+)
