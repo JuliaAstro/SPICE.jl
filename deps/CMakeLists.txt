@@ -8,7 +8,7 @@ if(WIN32)
   include(GenerateExportHeader)
 endif()
 
-set(CMAKE_C_FLAGS "-m64 -DNON_UNIX_STDIO -ansi")
+set(CMAKE_C_FLAGS "-m${ARCH} -DNON_UNIX_STDIO -ansi")
 
 add_library(cspice SHARED ${SRCS})
 if(WIN32)

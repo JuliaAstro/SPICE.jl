@@ -29,9 +29,9 @@ end
 end
 
 cspice = library_dependency("libcspice")
-@osx_only provides(Sources, URI("http://naif.jpl.nasa.gov/pub/naif/toolkit/C/MacIntel_OSX_AppleC_64bit/packages/cspice.tar.Z"), cspice, os=:Darwin)
-@linux_only provides(Sources, URI("http://naif.jpl.nasa.gov/pub/naif/toolkit/C/PC_Linux_GCC_64bit/packages/cspice.tar.Z"), cspice, os=:Linux)
-@windows_only provides(Sources, URI("http://naif.jpl.nasa.gov/pub/naif/toolkit/C/PC_Cygwin_GCC_64bit/packages/cspice.tar.gz"), cspice, os=:Windows)
+@osx_only provides(Sources, URI("http://naif.jpl.nasa.gov/pub/naif/toolkit/C/MacIntel_OSX_AppleC_$(WORD_SIZE)bit/packages/cspice.tar.Z"), cspice, os=:Darwin)
+@linux_only provides(Sources, URI("http://naif.jpl.nasa.gov/pub/naif/toolkit/C/PC_Linux_GCC_$(WORD_SIZE)bit/packages/cspice.tar.Z"), cspice, os=:Linux)
+@windows_only provides(Sources, URI("http://naif.jpl.nasa.gov/pub/naif/toolkit/C/PC_Cygwin_GCC_$(WORD_SIZE)bit/packages/cspice.tar.gz"), cspice, os=:Windows)
 
 prefix = joinpath(BinDeps.depsdir(cspice), "usr")
 build = joinpath(BinDeps.depsdir(cspice), "build")
@@ -41,7 +41,7 @@ provides(SimpleBuild, (@build_steps begin
     CreateDirectory(build)
     @build_steps begin
         ChangeDirectory(build)
-        `cmake -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$prefix ..`
+        `cmake -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=$prefix -DARCH=$WORD_SIZE ..`
         `cmake --build .`
         `cmake --build . --target install`
     end
