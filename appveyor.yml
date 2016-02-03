@@ -17,9 +17,9 @@ notifications:
     on_build_status_changed: false
 
 install:
-  - cinst cmake
-  - C:\msys64\usr\bin\bash -lc "pacman --noconfirm -S gcc"
-  - cmake --help
+  - C:\msys64\usr\bin\bash -lc "pacman --noconfirm -S gcc cmake"
+  - dir C:\msys64\usr\bin\
+  # - set PATH=%PATH:C:\MinGW\bin;=%
 # Download most recent Julia Windows binary
   - ps: (new-object net.webclient).DownloadFile(
         $("http://s3.amazonaws.com/"+$env:JULIAVERSION),
