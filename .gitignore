@@ -7,3 +7,5 @@ deps/usr/
 deps/build/
 *.bsp
 *.tls
+deps/windows/build*
+deps/windows/cspice*
