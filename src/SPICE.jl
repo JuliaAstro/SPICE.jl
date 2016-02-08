@@ -12,6 +12,8 @@ end
 function __init__()
     # Set error handling to return on error
     ccall((:erract_c, libcspice), Void, (Cstring, Cint, Cstring), "SET", 0, "RETURN")
+    # Do not print error messages
+    ccall((:errprt_c, libcspice), Void, (Cstring, Cint, Cstring), "SET", 0, "NONE")
 end
 
 function handleerror()
