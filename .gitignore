@@ -9,3 +9,4 @@ deps/build/
 *.tls
 deps/windows/build*
 deps/windows/cspice*
+deps/deps.jl
