@@ -10,3 +10,5 @@ deps/build/
 deps/windows/build*
 deps/windows/cspice*
 deps/deps.jl
+deps/windows/i686
+deps/windows/x64
