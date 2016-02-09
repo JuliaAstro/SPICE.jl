@@ -11,6 +11,7 @@ end
 
 path = abspath(joinpath(splitdir(@__FILE__)[1], "windows"))
 cd(path)
+mkpath("usr\\lib")
 for word_size in (32, 64)
     url = "http://naif.jpl.nasa.gov/pub/naif/toolkit/C/PC_Windows_VisualC_$(word_size)bit/packages/cspice.zip"
     archive = "cspice$(word_size).zip"
@@ -37,5 +38,6 @@ for word_size in (32, 64)
     end
     run(`cmake --build . --config Release`)
     cd(path)
-    run(`7z a libcspice$(word_size).zip .\\$build\\Release\\cspice.dll`)
+    cp("$build\\Release\\cspice.dll", "usr\\lib\\libcspice.dll", remove_destination=true)
+    run(`7z a libcspice$(word_size).zip usr\\lib\\libcspice.dll`)
 end

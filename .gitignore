@@ -13,3 +13,4 @@ deps/deps.jl
 deps/windows/i686
 deps/windows/x64
 *.zip
+deps/windows/usr/
