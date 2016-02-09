@@ -32,5 +32,6 @@ end
 include("constants.jl")
 include("kernels.jl")
 include("time.jl")
+include("spk.jl")
 
 end # module
