@@ -29,6 +29,7 @@ function handleerror()
     end
 end
 
+include("constants.jl")
 include("kernels.jl")
 include("time.jl")
 
