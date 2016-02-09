@@ -10,7 +10,7 @@ if !isinstalled("cmake")
     error("CMake must be installed and on the path.")
 end
 
-cspice = library_dependency("libcspice")
+cspice = library_dependency("libcspice", aliases=["libcspice", "cspice"])
 @osx_only provides(Sources, URI("http://naif.jpl.nasa.gov/pub/naif/toolkit/C/MacIntel_OSX_AppleC_$(WORD_SIZE)bit/packages/cspice.tar.Z"), cspice, os=:Darwin)
 @linux_only provides(Sources, URI("http://naif.jpl.nasa.gov/pub/naif/toolkit/C/PC_Linux_GCC_$(WORD_SIZE)bit/packages/cspice.tar.Z"), cspice, os=:Linux)
 
