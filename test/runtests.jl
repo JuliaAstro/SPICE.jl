@@ -23,3 +23,6 @@ datestring1 = timout(et,"YYYY-MM-DDTHR:MN:SC")
 @test_throws ErrorException timout(et,"")
 
 unload([SPK_FILE, LSK_FILE])
+
+handle = spkopn("test.spk", "SPK_test", 0)
+spkcls(handle)

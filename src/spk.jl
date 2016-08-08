@@ -1,4 +1,4 @@
-export spkezr, spkpos, spkcpo
+export spkezr, spkpos, spkcpo, spkopn, spkcls, spkw13
 
 """
 Returns the state of a target body relative to an observing body.
@@ -47,4 +47,33 @@ function spkcpo(target, et, outref, refloc, obspos, obsctr, obsref; abcorr="NONE
     )
     handleerror()
     return state, lt[]
+end
+
+function spkopn(name, ifname, ncomch)
+    handle = Ref{Cint}(0)
+    ccall(
+        (:spkopn_c, libcspice), Void,
+        (Cstring, Cstring, Cint, Ref{Cint}), name, ifname, ncomch, handle
+    )
+    handleerror()
+    return handle
+end
+
+function spkcls(handle)
+    ccall(
+        (:spkcls_c, libcspice), Void,
+        (Ref{Cint},), handle
+    )
+    handleerror()
+    return handle
+end
+
+function spkw13(handle, body, center, frame, first, last, segid, degree, states, epochs)
+    n = length(epochs)
+    ccall(
+        (:spkw13_c, libcspice), Void,
+        (Cint, Cint, Cint, Cstring, Cdouble, Cdouble, Cstring, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}),
+        handle[], body, center, frame, first, last, segid, degree, n, states, epochs
+    )
+    handleerror()
 end
