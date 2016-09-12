@@ -3,7 +3,7 @@ using Base.Test
 using BinDeps
 
 const LSK_URL = "http://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/"
-const LSK_FILE = "naif0011.tls"
+const LSK_FILE = "naif0012.tls"
 const SPK_URL = "http://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/"
 const SPK_FILE = "de430.bsp"
 
