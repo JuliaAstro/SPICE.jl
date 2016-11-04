@@ -24,5 +24,9 @@ datestring1 = timout(et,"YYYY-MM-DDTHR:MN:SC")
 
 unload([SPK_FILE, LSK_FILE])
 
-handle = spkopn("test.spk", "SPK_test", 0)
-spkcls(handle)
+try
+    handle = spkopn("test.spk", "SPK_test", 0)
+    spkcls(handle)
+finally
+    isfile("test.spk") && rm("test.spk")
+end
