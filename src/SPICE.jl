@@ -22,7 +22,7 @@ function handleerror()
         # Retrive error message
         msg = Array(UInt8, 1841)
         ccall((:getmsg_c, libcspice), Void, (Cstring, Cint, Ptr{UInt8}), "LONG", 1841, msg)
-        message = bytestring(pointer(msg))
+        message = unsafe_string(pointer(msg))
         # Reset error status and throw Julia error
         ccall((:reset_c, libcspice), Void, ())
         error(message)

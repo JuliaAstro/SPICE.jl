@@ -35,7 +35,8 @@ spkpos(targ::Int, et::Float64, ref::AbstractString, obs::AbstractString; abcorr:
 """
 Returns the state of a target body relative to a constant-position observer location.
 
-[NAIF documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcpo_c.html)
+[https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcpo_c.html]
+(https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcpo_c.html)
 """
 function spkcpo(target, et, outref, refloc, obspos, obsctr, obsref; abcorr="NONE")
     state = Array(Cdouble, 6)
@@ -50,19 +51,19 @@ function spkcpo(target, et, outref, refloc, obspos, obsctr, obsref; abcorr="NONE
 end
 
 function spkopn(name, ifname, ncomch)
-    handle = Ref{Cint}(0)
+    handle = Ref{SpiceInt}(0)
     ccall(
         (:spkopn_c, libcspice), Void,
         (Cstring, Cstring, Cint, Ref{Cint}), name, ifname, ncomch, handle
     )
     handleerror()
-    return handle
+    return handle[]
 end
 
 function spkcls(handle)
     ccall(
         (:spkcls_c, libcspice), Void,
-        (Ref{Cint},), handle
+        (SpiceInt,), handle
     )
     handleerror()
     return handle

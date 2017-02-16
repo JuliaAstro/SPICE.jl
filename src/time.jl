@@ -12,5 +12,5 @@ function timout(et, pictur)
     ccall((:timout_c, libcspice), Void, (Cdouble, Cstring, Cint, Ptr{UInt8}),
         et, pictur, 128, string)
     handleerror()
-    return bytestring(pointer(string))
+    return unsafe_string(pointer(string))
 end
