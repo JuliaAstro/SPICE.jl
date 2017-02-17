@@ -61,10 +61,5 @@ include("u.jl")
 include("v.jl")
 include("w.jl")
 include("x.jl")
-include("constants.jl")
-include("kernels.jl")
-include("math.jl")
-include("spk.jl")
-include("pck.jl")
 
 end # module

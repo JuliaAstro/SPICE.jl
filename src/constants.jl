@@ -21,15 +21,7 @@ function clight()
     ccall((:clight_c, libcspice), Cdouble, ())
 end
 
-"Returns the Julian Date corresponding to Besselian date 1900.0."
-function b1900()
-    ccall((:b1900_c, libcspice), Cdouble, ())
-end
 
-"Returns the Julian Date corresponding to Besselian date 1950.0."
-function b1950()
-    ccall((:b1950_c, libcspice), Cdouble, ())
-end
 
 "Returns the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5)."
 function j1900()
