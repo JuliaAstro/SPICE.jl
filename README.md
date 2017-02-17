@@ -1,7 +1,7 @@
 # SPICE.jl
 
 [![Build Status](https://travis-ci.org/JuliaAstrodynamics/SPICE.jl.svg?branch=master)](https://travis-ci.org/JuliaAstrodynamics/SPICE.jl)
-[![Build status](https://ci.appveyor.com/api/projects/status/ty9j5n61bghu5y5p?svg=true)](https://ci.appveyor.com/project/JuliaAstrodynamics/spice-jl)
+[![Build status](https://ci.appveyor.com/api/projects/status/2mjf3djfw39gyl0k?svg=true)](https://ci.appveyor.com/project/JuliaAstrodynamics/spice-jl)
 
 ## Installation
 
