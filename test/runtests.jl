@@ -41,3 +41,7 @@ appnd(1, cell)
 appnd(2, cell)
 appnd(3, cell)
 @test cell[1:3] == [1.0, 2.0, 3.0]
+
+cell = SpiceCharCell(3, 3)
+appnd("blob", cell)
+@test cell[1] == "blo"

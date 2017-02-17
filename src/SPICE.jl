@@ -31,7 +31,7 @@ end
 
 # CSPICE data types
 typealias SpiceBoolean Cint
-typealias SpiceChar Cchar
+typealias SpiceChar UInt8
 typealias SpiceDouble Cdouble
 typealias SpiceInt Cint
 
