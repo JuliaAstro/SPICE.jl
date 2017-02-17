@@ -8,7 +8,7 @@ function str2et(string)
 end
 
 function timout(et, pictur)
-    string = Array(UInt8, 128)
+    string = Array{UInt8}(128)
     ccall((:timout_c, libcspice), Void, (Cdouble, Cstring, Cint, Ptr{UInt8}),
         et, pictur, 128, string)
     handleerror()
