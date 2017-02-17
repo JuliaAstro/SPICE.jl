@@ -98,6 +98,16 @@ for (t, f) in zip((SpiceInt, SpiceDouble), ("appndi_c", "appndd_c"))
         end
     end
 end
+
+"""
+    appnd(item, cell)
+
+Append an `item` to a char/double/integer `cell`.
+
+[https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndc_c.html](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndc_c.html)
+[https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndd_c.html](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndd_c.html)
+[https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndi_c.html](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndi_c.html)
+"""
 function appnd(item, cell::SpiceCell{SpiceChar})
     c = Ref(cell.cell)
     ccall((:appndc_c, libcspice), Void, (Cstring, Ref{Cell{SpiceChar}}), item, cell.cell)
