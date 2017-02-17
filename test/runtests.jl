@@ -29,3 +29,15 @@ unload([SPK_FILE, LSK_FILE])
 # isfile("test.spk") && rm("test.spk")
 # handle = spkopn("test.spk", "SPK_test", 0)
 # spkcls(handle)
+
+cell = SpiceIntCell(3)
+appnd(1, cell)
+appnd(2, cell)
+appnd(3, cell)
+@test cell[1:3] == [1, 2, 3]
+
+cell = SpiceDoubleCell(3)
+appnd(1, cell)
+appnd(2, cell)
+appnd(3, cell)
+@test cell[1:3] == [1.0, 2.0, 3.0]

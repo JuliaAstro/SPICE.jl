@@ -35,6 +35,7 @@ typealias SpiceChar Cchar
 typealias SpiceDouble Cdouble
 typealias SpiceInt Cint
 
+include("cells.jl")
 include("constants.jl")
 include("kernels.jl")
 include("time.jl")
