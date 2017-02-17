@@ -45,3 +45,5 @@ appnd(3, cell)
 cell = SpiceCharCell(3, 3)
 appnd("blob", cell)
 @test cell[1] == "blo"
+appnd("abc", cell)
+@test cell[1:end] == ["blo", "abc"]

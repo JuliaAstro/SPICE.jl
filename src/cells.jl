@@ -42,13 +42,21 @@ function check_ind(cell, inds)
     end
 end
 
-function getindex{T<:Real}(cell::SpiceCell{T}, ind)
+function getindex(cell::SpiceCell, ind)
     check_ind(cell, ind)
+    getindex(cell, ind)
+end
+
+function getindex{T<:Real}(cell::SpiceCell{T}, ind)
     return cell.data[CTRLSZ + ind]
 end
 
+function getindex(cell::SpiceCharCell, ind::Int)
+    str = cell.data[:, CTRLSZ + ind]
+    return String(str[1:findfirst(str .== 0)-1])
+end
+
 function getindex(cell::SpiceCharCell, ind)
-    check_ind(cell, ind)
     str = cell.data[:, CTRLSZ + ind]
     return vec(mapslices(x -> String(x[1:findfirst(x .== 0)-1]), str, 1))
 end
