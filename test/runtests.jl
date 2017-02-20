@@ -55,6 +55,7 @@ using Base.Test
     cell = SpiceCharCell(3, 6)
     append!(cell, ["foobar1", "foobar2", "foobar3"])
     @test cell[1:end] == fill("foobar", 3)
+    @test card(cell) == 3
 
     cell = SpiceIntCell(1)
     @test_throws ErrorException cell[1]

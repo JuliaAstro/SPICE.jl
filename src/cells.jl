@@ -1,5 +1,5 @@
 import Base: getindex, endof, push!, append!, show
-export SpiceIntCell, SpiceDoubleCell, SpiceCharCell, appnd, push!, append!
+export SpiceIntCell, SpiceDoubleCell, SpiceCharCell, appnd, push!, append!, card
 
 const CTRLSZ = 6
 
@@ -147,3 +147,9 @@ Append all items from `collection` to the char/double/integer SpiceCell `cell`.
 """
 append!(cell::SpiceCell, collection) = foreach(x -> appnd(x, cell), collection)
 
+"""
+    card(cell)
+
+Returns the cardinality (number of elements) of a SpiceCell `cell`.
+"""
+card(cell::SpiceCell) = Int(cell.cell.card)
