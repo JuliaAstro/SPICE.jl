@@ -17,8 +17,8 @@ type Cell{T}
     init::SpiceInt
     base::Ptr{Void}
     data::Ptr{Void}
-    function Cell(length, size)
-        new(dtype(T), length, size, 0, 1, 0, 0)
+    function (::Type{Cell{T}}){T}(length, size)
+        new{T}(dtype(T), length, size, 0, 1, 0, 0)
     end
 end
 
@@ -27,9 +27,9 @@ type SpiceCell{T,N}
     cell::Cell{T}
 end
 
-typealias SpiceCharCell SpiceCell{SpiceChar,2}
-typealias SpiceDoubleCell SpiceCell{SpiceDouble,1}
-typealias SpiceIntCell SpiceCell{SpiceInt,1}
+const SpiceCharCell = SpiceCell{SpiceChar,2}
+const SpiceDoubleCell = SpiceCell{SpiceDouble,1}
+const SpiceIntCell = SpiceCell{SpiceInt,1}
 
 endof(cell::SpiceCell) = cell.cell.card
 show{T}(io::IO, cell::SpiceCell{T,1}) = print(io, "SpiceCell{$(T.name.name)}($(cell.cell.size))")

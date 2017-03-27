@@ -30,10 +30,10 @@ function handleerror()
 end
 
 # CSPICE data types
-typealias SpiceBoolean Cint
-typealias SpiceChar UInt8
-typealias SpiceDouble Cdouble
-typealias SpiceInt Cint
+const SpiceBoolean = Cint
+const SpiceChar = UInt8
+const SpiceDouble = Cdouble
+const SpiceInt = Cint
 
 include("cells.jl")
 
