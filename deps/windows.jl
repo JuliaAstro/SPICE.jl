@@ -39,5 +39,5 @@ for word_size in (32, 64)
     run(`cmake --build . --config Release`)
     cd(path)
     cp("$build\\Release\\cspice.dll", "usr\\lib\\libcspice.dll", remove_destination=true)
-    run(`7z a libcspice$(word_size).zip usr\\lib\\libcspice.dll`)
+    run(`$(joinpath(JULIA_HOME, "7z.exe")) a libcspice$(word_size).zip usr\\lib\\libcspice.dll`)
 end
