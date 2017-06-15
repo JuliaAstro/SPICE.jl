@@ -1,6 +1,7 @@
 # vi:syntax=cmake
 
 set(SRCS
+    src/cspice/src/cspice/F77_aloc.c
     src/cspice/src/cspice/abort_.c
     src/cspice/src/cspice/accept.c
     src/cspice/src/cspice/alltru.c
@@ -64,19 +65,23 @@ set(SRCS
     src/cspice/src/cspice/bsrchi_c.c
     src/cspice/src/cspice/byebye.c
     src/cspice/src/cspice/c_abs.c
+    src/cspice/src/cspice/c_cos.c
+    src/cspice/src/cspice/c_div.c
+    src/cspice/src/cspice/c_exp.c
+    src/cspice/src/cspice/c_log.c
+    src/cspice/src/cspice/c_sin.c
+    src/cspice/src/cspice/c_sqrt.c
     src/cspice/src/cspice/cabs.c
     src/cspice/src/cspice/card_c.c
     src/cspice/src/cspice/cardc.c
     src/cspice/src/cspice/cardd.c
     src/cspice/src/cspice/cardi.c
     src/cspice/src/cspice/ccifrm_c.c
-    src/cspice/src/cspice/c_cos.c
-    src/cspice/src/cspice/c_div.c
-    src/cspice/src/cspice/c_exp.c
     src/cspice/src/cspice/cgv2el.c
     src/cspice/src/cspice/cgv2el_c.c
     src/cspice/src/cspice/chbase.c
     src/cspice/src/cspice/chbder.c
+    src/cspice/src/cspice/chbder_c.c
     src/cspice/src/cspice/chbigr.c
     src/cspice/src/cspice/chbint.c
     src/cspice/src/cspice/chbval.c
@@ -98,10 +103,10 @@ set(SRCS
     src/cspice/src/cspice/cke06.c
     src/cspice/src/cspice/ckfrot.c
     src/cspice/src/cspice/ckfxfm.c
-    src/cspice/src/cspice/ckgpav.c
-    src/cspice/src/cspice/ckgpav_c.c
     src/cspice/src/cspice/ckgp.c
     src/cspice/src/cspice/ckgp_c.c
+    src/cspice/src/cspice/ckgpav.c
+    src/cspice/src/cspice/ckgpav_c.c
     src/cspice/src/cspice/ckgr01.c
     src/cspice/src/cspice/ckgr02.c
     src/cspice/src/cspice/ckgr03.c
@@ -143,10 +148,10 @@ set(SRCS
     src/cspice/src/cspice/ckw06.c
     src/cspice/src/cspice/clearc.c
     src/cspice/src/cspice/cleard.c
+    src/cspice/src/cspice/cleard_c.c
     src/cspice/src/cspice/cleari.c
     src/cspice/src/cspice/clight.c
     src/cspice/src/cspice/clight_c.c
-    src/cspice/src/cspice/c_log.c
     src/cspice/src/cspice/close.c
     src/cspice/src/cspice/clpool_c.c
     src/cspice/src/cspice/cmprss.c
@@ -165,8 +170,6 @@ set(SRCS
     src/cspice/src/cspice/cpos_c.c
     src/cspice/src/cspice/cposr.c
     src/cspice/src/cspice/cposr_c.c
-    src/cspice/src/cspice/c_sin.c
-    src/cspice/src/cspice/c_sqrt.c
     src/cspice/src/cspice/cvpool_c.c
     src/cspice/src/cspice/cyacip.c
     src/cspice/src/cspice/cyadip.c
@@ -183,6 +186,27 @@ set(SRCS
     src/cspice/src/cspice/cylsph_c.c
     src/cspice/src/cspice/d_abs.c
     src/cspice/src/cspice/d_acos.c
+    src/cspice/src/cspice/d_asin.c
+    src/cspice/src/cspice/d_atan.c
+    src/cspice/src/cspice/d_atn2.c
+    src/cspice/src/cspice/d_cnjg.c
+    src/cspice/src/cspice/d_cos.c
+    src/cspice/src/cspice/d_cosh.c
+    src/cspice/src/cspice/d_dim.c
+    src/cspice/src/cspice/d_exp.c
+    src/cspice/src/cspice/d_imag.c
+    src/cspice/src/cspice/d_int.c
+    src/cspice/src/cspice/d_lg10.c
+    src/cspice/src/cspice/d_log.c
+    src/cspice/src/cspice/d_mod.c
+    src/cspice/src/cspice/d_nint.c
+    src/cspice/src/cspice/d_prod.c
+    src/cspice/src/cspice/d_sign.c
+    src/cspice/src/cspice/d_sin.c
+    src/cspice/src/cspice/d_sinh.c
+    src/cspice/src/cspice/d_sqrt.c
+    src/cspice/src/cspice/d_tan.c
+    src/cspice/src/cspice/d_tanh.c
     src/cspice/src/cspice/dacosh.c
     src/cspice/src/cspice/dacosn.c
     src/cspice/src/cspice/dafa2b.c
@@ -244,22 +268,25 @@ set(SRCS
     src/cspice/src/cspice/dascls_c.c
     src/cspice/src/cspice/dascud.c
     src/cspice/src/cspice/dasdc.c
+    src/cspice/src/cspice/dasdc_c.c
     src/cspice/src/cspice/dasec.c
     src/cspice/src/cspice/dasec_c.c
     src/cspice/src/cspice/dasecu.c
     src/cspice/src/cspice/dasfm.c
-    src/cspice/src/cspice/d_asin.c
+    src/cspice/src/cspice/dashfn_c.c
     src/cspice/src/cspice/dasine.c
     src/cspice/src/cspice/dasioc.c
     src/cspice/src/cspice/dasiod.c
     src/cspice/src/cspice/dasioi.c
     src/cspice/src/cspice/daslla.c
     src/cspice/src/cspice/dasopr_c.c
+    src/cspice/src/cspice/dasopw_c.c
     src/cspice/src/cspice/dasrcr.c
     src/cspice/src/cspice/dasrdc.c
     src/cspice/src/cspice/dasrdd.c
     src/cspice/src/cspice/dasrdi.c
     src/cspice/src/cspice/dasrfr.c
+    src/cspice/src/cspice/dasrfr_c.c
     src/cspice/src/cspice/dasrwr.c
     src/cspice/src/cspice/dassdr.c
     src/cspice/src/cspice/dastb.c
@@ -267,16 +294,10 @@ set(SRCS
     src/cspice/src/cspice/dasudd.c
     src/cspice/src/cspice/dasudi.c
     src/cspice/src/cspice/daswfr.c
-    src/cspice/src/cspice/d_atan.c
     src/cspice/src/cspice/datanh.c
-    src/cspice/src/cspice/d_atn2.c
     src/cspice/src/cspice/dcbrt.c
-    src/cspice/src/cspice/d_cnjg.c
-    src/cspice/src/cspice/d_cos.c
-    src/cspice/src/cspice/d_cosh.c
     src/cspice/src/cspice/dcyldr.c
     src/cspice/src/cspice/dcyldr_c.c
-    src/cspice/src/cspice/d_dim.c
     src/cspice/src/cspice/delfil.c
     src/cspice/src/cspice/deltet.c
     src/cspice/src/cspice/deltet_c.c
@@ -284,7 +305,6 @@ set(SRCS
     src/cspice/src/cspice/derfc_.c
     src/cspice/src/cspice/det.c
     src/cspice/src/cspice/det_c.c
-    src/cspice/src/cspice/d_exp.c
     src/cspice/src/cspice/dfe.c
     src/cspice/src/cspice/dgeodr.c
     src/cspice/src/cspice/dgeodr_c.c
@@ -295,15 +315,21 @@ set(SRCS
     src/cspice/src/cspice/diffc.c
     src/cspice/src/cspice/diffd.c
     src/cspice/src/cspice/diffi.c
-    src/cspice/src/cspice/d_imag.c
-    src/cspice/src/cspice/d_int.c
+    src/cspice/src/cspice/dlabbs.c
+    src/cspice/src/cspice/dlabbs_c.c
+    src/cspice/src/cspice/dlabfs.c
+    src/cspice/src/cspice/dlabfs_c.c
+    src/cspice/src/cspice/dlabns.c
+    src/cspice/src/cspice/dlaens.c
+    src/cspice/src/cspice/dlafns.c
+    src/cspice/src/cspice/dlafns_c.c
+    src/cspice/src/cspice/dlafps.c
+    src/cspice/src/cspice/dlafps_c.c
+    src/cspice/src/cspice/dlaopn.c
+    src/cspice/src/cspice/dlassg.c
     src/cspice/src/cspice/dlatdr.c
     src/cspice/src/cspice/dlatdr_c.c
-    src/cspice/src/cspice/d_lg10.c
-    src/cspice/src/cspice/d_log.c
-    src/cspice/src/cspice/d_mod.c
     src/cspice/src/cspice/dnearp.c
-    src/cspice/src/cspice/d_nint.c
     src/cspice/src/cspice/dolio.c
     src/cspice/src/cspice/dp2hx.c
     src/cspice/src/cspice/dp2hx_c.c
@@ -316,7 +342,6 @@ set(SRCS
     src/cspice/src/cspice/dpmin_c.c
     src/cspice/src/cspice/dpr.c
     src/cspice/src/cspice/dpr_c.c
-    src/cspice/src/cspice/d_prod.c
     src/cspice/src/cspice/dpspce.c
     src/cspice/src/cspice/dpstr.c
     src/cspice/src/cspice/dpstrf.c
@@ -331,14 +356,47 @@ set(SRCS
     src/cspice/src/cspice/drdsph.c
     src/cspice/src/cspice/drdsph_c.c
     src/cspice/src/cspice/drotat.c
-    src/cspice/src/cspice/d_sign.c
-    src/cspice/src/cspice/d_sin.c
-    src/cspice/src/cspice/d_sinh.c
+    src/cspice/src/cspice/dskb02.c
+    src/cspice/src/cspice/dskb02_c.c
+    src/cspice/src/cspice/dskcls.c
+    src/cspice/src/cspice/dskcls_c.c
+    src/cspice/src/cspice/dskd02.c
+    src/cspice/src/cspice/dskd02_c.c
+    src/cspice/src/cspice/dskgd.c
+    src/cspice/src/cspice/dskgd_c.c
+    src/cspice/src/cspice/dskgtl_c.c
+    src/cspice/src/cspice/dski02.c
+    src/cspice/src/cspice/dski02_c.c
+    src/cspice/src/cspice/dskmi2.c
+    src/cspice/src/cspice/dskmi2_c.c
+    src/cspice/src/cspice/dskn02.c
+    src/cspice/src/cspice/dskn02_c.c
+    src/cspice/src/cspice/dskobj.c
+    src/cspice/src/cspice/dskobj_c.c
+    src/cspice/src/cspice/dskopn.c
+    src/cspice/src/cspice/dskopn_c.c
+    src/cspice/src/cspice/dskp02.c
+    src/cspice/src/cspice/dskp02_c.c
+    src/cspice/src/cspice/dskrb2.c
+    src/cspice/src/cspice/dskrb2_c.c
+    src/cspice/src/cspice/dsksrf.c
+    src/cspice/src/cspice/dsksrf_c.c
+    src/cspice/src/cspice/dskstl_c.c
+    src/cspice/src/cspice/dsktol.c
+    src/cspice/src/cspice/dskv02.c
+    src/cspice/src/cspice/dskv02_c.c
+    src/cspice/src/cspice/dskw02.c
+    src/cspice/src/cspice/dskw02_c.c
+    src/cspice/src/cspice/dskx02.c
+    src/cspice/src/cspice/dskx02_c.c
+    src/cspice/src/cspice/dskxsi.c
+    src/cspice/src/cspice/dskxsi_c.c
+    src/cspice/src/cspice/dskxv.c
+    src/cspice/src/cspice/dskxv_c.c
+    src/cspice/src/cspice/dskz02.c
+    src/cspice/src/cspice/dskz02_c.c
     src/cspice/src/cspice/dsphdr.c
     src/cspice/src/cspice/dsphdr_c.c
-    src/cspice/src/cspice/d_sqrt.c
-    src/cspice/src/cspice/d_tan.c
-    src/cspice/src/cspice/d_tanh.c
     src/cspice/src/cspice/dtime_.c
     src/cspice/src/cspice/dtpool_c.c
     src/cspice/src/cspice/ducrss.c
@@ -358,6 +416,8 @@ set(SRCS
     src/cspice/src/cspice/dxtrct.c
     src/cspice/src/cspice/edlimb.c
     src/cspice/src/cspice/edlimb_c.c
+    src/cspice/src/cspice/ednmpt.c
+    src/cspice/src/cspice/edpnt.c
     src/cspice/src/cspice/edterm.c
     src/cspice/src/cspice/edterm_c.c
     src/cspice/src/cspice/ef1asc_.c
@@ -446,9 +506,9 @@ set(SRCS
     src/cspice/src/cspice/eqstr_c.c
     src/cspice/src/cspice/erf_.c
     src/cspice/src/cspice/erfc_.c
+    src/cspice/src/cspice/err.c
     src/cspice/src/cspice/erract.c
     src/cspice/src/cspice/erract_c.c
-    src/cspice/src/cspice/err.c
     src/cspice/src/cspice/errch.c
     src/cspice/src/cspice/errch_c.c
     src/cspice/src/cspice/errdev.c
@@ -482,9 +542,6 @@ set(SRCS
     src/cspice/src/cspice/exit_.c
     src/cspice/src/cspice/expln.c
     src/cspice/src/cspice/expool_c.c
-    src/cspice/src/cspice/f2c.h
-    src/cspice/src/cspice/f2cMang.h
-    src/cspice/src/cspice/F77_aloc.c
     src/cspice/src/cspice/failed_c.c
     src/cspice/src/cspice/fetchc.c
     src/cspice/src/cspice/fetchd.c
@@ -492,9 +549,7 @@ set(SRCS
     src/cspice/src/cspice/fillc.c
     src/cspice/src/cspice/filld.c
     src/cspice/src/cspice/filli.c
-    src/cspice/src/cspice/fio.h
     src/cspice/src/cspice/fmt.c
-    src/cspice/src/cspice/fmt.h
     src/cspice/src/cspice/fmtlib.c
     src/cspice/src/cspice/fn2lun.c
     src/cspice/src/cspice/fndlun.c
@@ -503,7 +558,6 @@ set(SRCS
     src/cspice/src/cspice/fovray_c.c
     src/cspice/src/cspice/fovtrg.c
     src/cspice/src/cspice/fovtrg_c.c
-    src/cspice/src/cspice/fp.h
     src/cspice/src/cspice/frame.c
     src/cspice/src/cspice/frame_c.c
     src/cspice/src/cspice/framex.c
@@ -583,49 +637,58 @@ set(SRCS
     src/cspice/src/cspice/gipool_c.c
     src/cspice/src/cspice/gnpool_c.c
     src/cspice/src/cspice/h_abs.c
-    src/cspice/src/cspice/halfpi.c
-    src/cspice/src/cspice/halfpi_c.c
     src/cspice/src/cspice/h_dim.c
     src/cspice/src/cspice/h_dnnt.c
     src/cspice/src/cspice/h_indx.c
     src/cspice/src/cspice/h_len.c
+    src/cspice/src/cspice/h_mod.c
+    src/cspice/src/cspice/h_nint.c
+    src/cspice/src/cspice/h_sign.c
+    src/cspice/src/cspice/halfpi.c
+    src/cspice/src/cspice/halfpi_c.c
     src/cspice/src/cspice/hl_ge.c
     src/cspice/src/cspice/hl_gt.c
     src/cspice/src/cspice/hl_le.c
     src/cspice/src/cspice/hl_lt.c
-    src/cspice/src/cspice/h_mod.c
-    src/cspice/src/cspice/h_nint.c
     src/cspice/src/cspice/hrmesp.c
     src/cspice/src/cspice/hrmint.c
-    src/cspice/src/cspice/h_sign.c
+    src/cspice/src/cspice/hrmint_c.c
     src/cspice/src/cspice/hx2dp.c
     src/cspice/src/cspice/hx2dp_c.c
     src/cspice/src/cspice/hx2int.c
     src/cspice/src/cspice/hyptof.c
     src/cspice/src/cspice/i_abs.c
-    src/cspice/src/cspice/ident.c
-    src/cspice/src/cspice/ident_c.c
     src/cspice/src/cspice/i_dim.c
     src/cspice/src/cspice/i_dnnt.c
-    src/cspice/src/cspice/idw2at.c
     src/cspice/src/cspice/i_indx.c
-    src/cspice/src/cspice/iio.c
     src/cspice/src/cspice/i_len.c
+    src/cspice/src/cspice/i_mod.c
+    src/cspice/src/cspice/i_nint.c
+    src/cspice/src/cspice/i_sign.c
+    src/cspice/src/cspice/ident.c
+    src/cspice/src/cspice/ident_c.c
+    src/cspice/src/cspice/idw2at.c
+    src/cspice/src/cspice/iio.c
     src/cspice/src/cspice/illum.c
     src/cspice/src/cspice/illum_c.c
+    src/cspice/src/cspice/illum_pl02.c
+    src/cspice/src/cspice/illum_plid_pl02.c
+    src/cspice/src/cspice/illumf.c
+    src/cspice/src/cspice/illumf_c.c
     src/cspice/src/cspice/illumg.c
+    src/cspice/src/cspice/illumg_c.c
     src/cspice/src/cspice/ilnw.c
     src/cspice/src/cspice/ilumin.c
     src/cspice/src/cspice/ilumin_c.c
-    src/cspice/src/cspice/i_mod.c
+    src/cspice/src/cspice/incnsg.c
     src/cspice/src/cspice/inedpl.c
     src/cspice/src/cspice/inedpl_c.c
     src/cspice/src/cspice/inelpl.c
     src/cspice/src/cspice/inelpl_c.c
-    src/cspice/src/cspice/i_nint.c
     src/cspice/src/cspice/inquire.c
     src/cspice/src/cspice/inrypl.c
     src/cspice/src/cspice/inrypl_c.c
+    src/cspice/src/cspice/insang.c
     src/cspice/src/cspice/inslac.c
     src/cspice/src/cspice/inslad.c
     src/cspice/src/cspice/inslai.c
@@ -655,7 +718,6 @@ set(SRCS
     src/cspice/src/cspice/invstm.c
     src/cspice/src/cspice/ioerr.c
     src/cspice/src/cspice/irftrn.c
-    src/cspice/src/cspice/i_sign.c
     src/cspice/src/cspice/iso2utc.c
     src/cspice/src/cspice/isopen.c
     src/cspice/src/cspice/isordv.c
@@ -691,6 +753,10 @@ set(SRCS
     src/cspice/src/cspice/ktotal_c.c
     src/cspice/src/cspice/kxtrct.c
     src/cspice/src/cspice/kxtrct_c.c
+    src/cspice/src/cspice/l_ge.c
+    src/cspice/src/cspice/l_gt.c
+    src/cspice/src/cspice/l_le.c
+    src/cspice/src/cspice/l_lt.c
     src/cspice/src/cspice/lastnb.c
     src/cspice/src/cspice/lastnb_c.c
     src/cspice/src/cspice/lastpc.c
@@ -700,22 +766,24 @@ set(SRCS
     src/cspice/src/cspice/latrec_c.c
     src/cspice/src/cspice/latsph.c
     src/cspice/src/cspice/latsph_c.c
+    src/cspice/src/cspice/latsrf.c
+    src/cspice/src/cspice/latsrf_c.c
     src/cspice/src/cspice/lbitbits.c
     src/cspice/src/cspice/lbitshft.c
     src/cspice/src/cspice/lbuild.c
     src/cspice/src/cspice/lcase.c
     src/cspice/src/cspice/lcase_c.c
     src/cspice/src/cspice/ldpool_c.c
-    src/cspice/src/cspice/l_ge.c
     src/cspice/src/cspice/lgresp.c
     src/cspice/src/cspice/lgrind.c
+    src/cspice/src/cspice/lgrind_c.c
     src/cspice/src/cspice/lgrint.c
-    src/cspice/src/cspice/l_gt.c
-    src/cspice/src/cspice/lio.h
+    src/cspice/src/cspice/limb_pl02.c
+    src/cspice/src/cspice/limbpt.c
+    src/cspice/src/cspice/limbpt_c.c
     src/cspice/src/cspice/ljucrs.c
     src/cspice/src/cspice/ljust.c
-    src/cspice/src/cspice/l_le.c
-    src/cspice/src/cspice/l_lt.c
+    src/cspice/src/cspice/llgrid_pl02.c
     src/cspice/src/cspice/lmpool_c.c
     src/cspice/src/cspice/lnkan.c
     src/cspice/src/cspice/lnkfsl.c
@@ -834,6 +902,7 @@ set(SRCS
     src/cspice/src/cspice/npelpt_c.c
     src/cspice/src/cspice/nplnpt.c
     src/cspice/src/cspice/nplnpt_c.c
+    src/cspice/src/cspice/npsgpt.c
     src/cspice/src/cspice/nthwd.c
     src/cspice/src/cspice/nvc2pl.c
     src/cspice/src/cspice/nvc2pl_c.c
@@ -859,6 +928,8 @@ set(SRCS
     src/cspice/src/cspice/ordi_c.c
     src/cspice/src/cspice/oscelt.c
     src/cspice/src/cspice/oscelt_c.c
+    src/cspice/src/cspice/oscltx.c
+    src/cspice/src/cspice/oscltx_c.c
     src/cspice/src/cspice/outmsg.c
     src/cspice/src/cspice/packac.c
     src/cspice/src/cspice/packad.c
@@ -870,6 +941,7 @@ set(SRCS
     src/cspice/src/cspice/pck03e.c
     src/cspice/src/cspice/pckbsr.c
     src/cspice/src/cspice/pckcls.c
+    src/cspice/src/cspice/pckcls_c.c
     src/cspice/src/cspice/pckcov.c
     src/cspice/src/cspice/pckcov_c.c
     src/cspice/src/cspice/pcke02.c
@@ -881,6 +953,7 @@ set(SRCS
     src/cspice/src/cspice/pcklof_c.c
     src/cspice/src/cspice/pckmat.c
     src/cspice/src/cspice/pckopn.c
+    src/cspice/src/cspice/pckopn_c.c
     src/cspice/src/cspice/pckpds.c
     src/cspice/src/cspice/pckr02.c
     src/cspice/src/cspice/pckr03.c
@@ -888,6 +961,7 @@ set(SRCS
     src/cspice/src/cspice/pckuds.c
     src/cspice/src/cspice/pckuof_c.c
     src/cspice/src/cspice/pckw02.c
+    src/cspice/src/cspice/pckw02_c.c
     src/cspice/src/cspice/pckw20.c
     src/cspice/src/cspice/pcpool_c.c
     src/cspice/src/cspice/pcwid.c
@@ -908,7 +982,18 @@ set(SRCS
     src/cspice/src/cspice/pl2psv.c
     src/cspice/src/cspice/pl2psv_c.c
     src/cspice/src/cspice/plnsns.c
+    src/cspice/src/cspice/pltar.c
+    src/cspice/src/cspice/pltar_c.c
+    src/cspice/src/cspice/pltexp.c
+    src/cspice/src/cspice/pltexp_c.c
+    src/cspice/src/cspice/pltnp.c
+    src/cspice/src/cspice/pltnp_c.c
+    src/cspice/src/cspice/pltnrm.c
+    src/cspice/src/cspice/pltnrm_c.c
+    src/cspice/src/cspice/pltvol.c
+    src/cspice/src/cspice/pltvol_c.c
     src/cspice/src/cspice/polyds.c
+    src/cspice/src/cspice/polyds_c.c
     src/cspice/src/cspice/pool.c
     src/cspice/src/cspice/pos.c
     src/cspice/src/cspice/pos_c.c
@@ -957,24 +1042,36 @@ set(SRCS
     src/cspice/src/cspice/qxq_c.c
     src/cspice/src/cspice/r_abs.c
     src/cspice/src/cspice/r_acos.c
-    src/cspice/src/cspice/radrec.c
-    src/cspice/src/cspice/radrec_c.c
     src/cspice/src/cspice/r_asin.c
     src/cspice/src/cspice/r_atan.c
     src/cspice/src/cspice/r_atn2.c
-    src/cspice/src/cspice/rav2xf.c
-    src/cspice/src/cspice/rav2xf_c.c
-    src/cspice/src/cspice/rawio.h
-    src/cspice/src/cspice/raxisa.c
-    src/cspice/src/cspice/raxisa_c.c
     src/cspice/src/cspice/r_cnjg.c
     src/cspice/src/cspice/r_cos.c
     src/cspice/src/cspice/r_cosh.c
+    src/cspice/src/cspice/r_dim.c
+    src/cspice/src/cspice/r_exp.c
+    src/cspice/src/cspice/r_imag.c
+    src/cspice/src/cspice/r_int.c
+    src/cspice/src/cspice/r_lg10.c
+    src/cspice/src/cspice/r_log.c
+    src/cspice/src/cspice/r_mod.c
+    src/cspice/src/cspice/r_nint.c
+    src/cspice/src/cspice/r_sign.c
+    src/cspice/src/cspice/r_sin.c
+    src/cspice/src/cspice/r_sinh.c
+    src/cspice/src/cspice/r_sqrt.c
+    src/cspice/src/cspice/r_tan.c
+    src/cspice/src/cspice/r_tanh.c
+    src/cspice/src/cspice/radrec.c
+    src/cspice/src/cspice/radrec_c.c
+    src/cspice/src/cspice/rav2xf.c
+    src/cspice/src/cspice/rav2xf_c.c
+    src/cspice/src/cspice/raxisa.c
+    src/cspice/src/cspice/raxisa_c.c
     src/cspice/src/cspice/rdencc.c
     src/cspice/src/cspice/rdencd.c
     src/cspice/src/cspice/rdenci.c
     src/cspice/src/cspice/rdfmt.c
-    src/cspice/src/cspice/r_dim.c
     src/cspice/src/cspice/rdker.c
     src/cspice/src/cspice/rdkvar.c
     src/cspice/src/cspice/rdnbl.c
@@ -1033,19 +1130,12 @@ set(SRCS
     src/cspice/src/cspice/return.c
     src/cspice/src/cspice/return_c.c
     src/cspice/src/cspice/rewind.c
-    src/cspice/src/cspice/r_exp.c
-    src/cspice/src/cspice/r_imag.c
-    src/cspice/src/cspice/r_int.c
     src/cspice/src/cspice/rjust.c
-    src/cspice/src/cspice/r_lg10.c
-    src/cspice/src/cspice/r_log.c
     src/cspice/src/cspice/rmaind.c
     src/cspice/src/cspice/rmaini.c
     src/cspice/src/cspice/rmdupc.c
     src/cspice/src/cspice/rmdupd.c
     src/cspice/src/cspice/rmdupi.c
-    src/cspice/src/cspice/r_mod.c
-    src/cspice/src/cspice/r_nint.c
     src/cspice/src/cspice/rotate.c
     src/cspice/src/cspice/rotate_c.c
     src/cspice/src/cspice/rotget.c
@@ -1058,15 +1148,15 @@ set(SRCS
     src/cspice/src/cspice/rquad.c
     src/cspice/src/cspice/rquad_c.c
     src/cspice/src/cspice/rsfe.c
-    src/cspice/src/cspice/r_sign.c
-    src/cspice/src/cspice/r_sin.c
-    src/cspice/src/cspice/r_sinh.c
     src/cspice/src/cspice/rsli.c
     src/cspice/src/cspice/rsne.c
-    src/cspice/src/cspice/r_sqrt.c
-    src/cspice/src/cspice/r_tan.c
-    src/cspice/src/cspice/r_tanh.c
     src/cspice/src/cspice/rtrim.c
+    src/cspice/src/cspice/s_cat.c
+    src/cspice/src/cspice/s_cmp.c
+    src/cspice/src/cspice/s_copy.c
+    src/cspice/src/cspice/s_paus.c
+    src/cspice/src/cspice/s_rnge.c
+    src/cspice/src/cspice/s_stop.c
     src/cspice/src/cspice/saelgv.c
     src/cspice/src/cspice/saelgv_c.c
     src/cspice/src/cspice/samch.c
@@ -1081,7 +1171,6 @@ set(SRCS
     src/cspice/src/cspice/scardc.c
     src/cspice/src/cspice/scardd.c
     src/cspice/src/cspice/scardi.c
-    src/cspice/src/cspice/s_cat.c
     src/cspice/src/cspice/scdecd.c
     src/cspice/src/cspice/scdecd_c.c
     src/cspice/src/cspice/sce2c.c
@@ -1095,8 +1184,6 @@ set(SRCS
     src/cspice/src/cspice/scfmt.c
     src/cspice/src/cspice/scfmt_c.c
     src/cspice/src/cspice/sclu01.c
-    src/cspice/src/cspice/s_cmp.c
-    src/cspice/src/cspice/s_copy.c
     src/cspice/src/cspice/scpars.c
     src/cspice/src/cspice/scpart.c
     src/cspice/src/cspice/scpart_c.c
@@ -1138,11 +1225,10 @@ set(SRCS
     src/cspice/src/cspice/shiftc.c
     src/cspice/src/cspice/shiftl.c
     src/cspice/src/cspice/shiftr.c
-    src/cspice/src/cspice/sigdgt.c
     src/cspice/src/cspice/sig_die.c
+    src/cspice/src/cspice/sigdgt.c
     src/cspice/src/cspice/sigerr.c
     src/cspice/src/cspice/sigerr_c.c
-    src/cspice/src/cspice/signal1.h
     src/cspice/src/cspice/signal_.c
     src/cspice/src/cspice/sincpt.c
     src/cspice/src/cspice/sincpt_c.c
@@ -1154,7 +1240,6 @@ set(SRCS
     src/cspice/src/cspice/smsgni.c
     src/cspice/src/cspice/somfls.c
     src/cspice/src/cspice/somtru.c
-    src/cspice/src/cspice/s_paus.c
     src/cspice/src/cspice/spca2b.c
     src/cspice/src/cspice/spcac.c
     src/cspice/src/cspice/spcb2a.c
@@ -1173,26 +1258,6 @@ set(SRCS
     src/cspice/src/cspice/sphrec.c
     src/cspice/src/cspice/sphrec_c.c
     src/cspice/src/cspice/sphsd.c
-    src/cspice/src/cspice/SpiceCel.h
-    src/cspice/src/cspice/SpiceCK.h
-    src/cspice/src/cspice/SpiceEK.h
-    src/cspice/src/cspice/SpiceEll.h
-    src/cspice/src/cspice/SpiceErr.h
-    src/cspice/src/cspice/SpiceFrm.h
-    src/cspice/src/cspice/SpiceGF.h
-    src/cspice/src/cspice/SpiceOccult.h
-    src/cspice/src/cspice/SpicePln.h
-    src/cspice/src/cspice/SpiceSPK.h
-    src/cspice/src/cspice/SpiceUsr.h
-    src/cspice/src/cspice/SpiceZad.h
-    src/cspice/src/cspice/SpiceZdf.h
-    src/cspice/src/cspice/SpiceZfc.h
-    src/cspice/src/cspice/SpiceZim.h
-    src/cspice/src/cspice/SpiceZmc.h
-    src/cspice/src/cspice/SpiceZpl.h
-    src/cspice/src/cspice/SpiceZpr.h
-    src/cspice/src/cspice/SpiceZrnm.h
-    src/cspice/src/cspice/SpiceZst.h
     src/cspice/src/cspice/spk14a.c
     src/cspice/src/cspice/spk14a_c.c
     src/cspice/src/cspice/spk14b.c
@@ -1329,16 +1394,24 @@ set(SRCS
     src/cspice/src/cspice/spkw20.c
     src/cspice/src/cspice/spkw20_c.c
     src/cspice/src/cspice/spkw21.c
+    src/cspice/src/cspice/srfc2s.c
+    src/cspice/src/cspice/srfc2s_c.c
+    src/cspice/src/cspice/srfcss.c
+    src/cspice/src/cspice/srfcss_c.c
+    src/cspice/src/cspice/srfnrm.c
+    src/cspice/src/cspice/srfnrm_c.c
     src/cspice/src/cspice/srfrec.c
     src/cspice/src/cspice/srfrec_c.c
+    src/cspice/src/cspice/srfs2c.c
+    src/cspice/src/cspice/srfs2c_c.c
+    src/cspice/src/cspice/srfscc.c
+    src/cspice/src/cspice/srfscc_c.c
     src/cspice/src/cspice/srfxpt.c
     src/cspice/src/cspice/srfxpt_c.c
-    src/cspice/src/cspice/s_rnge.c
     src/cspice/src/cspice/ssize_c.c
     src/cspice/src/cspice/ssizec.c
     src/cspice/src/cspice/ssized.c
     src/cspice/src/cspice/ssizei.c
-    src/cspice/src/cspice/s_stop.c
     src/cspice/src/cspice/stcc01.c
     src/cspice/src/cspice/stcf01.c
     src/cspice/src/cspice/stcg01.c
@@ -1356,10 +1429,12 @@ set(SRCS
     src/cspice/src/cspice/subpnt_c.c
     src/cspice/src/cspice/subpt.c
     src/cspice/src/cspice/subpt_c.c
+    src/cspice/src/cspice/subpt_pl02.c
     src/cspice/src/cspice/subslr.c
     src/cspice/src/cspice/subslr_c.c
     src/cspice/src/cspice/subsol.c
     src/cspice/src/cspice/subsol_c.c
+    src/cspice/src/cspice/subsol_pl02.c
     src/cspice/src/cspice/sue.c
     src/cspice/src/cspice/suffix.c
     src/cspice/src/cspice/sumad.c
@@ -1429,6 +1504,9 @@ set(SRCS
     src/cspice/src/cspice/sytrni.c
     src/cspice/src/cspice/szpool_c.c
     src/cspice/src/cspice/tcheck.c
+    src/cspice/src/cspice/term_pl02.c
+    src/cspice/src/cspice/termpt.c
+    src/cspice/src/cspice/termpt_c.c
     src/cspice/src/cspice/texpyr.c
     src/cspice/src/cspice/timdef.c
     src/cspice/src/cspice/timdef_c.c
@@ -1522,9 +1600,9 @@ set(SRCS
     src/cspice/src/cspice/vhatg.c
     src/cspice/src/cspice/vhatg_c.c
     src/cspice/src/cspice/vhatip.c
+    src/cspice/src/cspice/vlcom.c
     src/cspice/src/cspice/vlcom3.c
     src/cspice/src/cspice/vlcom3_c.c
-    src/cspice/src/cspice/vlcom.c
     src/cspice/src/cspice/vlcom_c.c
     src/cspice/src/cspice/vlcomg.c
     src/cspice/src/cspice/vlcomg_c.c
@@ -1624,6 +1702,7 @@ set(SRCS
     src/cspice/src/cspice/wsfe.c
     src/cspice/src/cspice/wsle.c
     src/cspice/src/cspice/wsne.c
+    src/cspice/src/cspice/xdda.c
     src/cspice/src/cspice/xf2eul.c
     src/cspice/src/cspice/xf2eul_c.c
     src/cspice/src/cspice/xf2rav.c
@@ -1631,8 +1710,8 @@ set(SRCS
     src/cspice/src/cspice/xfmsta.c
     src/cspice/src/cspice/xfmsta_c.c
     src/cspice/src/cspice/xposbl.c
-    src/cspice/src/cspice/xpose6_c.c
     src/cspice/src/cspice/xpose.c
+    src/cspice/src/cspice/xpose6_c.c
     src/cspice/src/cspice/xpose_c.c
     src/cspice/src/cspice/xposeg.c
     src/cspice/src/cspice/xposeg_c.c
@@ -1646,6 +1725,7 @@ set(SRCS
     src/cspice/src/cspice/z_sin.c
     src/cspice/src/cspice/z_sqrt.c
     src/cspice/src/cspice/zzadbail_c.c
+    src/cspice/src/cspice/zzaddlnk.c
     src/cspice/src/cspice/zzadfunc_c.c
     src/cspice/src/cspice/zzadqdec_c.c
     src/cspice/src/cspice/zzadrefn_c.c
@@ -1655,7 +1735,6 @@ set(SRCS
     src/cspice/src/cspice/zzadsave_c.c
     src/cspice/src/cspice/zzadstep_c.c
     src/cspice/src/cspice/zzalloc.c
-    src/cspice/src/cspice/zzalloc.h
     src/cspice/src/cspice/zzascii.c
     src/cspice/src/cspice/zzasryel.c
     src/cspice/src/cspice/zzbodblt.c
@@ -1665,6 +1744,8 @@ set(SRCS
     src/cspice/src/cspice/zzbods2c.c
     src/cspice/src/cspice/zzbodtrn.c
     src/cspice/src/cspice/zzbodvcd.c
+    src/cspice/src/cspice/zzbquad.c
+    src/cspice/src/cspice/zzchrlat.c
     src/cspice/src/cspice/zzck4d2i.c
     src/cspice/src/cspice/zzck4i2d.c
     src/cspice/src/cspice/zzckcv01.c
@@ -1675,17 +1756,22 @@ set(SRCS
     src/cspice/src/cspice/zzckcv06.c
     src/cspice/src/cspice/zzckspk.c
     src/cspice/src/cspice/zzcln.c
+    src/cspice/src/cspice/zzcnquad.c
     src/cspice/src/cspice/zzcorepc.c
     src/cspice/src/cspice/zzcorsxf.c
     src/cspice/src/cspice/zzcputim.c
     src/cspice/src/cspice/zzctr.c
     src/cspice/src/cspice/zzcvpool.c
     src/cspice/src/cspice/zzcvstat.c
+    src/cspice/src/cspice/zzcxbrut.c
     src/cspice/src/cspice/zzdafgdr.c
     src/cspice/src/cspice/zzdafgfr.c
     src/cspice/src/cspice/zzdafgsr.c
     src/cspice/src/cspice/zzdafnfr.c
+    src/cspice/src/cspice/zzdasgrd.c
+    src/cspice/src/cspice/zzdasgri.c
     src/cspice/src/cspice/zzdasnfr.c
+    src/cspice/src/cspice/zzdasrfr.c
     src/cspice/src/cspice/zzddhclu.c
     src/cspice/src/cspice/zzddhf2h.c
     src/cspice/src/cspice/zzddhgsd.c
@@ -1694,10 +1780,27 @@ set(SRCS
     src/cspice/src/cspice/zzddhivf.c
     src/cspice/src/cspice/zzddhman.c
     src/cspice/src/cspice/zzddhmnm.c
+    src/cspice/src/cspice/zzddhnfc.c
     src/cspice/src/cspice/zzddhppf.c
     src/cspice/src/cspice/zzddhrcm.c
     src/cspice/src/cspice/zzddhrmu.c
     src/cspice/src/cspice/zzdiv.c
+    src/cspice/src/cspice/zzdscm.c
+    src/cspice/src/cspice/zzdsin.c
+    src/cspice/src/cspice/zzdskbbl.c
+    src/cspice/src/cspice/zzdskbsr.c
+    src/cspice/src/cspice/zzdskbun.c
+    src/cspice/src/cspice/zzdskbux.c
+    src/cspice/src/cspice/zzdsksba.c
+    src/cspice/src/cspice/zzdsksbf.c
+    src/cspice/src/cspice/zzdsksbi.c
+    src/cspice/src/cspice/zzdsksbr.c
+    src/cspice/src/cspice/zzdsksel.c
+    src/cspice/src/cspice/zzdsksgr.c
+    src/cspice/src/cspice/zzdsksgx.c
+    src/cspice/src/cspice/zzdsksph.c
+    src/cspice/src/cspice/zzdspc.c
+    src/cspice/src/cspice/zzdspr.c
     src/cspice/src/cspice/zzdynbid.c
     src/cspice/src/cspice/zzdynfid.c
     src/cspice/src/cspice/zzdynfr0.c
@@ -1710,6 +1813,7 @@ set(SRCS
     src/cspice/src/cspice/zzdynvad.c
     src/cspice/src/cspice/zzdynvai.c
     src/cspice/src/cspice/zzedterm.c
+    src/cspice/src/cspice/zzedtmpt.c
     src/cspice/src/cspice/zzekac01.c
     src/cspice/src/cspice/zzekac02.c
     src/cspice/src/cspice/zzekac03.c
@@ -1870,12 +1974,13 @@ set(SRCS
     src/cspice/src/cspice/zzekwpac.c
     src/cspice/src/cspice/zzekwpai.c
     src/cspice/src/cspice/zzekwpal.c
+    src/cspice/src/cspice/zzellbds.c
+    src/cspice/src/cspice/zzelnaxx.c
     src/cspice/src/cspice/zzelvupy.c
     src/cspice/src/cspice/zzenut80.c
     src/cspice/src/cspice/zzeprc76.c
     src/cspice/src/cspice/zzeprcss.c
     src/cspice/src/cspice/zzerror.c
-    src/cspice/src/cspice/zzerror.h
     src/cspice/src/cspice/zzerrorinit.c
     src/cspice/src/cspice/zzfcstring.c
     src/cspice/src/cspice/zzfdat.c
@@ -1890,6 +1995,7 @@ set(SRCS
     src/cspice/src/cspice/zzgetbff.c
     src/cspice/src/cspice/zzgetcml_c.c
     src/cspice/src/cspice/zzgetelm.c
+    src/cspice/src/cspice/zzgetvox.c
     src/cspice/src/cspice/zzgfcoq.c
     src/cspice/src/cspice/zzgfcost.c
     src/cspice/src/cspice/zzgfcou.c
@@ -1922,6 +2028,7 @@ set(SRCS
     src/cspice/src/cspice/zzgfudlt.c
     src/cspice/src/cspice/zzgfwsts.c
     src/cspice/src/cspice/zzgpnm.c
+    src/cspice/src/cspice/zzgrav.c
     src/cspice/src/cspice/zzhashi.c
     src/cspice/src/cspice/zzholdd.c
     src/cspice/src/cspice/zzhsc.c
@@ -1929,23 +2036,44 @@ set(SRCS
     src/cspice/src/cspice/zzhullax.c
     src/cspice/src/cspice/zzidmap.c
     src/cspice/src/cspice/zzilusta.c
+    src/cspice/src/cspice/zzingrd.c
+    src/cspice/src/cspice/zzinil.c
+    src/cspice/src/cspice/zzinilnk.c
+    src/cspice/src/cspice/zzinlat.c
+    src/cspice/src/cspice/zzinlat0.c
+    src/cspice/src/cspice/zzinpdt.c
+    src/cspice/src/cspice/zzinpdt0.c
+    src/cspice/src/cspice/zzinrec.c
+    src/cspice/src/cspice/zzinrypl.c
     src/cspice/src/cspice/zzinssub.c
+    src/cspice/src/cspice/zzinvelt.c
+    src/cspice/src/cspice/zzlatbox.c
     src/cspice/src/cspice/zzldker.c
+    src/cspice/src/cspice/zzlexmet.c
     src/cspice/src/cspice/zzmkpc.c
+    src/cspice/src/cspice/zzmkspin.c
     src/cspice/src/cspice/zzmobliq.c
     src/cspice/src/cspice/zzmsxf.c
     src/cspice/src/cspice/zzmult.c
     src/cspice/src/cspice/zznamfrm.c
     src/cspice/src/cspice/zznofcon.c
     src/cspice/src/cspice/zznrddp.c
+    src/cspice/src/cspice/zznrmlon.c
     src/cspice/src/cspice/zznwpool.c
     src/cspice/src/cspice/zzocced.c
+    src/cspice/src/cspice/zzpdcmpl.c
+    src/cspice/src/cspice/zzpdpltc.c
+    src/cspice/src/cspice/zzpdtbox.c
     src/cspice/src/cspice/zzphsh.c
     src/cspice/src/cspice/zzpini.c
     src/cspice/src/cspice/zzplatfm.c
     src/cspice/src/cspice/zzpltchk.c
     src/cspice/src/cspice/zzprscor.c
+    src/cspice/src/cspice/zzprsmet.c
+    src/cspice/src/cspice/zzptpl02.c
+    src/cspice/src/cspice/zzraybox.c
     src/cspice/src/cspice/zzrbrkst.c
+    src/cspice/src/cspice/zzrecbox.c
     src/cspice/src/cspice/zzrefch0.c
     src/cspice/src/cspice/zzrefch1.c
     src/cspice/src/cspice/zzrepsub.c
@@ -1956,8 +2084,18 @@ set(SRCS
     src/cspice/src/cspice/zzrvar.c
     src/cspice/src/cspice/zzrvbf.c
     src/cspice/src/cspice/zzrxr.c
+    src/cspice/src/cspice/zzrytelt.c
+    src/cspice/src/cspice/zzrytlat.c
+    src/cspice/src/cspice/zzrytpdt.c
+    src/cspice/src/cspice/zzrytrec.c
+    src/cspice/src/cspice/zzryxsph.c
     src/cspice/src/cspice/zzsclk.c
     src/cspice/src/cspice/zzsecprt.c
+    src/cspice/src/cspice/zzsegbox.c
+    src/cspice/src/cspice/zzsfxcor.c
+    src/cspice/src/cspice/zzsglatx.c
+    src/cspice/src/cspice/zzsgp4.c
+    src/cspice/src/cspice/zzsinutl.c
     src/cspice/src/cspice/zzsizeok.c
     src/cspice/src/cspice/zzspkac0.c
     src/cspice/src/cspice/zzspkac1.c
@@ -1985,19 +2123,31 @@ set(SRCS
     src/cspice/src/cspice/zzspksb1.c
     src/cspice/src/cspice/zzspkzp0.c
     src/cspice/src/cspice/zzspkzp1.c
+    src/cspice/src/cspice/zzsrfini.c
+    src/cspice/src/cspice/zzsrfker.c
+    src/cspice/src/cspice/zzsrftrn.c
     src/cspice/src/cspice/zzstelab.c
     src/cspice/src/cspice/zzsynccl_c.c
+    src/cspice/src/cspice/zztangnt.c
+    src/cspice/src/cspice/zztanslv.c
+    src/cspice/src/cspice/zztanutl.c
     src/cspice/src/cspice/zzteme.c
     src/cspice/src/cspice/zztime.c
     src/cspice/src/cspice/zztknerr.c
+    src/cspice/src/cspice/zztogrid.c
     src/cspice/src/cspice/zztpats.c
+    src/cspice/src/cspice/zztrvlnk.c
     src/cspice/src/cspice/zztwovxf.c
+    src/cspice/src/cspice/zzuntngl.c
     src/cspice/src/cspice/zzutcpm.c
     src/cspice/src/cspice/zzvalcor.c
+    src/cspice/src/cspice/zzvox2id.c
+    src/cspice/src/cspice/zzvoxcvo.c
+    src/cspice/src/cspice/zzvrtplt.c
     src/cspice/src/cspice/zzvstrng.c
     src/cspice/src/cspice/zzwahr.c
-    src/cspice/src/cspice/zzwind2d.c
     src/cspice/src/cspice/zzwind.c
+    src/cspice/src/cspice/zzwind2d.c
     src/cspice/src/cspice/zzwninsd.c
     src/cspice/src/cspice/zzxlated.c
     src/cspice/src/cspice/zzxlatei.c)

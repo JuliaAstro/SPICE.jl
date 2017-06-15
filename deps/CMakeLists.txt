@@ -5,7 +5,7 @@ enable_language(C CXX)
 
 set(BITNESS 32)
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(BITNESS 64)  
+  set(BITNESS 64)
 endif()
 
 include(CMakeSrc.txt)
@@ -24,6 +24,10 @@ if(WIN32)
              STATIC_DEFINE cspice_BUILT_AS_STATIC)
 endif()
 target_link_libraries(cspice m)
+
+if(CMAKE_VERSION VERSION_GREATER 2.8.12)
+    set_target_properties(cspice PROPERTIES MACOSX_RPATH ON)
+endif()
 
 INSTALL(
   TARGETS cspice
