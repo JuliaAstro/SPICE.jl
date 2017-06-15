@@ -1,10 +1,25 @@
 using SPICE
 using Base.Test
 
+kernels = Dict(
+    :PCK => Dict(
+        :url => "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/",
+        :file => "pck00010.tpc",
+    ),
+)
+
 # const LSK_URL = "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/"
 # const LSK_FILE = "naif0012.tls"
 # const SPK_URL = "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/"
 # const SPK_FILE = "de430.bsp"
+
+for kernel in values(kernels)
+    if !isfile(kernel[:file])
+        download(kernel[:url] * kernel[:file], kernel[:file])
+    end
+end
+
+path(kernel) = kernels[kernel][:file]
 
 # if !isfile(LSK_FILE)
     # download(LSK_URL*LSK_FILE, LSK_FILE)

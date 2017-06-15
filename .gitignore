@@ -14,3 +14,4 @@ deps/windows/i686
 deps/windows/x64
 *.zip
 deps/windows/usr/
+test/pck00010.tpc
