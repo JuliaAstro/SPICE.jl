@@ -6,12 +6,15 @@ kernels = Dict(
         :url => "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/",
         :file => "pck00010.tpc",
     ),
+    :SPK => Dict(
+        :url => "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/",
+        :file => "de430.bsp",
+    ),
+    :LSK => Dict(
+        :url => "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/",
+        :file => "naif0012.tls",
+    ),
 )
-
-# const LSK_URL = "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/"
-# const LSK_FILE = "naif0012.tls"
-# const SPK_URL = "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/"
-# const SPK_FILE = "de430.bsp"
 
 for kernel in values(kernels)
     if !isfile(kernel[:file])
@@ -20,13 +23,6 @@ for kernel in values(kernels)
 end
 
 path(kernel) = kernels[kernel][:file]
-
-# if !isfile(LSK_FILE)
-    # download(LSK_URL*LSK_FILE, LSK_FILE)
-# end
-# if !isfile(SPK_FILE)
-    # download(SPK_URL*SPK_FILE, SPK_FILE)
-# end
 
 @testset "Cells" begin
     cell = SpiceIntCell(3)
