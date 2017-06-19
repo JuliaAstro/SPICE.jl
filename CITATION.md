@@ -15,7 +15,7 @@ Acton, C.H.; "Ancillary Data Services of NASA's Navigation and Ancillary Informa
     journal={Planetary and Space Science},
     volume={44},
     number={1},
-    pages={65--70}, 
+    pages={65--70},
     year={1996}
 }
 ```
