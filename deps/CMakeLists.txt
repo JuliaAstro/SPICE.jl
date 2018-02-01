@@ -3,17 +3,12 @@ cmake_minimum_required(VERSION 2.8.1)
 project(cspice C)
 enable_language(C CXX)
 
-set(BITNESS 32)
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(BITNESS 64)
-endif()
-
-include(CMakeSrc.txt)
+include(src.cmake)
 if(WIN32)
   include(GenerateExportHeader)
 endif()
 
-set(CMAKE_C_FLAGS "-m${BITNESS} -DNON_UNIX_STDIO -ansi")
+set(CMAKE_C_FLAGS "-O2 -DNON_UNIX_STDIO")
 
 add_library(cspice SHARED ${SRCS})
 if(WIN32)
