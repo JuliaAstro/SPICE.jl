@@ -17,6 +17,7 @@ if(WIN32)
              EXPORT_MACRO_NAME cspice_EXPORT
              EXPORT_FILE_NAME cspice_Export.h
              STATIC_DEFINE cspice_BUILT_AS_STATIC)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DMSDOS")
 endif()
 target_link_libraries(cspice m)
 
