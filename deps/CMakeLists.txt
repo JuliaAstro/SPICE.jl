@@ -7,6 +7,7 @@ include(src.cmake)
 if(WIN32)
   include(GenerateExportHeader)
 endif()
+include(GNUInstallDirs)
 
 set(CMAKE_C_FLAGS "-O2 -DNON_UNIX_STDIO")
 
@@ -27,6 +28,7 @@ endif()
 
 INSTALL(
   TARGETS cspice
-  RUNTIME DESTINATION lib
-  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
 )
