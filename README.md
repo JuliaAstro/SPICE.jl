@@ -1,19 +1,24 @@
 # SPICE.jl
 
-[![Build Status](https://travis-ci.org/JuliaAstrodynamics/SPICE.jl.svg?branch=master)](https://travis-ci.org/JuliaAstrodynamics/SPICE.jl)
-[![Build status](https://ci.appveyor.com/api/projects/status/2mjf3djfw39gyl0k?svg=true)](https://ci.appveyor.com/project/JuliaAstrodynamics/spice-jl)
+*Julia wrapper for NASA NAIF's SPICE toolkit*
+
+[![Build Status Unix][travis-badge]][travis-url] [![Build Status Windows][av-badge]][av-url] [![Coveralls][coveralls-badge]][coveralls-url] [![Codecov][codecov-badge]][codecov-url] [![Docs Stable][docs-badge-stable]][docs-url-stable] [![Docs Latest][docs-badge-latest]][docs-url-latest]
 
 ## Installation
 
-On Linux and OSX CMake and a C compiler are needed.
-
 ```julia
 Pkg.clone("https://github.com/JuliaAstrodynamics/SPICE.jl.git")
-# Pkg.add("SPICE")
 ```
 
-## Roadmap
-
-* [X] Julia-native error handling
-* [ ] Wrap the most used [CSPICE APIs](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/info/mostused.html)
-* [ ] Provide julian APIs
+[travis-badge]: https://travis-ci.org/JuliaAstro/SPICE.jl.svg?branch=master
+[travis-url]: https://travis-ci.org/JuliaAstro/SPICE.jl
+[av-badge]: https://ci.appveyor.com/api/projects/status/13l2bwswxbl1g8cq?svg=true
+[av-url]: https://ci.appveyor.com/project/helgee/spice-jl
+[coveralls-badge]: https://coveralls.io/repos/github/JuliaAstro/SPICE.jl/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/JuliaAstro/SPICE.jl?branch=master
+[codecov-badge]: http://codecov.io/github/JuliaAstro/SPICE.jl/coverage.svg?branch=master
+[codecov-url]: http://codecov.io/github/JuliaAstro/SPICE.jl?branch=master
+[docs-badge-latest]: https://img.shields.io/badge/docs-latest-blue.svg
+[docs-url-latest]: https://juliaastro.github.io/SPICE.jl/latest
+[docs-badge-stable]: https://img.shields.io/badge/docs-stable-blue.svg
+[docs-url-stable]: https://juliaastro.github.io/SPICE.jl/stable
