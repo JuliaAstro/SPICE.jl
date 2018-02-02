@@ -12,7 +12,7 @@ Pkg.clone("https://github.com/JuliaAstrodynamics/SPICE.jl.git")
 
 [travis-badge]: https://travis-ci.org/JuliaAstro/SPICE.jl.svg?branch=master
 [travis-url]: https://travis-ci.org/JuliaAstro/SPICE.jl
-[av-badge]: https://ci.appveyor.com/api/projects/status/13l2bwswxbl1g8cq?svg=true
+[av-badge]: https://ci.appveyor.com/api/projects/status/rv89bw5tl1bfqo7h?svg=true
 [av-url]: https://ci.appveyor.com/project/helgee/spice-jl
 [coveralls-badge]: https://coveralls.io/repos/github/JuliaAstro/SPICE.jl/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/JuliaAstro/SPICE.jl?branch=master
