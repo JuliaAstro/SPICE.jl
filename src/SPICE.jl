@@ -1,8 +1,8 @@
+#= __precompile__() =#
+
 module SPICE
 
 export SpiceException
-
-#= __precompile__() =#
 
 deps = abspath(joinpath(splitdir(@__FILE__)[1], "..", "deps", "deps.jl"))
 if isfile(deps)
