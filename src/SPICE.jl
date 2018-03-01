@@ -22,6 +22,8 @@ struct SpiceException <: Exception
     msg::String
 end
 
+Base.show(io::IO, ex::SpiceException) = print(io, ex.msg)
+
 function handleerror()
     failed = ccall((:failed_c, libcspice), Bool, ())
     if failed
