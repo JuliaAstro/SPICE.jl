@@ -6,7 +6,7 @@ Returns the state of a target body relative to an observing body.
 [NAIF documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkezr_c.html)
 """
 function spkezr(targ::AbstractString, et::Float64, ref::AbstractString, obs::AbstractString; abcorr::AbstractString="NONE")
-    starg = Array(Cdouble, 6)
+    starg = Array{Cdouble}(6)
     lt = Ref{Cdouble}(0)
     ccall((:spkezr_c, libcspice), Void, (Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}), targ, et, ref, abcorr, obs, starg, lt)
     handleerror()
@@ -22,7 +22,7 @@ Returns the state of a target body relative to an observing body.
 [NAIF documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkpos_c.html)
 """
 function spkpos(targ::AbstractString, et::Float64, ref::AbstractString, obs::AbstractString; abcorr::AbstractString="NONE")
-    starg = Array(Cdouble, 3)
+    starg = Array{Cdouble}(3)
     lt = Ref{Cdouble}(0)
     ccall((:spkpos_c, libcspice), Void, (Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}), targ, et, ref, abcorr, obs, starg, lt)
     handleerror()
@@ -39,7 +39,7 @@ Returns the state of a target body relative to a constant-position observer loca
 (https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcpo_c.html)
 """
 function spkcpo(target, et, outref, refloc, obspos, obsctr, obsref; abcorr="NONE")
-    state = Array(Cdouble, 6)
+    state = Array{Cdouble}(6)
     lt = Ref{Cdouble}(0)
     ccall(
         (:spkcpo_c, libcspice), Void,

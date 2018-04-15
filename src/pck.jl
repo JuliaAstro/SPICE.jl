@@ -15,7 +15,7 @@ Fetch from the kernel pool the double precision values of an item associated wit
 https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/bodvrd_c.html
 """
 function bodvrd(bodynm::String, item::String, maxn::Int)
-    values = Array(Cdouble, maxn)
+    values = Array{Cdouble}(maxn)
     dim = Ref{Cint}(0)
     ccall((:bodvrd_c, libcspice), Void, (Cstring, Cstring, Cint, Ref{Cint}, Ptr{Float64}), bodynm, item, maxn, dim, values)
     handleerror()
@@ -28,7 +28,7 @@ Return the matrix that transforms position vectors from one specified frame to a
 https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/pxform_c.html
 """
 function pxform(from::String, to::String, et::Float64)
-    rot = Array(Cdouble, 3, 3)
+    rot = Array{Cdouble}(3, 3)
     ccall((:pxform_c, libcspice), Void, (Cstring, Cstring, Cdouble, Ptr{Cdouble}), from, to, et, rot)
     handleerror()
     return rot
@@ -40,7 +40,7 @@ Return the state transformation matrix from one frame to another at a specified 
 https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sxform_c.html
 """
 function sxform(from::String, to::String, et::Float64)
-    rot = Array(Cdouble, 6, 6)
+    rot = Array{Cdouble}(6, 6)
     ccall((:sxform_c, libcspice), Void, (Cstring, Cstring, Cdouble, Ptr{Cdouble}), from, to, et, rot)
     handleerror()
     return rot
