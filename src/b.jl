@@ -264,6 +264,7 @@ Fetch from the kernel pool the double precision values of an item associated wit
 
 - `bodynm`: Body name
 - `item`: Item for which values are desired. ("RADII", "NUT_PREC_ANGLES", etc.)
+- `maxn`: Maximum number of values that may be returned. 
 
 ### Output ###
 
@@ -273,8 +274,7 @@ Fetch from the kernel pool the double precision values of an item associated wit
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/bodvrd_c.html)
 """
-function bodvrd(bodynm, item)
-    maxn = 100
+function bodvrd(bodynm, item, maxn = 100)
     values = Array{SpiceDouble}(maxn)
     dim = Ref{SpiceInt}()
     ccall((:bodvrd_c, libcspice), Void, (Cstring, Cstring, SpiceInt, Ref{SpiceInt}, Ptr{SpiceDouble}),
