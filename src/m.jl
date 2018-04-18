@@ -7,7 +7,7 @@ function mxvg(m1, v2)
         error("Dimension mismatch.")
     end
     vout = Array{Float64}(lm1)
-    ccall((:mxvg_c, libcspice), Void, (Ptr{Float64}, Ptr{Float64}, Cint, Cint, Ptr{Float64}), m1, v2, lm1, lm2, vout)
+    ccall((:mxvg_c, libcspice), Void, (Ptr{Float64}, Ptr{Float64}, Cint, Cint, Ptr{Float64}), transpose(m1), v2, lm1, lm2, vout)
     handleerror()
     return vout
 end
