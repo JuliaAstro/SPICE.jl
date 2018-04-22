@@ -4,6 +4,7 @@
 
     @test cidfrm(399) == (10013, "IAU_EARTH")
     @test_throws SpiceException cidfrm(999999)
+    @test clight() == 299792.458
 
     file = "test.ck"
     try

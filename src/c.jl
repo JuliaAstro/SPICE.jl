@@ -1,4 +1,4 @@
-export ccifrm, cidfrm, ckcls, ckopn, ckw01, ckgp, ckgpav
+export ccifrm, cidfrm, ckcls, ckopn, ckw01, ckgp, ckgpav, clight
 
 """
     ccifrm(frclss, clssid)
@@ -134,4 +134,9 @@ end
 """
 """
 function ckgpav()
+end
+
+"Returns the speed of light in vacuo (km/sec)."
+function clight()
+    ccall((:clight_c, libcspice), Cdouble, ())
 end
