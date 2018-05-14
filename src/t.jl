@@ -1,4 +1,4 @@
-export timout, tisbod
+export timout, tisbod, tyear
 
 function timout(et, pictur)
     string = Array{UInt8}(128)
@@ -14,4 +14,9 @@ function tisbod(ref, body, et)
         ref, body, et, tsipm)
     handleerror()
     tsipm'
+end
+
+"Returns the number of seconds per tropical year."
+function tyear()
+    ccall((:tyear_c, libcspice), Cdouble, ())
 end

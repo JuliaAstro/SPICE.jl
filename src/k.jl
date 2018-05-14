@@ -1,4 +1,4 @@
-export kclear
+export kclear, ktotal
 
 """
     kclear()
@@ -14,3 +14,19 @@ function kclear()
     ccall((:kclear_c, libcspice), Void, ())
     handleerror()
 end
+
+"""
+    ktotal(kind) 
+
+Return the current number of kernels that have been loaded 
+via the KEEPER interface that are of a specified type. 
+
+[https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ktotal_c.html]
+(https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ktotal_c.html)
+"""
+function ktotal(kind)
+    count = Ref{SpiceInt}()
+    ccall((:ktotal_c, libcspice), Void, (Cstring, Ref{SpiceInt}), kind, count)
+    handleerror()
+    Int(count[])
+end 
