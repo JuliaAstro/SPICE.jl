@@ -1,28 +1,39 @@
 using SPICE
+using RemoteFiles
 using Base.Test
 
-kernels = Dict(
-    :PCK => Dict(
-        :url => "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/",
-        :file => "pck00010.tpc",
-    ),
-    :SPK => Dict(
-        :url => "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/",
-        :file => "de430.bsp",
-    ),
-    :LSK => Dict(
-        :url => "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/",
-        :file => "naif0012.tls",
-    ),
-)
+const BASE_URL = "https://raw.githubusercontent.com/AndrewAnnex/SpiceyPyTestKernels/master/"
+const KERNEL_DIR = joinpath(@__DIR__, "kernels")
 
-for kernel in values(kernels)
-    if !isfile(kernel[:file])
-        download(kernel[:url] * kernel[:file], kernel[:file])
-    end
+@RemoteFileSet CASSINI "Cassini Kernels" begin
+    cassPck     = @RemoteFile BASE_URL * "cpck05Mar2004.tpc" dir=KERNEL_DIR
+    satSpk      = @RemoteFile BASE_URL * "130220AP_SE_13043_13073.bsp" dir=KERNEL_DIR
+    cassTourSpk = @RemoteFile BASE_URL * "130212AP_SK_13043_13058.bsp" dir=KERNEL_DIR
+    cassFk      = @RemoteFile BASE_URL * "cas_v40.tf" dir=KERNEL_DIR
+    cassCk      = @RemoteFile BASE_URL * "13056_13057ra.bc" dir=KERNEL_DIR
+    cassSclk    = @RemoteFile BASE_URL * "cas00167.tsc" dir=KERNEL_DIR
+    cassIk      = @RemoteFile BASE_URL * "cas_iss_v10.ti" dir=KERNEL_DIR
 end
 
-path(kernel) = kernels[kernel][:file]
+@RemoteFileSet EXTRA "Extra Kernels" begin
+    voyagerSclk     = @RemoteFile BASE_URL * "vg200022.tsc" dir=KERNEL_DIR
+    earthTopoTf     = @RemoteFile BASE_URL * "earth_topo_050714.tf" dir=KERNEL_DIR
+    earthStnSpk     = @RemoteFile BASE_URL * "earthstns_itrf93_050714.bsp" dir=KERNEL_DIR
+    earthHighPerPck = @RemoteFile BASE_URL * "earth_031228_231229_predict.bpc" dir=KERNEL_DIR
+    phobosDsk       = @RemoteFile BASE_URL * "phobos_lores.bds" dir=KERNEL_DIR
+    marsSpk         = @RemoteFile BASE_URL * "mar022-1.bsp" dir=KERNEL_DIR
+end
+
+@RemoteFileSet CORE "Core Kernels" begin
+    pck    = @RemoteFile BASE_URL * "pck00010.tpc" dir=KERNEL_DIR
+    spk    = @RemoteFile BASE_URL * "de405s_littleendian.bsp" dir=KERNEL_DIR
+    gm_pck = @RemoteFile BASE_URL * "gm_de431.tpc" dir=KERNEL_DIR
+    lsk    = @RemoteFile BASE_URL * "naif0012.tls" dir=KERNEL_DIR
+end
+
+download(CASSINI)
+download(EXTRA)
+download(CORE)
 
 @testset "SPICE" begin
     @testset "Cells" begin
