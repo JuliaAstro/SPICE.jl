@@ -249,6 +249,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api.html#SPICE.cgv2el-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.cgv2el",
+    "category": "method",
+    "text": "cgv2el(center, vec1, vec2)\n\nForm a CSPICE ellipse from a center vector and two generating vectors.\n\nArguments\n\ncenter: Center vector\nvec1: Generating vector\nvec2: Generating vector\n\nOutput\n\nThe CSPICE ellipse defined by the input vectors.\n\nReferences\n\nNAIF Documentation\n\n\n\n"
+},
+
+{
     "location": "api.html#SPICE.cidfrm-Tuple{Any}",
     "page": "API",
     "title": "SPICE.cidfrm",
@@ -265,6 +273,22 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api.html#SPICE.ckcov!-NTuple{7,Any}",
+    "page": "API",
+    "title": "SPICE.ckcov!",
+    "category": "method",
+    "text": "ckcov!(ck, idcode, needav, level, tol, timsys, cover)\n\nFind the coverage window for a specified object in a specified CK file.\n\nArguments\n\nck: Name of CK file\nidcode: ID code of object\nneedav: Flag indicating whether angular velocity is needed\nlevel: Coverage level:  \"SEGMENT\" OR \"INTERVAL\"\ntol: Tolerance in ticks\ntimsys: Time system used to represent coverage\ncover: Window giving coverage for idcode. Data already present in cover   will be combined with coverage found for the object designated by idcode   in the file ck.\n\nReferences\n\nNAIF Documentation\n\n\n\n"
+},
+
+{
+    "location": "api.html#SPICE.ckcov-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.ckcov",
+    "category": "method",
+    "text": "ckcov(ck, idcode, needav, level, tol, timsys)\n\nFind the coverage window for a specified object in a specified CK file.\n\nArguments\n\nck: Name of CK file\nidcode: ID code of object\nneedav: Flag indicating whether angular velocity is needed\nlevel: Coverage level:  \"SEGMENT\" OR \"INTERVAL\"\ntol: Tolerance in ticks\ntimsys: Time system used to represent coverage\n\nOutput\n\nWindow giving coverage for idcode\n\nReferences\n\nNAIF Documentation\n\n\n\n"
+},
+
+{
     "location": "api.html#SPICE.ckgp-Tuple{}",
     "page": "API",
     "title": "SPICE.ckgp",
@@ -278,6 +302,22 @@ var documenterSearchIndex = {"docs": [
     "title": "SPICE.ckgpav",
     "category": "method",
     "text": "\n\n"
+},
+
+{
+    "location": "api.html#SPICE.ckobj!-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.ckobj!",
+    "category": "method",
+    "text": "ckobj!(ck, ids)\n\nFind the set of ID codes of all objects in a specified CK file.\n\nArguments\n\nck: Name of CK file\nids: Set of ID codes of objects in CK file. Data already present in    ids will be combined with ID code set found for the file ck.\n\nReferences\n\nNAIF Documentation\n\n\n\n"
+},
+
+{
+    "location": "api.html#SPICE.ckobj-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.ckobj",
+    "category": "method",
+    "text": "ckobj(ck)\n\nFind the set of ID codes of all objects in a specified CK file.\n\nArguments\n\nck: Name of CK file\n\nOutput\n\nSet of ID codes of objects in CK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n"
 },
 
 {
@@ -301,7 +341,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.clight",
     "category": "method",
-    "text": "Returns the speed of light in vacuo (km/sec).\n\n\n\n"
+    "text": "clight()\n\nOutput\n\nReturns the speed of light in vacuo (km/sec).\n\n\n\n"
 },
 
 {
