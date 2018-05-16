@@ -77,7 +77,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.axisar",
     "category": "method",
-    "text": "axisar(axis, angle)\n\nConstruct a rotation matrix that rotates vectors by a specified angle about a specified axis.\n\nhttps://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/axisar_c.html\n\n\n\n"
+    "text": "axisar(axis, angle)\n\nConstruct a rotation matrix that rotates vectors by a specified angle about a specified axis.\n\nArguments\n\naxis: Rotation axis\nangle: Rotation angle in radians\n\nOutput\n\nRotation matrix corresponding to axis and angle\n\nReferences\n\nNAIF Documentation\n\n\n\n"
 },
 
 {
@@ -101,7 +101,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.badkpv",
     "category": "method",
-    "text": "badkpv(caller, name, comp, size, divby, typ)\n\nDetermine if a kernel pool variable is present and if so that it has the correct size and type.\n\nArguments\n\ncaller: Name of the routine calling this routine\nname: Name of a kernel pool variable\ncomp: Comparison operator\nsize: Expected size of the kernel pool variable\ndivby: A divisor of the size of the kernel pool variable\ntype: Expected type of the kernel pool variable\n\nOutput\n\nThe function returns false if the kernel pool variable is OK otherwise and exception is thrown.\n\nReferences\n\nNAIF Documentation\n\n\n\n"
+    "text": "badkpv(caller, name, comp, size, divby, typ)\n\nDetermine if a kernel pool variable is present and if so that it has the correct size and type.\n\nArguments\n\ncaller: Name of the routine calling this routine\nname: Name of a kernel pool variable\ncomp: Comparison operator\nsize: Expected size of the kernel pool variable\ndivby: A divisor of the size of the kernel pool variable\ntype: Expected type of the kernel pool variable\n\nOutput\n\nThe function returns false if the kernel pool variable is OK otherwise an exception is thrown.\n\nReferences\n\nNAIF Documentation\n\n\n\n"
 },
 
 {
@@ -174,6 +174,62 @@ var documenterSearchIndex = {"docs": [
     "title": "SPICE.bodvrd",
     "category": "function",
     "text": "bodvrd(bodynm, item)\n\nFetch from the kernel pool the double precision values of an item associated with a body.\n\nArguments\n\nbodynm: Body name\nitem: Item for which values are desired. (\"RADII\", \"NUT_PREC_ANGLES\", etc.)\nmaxn: Maximum number of values that may be returned. \n\nOutput\n\nvalues: Values\n\nReferences\n\nNAIF Documentation\n\n\n\n"
+},
+
+{
+    "location": "api.html#SPICE.brcktd",
+    "page": "API",
+    "title": "SPICE.brcktd",
+    "category": "function",
+    "text": "brcktd(number, e1, e2)\n\nDeprecated: Use clamp from Julia\'s standard library instead.\n\n\n\n"
+},
+
+{
+    "location": "api.html#SPICE.brckti",
+    "page": "API",
+    "title": "SPICE.brckti",
+    "category": "function",
+    "text": "brckti(number, e1, e2)\n\nDeprecated: Use clamp from Julia\'s standard library instead.\n\n\n\n"
+},
+
+{
+    "location": "api.html#SPICE.bschoc",
+    "page": "API",
+    "title": "SPICE.bschoc",
+    "category": "function",
+    "text": "bschoc(value, array, order)\n\nDeprecated: Use findfirst(array .== value)\n\n\n\n"
+},
+
+{
+    "location": "api.html#SPICE.bschoi",
+    "page": "API",
+    "title": "SPICE.bschoi",
+    "category": "function",
+    "text": "bschoi(value, array, order)\n\nDeprecated: Use findfirst(array .== value)\n\n\n\n"
+},
+
+{
+    "location": "api.html#SPICE.bsrchc",
+    "page": "API",
+    "title": "SPICE.bsrchc",
+    "category": "function",
+    "text": "bsrchc(value, array)\n\nDeprecated: Use findfirst(array .== value)\n\n\n\n"
+},
+
+{
+    "location": "api.html#SPICE.bsrchd",
+    "page": "API",
+    "title": "SPICE.bsrchd",
+    "category": "function",
+    "text": "bsrchd(value, array)\n\nDeprecated: Use findfirst(array .== value)\n\n\n\n"
+},
+
+{
+    "location": "api.html#SPICE.bsrchi",
+    "page": "API",
+    "title": "SPICE.bsrchi",
+    "category": "function",
+    "text": "bsrchi(value, array)\n\nDeprecated: Use findfirst(array .== value)\n\n\n\n"
 },
 
 {
