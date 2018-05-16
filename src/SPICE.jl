@@ -43,6 +43,19 @@ const SpiceChar = UInt8
 const SpiceDouble = Cdouble
 const SpiceInt = Cint
 
+function chararray(strings)
+    m = length(strings)
+    # Longest string + terminator
+    n = maximum(length.(strings)) + 1
+    out = fill(UInt8(0), (n, m))
+    for (i, s) in enumerate(strings)
+        start = n * (i - 1) + 1
+        stop = start + length(s) - 1
+        out[start:stop] = convert(Array{UInt8}, s)
+    end
+    out, m, n
+end
+
 include("cells.jl")
 
 include("a.jl")

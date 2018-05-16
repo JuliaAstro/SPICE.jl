@@ -1,4 +1,23 @@
-export b1900, b1950, badkpv, bltfrm, bodc2n, bodc2s, boddef, bodfnd, bodn2c, bods2c, bodvcd, bodvrd
+export
+    b1900,
+    b1950,
+    badkpv,
+    bltfrm,
+    bodc2n,
+    bodc2s,
+    boddef,
+    bodfnd,
+    bodn2c,
+    bods2c,
+    bodvcd,
+    bodvrd,
+    brcktd,
+    brckti,
+    bschoc,
+    bschoi,
+    bsrchc,
+    bsrchd,
+    bsrchi
 
 """
     b1900()
@@ -282,3 +301,126 @@ function bodvrd(bodynm, item, maxn = 100)
     handleerror()
     values[1:dim[]]
 end
+
+function _brcktd(number, e1, e2)
+    ccall((:brcktd_c, libcspice), SpiceDouble, (SpiceDouble, SpiceDouble, SpiceDouble),
+        number, e1, e2)
+end
+
+"""
+    brcktd(number, e1, e2)
+
+**Deprecated:** Use `clamp` from Julia's standard library instead.
+"""
+brcktd
+
+@deprecate brcktd clamp
+
+function _brckti(number, e1, e2)
+    ccall((:brckti_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, SpiceInt),
+        number, e1, e2)
+end
+
+"""
+    brckti(number, e1, e2)
+
+**Deprecated:** Use `clamp` from Julia's standard library instead.
+"""
+brckti
+
+@deprecate brckti clamp
+
+function _bschoc(value, array, order)
+    arr, m, n = chararray(array)
+    ord = Array{SpiceInt}(order - 1)
+    idx = ccall((:bschoc_c, libcspice), SpiceInt,
+        (Cstring, SpiceInt, SpiceInt, Ptr{SpiceChar}, Ptr{SpiceInt}),
+        value, m, n, arr, ord)
+    handleerror()
+    return idx == -1 ? idx : idx + 1
+end
+
+"""
+    bschoc(value, array, order)
+
+**Deprecated:** Use `findfirst(array .== value)`
+"""
+bschoc
+
+@deprecate bschoc(value, array, order) findfirst(array .== value)
+
+function _bschoi(value, array, order)
+    arr = Array{SpiceInt}(array)
+    n = length(arr)
+    ord = Array{SpiceInt}(order - 1)
+    idx = ccall((:bschoi_c, libcspice), SpiceInt,
+        (SpiceInt, SpiceInt, Ptr{SpiceInt}, Ptr{SpiceInt}),
+        value, n, arr, ord)
+    handleerror()
+    return idx == -1 ? idx : idx + 1
+end
+
+"""
+    bschoi(value, array, order)
+
+**Deprecated:** Use `findfirst(array .== value)`
+"""
+bschoi
+
+@deprecate bschoi(value, array, order) findfirst(array .== value)
+
+function _bsrchc(value, array)
+    arr, m, n = chararray(array)
+    idx = ccall((:bsrchc_c, libcspice), SpiceInt,
+        (Cstring, SpiceInt, SpiceInt, Ptr{SpiceChar}),
+        value, m, n, arr)
+    handleerror()
+    return idx == -1 ? idx : idx + 1
+end
+
+"""
+    bsrchc(value, array)
+
+**Deprecated:** Use `findfirst(array .== value)`
+"""
+bsrchc
+
+@deprecate bsrchc(value, array) findfirst(array .== value)
+
+function _bsrchd(value, array)
+    arr = Array{SpiceDouble}(array)
+    n = length(arr)
+    idx = ccall((:bsrchd_c, libcspice), SpiceInt,
+        (SpiceDouble, SpiceInt, Ptr{SpiceDouble}),
+        value, n, arr)
+    handleerror()
+    return idx == -1 ? idx : idx + 1
+end
+
+"""
+    bsrchd(value, array)
+
+**Deprecated:** Use `findfirst(array .== value)`
+"""
+bsrchd
+
+@deprecate bsrchd(value, array) findfirst(array .== value)
+
+function _bsrchi(value, array)
+    arr = Array{SpiceInt}(array)
+    n = length(arr)
+    idx = ccall((:bsrchi_c, libcspice), SpiceInt,
+        (SpiceInt, SpiceInt, Ptr{SpiceInt}),
+        value, n, arr)
+    handleerror()
+    return idx == -1 ? idx : idx + 1
+end
+
+"""
+    bsrchi(value, array)
+
+**Deprecated:** Use `findfirst(array .== value)`
+"""
+bsrchi
+
+@deprecate bsrchi(value, array) findfirst(array .== value)

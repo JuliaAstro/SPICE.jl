@@ -44,4 +44,20 @@
     @test_throws SpiceException bodvrd("EARTH", "Norbert")
     @test_throws SpiceException bodvrd("Norbert", "RADII")
     unload(path(CORE, :pck))
+
+    @test SPICE._brcktd(4.0, 1.0, 3.0) == clamp(4.0, 1.0, 3.0)
+    @test SPICE._brckti(4, 1, 3) == clamp(4, 1, 3)
+    let arr = ["FEYNMAN", "BOHR", "EINSTEIN", "NEWTON", "GALILEO"],
+        ord=sortperm(arr)
+        for name in arr
+            @test SPICE._bschoc(name, arr, ord) ==
+                findfirst(arr .== name)
+            @test SPICE._bsrchc(name, sort(arr)) ==
+                findfirst(sort(arr) .== name)
+        end
+    end
+    @test SPICE._bschoi(1, [3, 1, 2], [2, 3, 1]) == findfirst([3, 1, 2] .== 1)
+    @test SPICE._bsrchd(3.0, [1.0, 2.0, 3.0]) ==
+        findfirst([1.0, 2.0, 3.0] .== 3.0)
+    @test SPICE._bsrchi(3, [1, 2, 3]) == findfirst([1, 2, 3] .== 3)
 end
