@@ -5,10 +5,20 @@ export axisar
 
 Construct a rotation matrix that rotates vectors by a specified `angle` about a specified `axis`.
 
-[https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/axisar_c.html](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/axisar_c.html)
+### Arguments ###
+
+- `axis`: Rotation axis
+- `angle`: Rotation angle in radians
+
+### Output ###
+
+Rotation matrix corresponding to `axis` and `angle`
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/axisar_c.html)
 """
 function axisar(axis, angle)
-    ptr = pointer(axis, 1)
     r = Matrix{Float64}(3,3)
     ccall((:axisar_c, libcspice), Void, (Ptr{SpiceDouble}, SpiceDouble, Ptr{SpiceDouble}), axis, angle, r)
     return r'

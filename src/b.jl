@@ -7,7 +7,7 @@ Returns the Julian Date corresponding to Besselian date 1900.0.
 
 ### References ###
 
-[NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/b1900_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/b1900_c.html)
 """
 function b1900()
     ccall((:b1900_c, libcspice), SpiceDouble, ())
@@ -20,7 +20,7 @@ Returns the Julian Date corresponding to Besselian date 1950.0.
 
 ### References ###
 
-[NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/b1950_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/b1950_c.html)
 """
 function b1950()
     ccall((:b1950_c, libcspice), SpiceDouble, ())
@@ -42,7 +42,7 @@ Determine if a kernel pool variable is present and if so that it has the correct
 
 ### Output ###
 
-The function returns `false` if the kernel pool variable is OK otherwise and exception is thrown.
+The function returns `false` if the kernel pool variable is OK otherwise an exception is thrown.
 
 ### References ###
 
