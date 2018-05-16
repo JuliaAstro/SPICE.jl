@@ -1,4 +1,17 @@
-export ccifrm, cidfrm, ckcls, ckopn, ckw01, ckgp, ckgpav, clight
+export
+    ccifrm,
+    cgv2el,
+    cidfrm,
+    ckcls,
+    ckcov,
+    ckcov!,
+    ckobj,
+    ckobj!,
+    ckgp,
+    ckgpav,
+    ckopn,
+    ckw01,
+    clight
 
 """
     ccifrm(frclss, clssid)
@@ -35,6 +48,134 @@ function ccifrm(frclss, clssid)
     handleerror()
     found[] == 0 && throw(SpiceException("No frame with class $frclss and class ID $clssid found."))
     frcode[], unsafe_string(pointer(frname)), center[]
+end
+
+"""
+    cgv2el(center, vec1, vec2)
+
+Form a CSPICE ellipse from a center vector and two generating vectors.
+
+### Arguments ###
+
+- `center`: Center vector
+- `vec1`: Generating vector
+- `vec2`: Generating vector
+
+### Output ###
+
+The CSPICE ellipse defined by the input vectors.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cgv2el_c.html)
+"""
+function cgv2el(center, vec1, vec2)
+    ellipse = Ellipse()
+    ccall((:cgv2el_c, libcspice), Void,
+        (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ref{Ellipse}),
+        center, vec1, vec2, ellipse)
+    ellipse
+end
+
+"""
+    ckcov(ck, idcode, needav, level, tol, timsys)
+
+Find the coverage window for a specified object in a specified CK file.
+
+### Arguments ###
+
+- `ck`: Name of CK file
+- `idcode`: ID code of object
+- `needav`: Flag indicating whether angular velocity is needed
+- `level`: Coverage level:  "SEGMENT" OR "INTERVAL"
+- `tol`: Tolerance in ticks
+- `timsys`: Time system used to represent coverage
+
+### Output ###
+
+Window giving coverage for `idcode`
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckcov_c.html)
+"""
+function ckcov(ck, idcode, needav, level, tol, timsys)
+    cover = SpiceDoubleCell(20000)
+    ckcov!(ck, idcode, needav, level, tol, timsys, cover)
+end
+
+"""
+    ckcov!(ck, idcode, needav, level, tol, timsys, cover)
+
+Find the coverage window for a specified object in a specified CK file.
+
+### Arguments ###
+
+- `ck`: Name of CK file
+- `idcode`: ID code of object
+- `needav`: Flag indicating whether angular velocity is needed
+- `level`: Coverage level:  "SEGMENT" OR "INTERVAL"
+- `tol`: Tolerance in ticks
+- `timsys`: Time system used to represent coverage
+- `cover`: Window giving coverage for `idcode`. Data already present in `cover`
+    will be combined with coverage found for the object designated by `idcode`
+    in the file `ck`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckcov_c.html)
+"""
+function ckcov!(ck, idcode, needav, level, tol, timsys, cover)
+    ccall((:ckcov_c, libcspice), Void,
+        (Cstring, SpiceInt, SpiceBoolean, Cstring, SpiceDouble, Cstring,
+            Ref{Cell{SpiceDouble}}),
+        ck, idcode, needav, level, tol, timsys, cover.cell)
+    handleerror()
+    cover
+end
+
+"""
+    ckobj(ck)
+
+Find the set of ID codes of all objects in a specified CK file.
+
+### Arguments ##
+
+- `ck`: Name of CK file
+
+### Output ###
+
+Set of ID codes of objects in CK file.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckobj_c.html)
+"""
+function ckobj(ck)
+    ids = SpiceIntCell(1000)
+    ckobj!(ck, ids)
+end
+
+"""
+    ckobj!(ck, ids)
+
+Find the set of ID codes of all objects in a specified CK file.
+
+### Arguments ##
+
+- `ck`: Name of CK file
+- `ids`: Set of ID codes of objects in CK file. Data already present in 
+    `ids` will be combined with ID code set found for the file `ck`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckobj_c.html)
+"""
+function ckobj!(ck, ids)
+    ccall((:ckobj_c, libcspice), Void, (Cstring, Ref{Cell{SpiceInt}}),
+        ck, ids.cell)
+    handleerror()
+    ids
 end
 
 """
@@ -136,7 +277,13 @@ end
 function ckgpav()
 end
 
-"Returns the speed of light in vacuo (km/sec)."
+"""
+    clight()
+
+### Output ###
+
+Returns the speed of light in vacuo (km/sec).
+"""
 function clight()
     ccall((:clight_c, libcspice), Cdouble, ())
 end

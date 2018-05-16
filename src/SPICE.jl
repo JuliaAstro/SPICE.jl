@@ -57,6 +57,7 @@ function chararray(strings)
 end
 
 include("cells.jl")
+include("types.jl")
 
 include("a.jl")
 include("b.jl")
