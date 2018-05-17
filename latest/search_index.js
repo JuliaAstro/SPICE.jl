@@ -197,7 +197,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bschoc",
     "category": "function",
-    "text": "bschoc(value, array, order)\n\nDeprecated: Use findfirst(array .== value)\n\n\n\n"
+    "text": "bschoc(value, array, order)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n"
 },
 
 {
@@ -205,7 +205,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bschoi",
     "category": "function",
-    "text": "bschoi(value, array, order)\n\nDeprecated: Use findfirst(array .== value)\n\n\n\n"
+    "text": "bschoi(value, array, order)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n"
 },
 
 {
@@ -213,7 +213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bsrchc",
     "category": "function",
-    "text": "bsrchc(value, array)\n\nDeprecated: Use findfirst(array .== value)\n\n\n\n"
+    "text": "bsrchc(value, array)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n"
 },
 
 {
@@ -221,7 +221,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bsrchd",
     "category": "function",
-    "text": "bsrchd(value, array)\n\nDeprecated: Use findfirst(array .== value)\n\n\n\n"
+    "text": "bsrchd(value, array)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n"
 },
 
 {
@@ -229,7 +229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bsrchi",
     "category": "function",
-    "text": "bsrchi(value, array)\n\nDeprecated: Use findfirst(array .== value)\n\n\n\n"
+    "text": "bsrchi(value, array)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n"
 },
 
 {
@@ -289,19 +289,27 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api.html#SPICE.ckgp-Tuple{}",
+    "location": "api.html#SPICE.ckgp-NTuple{4,Any}",
     "page": "API",
     "title": "SPICE.ckgp",
     "category": "method",
-    "text": "\n\n"
+    "text": "ckgp(inst, sclkdp, tol, ref)\n\nGet pointing (attitude) for a specified spacecraft clock time.\n\nArguments\n\ninst: NAIF ID of instrument, spacecraft, or structure\nsclkdp: Encoded spacecraft clock time\ntol: Time tolerance\nref: Reference frame\n\nOutputs\n\ncmat: C-matrix pointing data\nclkout: Output encoded spacecraft clock time\nfound: true when requested pointing is available\n\nReferences\n\nNAIF Documentation\n\n\n\n"
 },
 
 {
-    "location": "api.html#SPICE.ckgpav-Tuple{}",
+    "location": "api.html#SPICE.ckgpav-NTuple{4,Any}",
     "page": "API",
     "title": "SPICE.ckgpav",
     "category": "method",
-    "text": "\n\n"
+    "text": "ckgpav(inst, sclkdp, tol, ref)\n\nGet pointing (attitude) and angular velocity for a specified spacecraft clock time.\n\nArguments\n\ninst: NAIF ID of instrument, spacecraft, or structure\nsclkdp: Encoded spacecraft clock time\ntol: Time tolerance\nref: Reference frame\n\nOutputs\n\ncmat: C-matrix pointing data\nav: Angular velocity vector\nclkout: Output encoded spacecraft clock time\nfound: true when requested pointing is available\n\nReferences\n\nNAIF Documentation\n\n\n\n"
+},
+
+{
+    "location": "api.html#SPICE.cklpf-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.cklpf",
+    "category": "method",
+    "text": "cklpf(filename)\n\nLoad a CK pointing file for use by the CK readers.  Return that file\'s handle, to be used by other CK routines to refer to the file.\n\nArguments\n\nfilename: Name of the CK file to be loaded\n\nOutput\n\nLoaded file\'s handle\n\nReferences\n\nNAIF Documentation\n\n\n\n"
 },
 
 {
@@ -329,11 +337,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api.html#SPICE.ckupf-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.ckupf",
+    "category": "method",
+    "text": "ckupf(handle)\n\nUnload a CK pointing file so that it will no longer be searched by the readers.\n\nArguments\n\nhandle: Handle of CK file to be unloaded\n\nReferences\n\nNAIF Documentation\n\n\n\n"
+},
+
+{
     "location": "api.html#SPICE.ckw01",
     "page": "API",
     "title": "SPICE.ckw01",
     "category": "function",
-    "text": "\n\n"
+    "text": "ckw01(handle, inst, ref, segid, sclkdp, quats, avvs=Matrix{SpiceDouble}(0,0);\n    begtim=sclkdp[1], endtim=sclkdp[end])\n\nAdd a type 1 segment to a C-kernel.\n\nArguments\n\nhandle: Handle of an open CK file\ninst: The NAIF instrument ID code\nref: The reference frame of the segment\navflag: True if the segment will contain angular velocity\nsegid: Segment identifier\nnrec: Number of pointing records\nsclkdp: Encoded SCLK times\nquats: Quaternions representing instrument pointing\navvs: Angular velocity vectors (optional)\nbegtim: The beginning encoded SCLK of the segment (optional)\nendtim: The ending encoded SCLK of the segment (optional)\n\nReferences\n\nNAIF Documentation\n\n\n\n"
 },
 
 {
@@ -341,7 +357,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.clight",
     "category": "method",
-    "text": "clight()\n\nOutput\n\nReturns the speed of light in vacuo (km/sec).\n\n\n\n"
+    "text": "clight()\n\nReturns the speed of light in vacuo (km/sec).\n\n\n\n"
 },
 
 {
