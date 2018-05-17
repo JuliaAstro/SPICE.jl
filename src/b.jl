@@ -343,7 +343,7 @@ end
 """
     bschoc(value, array, order)
 
-**Deprecated:** Use `findfirst(array .== value)`
+**Deprecated:** Use `findfirst(array .== value)` instead.
 """
 bschoc
 
@@ -363,7 +363,7 @@ end
 """
     bschoi(value, array, order)
 
-**Deprecated:** Use `findfirst(array .== value)`
+**Deprecated:** Use `findfirst(array .== value)` instead.
 """
 bschoi
 
@@ -381,7 +381,7 @@ end
 """
     bsrchc(value, array)
 
-**Deprecated:** Use `findfirst(array .== value)`
+**Deprecated:** Use `findfirst(array .== value)` instead.
 """
 bsrchc
 
@@ -400,7 +400,7 @@ end
 """
     bsrchd(value, array)
 
-**Deprecated:** Use `findfirst(array .== value)`
+**Deprecated:** Use `findfirst(array .== value)` instead.
 """
 bsrchd
 
@@ -419,7 +419,7 @@ end
 """
     bsrchi(value, array)
 
-**Deprecated:** Use `findfirst(array .== value)`
+**Deprecated:** Use `findfirst(array .== value)` instead.
 """
 bsrchi
 
