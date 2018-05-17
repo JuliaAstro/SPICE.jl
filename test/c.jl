@@ -17,8 +17,8 @@
     end
 
     try
-        sclk = path(CASSINI, :cass_sclk)
-        ck = path(CASSINI, :cass_ck)
+        sclk = path(CASSINI, :sclk)
+        ck = path(CASSINI, :ck)
         furnsh(sclk)
         ckid = ckobj(ck)[1]
         @test length(ckid) == 1
@@ -28,6 +28,75 @@
         @test cover[5:6] ≈ [267868006304.000000, 267876773792.000000]
     finally
         kclear()
+    end
+
+    try
+        ck = path(CASSINI, :ck)
+        furnsh(
+            ck,
+            path(CASSINI, :sclk),
+            path(CASSINI, :ik),
+            path(CASSINI, :fk),
+            path(CASSINI, :pck),
+        )
+        ckid = ckobj(ck)[1]
+        cover = ckcov(ck, ckid, false, "INTERVAL", 0.0, "SCLK")
+        cmat, clkout, found = ckgp(ckid, cover[1], 256, "J2000")
+        expected_cmat = [
+            0.5064665782997639365 -0.75794210739897316387  0.41111478554891744963
+            -0.42372128242505308071  0.19647683351734512858  0.88422685364733510927
+            -0.7509672961490383436  -0.6220294331642198804 -0.22164725216433822652
+        ]
+        @test cmat ≈ expected_cmat
+        @test clkout == 267832537952.0
+        @test found
+    finally
+        kclear()
+    end
+
+    try
+        ck = path(CASSINI, :ck)
+        furnsh(
+            ck,
+            path(CASSINI, :sclk),
+            path(CASSINI, :ik),
+            path(CASSINI, :fk),
+            path(CASSINI, :pck),
+        )
+        ckid = ckobj(ck)[1]
+        cover = ckcov(ck, ckid, false, "INTERVAL", 0.0, "SCLK")
+        cmat, av, clkout, found = ckgpav(ckid, cover[1], 256, "J2000")
+        expected_cmat = [
+            0.5064665782997639365 -0.75794210739897316387  0.41111478554891744963
+            -0.42372128242505308071  0.19647683351734512858  0.88422685364733510927
+            -0.7509672961490383436  -0.6220294331642198804 -0.22164725216433822652
+        ]
+        expected_av = [-0.00231258422150853885, -0.00190333614370416515, -0.00069657429072504716]
+        @test cmat ≈ expected_cmat
+        @test av ≈ expected_av
+        @test clkout == 267832537952.0
+        @test found
+    finally
+        kclear()
+    end
+
+    let CKLPF = tempfile()
+        try
+            ifname = "Test CK type 1 segment created by cklpf"
+            handle = ckopn(CKLPF, ifname, 10)
+            ckw01(handle, -77701, "J2000", "Test type 1 CK segment",
+                [1.1, 4.1], [1.0 1.0 1.0 1.0; 2.0 2.0 2.0 2.0],
+                [0.0 0.0 1.0; 0.0 0.0 2.0])
+            ckcls(handle)
+            kclear()
+            handle = cklpf(CKLPF)
+            ckupf(handle)
+            ckcls(handle)
+            @test isfile(CKLPF)
+        finally
+            kclear()
+            rm(CKLPF, force=true)
+        end
     end
 
     file = "test.ck"

@@ -9,7 +9,9 @@ export
     ckobj!,
     ckgp,
     ckgpav,
+    cklpf,
     ckopn,
+    ckupf,
     ckw01,
     clight
 
@@ -135,6 +137,103 @@ function ckcov!(ck, idcode, needav, level, tol, timsys, cover)
 end
 
 """
+    ckgp(inst, sclkdp, tol, ref)
+
+Get pointing (attitude) for a specified spacecraft clock time.
+
+### Arguments ###
+
+- `inst`: NAIF ID of instrument, spacecraft, or structure
+- `sclkdp`: Encoded spacecraft clock time
+- `tol`: Time tolerance
+- `ref`: Reference frame
+
+### Outputs ###
+
+- `cmat`: C-matrix pointing data
+- `clkout`: Output encoded spacecraft clock time
+- `found`: `true` when requested pointing is available
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckgp_c.html)
+"""
+function ckgp(inst, sclkdp, tol, ref)
+    cmat = Matrix{SpiceDouble}(3, 3)
+    clkout = Ref{SpiceDouble}(0.0)
+    found = Ref{SpiceBoolean}(0)
+    ccall((:ckgp_c, libcspice), Void,
+        (SpiceInt, SpiceDouble, SpiceDouble, Cstring,
+        Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
+        inst, sclkdp, tol, ref, cmat, clkout, found)
+    handleerror()
+    # TODO: Revisit this API in Julia 1.0 and use `nothing`
+    cmat', clkout[], found[] == 1
+end
+
+"""
+    ckgpav(inst, sclkdp, tol, ref)
+
+Get pointing (attitude) and angular velocity for a specified spacecraft clock time.
+
+### Arguments ###
+
+- `inst`: NAIF ID of instrument, spacecraft, or structure
+- `sclkdp`: Encoded spacecraft clock time
+- `tol`: Time tolerance
+- `ref`: Reference frame
+
+### Outputs ###
+
+- `cmat`: C-matrix pointing data
+- `av`: Angular velocity vector
+- `clkout`: Output encoded spacecraft clock time
+- `found`: `true` when requested pointing is available
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckgpav_c.html)
+"""
+function ckgpav(inst, sclkdp, tol, ref)
+    cmat = Matrix{SpiceDouble}(3, 3)
+    av = Vector{SpiceDouble}(3)
+    clkout = Ref{SpiceDouble}(0.0)
+    found = Ref{SpiceBoolean}(0)
+    ccall((:ckgpav_c, libcspice), Void,
+        (SpiceInt, SpiceDouble, SpiceDouble, Cstring,
+        Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
+        inst, sclkdp, tol, ref, cmat, av, clkout, found)
+    handleerror()
+    # TODO: Revisit this API in Julia 1.0 and use `nothing`
+    cmat', av, clkout[], found[] == 1
+end
+
+"""
+    cklpf(filename)
+
+Load a CK pointing file for use by the CK readers.  Return that file's handle, to be used by other CK
+routines to refer to the file.
+
+### Arguments ###
+
+- `filename`: Name of the CK file to be loaded
+
+### Output ###
+
+Loaded file's handle
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cklpf_c.html)
+"""
+function cklpf(filename)
+    handle = Ref{SpiceInt}()
+    ccall((:cklpf_c, libcspice), Void, (Cstring, Ref{SpiceInt}), filename, handle)
+    handleerror()
+    handle[]
+end
+
+"""
     ckobj(ck)
 
 Find the set of ID codes of all objects in a specified CK file.
@@ -255,8 +354,46 @@ function ckcls(handle)
 end
 
 """
+    ckupf(handle)
+
+Unload a CK pointing file so that it will no longer be searched by the readers.
+
+### Arguments ###
+
+- `handle`: Handle of CK file to be unloaded
+
+### References ###
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckupf_c.html)
 """
-function ckw01(handle, inst, ref, segid, sclkdp, quats, avvs=Matrix(0,0);
+function ckupf(handle)
+    ccall((:ckupf_c, libcspice), Void, (SpiceInt,), handle)
+end
+
+"""
+    ckw01(handle, inst, ref, segid, sclkdp, quats, avvs=Matrix{SpiceDouble}(0,0);
+        begtim=sclkdp[1], endtim=sclkdp[end])
+
+Add a type 1 segment to a C-kernel.
+
+### Arguments ###
+
+- `handle`: Handle of an open CK file
+- `inst`: The NAIF instrument ID code
+- `ref`: The reference frame of the segment
+- `avflag`: True if the segment will contain angular velocity
+- `segid`: Segment identifier
+- `nrec`: Number of pointing records
+- `sclkdp`: Encoded SCLK times
+- `quats`: Quaternions representing instrument pointing
+- `avvs`: Angular velocity vectors (optional)
+- `begtim`: The beginning encoded SCLK of the segment (optional)
+- `endtim`: The ending encoded SCLK of the segment (optional)
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckw01_c.html)
+"""
+function ckw01(handle, inst, ref, segid, sclkdp, quats, avvs=Matrix{SpiceDouble}(0,0);
                begtim=sclkdp[1], endtim=sclkdp[end])
     nrec = length(sclkdp)
     avflag = length(avvs) > 0 ? 1 : 0
@@ -268,19 +405,7 @@ function ckw01(handle, inst, ref, segid, sclkdp, quats, avvs=Matrix(0,0);
 end
 
 """
-"""
-function ckgp()
-end
-
-"""
-"""
-function ckgpav()
-end
-
-"""
     clight()
-
-### Output ###
 
 Returns the speed of light in vacuo (km/sec).
 """
