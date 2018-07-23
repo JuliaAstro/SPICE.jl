@@ -20,6 +20,6 @@ Rotation matrix corresponding to `axis` and `angle`
 """
 function axisar(axis, angle)
     r = Matrix{Float64}(3,3)
-    ccall((:axisar_c, libcspice), Void, (Ptr{SpiceDouble}, SpiceDouble, Ptr{SpiceDouble}), axis, angle, r)
+    ccall((:axisar_c, libcspice), Cvoid, (Ptr{SpiceDouble}, SpiceDouble, Ptr{SpiceDouble}), axis, angle, r)
     return r'
 end

@@ -13,9 +13,9 @@ end
 
 function __init__()
     # Set error handling to return on error
-    ccall((:erract_c, libcspice), Void, (Cstring, Cint, Cstring), "SET", 0, "RETURN")
+    ccall((:erract_c, libcspice), Cvoid, (Cstring, Cint, Cstring), "SET", 0, "RETURN")
     # Do not print error messages
-    ccall((:errprt_c, libcspice), Void, (Cstring, Cint, Cstring), "SET", 0, "NONE")
+    ccall((:errprt_c, libcspice), Cvoid, (Cstring, Cint, Cstring), "SET", 0, "NONE")
 end
 
 struct SpiceException <: Exception
@@ -29,10 +29,10 @@ function handleerror()
     if failed
         # Retrive error message
         msg = Array{UInt8}(1841)
-        ccall((:getmsg_c, libcspice), Void, (Cstring, Cint, Ptr{UInt8}), "LONG", 1841, msg)
+        ccall((:getmsg_c, libcspice), Cvoid, (Cstring, Cint, Ptr{UInt8}), "LONG", 1841, msg)
         message = unsafe_string(pointer(msg))
         # Reset error status and throw Julia error
-        ccall((:reset_c, libcspice), Void, ())
+        ccall((:reset_c, libcspice), Cvoid, ())
         throw(SpiceException(message))
     end
 end

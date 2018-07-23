@@ -2,7 +2,7 @@ export str2et, spkezr, spkpos, spkcpo, spkopn, spkcls, spkw13, spd, sxform
 
 function str2et(string)
     et = Ref{Cdouble}(0)
-    ccall((:str2et_c, libcspice), Void, (Cstring, Ref{Cdouble}), string, et)
+    ccall((:str2et_c, libcspice), Cvoid, (Cstring, Ref{Cdouble}), string, et)
     handleerror()
     return et[]
 end
@@ -15,7 +15,7 @@ Returns the state of a target body relative to an observing body.
 function spkezr(targ::AbstractString, et::Float64, ref::AbstractString, obs::AbstractString; abcorr::AbstractString="NONE")
     starg = Array{Cdouble}(6)
     lt = Ref{Cdouble}(0)
-    ccall((:spkezr_c, libcspice), Void, (Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}), targ, et, ref, abcorr, obs, starg, lt)
+    ccall((:spkezr_c, libcspice), Cvoid, (Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}), targ, et, ref, abcorr, obs, starg, lt)
     handleerror()
     return starg, lt[]
 end
@@ -31,7 +31,7 @@ Returns the state of a target body relative to an observing body.
 function spkpos(targ::AbstractString, et::Float64, ref::AbstractString, obs::AbstractString; abcorr::AbstractString="NONE")
     starg = Array{Cdouble}(3)
     lt = Ref{Cdouble}(0)
-    ccall((:spkpos_c, libcspice), Void, (Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}), targ, et, ref, abcorr, obs, starg, lt)
+    ccall((:spkpos_c, libcspice), Cvoid, (Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}), targ, et, ref, abcorr, obs, starg, lt)
     handleerror()
     return starg, lt[]
 end
@@ -49,7 +49,7 @@ function spkcpo(target, et, outref, refloc, obspos, obsctr, obsref; abcorr="NONE
     state = Array{Cdouble}(6)
     lt = Ref{Cdouble}(0)
     ccall(
-        (:spkcpo_c, libcspice), Void,
+        (:spkcpo_c, libcspice), Cvoid,
         (Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}),
         target, et, outref, refloc, abcorr, obspos, obsctr, obsref, state, lt
     )
@@ -60,7 +60,7 @@ end
 function spkopn(name, ifname, ncomch)
     handle = Ref{SpiceInt}(0)
     ccall(
-        (:spkopn_c, libcspice), Void,
+        (:spkopn_c, libcspice), Cvoid,
         (Cstring, Cstring, Cint, Ref{Cint}), name, ifname, ncomch, handle
     )
     handleerror()
@@ -69,7 +69,7 @@ end
 
 function spkcls(handle)
     ccall(
-        (:spkcls_c, libcspice), Void,
+        (:spkcls_c, libcspice), Cvoid,
         (SpiceInt,), handle
     )
     handleerror()
@@ -79,7 +79,7 @@ end
 function spkw13(handle, body, center, frame, first, last, segid, degree, states, epochs)
     n = length(epochs)
     ccall(
-        (:spkw13_c, libcspice), Void,
+        (:spkw13_c, libcspice), Cvoid,
         (Cint, Cint, Cint, Cstring, Cdouble, Cdouble, Cstring, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}),
         handle[], body, center, frame, first, last, segid, degree, n, states, epochs
     )
@@ -98,7 +98,7 @@ https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sxform_c.html
 """
 function sxform(from::String, to::String, et::Float64)
     rot = Array{Cdouble}(6, 6)
-    ccall((:sxform_c, libcspice), Void, (Cstring, Cstring, Cdouble, Ptr{Cdouble}), from, to, et, rot)
+    ccall((:sxform_c, libcspice), Cvoid, (Cstring, Cstring, Cdouble, Ptr{Cdouble}), from, to, et, rot)
     handleerror()
     return rot
 end

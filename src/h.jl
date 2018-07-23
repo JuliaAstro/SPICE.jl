@@ -22,7 +22,7 @@ function hx2dp(str)
     dp = Ref{SpiceDouble}()
     error = Ref{SpiceBoolean}()
     errmsg = Array{UInt8}(46)
-    ccall((:hx2dp_c, libcspice), Void,
+    ccall((:hx2dp_c, libcspice), Cvoid,
         (Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceBoolean}, Ptr{UInt8}),
         str, 46, dp, error, errmsg
     )

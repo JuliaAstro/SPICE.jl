@@ -1,4 +1,4 @@
-import Base: getindex, endof, push!, append!, show, length
+import Base: getindex, push!, append!, show, length
 export SpiceIntCell, SpiceDoubleCell, SpiceCharCell, appnd, push!, append!, card, length
 
 const CTRLSZ = 6
@@ -7,7 +7,7 @@ dtype(::Type{SpiceChar}) = 0
 dtype(::Type{SpiceDouble}) = 1
 dtype(::Type{SpiceInt}) = 2
 
-type Cell{T}
+mutable struct Cell{T}
     dtype::SpiceInt
     length::SpiceInt
     size::SpiceInt
@@ -15,14 +15,14 @@ type Cell{T}
     isset::SpiceInt
     adjust::SpiceInt
     init::SpiceInt
-    base::Ptr{Void}
-    data::Ptr{Void}
-    function (::Type{Cell{T}}){T}(length, size)
+    base::Ptr{Cvoid}
+    data::Ptr{Cvoid}
+    function (::Type{Cell{T}})(length, size) where T
         new{T}(dtype(T), length, size, 0, 1, 0, 0)
     end
 end
 
-type SpiceCell{T,N}
+mutable struct SpiceCell{T,N}
     data::Array{T,N}
     cell::Cell{T}
 end
@@ -31,7 +31,7 @@ const SpiceCharCell = SpiceCell{SpiceChar,2}
 const SpiceDoubleCell = SpiceCell{SpiceDouble,1}
 const SpiceIntCell = SpiceCell{SpiceInt,1}
 
-endof(cell::SpiceCell) = cell.cell.card
+Base.lastindex(cell::SpiceCell) = cell.cell.card
 show{T}(io::IO, cell::SpiceCell{T,1}) = print(io, "SpiceCell{$(T.name.name)}($(cell.cell.size))")
 show{T}(io::IO, cell::SpiceCell{T,2}) = print(io, "SpiceCell{$(T.name.name)}($(cell.cell.size),$(cell.cell.length))")
 
@@ -44,7 +44,7 @@ function check_ind(cell, inds)
     end
 end
 
-function getindex{T<:Real}(cell::SpiceCell{T}, ind)
+function getindex(cell::SpiceCell{T}, ind) where T<:Real
     check_ind(cell, ind)
     return cell.data[CTRLSZ + ind]
 end
@@ -110,7 +110,7 @@ for (t, f) in zip((SpiceInt, SpiceDouble), ("appndi_c", "appndd_c"))
     @eval begin
         function appnd(item, cell::SpiceCell{$t})
             c = Ref(cell.cell)
-            ccall(($f, libcspice), Void, ($t, Ref{Cell{$t}}), item, cell.cell)
+            ccall(($f, libcspice), Cvoid, ($t, Ref{Cell{$t}}), item, cell.cell)
             handleerror()
             return nothing
         end
@@ -128,7 +128,7 @@ Append an `item` to the char/double/integer SpiceCell `cell`.
 """
 function appnd(item, cell::SpiceCell{SpiceChar})
     c = Ref(cell.cell)
-    ccall((:appndc_c, libcspice), Void, (Cstring, Ref{Cell{SpiceChar}}), item, cell.cell)
+    ccall((:appndc_c, libcspice), Cvoid, (Cstring, Ref{Cell{SpiceChar}}), item, cell.cell)
     handleerror()
     return nothing
 end

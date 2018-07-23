@@ -94,7 +94,7 @@ Return a SPICE set containing the frame IDs of all built-in frames of a specifie
 """
 function bltfrm(frmcls)
     idset = SpiceIntCell(256)
-    ccall((:bltfrm_c, libcspice), Void, (SpiceInt, Ref{Cell{SpiceInt}}), frmcls, Ref(idset.cell))
+    ccall((:bltfrm_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{SpiceInt}}), frmcls, Ref(idset.cell))
     idset
 end
 
@@ -119,7 +119,7 @@ function bodc2n(code)
     len = 36
     name = Array{UInt8}(len)
     found = Ref{SpiceBoolean}()
-    ccall((:bodc2n_c, libcspice), Void, (SpiceInt, SpiceInt, Ptr{UInt8}, Ref{SpiceBoolean}),
+    ccall((:bodc2n_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ptr{UInt8}, Ref{SpiceBoolean}),
           code, 36, name, found)
     found[] == 0 && throw(SpiceException("No body with code $code found."))
     unsafe_string(pointer(name))
@@ -146,7 +146,7 @@ the string representation of the body ID value.
 function bodc2s(code)
     len = 36
     name = Array{UInt8}(len)
-    ccall((:bodc2s_c, libcspice), Void, (SpiceInt, SpiceInt, Ptr{UInt8}),
+    ccall((:bodc2s_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ptr{UInt8}),
           code, 36, name)
     unsafe_string(pointer(name))
 end
@@ -167,7 +167,7 @@ Define a body name/ID code pair for later translation via [`bodn2c`](@ref) or [`
 """
 function boddef(name, code)
     length(name) > 35 && throw(SpiceException("The maximum allowed length for a name is 35 characters."))
-    ccall((:boddef_c, libcspice), Void, (Cstring, SpiceInt), name, code)
+    ccall((:boddef_c, libcspice), Cvoid, (Cstring, SpiceInt), name, code)
 end
 
 """
@@ -213,7 +213,7 @@ Translate the name of a body or object to the corresponding SPICE integer ID cod
 function bodn2c(name)
     code = Ref{SpiceInt}()
     found = Ref{SpiceBoolean}()
-    ccall((:bodn2c_c, libcspice), Void, (Cstring, Ref{SpiceInt}, Ref{SpiceBoolean}),
+    ccall((:bodn2c_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}, Ref{SpiceBoolean}),
           name, code, found)
     found[] == 0 && throw(SpiceException("No body with name '$name' found."))
     Int(code[])
@@ -239,7 +239,7 @@ Translate a string containing a body name or ID code to an integer code.
 function bods2c(name)
     code = Ref{SpiceInt}()
     found = Ref{SpiceBoolean}()
-    ccall((:bods2c_c, libcspice), Void, (Cstring, Ref{SpiceInt}, Ref{SpiceBoolean}),
+    ccall((:bods2c_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}, Ref{SpiceBoolean}),
           name, code, found)
     found[] == 0 && throw(SpiceException("Neither a body with name '$name' found nor is it an integer."))
     Int(code[])
@@ -268,7 +268,7 @@ function bodvcd(bodyid, item)
     maxn = 100
     values = Array{SpiceDouble}(maxn)
     dim = Ref{SpiceInt}()
-    ccall((:bodvcd_c, libcspice), Void, (SpiceInt, Cstring, SpiceInt, Ref{SpiceInt}, Ptr{SpiceDouble}),
+    ccall((:bodvcd_c, libcspice), Cvoid, (SpiceInt, Cstring, SpiceInt, Ref{SpiceInt}, Ptr{SpiceDouble}),
           bodyid, item, maxn, dim, values)
     handleerror()
     values[1:dim[]]
@@ -283,7 +283,7 @@ Fetch from the kernel pool the double precision values of an item associated wit
 
 - `bodynm`: Body name
 - `item`: Item for which values are desired. ("RADII", "NUT_PREC_ANGLES", etc.)
-- `maxn`: Maximum number of values that may be returned. 
+- `maxn`: Maximum number of values that may be returned.
 
 ### Output ###
 
@@ -296,7 +296,7 @@ Fetch from the kernel pool the double precision values of an item associated wit
 function bodvrd(bodynm, item, maxn = 100)
     values = Array{SpiceDouble}(maxn)
     dim = Ref{SpiceInt}()
-    ccall((:bodvrd_c, libcspice), Void, (Cstring, Cstring, SpiceInt, Ref{SpiceInt}, Ptr{SpiceDouble}),
+    ccall((:bodvrd_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, Ref{SpiceInt}, Ptr{SpiceDouble}),
           bodynm, item, maxn, dim, values)
     handleerror()
     values[1:dim[]]

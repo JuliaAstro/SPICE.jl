@@ -43,7 +43,7 @@ function ccifrm(frclss, clssid)
     frname = Array{UInt8}(lenout)
     center = Ref{SpiceInt}()
     found = Ref{SpiceBoolean}()
-    ccall((:ccifrm_c, libcspice), Void,
+    ccall((:ccifrm_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}, Ref{SpiceInt}, Ref{SpiceBoolean}),
           frclss, clssid, lenout, frcode, frname, center, found,
          )
@@ -73,7 +73,7 @@ The CSPICE ellipse defined by the input vectors.
 """
 function cgv2el(center, vec1, vec2)
     ellipse = Ellipse()
-    ccall((:cgv2el_c, libcspice), Void,
+    ccall((:cgv2el_c, libcspice), Cvoid,
         (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ref{Ellipse}),
         center, vec1, vec2, ellipse)
     ellipse
@@ -128,7 +128,7 @@ Find the coverage window for a specified object in a specified CK file.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckcov_c.html)
 """
 function ckcov!(ck, idcode, needav, level, tol, timsys, cover)
-    ccall((:ckcov_c, libcspice), Void,
+    ccall((:ckcov_c, libcspice), Cvoid,
         (Cstring, SpiceInt, SpiceBoolean, Cstring, SpiceDouble, Cstring,
             Ref{Cell{SpiceDouble}}),
         ck, idcode, needav, level, tol, timsys, cover.cell)
@@ -162,7 +162,7 @@ function ckgp(inst, sclkdp, tol, ref)
     cmat = Matrix{SpiceDouble}(3, 3)
     clkout = Ref{SpiceDouble}(0.0)
     found = Ref{SpiceBoolean}(0)
-    ccall((:ckgp_c, libcspice), Void,
+    ccall((:ckgp_c, libcspice), Cvoid,
         (SpiceInt, SpiceDouble, SpiceDouble, Cstring,
         Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
         inst, sclkdp, tol, ref, cmat, clkout, found)
@@ -199,7 +199,7 @@ function ckgpav(inst, sclkdp, tol, ref)
     av = Vector{SpiceDouble}(3)
     clkout = Ref{SpiceDouble}(0.0)
     found = Ref{SpiceBoolean}(0)
-    ccall((:ckgpav_c, libcspice), Void,
+    ccall((:ckgpav_c, libcspice), Cvoid,
         (SpiceInt, SpiceDouble, SpiceDouble, Cstring,
         Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
         inst, sclkdp, tol, ref, cmat, av, clkout, found)
@@ -228,7 +228,7 @@ Loaded file's handle
 """
 function cklpf(filename)
     handle = Ref{SpiceInt}()
-    ccall((:cklpf_c, libcspice), Void, (Cstring, Ref{SpiceInt}), filename, handle)
+    ccall((:cklpf_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}), filename, handle)
     handleerror()
     handle[]
 end
@@ -271,7 +271,7 @@ Find the set of ID codes of all objects in a specified CK file.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckobj_c.html)
 """
 function ckobj!(ck, ids)
-    ccall((:ckobj_c, libcspice), Void, (Cstring, Ref{Cell{SpiceInt}}),
+    ccall((:ckobj_c, libcspice), Cvoid, (Cstring, Ref{Cell{SpiceInt}}),
         ck, ids.cell)
     handleerror()
     ids
@@ -302,7 +302,7 @@ function cidfrm(cent)
     frcode = Ref{SpiceInt}()
     frname = Array{UInt8}(lenout)
     found = Ref{SpiceBoolean}()
-    ccall((:cidfrm_c, libcspice), Void, (SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}, Ref{SpiceBoolean}),
+    ccall((:cidfrm_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}, Ref{SpiceBoolean}),
           cent, lenout, frcode, frname, found)
     found[] == 0 && throw(SpiceException("No frame associated with body $cent found."))
     frcode[], unsafe_string(pointer(frname))
@@ -329,7 +329,7 @@ Open a new CK file, returning the handle of the opened file.
 """
 function ckopn(fname, ifname="CK_file", ncomch=0)
     handle = Ref{SpiceInt}()
-    ccall((:ckopn_c, libcspice), Void, (Cstring, Cstring, SpiceInt, Ref{SpiceInt}),
+    ccall((:ckopn_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, Ref{SpiceInt}),
           fname, ifname, ncomch, handle)
     handleerror()
     handle[]
@@ -349,7 +349,7 @@ Close an open CK file.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckcls_c.html)
 """
 function ckcls(handle)
-    ccall((:ckcls_c, libcspice), Void, (SpiceInt,), handle)
+    ccall((:ckcls_c, libcspice), Cvoid, (SpiceInt,), handle)
     handleerror()
 end
 
@@ -366,7 +366,7 @@ Unload a CK pointing file so that it will no longer be searched by the readers.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckupf_c.html)
 """
 function ckupf(handle)
-    ccall((:ckupf_c, libcspice), Void, (SpiceInt,), handle)
+    ccall((:ckupf_c, libcspice), Cvoid, (SpiceInt,), handle)
 end
 
 """
@@ -397,7 +397,7 @@ function ckw01(handle, inst, ref, segid, sclkdp, quats, avvs=Matrix{SpiceDouble}
                begtim=sclkdp[1], endtim=sclkdp[end])
     nrec = length(sclkdp)
     avflag = length(avvs) > 0 ? 1 : 0
-    ccall((:ckw01_c, libcspice), Void,
+    ccall((:ckw01_c, libcspice), Cvoid,
           (SpiceInt, SpiceDouble, SpiceDouble, SpiceInt, Cstring, SpiceInt, Cstring, SpiceInt,
            Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
           handle, begtim, endtim, inst, ref, avflag, segid, nrec, sclkdp, quats, avvs)
