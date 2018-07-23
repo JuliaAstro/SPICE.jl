@@ -100,6 +100,13 @@ function _xpose6(m)
     mout
 end
 
+"""
+    xpose6(matrix)
+
+**Deprecated:** Use `transpose(matrix)` instead.
+"""
+xpose6
+
 @deprecate xpose6 transpose
 
 function _xpose(m)
@@ -107,6 +114,13 @@ function _xpose(m)
     ccall((:xpose_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ptr{SpiceDouble}), m, mout)
     mout
 end
+
+"""
+    xpose(matrix)
+
+**Deprecated:** Use `transpose(matrix)` instead.
+"""
+xpose
 
 @deprecate xpose transpose
 
@@ -117,6 +131,13 @@ function _xposeg(matrix)
           (Ptr{SpiceDouble}, SpiceInt, SpiceInt, Ptr{SpiceDouble}), matrix, n, m, mout)
     mout
 end
+
+"""
+    xposeg(matrix)
+
+**Deprecated:** Use `transpose(matrix)` instead.
+"""
+xposeg
 
 @deprecate xposeg transpose
 
