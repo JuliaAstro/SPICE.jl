@@ -17,7 +17,7 @@ mutable struct Cell{T}
     init::SpiceInt
     base::Ptr{Cvoid}
     data::Ptr{Cvoid}
-    function (::Type{Cell{T}})(length, size) where T
+    function Cell{T}(length, size) where T
         new{T}(dtype(T), length, size, 0, 1, 0, 0)
     end
 end
@@ -32,8 +32,12 @@ const SpiceDoubleCell = SpiceCell{SpiceDouble,1}
 const SpiceIntCell = SpiceCell{SpiceInt,1}
 
 Base.lastindex(cell::SpiceCell) = cell.cell.card
-show{T}(io::IO, cell::SpiceCell{T,1}) = print(io, "SpiceCell{$(T.name.name)}($(cell.cell.size))")
-show{T}(io::IO, cell::SpiceCell{T,2}) = print(io, "SpiceCell{$(T.name.name)}($(cell.cell.size),$(cell.cell.length))")
+function show(io::IO, cell::SpiceCell{T,1}) where T
+    print(io, "SpiceCell{$(T.name.name)}($(cell.cell.size))")
+end
+function show(io::IO, cell::SpiceCell{T,2}) where T
+    print(io, "SpiceCell{$(T.name.name)}($(cell.cell.size),$(cell.cell.length))")
+end
 
 function check_ind(cell, inds)
     ind = collect(inds)[end]
@@ -46,22 +50,22 @@ end
 
 function getindex(cell::SpiceCell{T}, ind) where T<:Real
     check_ind(cell, ind)
-    return cell.data[CTRLSZ + ind]
+    return cell.data[CTRLSZ .+ ind]
 end
 
 function getindex(cell::SpiceCharCell, ind::Int)
     check_ind(cell, ind)
-    str = cell.data[:, CTRLSZ + ind]
+    str = cell.data[:, CTRLSZ .+ ind]
     return String(str[1:findfirst(str .== 0)-1])
 end
 
 function getindex(cell::SpiceCharCell, ind)
     check_ind(cell, ind)
-    str = cell.data[:, CTRLSZ + ind]
-    return vec(mapslices(x -> String(x[1:findfirst(x .== 0)-1]), str, 1))
+    str = cell.data[:, CTRLSZ .+ ind]
+    return vec(mapslices(x -> String(x[1:findfirst(x .== 0)-1]), str, dims=1))
 end
 
-function SpiceCell{SpiceChar}(::Type{SpiceChar}, size, length)
+function SpiceCell(::Type{SpiceChar}, size, length)
     # We add an extra element for the null-byte terminator.
     nlength = length + 1
     strc = Cell{SpiceChar}(nlength, size)
@@ -81,9 +85,9 @@ Create a SpiceCharCell that can contain up to `size` strings with `length` chara
 """
 SpiceCharCell(size::Int, length::Int) = SpiceCell(SpiceChar, size, length)
 
-function SpiceCell{T<:Real}(::Type{T}, size)
+function SpiceCell(::Type{T}, size) where T<:Real
     strc = Cell{T}(0, size)
-    data = Vector{T}(CTRLSZ + size)
+    data = Vector{T}(undef, CTRLSZ + size)
     self = SpiceCell(data, strc)
     base = pointer(self.data, 1)
     data = pointer(self.data, CTRLSZ + 1)

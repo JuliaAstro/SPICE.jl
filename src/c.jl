@@ -40,7 +40,7 @@ Return the tuple `(frcode, frname, center)`.
 function ccifrm(frclss, clssid)
     lenout = 33
     frcode = Ref{SpiceInt}()
-    frname = Array{UInt8}(lenout)
+    frname = Array{UInt8}(undef, lenout)
     center = Ref{SpiceInt}()
     found = Ref{SpiceBoolean}()
     ccall((:ccifrm_c, libcspice), Cvoid,
@@ -159,7 +159,7 @@ Get pointing (attitude) for a specified spacecraft clock time.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckgp_c.html)
 """
 function ckgp(inst, sclkdp, tol, ref)
-    cmat = Matrix{SpiceDouble}(3, 3)
+    cmat = Matrix{SpiceDouble}(undef, 3, 3)
     clkout = Ref{SpiceDouble}(0.0)
     found = Ref{SpiceBoolean}(0)
     ccall((:ckgp_c, libcspice), Cvoid,
@@ -195,8 +195,8 @@ Get pointing (attitude) and angular velocity for a specified spacecraft clock ti
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckgpav_c.html)
 """
 function ckgpav(inst, sclkdp, tol, ref)
-    cmat = Matrix{SpiceDouble}(3, 3)
-    av = Vector{SpiceDouble}(3)
+    cmat = Matrix{SpiceDouble}(undef, 3, 3)
+    av = Vector{SpiceDouble}(undef, 3)
     clkout = Ref{SpiceDouble}(0.0)
     found = Ref{SpiceBoolean}(0)
     ccall((:ckgpav_c, libcspice), Cvoid,
@@ -300,7 +300,7 @@ Returns the tuple `(frcode, frname)`
 function cidfrm(cent)
     lenout = 33
     frcode = Ref{SpiceInt}()
-    frname = Array{UInt8}(lenout)
+    frname = Array{UInt8}(undef, lenout)
     found = Ref{SpiceBoolean}()
     ccall((:cidfrm_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}, Ref{SpiceBoolean}),
           cent, lenout, frcode, frname, found)

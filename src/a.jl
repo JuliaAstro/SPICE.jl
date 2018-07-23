@@ -19,7 +19,7 @@ Rotation matrix corresponding to `axis` and `angle`
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/axisar_c.html)
 """
 function axisar(axis, angle)
-    r = Matrix{Float64}(3,3)
+    r = Matrix{Float64}(undef, 3,3)
     ccall((:axisar_c, libcspice), Cvoid, (Ptr{SpiceDouble}, SpiceDouble, Ptr{SpiceDouble}), axis, angle, r)
     return r'
 end

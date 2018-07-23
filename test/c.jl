@@ -1,3 +1,5 @@
+using Random: randstring
+
 @testset "C" begin
     @test ccifrm(2, 3000) == (13000, "ITRF93", 399)
     @test_throws SpiceException ccifrm(9999, 3000)

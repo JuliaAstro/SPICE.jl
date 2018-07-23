@@ -117,7 +117,7 @@ Translate the SPICE integer code of a body into a common name for that body.
 """
 function bodc2n(code)
     len = 36
-    name = Array{UInt8}(len)
+    name = Array{UInt8}(undef, len)
     found = Ref{SpiceBoolean}()
     ccall((:bodc2n_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ptr{UInt8}, Ref{SpiceBoolean}),
           code, 36, name, found)
@@ -145,7 +145,7 @@ the string representation of the body ID value.
 """
 function bodc2s(code)
     len = 36
-    name = Array{UInt8}(len)
+    name = Array{UInt8}(undef, len)
     ccall((:bodc2s_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ptr{UInt8}),
           code, 36, name)
     unsafe_string(pointer(name))
@@ -266,7 +266,7 @@ is specified by an integer ID code.
 """
 function bodvcd(bodyid, item)
     maxn = 100
-    values = Array{SpiceDouble}(maxn)
+    values = Array{SpiceDouble}(undef, maxn)
     dim = Ref{SpiceInt}()
     ccall((:bodvcd_c, libcspice), Cvoid, (SpiceInt, Cstring, SpiceInt, Ref{SpiceInt}, Ptr{SpiceDouble}),
           bodyid, item, maxn, dim, values)
@@ -294,7 +294,7 @@ Fetch from the kernel pool the double precision values of an item associated wit
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/bodvrd_c.html)
 """
 function bodvrd(bodynm, item, maxn = 100)
-    values = Array{SpiceDouble}(maxn)
+    values = Array{SpiceDouble}(undef, maxn)
     dim = Ref{SpiceInt}()
     ccall((:bodvrd_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, Ref{SpiceInt}, Ptr{SpiceDouble}),
           bodynm, item, maxn, dim, values)
@@ -332,7 +332,7 @@ brckti
 
 function _bschoc(value, array, order)
     arr, m, n = chararray(array)
-    ord = Array{SpiceInt}(order - 1)
+    ord = Array{SpiceInt}(order .- 1)
     idx = ccall((:bschoc_c, libcspice), SpiceInt,
         (Cstring, SpiceInt, SpiceInt, Ptr{SpiceChar}, Ptr{SpiceInt}),
         value, m, n, arr, ord)
@@ -352,7 +352,7 @@ bschoc
 function _bschoi(value, array, order)
     arr = Array{SpiceInt}(array)
     n = length(arr)
-    ord = Array{SpiceInt}(order - 1)
+    ord = Array{SpiceInt}(order .- 1)
     idx = ccall((:bschoi_c, libcspice), SpiceInt,
         (SpiceInt, SpiceInt, Ptr{SpiceInt}, Ptr{SpiceInt}),
         value, n, arr, ord)

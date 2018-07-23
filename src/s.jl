@@ -13,7 +13,7 @@ Returns the state of a target body relative to an observing body.
 - [NAIF documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkezr_c.html)
 """
 function spkezr(targ::AbstractString, et::Float64, ref::AbstractString, obs::AbstractString; abcorr::AbstractString="NONE")
-    starg = Array{Cdouble}(6)
+    starg = Array{Cdouble}(undef, 6)
     lt = Ref{Cdouble}(0)
     ccall((:spkezr_c, libcspice), Cvoid, (Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}), targ, et, ref, abcorr, obs, starg, lt)
     handleerror()
@@ -29,7 +29,7 @@ Returns the state of a target body relative to an observing body.
 - [NAIF documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkpos_c.html)
 """
 function spkpos(targ::AbstractString, et::Float64, ref::AbstractString, obs::AbstractString; abcorr::AbstractString="NONE")
-    starg = Array{Cdouble}(3)
+    starg = Array{Cdouble}(undef, 3)
     lt = Ref{Cdouble}(0)
     ccall((:spkpos_c, libcspice), Cvoid, (Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}), targ, et, ref, abcorr, obs, starg, lt)
     handleerror()
@@ -97,7 +97,7 @@ Return the state transformation matrix from one frame to another at a specified 
 https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sxform_c.html
 """
 function sxform(from::String, to::String, et::Float64)
-    rot = Array{Cdouble}(6, 6)
+    rot = Array{Cdouble}(undef, 6, 6)
     ccall((:sxform_c, libcspice), Cvoid, (Cstring, Cstring, Cdouble, Ptr{Cdouble}), from, to, et, rot)
     handleerror()
     return rot

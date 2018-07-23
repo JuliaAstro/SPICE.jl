@@ -1,6 +1,6 @@
 using SPICE
 using RemoteFiles
-using Base.Test
+using Test
 
 tempfile() = joinpath(tempdir(), randstring(6))
 

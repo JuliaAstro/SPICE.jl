@@ -28,7 +28,7 @@ function handleerror()
     failed = ccall((:failed_c, libcspice), Bool, ())
     if failed
         # Retrive error message
-        msg = Array{UInt8}(1841)
+        msg = Array{UInt8}(undef, 1841)
         ccall((:getmsg_c, libcspice), Cvoid, (Cstring, Cint, Ptr{UInt8}), "LONG", 1841, msg)
         message = unsafe_string(pointer(msg))
         # Reset error status and throw Julia error
@@ -51,7 +51,7 @@ function chararray(strings)
     for (i, s) in enumerate(strings)
         start = n * (i - 1) + 1
         stop = start + length(s) - 1
-        out[start:stop] = convert(Array{UInt8}, s)
+        out[start:stop] = codeunits(s)
     end
     out, m, n
 end
