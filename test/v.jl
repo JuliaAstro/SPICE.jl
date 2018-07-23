@@ -4,7 +4,7 @@ using LinearAlgebra: cross, norm, dot, normalize
     let v1 = randn(3), v2 = randn(3)
         @test SPICE._vadd(v1, v2) == v1 .+ v2
         @test SPICE._vaddg(v1, v2) == v1 .+ v2
-        @test SPICE._vcrss(v1, v2) == cross(v1, v2)
+        @test SPICE._vcrss(v1, v2) ≈ cross(v1, v2)
         @test SPICE._vdist(v1, v2) ≈ norm(v1 .- v2)
         @test SPICE._vdistg(v1, v2) ≈ norm(v1 .- v2)
         @test SPICE._vdot(v1, v2) ≈ dot(v1, v2)
@@ -18,8 +18,8 @@ using LinearAlgebra: cross, norm, dot, normalize
         @test SPICE._vhat(v1) ≈ normalize(v1)
         v3 = randn(3)
         a, b, c = randn(3)
-        @test SPICE._vlcom3(a, v1, b, v2, c, v3) == a .* v1 .+ b .* v2 .+ c .* v3
-        @test SPICE._vlcom(a, v1, b, v2) == a .* v1 .+ b .* v2
+        @test SPICE._vlcom3(a, v1, b, v2, c, v3) ≈ a .* v1 .+ b .* v2 .+ c .* v3
+        @test SPICE._vlcom(a, v1, b, v2) ≈ a .* v1 .+ b .* v2
         @test SPICE._vminus(v1) == -v1
         @test SPICE._vnorm(v1) ≈ norm(v1)
         @test SPICE._vpack(a, b, c) == [a, b, c]
@@ -35,7 +35,7 @@ using LinearAlgebra: cross, norm, dot, normalize
         @test w2 == v2
         @test SPICE._vhatg(v1) ≈ normalize(v1)
         a, b = randn(2)
-        @test SPICE._vlcomg(a, v1, b, v2) == a .* v1 .+ b .* v2
+        @test SPICE._vlcomg(a, v1, b, v2) ≈ a .* v1 .+ b .* v2
         @test SPICE._vminug(v1) == -v1
         @test SPICE._vnormg(v1) ≈ norm(v1)
     end
