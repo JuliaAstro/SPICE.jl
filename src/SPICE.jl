@@ -43,6 +43,8 @@ const SpiceChar = UInt8
 const SpiceDouble = Cdouble
 const SpiceInt = Cint
 
+const LENOUT = 256
+
 function chararray(strings)
     m = length(strings)
     # Longest string + terminator

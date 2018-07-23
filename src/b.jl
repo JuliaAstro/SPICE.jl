@@ -293,7 +293,7 @@ Fetch from the kernel pool the double precision values of an item associated wit
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/bodvrd_c.html)
 """
-function bodvrd(bodynm, item, maxn = 100)
+function bodvrd(bodynm, item, maxn=100)
     values = Array{SpiceDouble}(undef, maxn)
     dim = Ref{SpiceInt}()
     ccall((:bodvrd_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, Ref{SpiceInt}, Ptr{SpiceDouble}),

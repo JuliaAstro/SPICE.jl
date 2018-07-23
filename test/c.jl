@@ -82,34 +82,119 @@ using Random: randstring
         kclear()
     end
 
-    let CKLPF = tempfile()
+    let file = tempfile()
         try
             ifname = "Test CK type 1 segment created by cklpf"
-            handle = ckopn(CKLPF, ifname, 10)
+            handle = ckopn(file, ifname, 10)
             ckw01(handle, -77701, "J2000", "Test type 1 CK segment",
                 [1.1, 4.1], [1.0 1.0 1.0 1.0; 2.0 2.0 2.0 2.0],
                 [0.0 0.0 1.0; 0.0 0.0 2.0])
             ckcls(handle)
             kclear()
-            handle = cklpf(CKLPF)
+            handle = cklpf(file)
             ckupf(handle)
             ckcls(handle)
-            @test isfile(CKLPF)
+            @test isfile(file)
         finally
             kclear()
-            rm(CKLPF, force=true)
+            rm(file, force=true)
         end
     end
 
-    file = "test.ck"
-    try
-        handle = ckopn(file)
-        quats = reshape(collect(1.0:8.0), 4, 2)
-        avvs = reshape(collect(1.0:6.0), 3, 2)
-        sclkdp = [1.0, 2.0]
-        ckw01(handle, -7701, "J2000", "GLL SCAN PLT - DATA TYPE 1", sclkdp, quats, avvs)
-        ckcls(handle)
-    finally
-        rm(file, force=true)
+    let file = tempfile()
+        try
+            handle = ckopn(file)
+            quats = reshape(collect(1.0:8.0), 4, 2)
+            avvs = reshape(collect(1.0:6.0), 3, 2)
+            sclkdp = [1.0, 2.0]
+            ckw01(handle, -7701, "J2000", "GLL SCAN PLT - DATA TYPE 1", sclkdp, quats, avvs)
+            ckcls(handle)
+        finally
+            kclear()
+            rm(file, force=true)
+        end
     end
+
+    pdpool("test", [1.0, 2.0, 3.0])
+    clpool()
+    @test gdpool("test") === nothing
+
+    let s = "1,,2,,,3,,,,"
+        @test cmprss(',', 1, s) == "1,2,3,"
+        @test cmprss(",", 2, s) == "1,,2,,3,,"
+        @test cmprss(",", 3, s) == "1,,2,,,3,,,"
+    end
+
+    @test cnmfrm("norbert") === nothing
+    let
+        code, name = cnmfrm("IO")
+        @test code == 10023
+        @test name == "IAU_IO"
+    end
+
+    furnsh(path(CORE, :lsk), path(CORE, :spk), path(CORE, :gm_pck))
+    let
+        et = str2et("Dec 25, 2007")
+        state, ltime = spkezr("Moon", et, "J2000", "EARTH")
+        mu = bodvrd("EARTH", "GM")[1]
+        elts = oscelt(state, et, mu)
+        later = et + 7.0 * spd()
+        later_state = conics(elts, later)
+        state, ltime = spkezr("Moon", later, "J2000", "EARTH")
+        pert = later_state .- state
+        expected_pert = [-7.48885583081946242601e+03,
+                        3.97608014470621128567e+02,
+                        1.95744667259379639290e+02,
+                        -3.61527427787390887026e-02,
+                        -1.27926899069508159812e-03,
+                        -2.01458906615054056388e-03]
+        @test expected_pert ≈ pert
+    end
+    kclear()
+
+    @test convrt(300.0, "statute_miles", "km") == 482.8032
+    @test convrt(1.0, "parsecs", "lightyears") ≈ 3.2615638
+    @test_throws SpiceException convrt(1.0, "parsecs", "hours")
+    @test_throws SpiceException convrt(1.0, "parsecs", "norbert")
+
+    let string = "BOB, JOHN, TED, AND MARTIN...."
+        @test cpos(string, " ,", 1) == 4
+        @test cpos(string, " ,", 5) == 5
+        @test cpos(string, " ,", 6) == 10
+        @test cpos(string, " ,", 11) == 11
+        @test cpos(string, " ,", 12) == 15
+        @test cpos(string, " ,", 16) == 16
+        @test cpos(string, " ,", 17) == 20
+        @test cpos(string, " ,", 21) == -1
+        @test cpos(string, " ,", -112) == 4
+        @test cpos(string, " ,", -1) == 4
+        @test cpos(string, " ,", 1230) == -1
+
+        @test cposr(string, " ,", 30) == 20
+        @test cposr(string, " ,", 26) == 20
+        @test cposr(string, " ,", 19) == 16
+        @test cposr(string, " ,", 15) == 15
+        @test cposr(string, " ,", 14) == 11
+        @test cposr(string, " ,", 10) == 10
+        @test cposr(string, " ,", 9) == 5
+        @test cposr(string, " ,", 4) == 4
+        @test cposr(string, " ,", 3) == -1
+        @test cposr(string, " ,", 231) == 20
+        @test cposr(string, " ,", 31) == 20
+        @test cposr(string, " ,", -1) == -1
+        @test cposr(string, " ,", -10) == -1
+    end
+
+    pdpool("TEST_VAR_CVPOOL", [-646.0])
+    swpool("TEST_CVPOOL", ["TEST_VAR_CVPOOL"])
+    pdpool("TEST_VAR_CVPOOL", [565.0])
+    updated = cvpool("TEST_CVPOOL")
+    @test updated
+    clpool()
+    kclear()
+
+    @test collect(cyllat(1.0, deg2rad(180.0), -1.0)) ≈ [sqrt(2), π, -π/4.0]
+    @test cylrec(0.0, deg2rad(33.0), 0.0) ≈ [0.0, 0.0, 0.0]
+    @test collect(cylsph(1.0, deg2rad(180.0), 1.0)) ≈ [1.4142, deg2rad(45.0), deg2rad(180.0)] rtol=1e-4
 end
+

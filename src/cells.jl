@@ -1,5 +1,5 @@
 import Base: getindex, push!, append!, show, length
-export SpiceIntCell, SpiceDoubleCell, SpiceCharCell, appnd, push!, append!, card, length
+export SpiceIntCell, SpiceDoubleCell, SpiceCharCell, appnd, push!, append!, card, length, copy
 
 const CTRLSZ = 6
 
@@ -160,5 +160,18 @@ card(cell::SpiceCell) = Int(cell.cell.card)
 
 """
     length(cell)
+
+Returns the cardinality (number of elements) of a SpiceCell `cell`.
 """
 length(cell::SpiceCell) = card(cell)
+
+"""
+    copy(cell::SpiceCell)
+
+Duplicate the SpiceCell `cell`.
+"""
+function Base.copy(cell::SpiceCell{T, N}) where {T, N}
+    copy = SpiceCell(T, cell.cell.size)
+    ccall((:copy_c, libcspice), Cvoid, (Ref{Cell{T}}, Ref{Cell{T}}), cell.cell, copy.cell)
+    copy
+end

@@ -13,7 +13,18 @@ export
     ckopn,
     ckupf,
     ckw01,
-    clight
+    clight,
+    clpool,
+    cmprss,
+    cnmfrm,
+    conics,
+    convrt,
+    cpos,
+    cposr,
+    cvpool,
+    cyllat,
+    cylrec,
+    cylsph
 
 """
     ccifrm(frclss, clssid)
@@ -263,7 +274,7 @@ Find the set of ID codes of all objects in a specified CK file.
 ### Arguments ##
 
 - `ck`: Name of CK file
-- `ids`: Set of ID codes of objects in CK file. Data already present in 
+- `ids`: Set of ID codes of objects in CK file. Data already present in
     `ids` will be combined with ID code set found for the file `ck`.
 
 ### References ###
@@ -380,9 +391,7 @@ Add a type 1 segment to a C-kernel.
 - `handle`: Handle of an open CK file
 - `inst`: The NAIF instrument ID code
 - `ref`: The reference frame of the segment
-- `avflag`: True if the segment will contain angular velocity
 - `segid`: Segment identifier
-- `nrec`: Number of pointing records
 - `sclkdp`: Encoded SCLK times
 - `quats`: Quaternions representing instrument pointing
 - `avvs`: Angular velocity vectors (optional)
@@ -412,3 +421,292 @@ Returns the speed of light in vacuo (km/sec).
 function clight()
     ccall((:clight_c, libcspice), Cdouble, ())
 end
+
+"""
+    clpool()
+
+Remove all variables from the kernel pool. Watches on kernel variables are retained.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/clpool_c.html)
+"""
+function clpool()
+    ccall((:clpool_c, libcspice), Cvoid, ())
+end
+
+"""
+    cmprss(delim, n, input)
+
+Compress a character string by removing occurrences of more than `n` consecutive occurrences
+of a specified character.
+
+### Arguments ###
+
+- `delim`: Delimiter to be compressed
+- `n`: Maximum consecutive occurrences of delim
+- `input`: Input string
+
+### Output ###
+
+Returns the compressed string.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cmprss_c.html)
+"""
+function cmprss(delim, n, input)
+    lenout = length(input)
+    output = Array{UInt8}(undef, lenout)
+    ccall((:cmprss_c, libcspice), Cvoid,
+          (Cchar, SpiceInt, Cstring, SpiceInt, Ptr{UInt8}),
+          first(delim), n, input, lenout, output)
+    handleerror()
+    unsafe_string(pointer(output))
+end
+
+"""
+    cnmfrm(cname)
+
+Retrieve frame ID code and name to associate with an object.
+
+### Arguments ###
+- `cname`: Name of the object to find a frame for
+
+### Output ###
+
+Returns a tuple of the ID code and the name of the frame associated with `cname` or `nothing` if no
+frame is found.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cnmfrm_c.html)
+
+"""
+function cnmfrm(cname, lenout=LENOUT)
+    frcode = Ref{SpiceInt}()
+    frname = Array{UInt8}(undef, lenout)
+    found = Ref{SpiceBoolean}()
+    ccall((:cnmfrm_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}, Ref{SpiceBoolean}),
+          cname, lenout, frcode, frname, found)
+    found[] == 1 ? (frcode[], unsafe_string(pointer(frname))) : nothing
+end
+
+"""
+    conics(elts, et)
+
+Determine the state (position, velocity) of an orbiting body from a set of elliptic, hyperbolic,
+or parabolic orbital elements.
+
+### Arguments ###
+
+- `elts`: Conic elements
+- `et`: Input time
+
+### Output ###
+
+Returns the state of orbiting body at `et`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/conics_c.html)
+"""
+function conics(elts, et)
+    state = Array{Float64}(undef, 6)
+    ccall((:conics_c, libcspice), Cvoid, (Ptr{SpiceDouble}, SpiceDouble, Ptr{SpiceDouble}), elts, et, state)
+    handleerror()
+    state
+end
+
+"""
+    convrt(x, in, out)
+
+Take a measurement `x`, the units associated with `x`, and units to which `x` should be converted;
+return `y` - the value of the measurement in the output units.
+
+### Arguments ###
+
+- `x`: Number representing a measurement in some units
+- `in`: The units in which x is measured
+- `out`: Desired units for the measurement
+
+### Output ###
+
+Returns the measurement in the desired units.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/convrt_c.html)
+"""
+function convrt(x, in, out)
+    y = Ref{SpiceDouble}()
+    ccall((:convrt_c, libcspice), Cvoid, (SpiceDouble, Cstring, Cstring, Ref{SpiceDouble}),
+          x, in, out, y)
+    handleerror()
+    y[]
+end
+
+
+"""
+    cpos(str, chars, start)
+
+Find the first occurrence in a string of a character belonging to a collection of characters,
+starting at a specified location, searching forward.
+
+### Arguments ###
+
+- `str`: Any character string
+- `chars`: A collection of characters
+- `start`: Position to begin looking for one of chars
+
+### Output ###
+
+Returns the index of the first character of `str` that is one of the characters in string
+`chars`. Returns -1 if none of the characters was found.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cpos_c.html)
+"""
+function cpos(str, chars, start)
+    idx = ccall((:cpos_c, libcspice), SpiceInt, (Cstring, Cstring, SpiceInt), str, chars, start - 1)
+    handleerror()
+    idx != -1 ? idx + 1 : idx
+end
+
+"""
+    cposr(str, chars, start)
+
+Find the first occurrence in a string of a character belonging to a collection of characters,
+starting at a specified location, searching in reverse.
+
+### Arguments ###
+
+- `str`: Any character string
+- `chars`: A collection of characters
+- `start`: Position to begin looking for one of chars
+
+### Output ###
+
+Returns the index of the last character of `str` that is one of the characters in string
+`chars`. Returns -1 if none of the characters was found.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cposr_c.html)
+"""
+function cposr(str, chars, start)
+    idx = ccall((:cposr_c, libcspice), SpiceInt, (Cstring, Cstring, SpiceInt), str, chars, start - 1)
+    handleerror()
+    idx != -1 ? idx + 1 : idx
+end
+
+"""
+    cvpool(agent)
+
+Indicate whether or not any watched kernel variables that have a specified agent on their
+notification list have been updated.
+
+### Arguments ###
+
+- `agent`: Name of the agent to check for notices
+
+### Output ###
+
+`true` if variables for `agent` have been updated.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cvpool_c.html)
+"""
+function cvpool(agent)
+    update = Ref{SpiceBoolean}()
+    ccall((:cvpool_c, libcspice), Cvoid, (Cstring, Ref{SpiceBoolean}), agent, update)
+    update[] == 1
+end
+
+"""
+    cyllat(r, lonc, z)
+
+Convert from cylindrical to latitudinal coordinates.
+
+### Arguments ###
+
+- `r`: Distance of point from z axis
+- `lonc`: Cylindrical angle of point from XZ plane (radians)
+- `z`: Height of point above XY plane
+
+### Output ###
+
+Returns a tuple of radius, longitude (radians), and latitude (radians).
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cyllat_c.html)
+"""
+function cyllat(r, lonc, z)
+    radius = Ref{SpiceDouble}()
+    lon = Ref{SpiceDouble}()
+    lat = Ref{SpiceDouble}()
+    ccall((:cyllat_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          r, lonc, z, radius, lon, lat)
+    radius[], lon[], lat[]
+end
+
+"""
+    cylrec(r, lon, z)
+
+Convert from cylindrical to rectangular coordinates.
+
+### Arguments ###
+
+- `r`: Distance of the point of interest from z axis
+- `lon`: Cylindrical angle (in radians) of the point of interest from XZ plane
+- `z`: Height of the point above XY plane
+
+### Output ###
+
+Returns rectangular coordinates of the point of interest.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cylrec_c.html)
+"""
+function cylrec(r, lon, z)
+    rectan = Array{SpiceDouble}(undef, 3)
+    ccall((:cylrec_c, libcspice), Cvoid, (SpiceDouble, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
+          r, lon, z, rectan)
+    rectan
+end
+
+"""
+    cylsph(r, lonc, z)
+
+Convert from cylindrical to spherical coordinates.
+
+### Arguments ###
+
+- `r`: Distance of point from z axis
+- `lonc`: Angle (radians) of point from XZ plane
+- `z`: Height of point above XY plane
+
+### Output ###
+
+Returns a tuple of distance of the point from the origin, polar angle (co-latitude in radians),
+and azimuthal angle (longitude).
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cylsph_c.html)
+"""
+function cylsph(r, lonc, z)
+    radius = Ref{SpiceDouble}()
+    colat = Ref{SpiceDouble}()
+    lon = Ref{SpiceDouble}()
+    ccall((:cylsph_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          r, lonc, z, radius, colat, lon)
+    radius[], colat[], lon[]
+end
+

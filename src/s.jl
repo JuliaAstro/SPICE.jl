@@ -1,4 +1,14 @@
-export str2et, spkezr, spkpos, spkcpo, spkopn, spkcls, spkw13, spd, sxform
+export
+    spd,
+    spkcls,
+    spkcpo,
+    spkezr,
+    spkopn,
+    spkpos,
+    spkw13,
+    str2et,
+    swpool,
+    sxform
 
 function str2et(string)
     et = Ref{Cdouble}(0)
@@ -89,6 +99,28 @@ end
 "Returns the number of seconds in a day."
 function spd()
     ccall((:spd_c, libcspice), Cdouble, ())
+end
+
+"""
+    swpool(agent, names)
+
+Add a name to the list of agents to notify whenever a member of a list of kernel variables is updated.
+
+### Arguments ###
+
+- `agent`: The name of an agent to be notified after updates
+- `names`: Variable names whose update causes the notice
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/swpool_c.html)
+"""
+function swpool(agent, names)
+    _names, m, n = chararray(names)
+    ccall((:swpool_c, libcspice), Cvoid, (Cstring, SpiceInt, SpiceInt, Ptr{SpiceChar}),
+          agent, m, n, _names)
+    handleerror()
+    nothing
 end
 
 """

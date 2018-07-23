@@ -9,7 +9,7 @@ const KERNEL_DIR = joinpath(@__DIR__, "kernels")
 
 @RemoteFileSet CASSINI "Cassini Kernels" begin
     pck     = @RemoteFile BASE_URL * "cpck05Mar2004.tpc" dir=KERNEL_DIR
-    sat_spk      = @RemoteFile BASE_URL * "130220AP_SE_13043_13073.bsp" dir=KERNEL_DIR
+    sat_spk = @RemoteFile BASE_URL * "130220AP_SE_13043_13073.bsp" dir=KERNEL_DIR
     tour_spk = @RemoteFile BASE_URL * "130212AP_SK_13043_13058.bsp" dir=KERNEL_DIR
     fk      = @RemoteFile BASE_URL * "cas_v40.tf" dir=KERNEL_DIR
     ck      = @RemoteFile BASE_URL * "13056_13057ra.bc" dir=KERNEL_DIR
@@ -48,6 +48,14 @@ download(CORE)
         cell = SpiceIntCell(3)
         push!(cell, 1, 2, 3)
         @test cell[1:end] == [1, 2, 3]
+
+        cell = SpiceIntCell(3)
+        push!(cell, 1, 2)
+        cell2 = copy(cell)
+        @test cell2[1:end] == [1, 2]
+        push!(cell2, 3)
+        @test cell[1:end] == [1, 2]
+        @test cell2[1:end] == [1, 2, 3]
 
         cell = SpiceIntCell(3)
         append!(cell, [1, 2, 3])
