@@ -1,4 +1,17 @@
-export hx2dp
+export halfpi, hx2dp
+
+function _halfpi()
+    ccall((:halfpi_c, libcspice), SpiceDouble, ())
+end
+
+"""
+    halfpi()
+
+**Deprecated:** Use `π/2` instead.
+"""
+halfpi
+
+@deprecate halfpi() π/2
 
 """
     hx2dp(str)
