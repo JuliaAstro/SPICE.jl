@@ -23,6 +23,16 @@ using LinearAlgebra: cross, norm, dot, normalize
         @test SPICE._vminus(v1) == -v1
         @test SPICE._vnorm(v1) ≈ norm(v1)
         @test SPICE._vpack(a, b, c) == [a, b, c]
+        @test SPICE._vscl(a, v1) ≈ a .* v1
+        @test SPICE._vsub(v1, v2) ≈ v1 .- v2
+        A = randn(3, 3)
+        @test SPICE._vtmv(v1, A, v2) ≈ v1' * A * v2
+        x1, y1, z1 = SPICE._vupack(v1)
+        x2, y2, z2 = v1
+        @test x1 == x2
+        @test y1 == y2
+        @test z1 == z2
+        @test SPICE._vzero([0.0, 0.0, 0.0]) == iszero([0.0, 0.0, 0.0])
     end
     let v1 = randn(6), v2 = randn(6)
         @test SPICE._vdistg(v1, v2) ≈ norm(v1 .- v2)
@@ -38,6 +48,11 @@ using LinearAlgebra: cross, norm, dot, normalize
         @test SPICE._vlcomg(a, v1, b, v2) ≈ a .* v1 .+ b .* v2
         @test SPICE._vminug(v1) == -v1
         @test SPICE._vnormg(v1) ≈ norm(v1)
+        @test SPICE._vsclg(a, v1) ≈ a .* v1
+        @test SPICE._vsubg(v1, v2) ≈ v1 .- v2
+        A = randn(6, 6)
+        @test SPICE._vtmvg(v1, A, v2) ≈ v1' * A * v2
+        @test SPICE._vzerog([0.0, 0.0, 0.0]) == iszero([0.0, 0.0, 0.0])
     end
     let c = SpiceIntCell(3)
         push!(c, 2, 1, 2)
@@ -55,5 +70,52 @@ using LinearAlgebra: cross, norm, dot, normalize
         proj = vprjp(vec1, plane)
         expected = [-5.0, 7.0, 0.0]
         @test proj ≈ expected
+    end
+    let
+        norm1 = [0.0, 0.0, 1.0]
+        norm2 = [1.0, 0.0, 1.0]
+        con1 = 1.2
+        con2 = 0.65
+        plane1 = nvc2pl(norm1, con1)
+        plane2 = nvc2pl(norm2, con2)
+        vec = [1.0, 1.0, 0.0]
+        result = vprjpi(vec, plane1, plane2)
+        expected = [1.0, 1.0, -0.35]
+        @test result ≈ expected
+    end
+    let
+        v1 = [6.0, 6.0, 6.0]
+        v2 = [2.0, 0.0, 0.0]
+        expected = [6.0, 0.0, 0.0]
+        vout = vproj(v1, v2)
+        @test expected ≈ vout
+    end
+    let
+        vec1 = [12.3, -4.32, 76.0]
+        vec2 = [23.0423, -11.99, -0.10]
+        @test vrel(vec1, vec2) ≈ 1.0016370 rtol=1e-6
+    end
+    let
+        vec1 = [12.3, -4.32, 76.0, 1.87]
+        vec2 = [23.0423, -11.99, -0.10, -99.1]
+        @test vrelg(vec1, vec2) ≈ 1.2408623 rtol=1e-6
+    end
+    let
+        v = [1.0, 2.0, 3.0]
+        axis = [0.0, 0.0, 1.0]
+        theta = π/2
+        vout = vrotv(v, axis, theta)
+        expected = [-2.0, 1.0, 3.0]
+        @test vout ≈ expected rtol=1e-7
+    end
+    let
+        v1 = [1.0, 0.0, 0.0]
+        v2 = [0.0, 1.0, 0.0]
+        @test vsep(v1, v2) ≈ π/2
+    end
+    let
+        v1 = [3.0, 0.0]
+        v2 = [-5.0, 0.0]
+        @test vsepg(v1, v2) ≈ π
     end
 end

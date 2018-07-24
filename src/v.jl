@@ -21,7 +21,21 @@ export vadd,
     vnormg,
     vpack,
     vperp,
-    vprjp
+    vprjp,
+    vprjpi,
+    vproj,
+    vrel,
+    vrelg,
+    vrotv,
+    vscl,
+    vsclg,
+    vsep,
+    vsepg,
+    vsub,
+    vsubg,
+    vtmv,
+    vtmvg,
+    vupack
 
 function _vadd(v1, v2)
     vout = Array{SpiceDouble}(undef, 3)
@@ -384,8 +398,8 @@ Project a vector onto a specified plane, orthogonally.
 
 ### Arguments ###
 
-- `vin`: 
-- `plane`: 
+- `vin`: Vector to be projected
+- `plane`: Plane onto which vin is projected
 
 ### Output ###
 
@@ -404,3 +418,322 @@ function vprjp(vin, plane)
     vout
 end
 
+"""
+    vprjpi(vin, projpl, invpl)
+
+Find the vector in a specified plane that maps to a specified vector in another plane
+under orthogonal projection.
+
+### Arguments ###
+
+- `vin`: The projected vector
+- `projpl`: Plane containing `vin`
+- `invpl`: Plane containing inverse image of `vin`
+
+### Output ###
+
+Returns the inverse projection of `vin` or `nothing` if `vin` could not be calculated.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/vprjpi_c.html)
+"""
+function vprjpi(vin, projpl, invpl)
+    vout = Array{SpiceDouble}(undef, 3)
+    found = Ref{SpiceBoolean}()
+    ccall((:vprjpi_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ref{Plane}, Ref{Plane}, Ptr{SpiceDouble}, Ref{SpiceBoolean}),
+          vin, projpl, invpl, vout, found)
+    handleerror()
+    Bool(found[]) ? vout : nothing
+end
+
+"""
+    vproj(a, b)
+
+Finds the projection of one vector onto another vector. All vectors are 3-dimensional.
+
+### Arguments ###
+
+- `a`: The vector to be projected
+- `b`: The vector onto which `a` is to be projected
+
+### Output ###
+
+Returns the projection of `a` onto `b`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/vproj_c.html)
+"""
+function vproj(a, b)
+    p = Array{SpiceDouble}(undef, 3)
+    ccall((:vproj_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}), a, b, p)
+    p
+end
+
+"""
+    vrel(v1, v2)
+
+Return the relative difference between two 3-dimensional vectors.
+
+### Arguments ###
+
+- `v1`, `v2`: Two three-dimensional input vectors
+
+### Output ###
+
+Returns the relative differences between `v1` and `v2`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/vrel_c.html)
+"""
+function vrel(v1, v2)
+    ccall((:vrel_c, libcspice), SpiceDouble,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}), v1, v2)
+end
+
+"""
+    vrelg(v1, v2)
+
+Return the relative difference between two vectors.
+
+### Arguments ###
+
+- `v1`, `v2`: Input vectors
+
+### Output ###
+
+Returns the relative differences between `v1` and `v2`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/vrelg_c.html)
+"""
+function vrelg(v1, v2)
+    ndim = length(v1)
+    ccall((:vrelg_c, libcspice), SpiceDouble,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt), v1, v2, ndim)
+end
+
+"""
+    vrotv(v, axis, theta)
+
+Rotate a vector about a specified axis vector by a specified angle and return
+the rotated vector.
+
+### Arguments ###
+
+- `v`: Vector to be rotated
+- `axis`: Axis of the rotation
+- `theta`: Angle of rotation (radians)
+
+### Output ###
+
+Result of rotating `v` about `axis` by `theta`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/vrotv_c.html)
+"""
+function vrotv(v, axis, theta)
+    r = Array{SpiceDouble}(undef, 3)
+    ccall((:vrotv_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceDouble, Ptr{SpiceDouble}),
+          v, axis, theta, r)
+    r
+end
+
+function _vscl(s, v1)
+    vout = Array{SpiceDouble}(undef, 3)
+    ccall((:vscl_c, libcspice), Cvoid,
+          (SpiceDouble, Ptr{SpiceDouble}, Ptr{SpiceDouble}), s, v1, vout)
+    vout
+end
+
+"""
+    vscl(s, v1)
+
+**Deprecated:** Use `s .* v1` instead.
+"""
+vscl
+
+@deprecate vscl(s, v1) s .* v1
+
+function _vsclg(s, v1)
+    ndim = length(v1)
+    vout = Array{SpiceDouble}(undef, ndim)
+    ccall((:vsclg_c, libcspice), Cvoid,
+          (SpiceDouble, Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceDouble}),
+          s, v1, ndim, vout)
+    vout
+end
+
+"""
+    vsclg(s, v1)
+
+**Deprecated:** Use `s .* v1` instead.
+"""
+vsclg
+
+@deprecate vsclg(s, v1) s .* v1
+
+"""
+    vsep(v1, v2)
+
+Return the sepative difference between two 3-dimensional vectors.
+
+### Arguments ###
+
+- `v1`, `v2`: Two three-dimensional input vectors
+
+### Output ###
+
+Returns the angle between `v1` and `v2` in radians.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/vsep_c.html)
+"""
+function vsep(v1, v2)
+    ccall((:vsep_c, libcspice), SpiceDouble,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}), v1, v2)
+end
+
+"""
+    vsepg(v1, v2)
+
+Return the sepative difference between two vectors.
+
+### Arguments ###
+
+- `v1`, `v2`: Input vectors
+
+### Output ###
+
+Returns the angle between `v1` and `v2` in radians.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/vsepg_c.html)
+"""
+function vsepg(v1, v2)
+    ndim = length(v1)
+    ccall((:vsepg_c, libcspice), SpiceDouble,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt), v1, v2, ndim)
+end
+
+function _vsub(v1, v2)
+    vout = Array{SpiceDouble}(undef, 3)
+    ccall((:vsub_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          v1, v2, vout)
+    vout
+end
+
+"""
+    vsub(v1, v2)
+
+**Deprecated:** Use `v1 .- v2` instead.
+"""
+vsub
+
+@deprecate vsub(v1, v2) v1 .- v2
+
+function _vsubg(v1, v2)
+    ndim = length(v1)
+    vout = Array{SpiceDouble}(undef, ndim)
+    ccall((:vsubg_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceDouble}),
+          v1, v2, ndim, vout)
+    vout
+end
+
+"""
+    vsubg(v1, v2)
+
+**Deprecated:** Use `v1 .- v2` instead.
+"""
+vsubg
+
+@deprecate vsubg(v1, v2) v1 .- v2
+
+function _vtmv(v1, matrix, v2)
+    ccall((:vtmv_c, libcspice), SpiceDouble,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          v1, permutedims(matrix), v2)
+end
+
+"""
+    vtmv(v1, matrix, v2)
+
+**Deprecated:** Use `v1' * matrix * v2` instead.
+"""
+vtmv
+
+@deprecate vtmv(v1, matrix, v2) v1' * matrix * v2
+
+function _vtmvg(v1, matrix, v2)
+    m, n = size(matrix)
+    ccall((:vtmvg_c, libcspice), SpiceDouble,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt, SpiceInt),
+          v1, permutedims(matrix), v2, n, m)
+end
+
+"""
+    vtmvg(v1, matrix, v2)
+
+**Deprecated:** Use `v1' * matrix * v2` instead.
+"""
+vtmvg
+
+@deprecate vtmvg(v1, matrix, v2) v1' * matrix * v2
+
+function _vupack(v)
+    x = Ref{SpiceDouble}()
+    y = Ref{SpiceDouble}()
+    z = Ref{SpiceDouble}()
+    ccall((:vupack_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          v, x, y, z)
+    x[], y[], z[]
+end
+
+"""
+    vupack(v)
+
+**Deprecated:** Use `x, y, z = v` instead.
+"""
+vupack
+
+@deprecate vupack(v) (x, y, z) = v
+
+function _vzero(v1)
+    Bool(ccall((:vzero_c, libcspice), SpiceBoolean, (Ptr{SpiceDouble},), v1))
+end
+
+"""
+    vzero(v1)
+
+**Deprecated:** Use `iszero(v1)` instead.
+"""
+vzero
+
+@deprecate vzero(v1) iszero(v1)
+
+function _vzerog(v1)
+    ndim = length(v1)
+    Bool(ccall((:vzerog_c, libcspice), SpiceBoolean,
+               (Ptr{SpiceDouble}, SpiceInt), v1, ndim))
+end
+
+"""
+    vzerog(v1, v2)
+
+**Deprecated:** Use `iszero(v1)` instead.
+"""
+vzerog
+
+@deprecate vzerog(v1) iszero(v1)
