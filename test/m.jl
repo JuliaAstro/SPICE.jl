@@ -7,12 +7,14 @@
     end
 
     let 
-        # r = spice.rotate(spice.halfpi(), 3)
+        r = rotate(π/2, 3)
 
-        # q = spice.m2q(r)
+        act = m2q(r)
 
-        # expected = [np.sqrt(2) / 2.0, 0.0, 0.0, -np.sqrt(2) / 2.0]
+        exp = [sqrt(2)/2.0, 0.0, 0.0, -sqrt(2)/2.0]
 
-        # np.testing.assert_array_almost_equal(expected, q, decimal = 6)
+        @testset for i in eachindex(act, exp)
+            @test act[i] ≈ exp[i]
+        end
     end
 end 

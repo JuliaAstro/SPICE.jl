@@ -22,19 +22,71 @@
 
         m = eul2m(angle[3], angle[2], angle[1], 3, 1, 3)
     
-        # q = spice.m2q(m)
+        q = m2q(m)
     
-        # expav = [1.0, 2.0, 3.0]
+        expav = [1.0, 2.0, 3.0]
     
-        # qav = [0.0, 1.0, 2.0, 3.0]
+        qav = [0.0, 1.0, 2.0, 3.0]
     
-        # dq = spice.qxq(q, qav)
+        dq = qxq(q, qav)
     
-        # dq = [-0.5 * x for x in dq]
+        #dq = [-0.5 * x for x in dq]
     
-        # av = spice.qdq2av(q, dq)
+        #av = spice.qdq2av(q, dq)
     
         # npt.assert_array_almost_equal(av, expav)
+    end
+
+    let qID = [1.0, 0.0, 0.0, 0.0]
+
+        nqID = [-1.0, 0.0, 0.0, 0.0]
+    
+        qI = [0.0, 1.0, 0.0, 0.0]
+    
+        qJ = [0.0, 0.0, 1.0, 0.0]
+    
+        qK = [0.0, 0.0, 0.0, 1.0]
+
+        qIJ=qxq(qI, qJ)
+        @testset for i in eachindex(qIJ, qK)
+            @test qIJ[i] ≈ qK[i]
+        end
+
+        qJK=qxq(qJ, qK)
+        @testset for i in eachindex(qJK, qI)
+            @test qJK[i] ≈ qI[i]
+        end
+
+        qKI=qxq(qK, qI)
+        @testset for i in eachindex(qKI, qJ)
+            @test qKI[i] ≈ qJ[i]
+        end
+
+        qII=qxq(qI, qI)
+        @testset for i in eachindex(qII, nqID)
+            @test qII[i] ≈ nqID[i]
+        end
+
+        qJJ=qxq(qJ, qJ)
+        @testset for i in eachindex(qJJ, nqID)
+            @test qJJ[i] ≈ nqID[i]
+        end
+
+        qKK=qxq(qK, qK)
+        @testset for i in eachindex(qKK, nqID)
+            @test qKK[i] ≈ nqID[i]
+        end
+
+        qIDI=qxq(qID, qI)
+        @testset for i in eachindex(qIDI, qI)
+            @test qIDI[i] ≈ qI[i]
+        end
+
+        qIID=qxq(qI, qID)
+        @testset for i in eachindex(qIID, qI)
+            @test qIID[i] ≈ qI[i]
+        end
+        
     end
 
 end

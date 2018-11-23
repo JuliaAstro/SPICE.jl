@@ -1,4 +1,6 @@
-export mxvg
+export 
+    mxvg,
+    m2q
 
 function mxvg(m1, v2)
     lm1, lm2 = size(m1)
@@ -12,3 +14,28 @@ function mxvg(m1, v2)
     handleerror()
     return vout
 end
+
+"""
+    m2q(r)
+
+Find a unit quaternion corresponding to a specified rotation matrix.
+
+### Arguments ###
+
+- `r`: A rotation matrix
+
+### Output ###
+
+A unit quaternion representing `r'
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/m2q_c.html)
+"""
+function m2q(r)
+    q = Array{SpiceDouble}(undef, 4)
+    ccall((:m2q_c, libcspice), Cvoid, (Ptr{Float64}, Ptr{Float64}), permutedims(r), q)
+    handleerror()
+    q
+end
+
