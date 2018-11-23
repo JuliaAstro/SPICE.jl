@@ -17,4 +17,24 @@
             @test actual[i] ≈ expected[i]
         end
     end
+
+    let angle = deg2rad.([-20.0, 50.0, -60.0])
+
+        # m = spice.eul2m(angle[2], angle[1], angle[0], 3, 1, 3)
+    
+        # q = spice.m2q(m)
+    
+        # expav = [1.0, 2.0, 3.0]
+    
+        # qav = [0.0, 1.0, 2.0, 3.0]
+    
+        # dq = spice.qxq(q, qav)
+    
+        # dq = [-0.5 * x for x in dq]
+    
+        # av = spice.qdq2av(q, dq)
+    
+        # npt.assert_array_almost_equal(av, expav)
+    end
+
 end
