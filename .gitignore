@@ -16,3 +16,4 @@ deps/windows/usr/
 deps/windows/x64
 docs/build/
 test/kernels/
+deps/build.log
