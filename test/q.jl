@@ -20,7 +20,7 @@
 
     let angle = deg2rad.([-20.0, 50.0, -60.0])
 
-        # m = spice.eul2m(angle[2], angle[1], angle[0], 3, 1, 3)
+        m = eul2m(angle[3], angle[2], angle[1], 3, 1, 3)
     
         # q = spice.m2q(m)
     
