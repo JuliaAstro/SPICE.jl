@@ -85,5 +85,3 @@ function recrad(rectan)
     ccall((:recrad_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}), rectan, range, ra, dec)
     range[], ra[], dec[]
 end
-
-
