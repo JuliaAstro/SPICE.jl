@@ -22,7 +22,7 @@ end
 """
 mxvg
 
-@deprecate mxvg(m1, v2) m1 * v2
+@deprecate mxvg(m1, v2) m1 .* v2
 
 """
     m2q(r)
