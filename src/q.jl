@@ -1,6 +1,7 @@
 export 
     q2m,
-    qxq
+    qxq,
+    qdq2av
 
 """
     q2m(q...)
@@ -55,4 +56,34 @@ function qxq(q1, q2)
     ccall((:qxq_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}), collect(q1), collect(q2), q)
     q
 end
+
+"""
+    qdq2av(q,dq...)
+
+Derive angular velocity from a unit quaternion and its derivative 
+with respect to time. 
+
+### Arguments ###
+
+- `q`: Unit SPICE quaternion (as any kind of iterable with four elements)
+- `dq`: Derivative of `q' with respect to time
+
+### Output ###
+
+Angular velocity vector defined by `q' and `dq'
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/qdq2av_c.html)
+"""
+qdq2av(q,dq...)=qdq2av(collect(q),collect(dq))
+
+function qdq2av(q,dq)
+    length(q) != 4 && throw(ArgumentError("`q` needs to be an iterable with four elements.")) 
+    length(dq) != 4 && throw(ArgumentError("`dq` needs to be an iterable with four elements."))   
+    av = Array{SpiceDouble}(undef, 3)
+    ccall((:qdq2av_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}), collect(q), collect(dq), av)
+    av
+end
+
 
