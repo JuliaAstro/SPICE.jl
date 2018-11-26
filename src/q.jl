@@ -30,7 +30,7 @@ function q2m(q)
 end
 
 """
-    qxq(q1,q2...)
+    qxq(q1,q2)
 
 Multiply two quaternions. 
 
@@ -47,8 +47,6 @@ A quaternion corresponding to the product of `q1' and `q2'
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/qxq_c.html)
 """
-qxq(q1,q2...) = qxq(collect(q1),collect(q2))
-
 function qxq(q1, q2)
     length(q1) != 4 && throw(ArgumentError("`q1` needs to be an iterable with four elements.")) 
     length(q2) != 4 && throw(ArgumentError("`q2` needs to be an iterable with four elements."))   
@@ -58,7 +56,7 @@ function qxq(q1, q2)
 end
 
 """
-    qdq2av(q,dq...)
+    qdq2av(q,dq)
 
 Derive angular velocity from a unit quaternion and its derivative 
 with respect to time. 
@@ -76,8 +74,6 @@ Angular velocity vector defined by `q' and `dq'
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/qdq2av_c.html)
 """
-qdq2av(q,dq...)=qdq2av(collect(q),collect(dq))
-
 function qdq2av(q,dq)
     length(q) != 4 && throw(ArgumentError("`q` needs to be an iterable with four elements.")) 
     length(dq) != 4 && throw(ArgumentError("`dq` needs to be an iterable with four elements."))   

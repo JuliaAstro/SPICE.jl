@@ -2,7 +2,7 @@ export
     mxvg,
     m2q
 
-function mxvg(m1, v2)
+function _mxvg(m1, v2)
     lm1, lm2 = size(m1)
     lv = length(v2)
     if lm2 != lv
@@ -14,6 +14,15 @@ function mxvg(m1, v2)
     handleerror()
     return vout
 end
+
+"""
+    mxvg(m1,v2)
+
+**Deprecated:** Use `m1 * v2` instead.
+"""
+mxvg
+
+@deprecate mxvg(m1, v2) m1 * v2
 
 """
     m2q(r)
