@@ -33,7 +33,7 @@
         qI = [0.0, 1.0, 0.0, 0.0]
         qJ = [0.0, 0.0, 1.0, 0.0]
         qK = [0.0, 0.0, 0.0, 1.0]
-        qIJ=qxq(qI, qJ)
+        qIJ = qxq(qI, qJ)
         @testset for i in eachindex(qIJ, qK)
             @test qIJ[i] ≈ qK[i]
         end
