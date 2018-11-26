@@ -81,5 +81,3 @@ function qdq2av(q,dq)
     ccall((:qdq2av_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}), collect(q), collect(dq), av)
     av
 end
-
-
