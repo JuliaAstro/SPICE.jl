@@ -25,5 +25,4 @@ function eul2m(angle3, angle2, angle1, axis3, axis2, axis1)
           angle3, angle2, angle1, axis3, axis2, axis1, r)
     handleerror()
     permutedims(r)
-
 end
