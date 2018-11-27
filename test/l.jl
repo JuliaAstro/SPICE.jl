@@ -1,12 +1,12 @@
 @testset "L" begin
     let str="ABCDE"
-        @test lastnb(str) == 4
+        @test lastnb(str) == 5
         str="AN EXAMPLE"
-        @test lastnb(str) == 9
+        @test lastnb(str) == 10
         str="AN EXAMPLE        "
-        @test lastnb(str) == 9
+        @test lastnb(str) == 10
         str="        "
-        @test lastnb(str) == -1
+        @test lastnb(str) == 0
     end
     let exp1 = [1.0, 0.0, 0.0]
         exp2 = [1.0, deg2rad(90.0), 0.0]
@@ -56,15 +56,17 @@
             @test isapprox(act3[i],exp3[i],atol=1e-15)
         end
     end 
-
     # TODO: code doesnt work, can't pass the test, needs to be modified
-    # kclear()
-    # furnsh(path(EXTRA, :phobos_dsk))
-    # let srfpts = latsrf("DSK/UNPRIORITIZED", "phobos", 0.0, "iau_phobos", [0.0 45.0; 60.0 45.0])  
-    #     radius1 = collect(recrad(srfpts[:,1]))[1]
-    #     radius2 = collect(recrad(srfpts[:,2]))[1]
-    #     @test radius1 > 9.77  
-    #     @test radius2 > 9.51 
-    #     kclear()
-    # end
+    kclear()
+    furnsh(path(EXTRA, :phobos_dsk))
+    let srfpts = latsrf("DSK/UNPRIORITIZED", "phobos", 0.0, "iau_phobos", [0.0 45.0; 60.0 45.0])  
+        radius1 = collect(recrad(srfpts[:,1]))[1]
+        radius2 = collect(recrad(srfpts[:,2]))[1]
+        @test radius1 > 9.77  
+        @test radius2 > 9.51 
+        kclear()
+    end
+
+    @test SPICE._lcase("THIS IS AN EXAMPLE") == "this is an example"
+    @test SPICE._lcase("1234") == "1234"
 end

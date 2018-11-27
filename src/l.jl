@@ -3,7 +3,8 @@ export
     latcyl,
     latrec,
     latsph,
-    latsrf
+    latsrf,
+    lcase
 
 """
     lastnb(str)
@@ -17,9 +18,9 @@ a character string.
 
 ### Output ###
 
-The function returns the zero-based index of the last non-blank 
+The function returns the one-based index of the last non-blank 
 character in a character string. If the string is entirely blank 
-or is empty, the value -1 is returned.
+or is empty, the value 0 is returned.
 
 ### References ###
 
@@ -28,7 +29,7 @@ or is empty, the value -1 is returned.
 function lastnb(str)
     r = ccall((:lastnb_c, libcspice), SpiceInt, (Cstring,), str)
     handleerror()
-    r
+    r+1
 end
 
 """
@@ -58,7 +59,8 @@ function latcyl(radius, lon, lat)
     r = Ref{SpiceDouble}()
     lonc = Ref{SpiceDouble}()
     z = Ref{SpiceDouble}()
-    ccall((:latcyl_c, libcspice), Cvoid, (SpiceDouble, SpiceDouble, SpiceDouble,  Ref{SpiceDouble},  Ref{SpiceDouble},  Ref{SpiceDouble}), radius, lon, lat, r, lonc, z)
+    ccall((:latcyl_c, libcspice), Cvoid, (SpiceDouble, SpiceDouble, SpiceDouble,  
+          Ref{SpiceDouble},  Ref{SpiceDouble},  Ref{SpiceDouble}), radius, lon, lat, r, lonc, z)
     r[], lonc[], z[]
 end
 
@@ -144,20 +146,31 @@ Returns an array of surface points
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/latsrf_c.html)
 """
-function latsrf(method, target, et, fixref, npts, lonlat)
-    srfpts = Matrix{SpiceDouble}(undef,npts,3)
+function latsrf(method, target, et, fixref, lonlat)
+    npts=size(lonlat)[2]
+    srfpts = Matrix{SpiceDouble}(undef, npts, 3)
     ccall((:latsrf_c, libcspice), Cvoid, (Cstring, Cstring, SpiceDouble, Cstring,  SpiceInt,  Ptr{SpiceDouble}, Ptr{SpiceDouble}), method, target, et, fixref, npts, lonlat, srfpts)
     handleerror()
     srfpts
 end
 
-function latsrf(method, target, et, fixref, lonlat)
-    npts=size(lonlat)[2]
-    srfpts = Matrix{SpiceDouble}(undef,npts,3)
-    ccall((:latsrf_c, libcspice), Cvoid, (Cstring, Cstring, SpiceDouble, Cstring,  SpiceInt,  Ptr{SpiceDouble}, Ptr{SpiceDouble}), method, target, et, fixref, npts, permutedims(lonlat), srfpts)
+_lcase(in) = _lcase(in,length(in)+1)
+
+function _lcase(in,lenout)
+    out = Array{UInt8}(undef, lenout)
+    ccall((:lcase_c, libcspice), Cvoid, (Cstring, SpiceInt, Ptr{UInt8}), in, lenout, out)
     handleerror()
-    permutedims(srfpts)
+    unsafe_string(pointer(out))
 end
+"""
+    lcase(in)
+
+**Deprecated:** Use `lowercase(in)` instead.
+"""
+lcase
+
+@deprecate lcase(in) lowercase(in)
+
 
 
 
