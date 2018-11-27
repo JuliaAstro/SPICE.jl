@@ -241,6 +241,15 @@ function lgrind(xvals, yvals, x)
     handleerror()
     p[], dp[]
 end
+"""
+    lcase(in)
+
+**Deprecated:** Use `lowercase(in)` instead.
+"""
+lcase
+
+@deprecate lcase(in) lowercase(in)
+
 
 """
     limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp, ncuts, schstp, soltol, maxn)
