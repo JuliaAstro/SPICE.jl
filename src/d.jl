@@ -24,13 +24,11 @@ Returns the tuple `(n ,vartype)`.
 function dtpool(name)
     found = Ref{SpiceBoolean}()
     n = Ref{SpiceInt}()
-    vartype = Ref{SpiceChar}()
-    ccall((:dtpool_c, libcspice), Cvoid, (Cstring, Ref{SpiceBoolean}, Ref{SpiceInt}, Ref{SpiceChar}), 
+    vartype = Array{UInt8}(undef, 1)
+    ccall((:dtpool_c, libcspice), Cvoid, (Cstring, Ref{SpiceBoolean}, Ref{SpiceInt}, Ptr{UInt8}), 
           name, found, n, vartype)
     handleerror() 
-    if found == true
-        n[], vartype[]
-    end
+    n[], unsafe_string(pointer(vartype))
 end
 
 

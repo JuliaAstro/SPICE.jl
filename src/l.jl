@@ -7,7 +7,8 @@ export
     lcase,
     ldpool,
     lgrind,
-    limbpt
+    limbpt,
+    lmpool
 
 """
     lastnb(str)
@@ -311,9 +312,8 @@ None
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lmpool_c.html)
 """
 function lmpool(cvals)
-    lenvals = 
-    n = length(cvals)
-    ccall((:ldpool_c, libcspice), Cvoid, (Cstring, SpiceInt, SpiceInt), cvals, lenvals, n)
+    cvals, n, lenvals = chararray(cvals)
+    ccall((:lmpool_c, libcspice), Cvoid, (Ptr{UInt8}, SpiceInt, SpiceInt), cvals, lenvals, n)
     handleerror()
 end
 
