@@ -118,6 +118,10 @@
             kclear()
             rm(kerneltemp, force=true)
         end
+    
+        kclear()
+        rm(kerneltemp, force=true)        
+        
     end
 
     p, dp = lgrind([-1.0, 0.0, 1.0, 3.0], [-2.0, -7.0, -8.0, 26.0], 2.0)
