@@ -18,7 +18,13 @@ export
     lstlei,
     lstltc,
     lstltd,
-    lstlti
+    lstlti,
+    ltime,
+    lx4dec,
+    lx4num,
+    lx4sgn,
+    lx4uns,
+    lxqstr
 
 """
     lastnb(str)
@@ -251,15 +257,6 @@ function lgrind(xvals, yvals, x)
     handleerror()
     p[], dp[]
 end
-"""
-    lcase(in)
-
-**Deprecated:** Use `lowercase(in)` instead.
-"""
-lcase
-
-@deprecate lcase(in) lowercase(in)
-
 
 """
     limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp, ncuts, schstp, soltol, maxn)
@@ -427,14 +424,13 @@ Returns a set containing items in the list, left justified
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lparse_c.html)
 """
-# WIP: errors when while inputting the Cell into the C function
-# function lparss(list, delims)
-#     items = SpiceCell(UInt8, length(list))
-#     ccall((:lparss_c, libcspice), Cvoid, (Cstring, Cstring, Ref{Cell{UInt8}}), 
-#           list, delims, items)
-#     handleerror()
-#     items
-# end
+function lparss(list, delims)
+    items = SpiceCell(UInt8, length(list), length(list))
+    ccall((:lparss_c, libcspice), Cvoid, (Cstring, Cstring, Ref{Cell{UInt8}}), 
+          list, delims, Ref(items.cell))
+    handleerror()
+    items
+end
 
 """
    lspcn(body, et, abcorr)
@@ -653,6 +649,183 @@ function lstlti(x, array)
     out = ccall((:lstlti_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, Ptr{SpiceInt}), 
                 x, n, array)
     out + 1
+end
+
+"""
+    ltime(etobs, obs, dir, targ)
+    
+This routine computes the transmit (or receive) time 
+of a signal at a specified target, given the receive 
+(or transmit) time at a specified observer. The elapsed 
+time between transmit and receive is also returned. 
+
+### Arguments ###
+
+- `etobs`: Epoch of a signal at some observer
+- `obs`: NAIF ID of some observer 
+- `dir`: Direction the signal travels ( "->" or "<-" ) 
+- `targ`: Time between transmit and receipt of the signal
+
+### Output ###
+
+Returns the tuple `(ettarg, elapsd)`.
+
+- `ettarg`: Epoch of the signal at the target 
+- `obs`: NAIF ID of some observer 
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ltime_c.html)
+"""
+function ltime(etobs, obs, dir, targ)
+    ettarg = Ref{SpiceDouble}()
+    elapsd = Ref{SpiceDouble}()
+    ccall((:ltime_c, libcspice), Cvoid, 
+          (SpiceDouble, SpiceInt, Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}), 
+          etobs, obs, dir, targ, ettarg, elapsd)
+    ettarg[], elapsd[]
+end
+
+"""
+    lx4dec(string, first)
+    
+Scan a string from a specified starting position for the 
+end of a decimal number. 
+
+### Arguments ###
+
+- `string`: Any character string
+- `first`: First character to scan from in string
+
+### Output ###
+
+Returns the tuple `(last, nchar)`.
+
+- `last`: Last character that is part of a decimal number. If there is no such
+          character, last will be returned with the value first-1.
+- `nchar`: Number of characters in the decimal number
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lx4dec_c.html)
+"""
+function lx4dec(string, first)
+    last = Ref{SpiceInt}()
+    nchar = Ref{SpiceInt}()
+    ccall((:lx4dec_c, libcspice), Cvoid, 
+          (Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}), 
+          string, first - 1, last, nchar)
+    handleerror()
+    last[] + 1, nchar[]
+end
+
+"""
+    lx4num(string, first)
+    
+Scan a string from a specified starting position for the 
+end of a number. 
+
+### Arguments ###
+
+- `string`: Any character string
+- `first`: First character to scan from in string
+
+### Output ###
+
+Returns the tuple `(last, nchar)`.
+
+- `last`: Last character that is part of a number. If there is no such
+          character, last will be returned with the value first-1.
+- `nchar`: Number of characters in the number
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lx4num_c.html)
+"""
+function lx4num(string, first)
+    last = Ref{SpiceInt}()
+    nchar = Ref{SpiceInt}()
+    ccall((:lx4num_c, libcspice), Cvoid, 
+          (Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}), 
+          string, first - 1, last, nchar)
+    handleerror()
+    last[] + 1, nchar[]
+end
+
+"""
+    lx4sgn(string, first)
+    
+Scan a string from a specified starting position for the 
+end of a signed integer. 
+
+### Arguments ###
+
+- `string`: Any character string
+- `first`: First character to scan from in string
+
+### Output ###
+
+Returns the tuple `(last, nchar)`.
+
+- `last`: Last character that is part of a signed integer. If there is no such
+          character, last will be returned with the value first-1.
+- `nchar`: Number of characters in the signed integer
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lx4sgn_c.html)
+"""
+function lx4sgn(string, first)
+    last = Ref{SpiceInt}()
+    nchar = Ref{SpiceInt}()
+    ccall((:lx4sgn_c, libcspice), Cvoid, 
+          (Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}), 
+          string, first - 1, last, nchar)
+    handleerror()
+    last[] + 1, nchar[]
+end
+
+"""
+    lx4uns(string, first)
+    
+Scan a string from a specified starting position for the 
+end of a unsigned integer. 
+
+### Arguments ###
+
+- `string`: Any character string
+- `first`: First character to scan from in string
+
+### Output ###
+
+Returns the tuple `(last, nchar)`.
+
+- `last`: Last character that is part of an unsigned integer. If there is no such
+          character, last will be returned with the value first-1.
+- `nchar`: Number of characters in the unsigned integer
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lx4uns_c.html)
+"""
+function lx4uns(string, first)
+    last = Ref{SpiceInt}()
+    nchar = Ref{SpiceInt}()
+    ccall((:lx4uns_c, libcspice), Cvoid, 
+          (Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}), 
+          string, first - 1, last, nchar)
+    handleerror()
+    last[] + 1, nchar[]
+end
+
+function lxqstr(string, qchar, first)
+    last = Ref{SpiceInt}()
+    nchar = Ref{SpiceInt}()
+    ccall((:lxqstr_c, libcspice), Cvoid, 
+          (Cstring, SpiceChar, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}), 
+          string, qchar, first - 1, last, nchar)
+    handleerror()
+    last[] + 1, nchar[]
 end
 
 

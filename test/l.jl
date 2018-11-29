@@ -182,41 +182,44 @@
     end
     kclear()
 
-    stringtest = "one two three four"
-    exp = ["one", "two", "three", "four"]
-    act = lparse(stringtest, " ", 25)
-    @testset for i in eachindex(act, exp)
-        @test act[i] == exp[i]
+    let stringtest = "one two three four"
+        exp = ["one", "two", "three", "four"]
+        act = lparse(stringtest, " ", 25)
+        @testset for i in eachindex(act, exp)
+            @test act[i] == exp[i]
+        end
     end
 
-    stringtest = "  A number of words   separated   by spaces   "
-    exp = ["A", "number", "of", "words", "separated", "by", "spaces"]
-    act = lparsm(stringtest, " ", 20, 23)
-    @testset for i in eachindex(act, exp)
-        @test act[i] == exp[i]
-    end
-    act = lparsm(stringtest, " ", length(stringtest)+10)
-    @testset for i in eachindex(act, exp)
-        @test act[i] == exp[i]
+    let stringtest = "  A number of words   separated   by spaces   "
+        exp = ["A", "number", "of", "words", "separated", "by", "spaces"]
+        act = lparsm(stringtest, " ", 20, 23)
+        @testset for i in eachindex(act, exp)
+            @test act[i] == exp[i]
+        end
+        act = lparsm(stringtest, " ", length(stringtest)+10)
+        @testset for i in eachindex(act, exp)
+            @test act[i] == exp[i]
+        end
     end
 
     # WIP
-    # stringtest = "  A number of words   separated   by spaces.   "
-    # delims = " ,."
-    # act = lparss(stringtest, delims)
-    # exp = ["", "A", "by", "number", "of", "separated", "spaces", "words"]
-    # @testset for i in eachindex(act, exp)
-    #     @test act[i] == exp[i]
-    # end
-    
-    # # ERROR: this kernel is not available
-    kclear()
-    furnsh(path(CORE, :lsk))
-    let et = str2et("21 march 2005")
-        lon = rad2deg(lspcn("EARTH", et, "NONE"))
+    let stringtest = "  A number of words   separated   by spaces.   "
+        delims = " ,."
+        act = lparss(stringtest, delims)
+        exp = ["", "A", "by", "number", "of", "separated", "spaces", "words"]
+        @testset for i in 1:length(exp)
+            @test act[i] == exp[i]
+        end
     end
-    kclear()
-    @test lon ≈ 0.48153755894179384
+    
+    # WIP
+    # kclear()
+    # furnsh(path(CORE, :lsk))
+    # let et = str2et("21 march 2005")
+    #     lon = rad2deg(lspcn("EARTH", et, "NONE"))
+    # end
+    # kclear()
+    # @test lon ≈ 0.48153755894179384
 
     let array = ["BOHR", "EINSTEIN", "FEYNMAN", "GALILEO", "NEWTON"]
         @test lstlec("NEWTON", array) == 5
@@ -268,21 +271,46 @@
     #     @test lstlti(12, array) == 6
     # end
 
-    # ERROR: this kernel is not available
     # kclear()
-    # furnsh(CoreKernels.testMetaKernel)
+    # furnsh(path(CORE, :lsk))
     # let OBS = 399   
     #     TARGET = 5   
     #     TIME_STR = "July 4, 2004"    
     #     et = str2et(TIME_STR)   
-    #     arrive, ltime = ltime(et, OBS, "->", TARGET) 
-    #     arrive_utc = et2utc(arrive, 'C', 3, 50)
-    #     @test ltime ≈ 2918.71705
+    #     arrive, ltime_act = ltime(et, OBS, "->", TARGET) 
+    #     arrive_utc = et2utc(arrive, "C", 3)
+    #     @test ltime_act ≈ 2918.71705
     #     @test arrive_utc == "2004 JUL 04 00:48:38.717"
-    #     receive, rtime = ltime(et, OBS, "<-", TARGET)
-    #     receive_utc = et2utc(receive, "C", 3, 50)
-    #     kclear()
-    #     @test rtime ≈ 2918.75247
-    #     @test receive_utc == '2004 JUL 03 23:11:21.248'
+    #     receive, rtime_act = ltime(et, OBS, "<-", TARGET)
+    #     receive_utc = et2utc(receive, "C", 3)
+    #     @test rtime_act ≈ 2918.75247
+    #     @test receive_utc == "2004 JUL 03 23:11:21.248"
     # end
+    # kclear()
+
+    
+    @test lx4dec("1%2%3", 1) == (1, 1)
+    @test lx4dec("1%2%3", 2) == (1, 0)
+    @test lx4dec("1%2%3", 3) == (3, 1)
+
+    @test lx4num("1%2%3", 1) == (1, 1)
+    @test lx4num("1%2%3", 2) == (1, 0)
+    @test lx4num("1%2%3", 3) == (3, 1)
+    @test lx4num("1%2e1%3", 3) == (5, 3)
+
+    @test lx4sgn("1%2%3", 1) == (1, 1)
+    @test lx4sgn("1%2%3", 2) == (1, 0)
+    @test lx4sgn("1%2%3", 3) == (3, 1)
+
+    @test lx4uns("test 10 end", 5) == (4, 0)
+
+    # This doesn't pass its tests
+    @test lxqstr("The 'SPICE' system", "\'", 5) == (11, 7)
+    @test lxqstr("The 'SPICE' system", "'", 5) == (11, 7)
+    @test lxqstr("The 'SPICE' system", "'", 1) == (0, 0)
+    @test lxqstr("The 'SPICE' system", "'", 5) == (4, 0)
+    @test lxqstr("The '''SPICE'''' system", "'", 5) == (15, 11)
+    @test lxqstr("The &&&SPICE system", "&", 5) == (6, 2)
+    @test lxqstr("' '", "'", 1) == (3, 3)
+    @test lxqstr("''", "'", 1) == (2, 2)
 end
