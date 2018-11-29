@@ -15,7 +15,10 @@ Return the data about a kernel pool variable.
 Returns the tuple `(n ,vartype)`.
 
 - `n`: Number of values returned for name
-- `vartype`: Type of the variable:  'C', 'N', or 'X' 
+- `vartype`: Type of the variable
+    - `:C` if the data is character data
+    - `:N` if the data is numeric
+    - `:X` if there is no variable name in the pool
 
 ### References ###
 
@@ -24,11 +27,9 @@ Returns the tuple `(n ,vartype)`.
 function dtpool(name)
     found = Ref{SpiceBoolean}()
     n = Ref{SpiceInt}()
-    vartype = Array{UInt8}(undef, 1)
-    ccall((:dtpool_c, libcspice), Cvoid, (Cstring, Ref{SpiceBoolean}, Ref{SpiceInt}, Ptr{UInt8}), 
+    vartype = Ref{Cchar}()
+    ccall((:dtpool_c, libcspice), Cvoid, (Cstring, Ref{SpiceBoolean}, Ref{SpiceInt}, Ref{Cchar}),
           name, found, n, vartype)
     handleerror() 
-    n[], unsafe_string(pointer(vartype))
+    n[], Symbol(Char(vartype[]))
 end
-
-

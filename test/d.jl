@@ -33,7 +33,7 @@
         for (var, expectLen) in zip(lmpoolNames, lmpoolLens)
             n, vartype = dtpool(var)
             @test expectLen == n
-            @test vartype == "N"
+            @test vartype == :N
         end
     end
     kclear()

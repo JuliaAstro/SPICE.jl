@@ -13,8 +13,7 @@ export
 """
     lastnb(str)
     
-Return the zero based index of the last non-blank character in
-a character string.
+Return the index of the last non-blank character in a character string.
 
 ### Arguments ###
 
@@ -33,7 +32,7 @@ or is empty, the value 0 is returned.
 function lastnb(str)
     r = ccall((:lastnb_c, libcspice), SpiceInt, (Cstring,), str)
     handleerror()
-    r+1
+    r + 1
 end
 
 """
@@ -63,8 +62,9 @@ function latcyl(radius, lon, lat)
     r = Ref{SpiceDouble}()
     lonc = Ref{SpiceDouble}()
     z = Ref{SpiceDouble}()
-    ccall((:latcyl_c, libcspice), Cvoid, (SpiceDouble, SpiceDouble, SpiceDouble,  
-          Ref{SpiceDouble},  Ref{SpiceDouble},  Ref{SpiceDouble}), radius, lon, lat, r, lonc, z)
+    ccall((:latcyl_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          radius, lon, lat, r, lonc, z)
     r[], lonc[], z[]
 end
 
@@ -121,8 +121,9 @@ function latsph(radius, lon, lat)
     rho = Ref{SpiceDouble}()
     colat = Ref{SpiceDouble}()
     lons = Ref{SpiceDouble}()
-    ccall((:latsph_c, libcspice), Cvoid, (SpiceDouble, SpiceDouble, SpiceDouble,  
-          Ref{SpiceDouble},  Ref{SpiceDouble},  Ref{SpiceDouble}), radius, lon, lat, rho, colat, lons)
+    ccall((:latsph_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble},  Ref{SpiceDouble},  Ref{SpiceDouble}),
+          radius, lon, lat, rho, colat, lons)
     rho[], colat[], lons[]
 end
 
@@ -156,7 +157,9 @@ function latsrf(method, target, et, fixref, lonlat)
     npts = length(lonlat)
     lonlat = permutedims(hcat(collect.(lonlat)...))
     srfpts = Matrix{SpiceDouble}(undef, npts, 3)
-    ccall((:latsrf_c, libcspice), Cvoid, (Cstring, Cstring, SpiceDouble, Cstring,  SpiceInt,  Ptr{SpiceDouble}, Ptr{SpiceDouble}), method, target, et, fixref, npts, lonlat, srfpts)
+    ccall((:latsrf_c, libcspice), Cvoid,
+          (Cstring, Cstring, SpiceDouble, Cstring, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          method, target, et, fixref, npts, lonlat, srfpts)
     handleerror()
     [srfpts[i, :] for i in 1:size(srfpts,1)]
 end
@@ -279,20 +282,22 @@ Returns the tuple `(npts, points, epochs, tangts)`.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lgrind_c.html)
 """
-function limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp, ncuts, schstp, soltol, maxn)
+function limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec,
+                rolstp, ncuts, schstp, soltol, maxn)
     npts = Array{SpiceInt}(undef, ncuts)
     points = Matrix{SpiceDouble}(undef, 3, maxn)
     epochs = Array{SpiceDouble}(undef, maxn)
     tangts = Matrix{SpiceDouble}(undef, 3, maxn)
-    ccall((:limbpt_c, libcspice), Cvoid, (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Cstring,
-          Ptr{SpiceDouble}, SpiceDouble, SpiceInt, SpiceDouble, SpiceDouble, SpiceInt, Ptr{SpiceInt}, Ptr{SpiceDouble}, 
-          Ptr{SpiceDouble}, Ptr{SpiceDouble}), method, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp, 
+    ccall((:limbpt_c, libcspice), Cvoid,
+          (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Cstring,
+          Ptr{SpiceDouble}, SpiceDouble, SpiceInt, SpiceDouble, SpiceDouble,
+          SpiceInt, Ptr{SpiceInt}, Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          method, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp,
           ncuts, schstp, soltol, maxn, npts, points, epochs, tangts)
     handleerror()
     npts, permutedims(points), epochs, permutedims(tangts)
 end
 
-# WIP
 """
    lmpool(cvals)
     
