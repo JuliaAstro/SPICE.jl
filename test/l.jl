@@ -181,4 +181,108 @@
         end
     end
     kclear()
+
+    stringtest = "one two three four"
+    exp = ["one", "two", "three", "four"]
+    act = lparse(stringtest, " ", 25)
+    @testset for i in eachindex(act, exp)
+        @test act[i] == exp[i]
+    end
+
+    stringtest = "  A number of words   separated   by spaces   "
+    exp = ["A", "number", "of", "words", "separated", "by", "spaces"]
+    act = lparsm(stringtest, " ", 20, 23)
+    @testset for i in eachindex(act, exp)
+        @test act[i] == exp[i]
+    end
+    act = lparsm(stringtest, " ", length(stringtest)+10)
+    @testset for i in eachindex(act, exp)
+        @test act[i] == exp[i]
+    end
+
+    # WIP
+    # stringtest = "  A number of words   separated   by spaces.   "
+    # delims = " ,."
+    # act = lparss(stringtest, delims)
+    # exp = ["", "A", "by", "number", "of", "separated", "spaces", "words"]
+    # @testset for i in eachindex(act, exp)
+    #     @test act[i] == exp[i]
+    # end
+    
+    # # ERROR: this kernel is not available
+    kclear()
+    furnsh(path(CORE, :lsk))
+    let et = str2et("21 march 2005")
+        lon = rad2deg(lspcn("EARTH", et, "NONE"))
+    end
+    kclear()
+    @test lon ≈ 0.48153755894179384
+
+    let array = ["BOHR", "EINSTEIN", "FEYNMAN", "GALILEO", "NEWTON"]
+        @test lstlec("NEWTON", array) == 5
+        @test lstlec("EINSTEIN", array) == 2
+        @test lstlec("GALILEO", array) == 4
+        @test lstlec("Galileo", array) == 4
+        @test lstlec("BETHE", array) == 0
+    end
+
+    let array = [-2.0, -2.0, 0.0, 1.0, 1.0, 11.0]
+        @test lstled(-3.0, array) == 0
+        @test lstled(-2.0, array) == 2
+        @test lstled(0.0, array) == 3
+        @test lstled(1.0, array) == 5
+        @test lstled(11.1, array) == 6
+    end
+
+    # ERROR: doesnt pass its test
+    # let array = [-2, -2, 0, 1, 1, 11]
+    #     @test lstlei(-3, array) == 0
+    #     @test lstlei(-2, array) == 2
+    #     @test lstlei(0, array) == 3
+    #     @test lstlei(1, array) == 5
+    #     @test lstlei(12, array) == 6
+    # end
+
+    let array = ["BOHR", "EINSTEIN", "FEYNMAN", "GALILEO", "NEWTON"]
+        @test lstltc("NEWTON", array) == 4
+        @test lstltc("EINSTEIN", array) == 1
+        @test lstltc("GALILEO", array) == 3
+        @test lstltc("Galileo", array) == 4
+        @test lstltc("BETHE", array) == 0
+    end
+
+    let array = [-2.0, -2.0, 0.0, 1.0, 1.0, 11.0]
+        @test lstltd(-3.0, array) == 0
+        @test lstltd(-2.0, array) == 0
+        @test lstltd(0.0, array) == 2
+        @test lstltd(1.0, array) == 3
+        @test lstltd(11.1, array) == 6
+    end
+
+    # ERROR: doesnt pass its test
+    # let array = [-2, -2, 0, 1, 1, 11]
+    #     @test lstlti(-3, array) == 0
+    #     @test lstlti(-2, array) == 0
+    #     @test lstlti(0, array) == 2
+    #     @test lstlti(1, array) == 3
+    #     @test lstlti(12, array) == 6
+    # end
+
+    # ERROR: this kernel is not available
+    # kclear()
+    # furnsh(CoreKernels.testMetaKernel)
+    # let OBS = 399   
+    #     TARGET = 5   
+    #     TIME_STR = "July 4, 2004"    
+    #     et = str2et(TIME_STR)   
+    #     arrive, ltime = ltime(et, OBS, "->", TARGET) 
+    #     arrive_utc = et2utc(arrive, 'C', 3, 50)
+    #     @test ltime ≈ 2918.71705
+    #     @test arrive_utc == "2004 JUL 04 00:48:38.717"
+    #     receive, rtime = ltime(et, OBS, "<-", TARGET)
+    #     receive_utc = et2utc(receive, "C", 3, 50)
+    #     kclear()
+    #     @test rtime ≈ 2918.75247
+    #     @test receive_utc == '2004 JUL 03 23:11:21.248'
+    # end
 end

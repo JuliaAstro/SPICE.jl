@@ -8,7 +8,17 @@ export
     ldpool,
     lgrind,
     limbpt,
-    lmpool
+    lmpool,
+    lparse,
+    lparsm,
+    lparss,
+    lspcn,
+    lstlec,
+    lstled,
+    lstlei,
+    lstltc,
+    lstltd,
+    lstlti
 
 """
     lastnb(str)
@@ -331,7 +341,319 @@ function lmpool(cvals)
     handleerror()
 end
 
+"""
+   lparse(list, delim, nmax)
+    
+Parse a list of items delimited by a single character.
 
+### Arguments ###
+
+- `list`: List of items delimited by delim
+- `delim`: Single character used to delimit items
+- `nmax`: Maximum number of items to return
+
+### Output ###
+
+Returns an array with the items in the list, left justified.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lparse_c.html)
+"""
+function lparse(list, delim, nmax)
+    lenout = length(list)+1
+    n = Ref{SpiceInt}()
+    items = Array{UInt8}(undef, lenout, nmax)
+    ccall((:lparse_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}), 
+          list, delim, nmax, lenout, n , items)
+    handleerror()
+    out = Array{String}(undef, n[])
+    for i in 1:n[]
+        out[i] = unsafe_string(pointer(items[:,i]))
+    end
+    out
+end
+
+"""
+   lparsm(list, delims, nmax)
+    
+Parse a list of items separated by multiple delimiters. 
+
+### Arguments ###
+
+- `list`: List of items delimited by delim
+- `delims`: Single characters which delimit items
+- `nmax`: Maximum number of items to return
+
+### Output ###
+
+Returns an array with the items in the list, left justified.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lparse_c.html)
+"""
+lparsm(list, delims, nmax) = lparsm(list, delims, nmax, length(list)+1)
+
+function lparsm(list, delims, nmax, lenout)
+    n = Ref{SpiceInt}()
+    items = Array{UInt8}(undef, lenout, nmax)
+    ccall((:lparsm_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}), 
+          list, delims, nmax, lenout, n , items)
+    handleerror()
+    out = Array{String}(undef, n[])
+    for i in 1:n[]
+        out[i] = unsafe_string(pointer(items[:,i]))
+    end
+    out
+end
+
+"""
+   lparss(list, delims)
+    
+Parse a list of items separated by multiple delimiters, placing the
+resulting items into a set.
+
+### Arguments ###
+
+- `list`: List of items delimited by delim
+- `delims`: Single characters which delimit items
+
+### Output ###
+
+Returns a set containing items in the list, left justified
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lparse_c.html)
+"""
+# WIP: errors when while inputting the Cell into the C function
+# function lparss(list, delims)
+#     items = SpiceCell(UInt8, length(list))
+#     ccall((:lparss_c, libcspice), Cvoid, (Cstring, Cstring, Ref{Cell{UInt8}}), 
+#           list, delims, items)
+#     handleerror()
+#     items
+# end
+
+"""
+   lspcn(body, et, abcorr)
+    
+Compute L_s, the planetocentric longitude of the sun, as seen 
+from a specified body. 
+
+### Arguments ###
+
+- `body`: Name of the central body
+- `et`: Epoch in seconds past J2000 TDB
+- `abcorr`: Aberration correction
+
+### Output ###
+
+Returns the planetocentric longitude of the sun for the specified body 
+at the specified time in radians.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lspcn_c.html)
+"""
+function lspcn(body , et, abcorr)
+    out = ccall((:lspcn_c, libcspice), SpiceDouble, (Cstring, SpiceDouble, Cstring), 
+         body, et, abcorr)
+    handleerror()
+end
+
+"""
+   lstlec(string, array)
+    
+Given a character string and an ordered array of character 
+strings, find the index of the largest array element less than 
+or equal to the given string. 
+
+### Arguments ###
+
+- `string`: Upper bound value to search against
+- `arrays`: Array of possible lower bounds
+
+### Output ###
+
+Returns the index of the last element of array that
+is lexically less than or equal to string. 
+
+If all elements of the input array are greater than the specified 
+upper bound string, the function returns 0. 
+ 
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstlec_c.html)
+"""
+function lstlec(string, array)
+    n = length(array)
+    array, n, lenvals = chararray(array)
+    out = ccall((:lstlec_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ptr{UInt8}), 
+                string, n, lenvals, array)
+    handleerror()
+    out+1
+end
+
+"""
+   lstled(x, array)
+    
+Given a number x and an array of non-decreasing numbers, 
+find the index of the largest array element less than or equal 
+to x.
+
+### Arguments ###
+
+- `x`: Value to search against
+- `arrays`: Array of possible lower bounds 
+
+### Output ###
+
+Returns the index of the highest-indexed element in the 
+input array that is less than or equal to x.  The routine assumes
+the array elements are sorted in non-decreasing order.
+ 
+If all elements of the input array are greater than x, the function
+returns 0.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstled_c.html)
+"""
+function lstled(x, array)
+    n = length(array)
+    out = ccall((:lstled_c, libcspice), SpiceInt, (SpiceDouble, SpiceInt, Ptr{SpiceDouble}), 
+                x, n, array)
+    out + 1
+end
+
+"""
+   lstlei(x, array)
+    
+Given a number x and an array of non-decreasing numbers, 
+find the index of the largest array element less than or equal 
+to x.
+
+### Arguments ###
+
+- `x`: Value to search against
+- `arrays`: Array of possible lower bounds 
+
+### Output ###
+
+Returns the index of the highest-indexed element in the 
+input array that is less than or equal to x. The routine assumes
+the array elements are sorted in non-decreasing order.
+
+If all elements of array are greater than x, this routine returns 
+the value 0.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstlei_c.html)
+"""
+function lstlei(x, array)
+    n = length(array)
+    out = ccall((:lstlei_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, Ptr{SpiceInt}), 
+                x, n, array)
+    out + 1
+end
+
+"""
+   lstltc(string, array)
+    
+Given a character string and an ordered array of character 
+strings, find the index of the largest array element less than 
+the given string. 
+
+### Arguments ###
+
+- `string`: Upper bound value to search against
+- `arrays`: Array of possible lower bounds
+
+### Output ###
+
+Returns the index of the last element of array that
+is lexically less than string. 
+
+If all elements of the input array are greater than or equal to the specified 
+upper bound string, the function returns 0. 
+ 
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstltc_c.html)
+"""
+function lstltc(string, array)
+    n = length(array)
+    array, n, lenvals = chararray(array)
+    out = ccall((:lstltc_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ptr{UInt8}), 
+                string, n, lenvals, array)
+    handleerror()
+    out+1
+end
+
+"""
+   lstltd(x, array)
+    
+Given a number x and an array of non-decreasing numbers, 
+find the index of the largest array element less than x.
+
+### Arguments ###
+
+- `x`: Value to search against
+- `arrays`: Array of possible lower bounds 
+
+### Output ###
+
+Returns the index of the highest-indexed element in the 
+input array that is less than x.  The routine assumes
+the array elements are sorted in non-decreasing order.
+ 
+If all elements of the input array are greater than or equal to x, the function
+returns 0.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstltd_c.html)
+"""
+function lstltd(x, array)
+    n = length(array)
+    out = ccall((:lstltd_c, libcspice), SpiceInt, (SpiceDouble, SpiceInt, Ptr{SpiceDouble}), 
+                x, n, array)
+    out + 1
+end
+
+"""
+   lstlti(x, array)
+    
+Given a number x and an array of non-decreasing numbers, 
+find the index of the largest array element less than x.
+
+### Arguments ###
+
+- `x`: Value to search against
+- `arrays`: Array of possible lower bounds 
+
+### Output ###
+
+Returns the index of the highest-indexed element in the 
+input array that is less than x. The routine assumes
+the array elements are sorted in non-decreasing order.
+
+If all elements of array are greater than or equal to x, this routine returns 
+the value 0.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstlti_c.html)
+"""
+function lstlti(x, array)
+    n = length(array)
+    out = ccall((:lstlti_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, Ptr{SpiceInt}), 
+                x, n, array)
+    out + 1
+end
 
 
 

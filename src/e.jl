@@ -1,4 +1,6 @@
-export eul2m
+export 
+    eul2m,
+    et2utc
 
 """
     eul2m(angle3, angle2, angle1, axis3, axis2, axis1)
@@ -25,4 +27,37 @@ function eul2m(angle3, angle2, angle1, axis3, axis2, axis1)
           angle3, angle2, angle1, axis3, axis2, axis1, r)
     handleerror()
     permutedims(r)
+end
+
+"""
+    et2utc(et, format, prec)
+
+Convert an input time from ephemeris seconds past J2000
+to Calendar, Day-of-Year, or Julian Date format, UTC.
+
+### Arguments ###
+
+- `et`: Input epoch, given in ephemeris seconds past J2000
+- `format`: Format of output epoch
+- `prec`: Digits of precision in fractional seconds or days
+
+### Output ###
+
+Returns an output time string equivalent to the input
+epoch, in the specified format.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/et2utc_c.html)
+"""
+# WIP
+function et2utc(et, format, prec)
+    # this is a guess
+    lenout = 30 
+    utcstr = Array{UInt8}(undef, lenout)
+    ccall((:et2utc_c, libcspice), Cvoid,
+          (SpiceDouble, Cstring, SpiceInt, SpiceInt, Ptr{UInt8}),
+          et, format, prec, lenout, utcstr)
+    handleerror()
+    unsafe_string(pointer(utcstr))
 end
