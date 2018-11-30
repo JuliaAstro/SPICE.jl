@@ -219,57 +219,55 @@
     kclear()
     
     let array = ["BOHR", "EINSTEIN", "FEYNMAN", "GALILEO", "NEWTON"]
-        @test lstlec("NEWTON", array) == 5
-        @test lstlec("EINSTEIN", array) == 2
-        @test lstlec("GALILEO", array) == 4
-        @test lstlec("Galileo", array) == 4
-        @test lstlec("BETHE", array) == 0
+        @test lstle("NEWTON", array) == 5
+        @test lstle("EINSTEIN", array) == 2
+        @test lstle("GALILEO", array) == 4
+        @test lstle("Galileo", array) == 4
+        @test lstle("BETHE", array) == 0
     end
 
     let array = [-2.0, -2.0, 0.0, 1.0, 1.0, 11.0]
-        @test lstled(-3.0, array) == 0
-        @test lstled(-2.0, array) == 2
-        @test lstled(0.0, array) == 3
-        @test lstled(1.0, array) == 5
-        @test lstled(11.1, array) == 6
+        @test lstle(-3.0, array) == 0
+        @test lstle(-2.0, array) == 2
+        @test lstle(0.0, array) == 3
+        @test lstle(1.0, array) == 5
+        @test lstle(11.1, array) == 6
     end
 
     let array = [-2, -2, 0, 1, 1, 11]
-        @test lstlei(-3, array) == 0
-        @test lstlei(-2, array) == 2
-        @test lstlei(0, array) == 3
-        @test lstlei(1, array) == 5
-        @test lstlei(12, array) == 6
+        @test lstle(-3, array) == 0
+        @test lstle(-2, array) == 2
+        @test lstle(0, array) == 3
+        @test lstle(1, array) == 5
+        @test lstle(12, array) == 6
     end
 
     let array = ["BOHR", "EINSTEIN", "FEYNMAN", "GALILEO", "NEWTON"]
-        @test lstltc("NEWTON", array) == 4
-        @test lstltc("EINSTEIN", array) == 1
-        @test lstltc("GALILEO", array) == 3
-        @test lstltc("Galileo", array) == 4
-        @test lstltc("BETHE", array) == 0
+        @test lstlt("NEWTON", array) == 4
+        @test lstlt("EINSTEIN", array) == 1
+        @test lstlt("GALILEO", array) == 3
+        @test lstlt("Galileo", array) == 4
+        @test lstlt("BETHE", array) == 0
     end
 
     let array = [-2.0, -2.0, 0.0, 1.0, 1.0, 11.0]
-        @test lstltd(-3.0, array) == 0
-        @test lstltd(-2.0, array) == 0
-        @test lstltd(0.0, array) == 2
-        @test lstltd(1.0, array) == 3
-        @test lstltd(11.1, array) == 6
+        @test lstlt(-3.0, array) == 0
+        @test lstlt(-2.0, array) == 0
+        @test lstlt(0.0, array) == 2
+        @test lstlt(1.0, array) == 3
+        @test lstlt(11.1, array) == 6
     end
 
     let array = [-2, -2, 0, 1, 1, 11]
-        @test lstlti(-3, array) == 0
-        @test lstlti(-2, array) == 0
-        @test lstlti(0, array) == 2
-        @test lstlti(1, array) == 3
-        @test lstlti(12, array) == 6
+        @test lstlt(-3, array) == 0
+        @test lstlt(-2, array) == 0
+        @test lstlt(0, array) == 2
+        @test lstlt(1, array) == 3
+        @test lstlt(12, array) == 6
     end
 
     kclear()
-    furnsh(
-        path(CORE, :lsk),
-        path(CORE, :spk))
+    furnsh(path(CORE, :lsk), path(CORE, :spk))
     let OBS = 399   
         TARGET = 5   
         TIME_STR = "July 4, 2004"    
