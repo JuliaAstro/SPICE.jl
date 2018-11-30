@@ -222,7 +222,6 @@
     end
     kclear()
     
-
     let array = ["BOHR", "EINSTEIN", "FEYNMAN", "GALILEO", "NEWTON"]
         @test lstlec("NEWTON", array) == 5
         @test lstlec("EINSTEIN", array) == 2
@@ -239,8 +238,7 @@
         @test lstled(11.1, array) == 6
     end
 
-    # ERROR: some don't pass their test
-    let array = Int64[-2, -2, 0, 1, 1, 11]
+    let array = [-2, -2, 0, 1, 1, 11]
         @test lstlei(-3, array) == 0
         @test lstlei(-2, array) == 2
         @test lstlei(0, array) == 3
@@ -264,8 +262,7 @@
         @test lstltd(11.1, array) == 6
     end
 
-    # ERROR: some don't pass their test
-    let array = Int64[-2, -2, 0, 1, 1, 11]
+    let array = [-2, -2, 0, 1, 1, 11]
         @test lstlti(-3, array) == 0
         @test lstlti(-2, array) == 0
         @test lstlti(0, array) == 2

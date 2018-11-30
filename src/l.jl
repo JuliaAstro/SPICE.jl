@@ -519,30 +519,38 @@ function lstle(x::Signed, array)
 end
 
 """
-   lstltc(string, array)
+   lstle(x, array)
     
-Given a character string and an ordered array of character 
-strings, find the index of the largest array element less than 
-the given string. 
+Given an element `x` and an array of non-decreasing elements (floats, integers, or strings), 
+find the index of the largest array element less than `x`.
 
 ### Arguments ###
 
-- `string`: Upper bound value to search against
-- `arrays`: Array of possible lower bounds
+- `x`: Value to search against
+- `arrays`: Array of possible lower bounds 
 
 ### Output ###
 
-Returns the index of the last element of array that
-is lexically less than string. 
-
-If all elements of the input array are greater than or equal to the specified 
-upper bound string, the function returns 0. 
+Returns the index of the highest-indexed element in the 
+input array that is less than `x`.  The routine assumes
+the array elements are sorted in non-decreasing order.
  
+If all elements of the input array are greater than or equal to `x`, the function
+returns 0.
+
 ### References ###
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstltc_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstltd_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstlti_c.html)
 """
-function lstltc(string, array)
+lstlt
+
+@deprecate lstltc lstlt
+@deprecate lstltd lstlt
+@deprecate lstlti lstlt
+
+function lstlt(string::AbstractString, array)
     n = length(array)
     array, n, lenvals = chararray(array)
     out = ccall((:lstltc_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ptr{UInt8}), 
@@ -551,63 +559,17 @@ function lstltc(string, array)
     out+1
 end
 
-"""
-   lstltd(x, array)
-    
-Given a number x and an array of non-decreasing numbers, 
-find the index of the largest array element less than x.
-
-### Arguments ###
-
-- `x`: Value to search against
-- `arrays`: Array of possible lower bounds 
-
-### Output ###
-
-Returns the index of the highest-indexed element in the 
-input array that is less than x.  The routine assumes
-the array elements are sorted in non-decreasing order.
- 
-If all elements of the input array are greater than or equal to x, the function
-returns 0.
-
-### References ###
-
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstltd_c.html)
-"""
-function lstltd(x, array)
+function lstlt(x::AbstractFloat, array)
     n = length(array)
+    array = Vector{SpiceDouble}(array)
     out = ccall((:lstltd_c, libcspice), SpiceInt, (SpiceDouble, SpiceInt, Ptr{SpiceDouble}), 
                 x, n, array)
     out + 1
 end
 
-"""
-   lstlti(x, array)
-    
-Given a number x and an array of non-decreasing numbers, 
-find the index of the largest array element less than x.
-
-### Arguments ###
-
-- `x`: Value to search against
-- `arrays`: Array of possible lower bounds 
-
-### Output ###
-
-Returns the index of the highest-indexed element in the 
-input array that is less than x. The routine assumes
-the array elements are sorted in non-decreasing order.
-
-If all elements of array are greater than or equal to x, this routine returns 
-the value 0.
-
-### References ###
-
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstlti_c.html)
-"""
-function lstlti(x, array)
+function lstlt(x::Signed, array)
     n = length(array)
+    array = Vector{SpiceInt}(array)
     out = ccall((:lstlti_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, Ptr{SpiceInt}), 
                 x, n, array)
     out + 1
