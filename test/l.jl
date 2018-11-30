@@ -202,7 +202,6 @@
         end
     end
 
-    # WIP
     let stringtest = "  A number of words   separated   by spaces.   "
         delims = " ,."
         act = lparss(stringtest, delims)
@@ -212,14 +211,17 @@
         end
     end
     
-    # WIP
-    # kclear()
-    # furnsh(path(CORE, :lsk))
-    # let et = str2et("21 march 2005")
-    #     lon = rad2deg(lspcn("EARTH", et, "NONE"))
-    # end
-    # kclear()
-    # @test lon ≈ 0.48153755894179384
+    kclear()
+    furnsh(
+        path(CORE, :lsk),
+        path(CORE, :pck),
+        path(CORE, :spk))
+    let et = str2et("21 march 2005")
+        lon = rad2deg(lspcn("EARTH", et, "NONE"))
+        @test lon ≈ 0.48153755894179384
+    end
+    kclear()
+    
 
     let array = ["BOHR", "EINSTEIN", "FEYNMAN", "GALILEO", "NEWTON"]
         @test lstlec("NEWTON", array) == 5
@@ -237,14 +239,14 @@
         @test lstled(11.1, array) == 6
     end
 
-    # ERROR: doesnt pass its test
-    # let array = [-2, -2, 0, 1, 1, 11]
-    #     @test lstlei(-3, array) == 0
-    #     @test lstlei(-2, array) == 2
-    #     @test lstlei(0, array) == 3
-    #     @test lstlei(1, array) == 5
-    #     @test lstlei(12, array) == 6
-    # end
+    # ERROR: some don't pass their test
+    let array = Int64[-2, -2, 0, 1, 1, 11]
+        @test lstlei(-3, array) == 0
+        @test lstlei(-2, array) == 2
+        @test lstlei(0, array) == 3
+        @test lstlei(1, array) == 5
+        @test lstlei(12, array) == 6
+    end
 
     let array = ["BOHR", "EINSTEIN", "FEYNMAN", "GALILEO", "NEWTON"]
         @test lstltc("NEWTON", array) == 4
@@ -262,32 +264,33 @@
         @test lstltd(11.1, array) == 6
     end
 
-    # ERROR: doesnt pass its test
-    # let array = [-2, -2, 0, 1, 1, 11]
-    #     @test lstlti(-3, array) == 0
-    #     @test lstlti(-2, array) == 0
-    #     @test lstlti(0, array) == 2
-    #     @test lstlti(1, array) == 3
-    #     @test lstlti(12, array) == 6
-    # end
+    # ERROR: some don't pass their test
+    let array = Int64[-2, -2, 0, 1, 1, 11]
+        @test lstlti(-3, array) == 0
+        @test lstlti(-2, array) == 0
+        @test lstlti(0, array) == 2
+        @test lstlti(1, array) == 3
+        @test lstlti(12, array) == 6
+    end
 
-    # kclear()
-    # furnsh(path(CORE, :lsk))
-    # let OBS = 399   
-    #     TARGET = 5   
-    #     TIME_STR = "July 4, 2004"    
-    #     et = str2et(TIME_STR)   
-    #     arrive, ltime_act = ltime(et, OBS, "->", TARGET) 
-    #     arrive_utc = et2utc(arrive, "C", 3)
-    #     @test ltime_act ≈ 2918.71705
-    #     @test arrive_utc == "2004 JUL 04 00:48:38.717"
-    #     receive, rtime_act = ltime(et, OBS, "<-", TARGET)
-    #     receive_utc = et2utc(receive, "C", 3)
-    #     @test rtime_act ≈ 2918.75247
-    #     @test receive_utc == "2004 JUL 03 23:11:21.248"
-    # end
-    # kclear()
-
+    kclear()
+    furnsh(
+        path(CORE, :lsk),
+        path(CORE, :spk))
+    let OBS = 399   
+        TARGET = 5   
+        TIME_STR = "July 4, 2004"    
+        et = str2et(TIME_STR)   
+        arrive, ltime_act = ltime(et, OBS, "->", TARGET) 
+        arrive_utc = et2utc(arrive, "C", 3)
+        @test ltime_act ≈ 2918.71705
+        @test arrive_utc == "2004 JUL 04 00:48:38.717"
+        receive, rtime_act = ltime(et, OBS, "<-", TARGET)
+        receive_utc = et2utc(receive, "C", 3)
+        @test rtime_act ≈ 2918.75247
+        @test receive_utc == "2004 JUL 03 23:11:21.248"
+    end
+    kclear()
     
     @test lx4dec("1%2%3", 1) == (1, 1)
     @test lx4dec("1%2%3", 2) == (1, 0)
@@ -304,13 +307,12 @@
 
     @test lx4uns("test 10 end", 5) == (4, 0)
 
-    # This doesn't pass its tests
-    @test lxqstr("The 'SPICE' system", "\'", 5) == (11, 7)
-    @test lxqstr("The 'SPICE' system", "'", 5) == (11, 7)
-    @test lxqstr("The 'SPICE' system", "'", 1) == (0, 0)
-    @test lxqstr("The 'SPICE' system", "'", 5) == (4, 0)
-    @test lxqstr("The '''SPICE'''' system", "'", 5) == (15, 11)
-    @test lxqstr("The &&&SPICE system", "&", 5) == (6, 2)
-    @test lxqstr("' '", "'", 1) == (3, 3)
-    @test lxqstr("''", "'", 1) == (2, 2)
+    @test lxqstr("The 'SPICE' system", '\'', 5) == (11, 7)
+    @test lxqstr("The 'SPICE' system", '\'', 5) == (11, 7)
+    @test lxqstr("The 'SPICE' system", '\'', 1) == (0, 0)
+    @test lxqstr("The 'SPICE' system", '\"', 5) == (4, 0)
+    @test lxqstr("The '''SPICE'''' system", '\'', 5) == (15, 11)
+    @test lxqstr("The &&&SPICE system", '&', 5) == (6, 2)
+    @test lxqstr("' '", '\'', 1) == (3, 3)
+    @test lxqstr("''", '\'', 1) == (2, 2)
 end

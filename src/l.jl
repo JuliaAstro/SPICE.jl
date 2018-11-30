@@ -457,6 +457,7 @@ function lspcn(body , et, abcorr)
     out = ccall((:lspcn_c, libcspice), SpiceDouble, (Cstring, SpiceDouble, Cstring), 
          body, et, abcorr)
     handleerror()
+    out
 end
 
 """
