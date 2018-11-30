@@ -8,7 +8,25 @@ export
     ldpool,
     lgrind,
     limbpt,
-    lmpool
+    lmpool,
+    lparse,
+    lparsm,
+    lparss,
+    lspcn,
+    lstlec,
+    lstled,
+    lstlei,
+    lstle,
+    lstltc,
+    lstltd,
+    lstlti,
+    lstlt,
+    ltime,
+    lx4dec,
+    lx4num,
+    lx4sgn,
+    lx4uns,
+    lxqstr
 
 """
     lastnb(str)
@@ -322,7 +340,418 @@ function lmpool(cvals)
     handleerror()
 end
 
+"""
+   lparse(list, delim, nmax)
+    
+Parse a list of items delimited by a single character.
 
+### Arguments ###
+
+- `list`: List of items delimited by delim
+- `delim`: Single character used to delimit items
+- `nmax`: Maximum number of items to return
+
+### Output ###
+
+Returns an array with the items in the list, left justified.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lparse_c.html)
+"""
+function lparse(list, delim, nmax)
+    lenout = length(list)+1
+    n = Ref{SpiceInt}()
+    items = Array{UInt8}(undef, lenout, nmax)
+    ccall((:lparse_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}), 
+          list, delim, nmax, lenout, n , items)
+    handleerror()
+    out = Array{String}(undef, n[])
+    for i in 1:n[]
+        out[i] = unsafe_string(pointer(items[:,i]))
+    end
+    out
+end
+
+"""
+   lparsm(list, delims, nmax)
+    
+Parse a list of items separated by multiple delimiters. 
+
+### Arguments ###
+
+- `list`: List of items delimited by delim
+- `delims`: Single characters which delimit items
+- `nmax`: Maximum number of items to return
+
+### Output ###
+
+Returns an array with the items in the list, left justified.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lparse_c.html)
+"""
+lparsm(list, delims, nmax) = lparsm(list, delims, nmax, length(list)+1)
+
+function lparsm(list, delims, nmax, lenout)
+    n = Ref{SpiceInt}()
+    items = Array{UInt8}(undef, lenout, nmax)
+    ccall((:lparsm_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}), 
+          list, delims, nmax, lenout, n , items)
+    handleerror()
+    out = Array{String}(undef, n[])
+    for i in 1:n[]
+        out[i] = unsafe_string(pointer(items[:,i]))
+    end
+    out
+end
+
+"""
+   lparss(list, delims)
+    
+Parse a list of items separated by multiple delimiters, placing the
+resulting items into a set.
+
+### Arguments ###
+
+- `list`: List of items delimited by delim
+- `delims`: Single characters which delimit items
+
+### Output ###
+
+Returns a set containing items in the list, left justified
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lparse_c.html)
+"""
+function lparss(list, delims)
+    items = SpiceCell(UInt8, length(list), length(list))
+    ccall((:lparss_c, libcspice), Cvoid, (Cstring, Cstring, Ref{Cell{UInt8}}), 
+          list, delims, Ref(items.cell))
+    handleerror()
+    items
+end
+
+"""
+   lspcn(body, et, abcorr)
+    
+Compute L_s, the planetocentric longitude of the sun, as seen 
+from a specified body. 
+
+### Arguments ###
+
+- `body`: Name of the central body
+- `et`: Epoch in seconds past J2000 TDB
+- `abcorr`: Aberration correction
+
+### Output ###
+
+Returns the planetocentric longitude of the sun for the specified body 
+at the specified time in radians.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lspcn_c.html)
+"""
+function lspcn(body , et, abcorr)
+    out = ccall((:lspcn_c, libcspice), SpiceDouble, (Cstring, SpiceDouble, Cstring), 
+         body, et, abcorr)
+    handleerror()
+    out
+end
+
+"""
+   lstle(x, array)
+    
+Given an element `x` and an array of non-decreasing elements (floats, integers, or strings), 
+find the index of the largest array element less than or equal to `x`.
+
+### Arguments ###
+
+- `x`: Value to search against
+- `arrays`: Array of possible lower bounds 
+
+### Output ###
+
+Returns the index of the highest-indexed element in the 
+input array that is less than or equal to `x`.  The routine assumes
+the array elements are sorted in non-decreasing order.
+ 
+If all elements of the input array are greater than `x`, the function
+returns 0.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstlec_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstled_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstlei_c.html)
+"""
+lstle
+
+@deprecate lstlec lstle
+@deprecate lstled lstle
+@deprecate lstlei lstle
+
+function lstle(string::AbstractString, array)
+    n = length(array)
+    array, n, lenvals = chararray(array)
+    out = ccall((:lstlec_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ptr{UInt8}), 
+                string, n, lenvals, array)
+    handleerror()
+    out + 1
+end
+
+function lstle(x::AbstractFloat, array)
+    n = length(array)
+    array = Vector{SpiceDouble}(array)
+    out = ccall((:lstled_c, libcspice), SpiceInt, (SpiceDouble, SpiceInt, Ptr{SpiceDouble}), 
+                x, n, array)
+    out + 1
+end
+
+function lstle(x::Signed, array)
+    n = length(array)
+    array = Vector{SpiceInt}(array)
+    out = ccall((:lstlei_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, Ptr{SpiceInt}), 
+                x, n, array)
+    out + 1
+end
+
+"""
+   lstle(x, array)
+    
+Given an element `x` and an array of non-decreasing elements (floats, integers, or strings), 
+find the index of the largest array element less than `x`.
+
+### Arguments ###
+
+- `x`: Value to search against
+- `arrays`: Array of possible lower bounds 
+
+### Output ###
+
+Returns the index of the highest-indexed element in the 
+input array that is less than `x`.  The routine assumes
+the array elements are sorted in non-decreasing order.
+ 
+If all elements of the input array are greater than or equal to `x`, the function
+returns 0.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstltc_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstltd_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstlti_c.html)
+"""
+lstlt
+
+@deprecate lstltc lstlt
+@deprecate lstltd lstlt
+@deprecate lstlti lstlt
+
+function lstlt(string::AbstractString, array)
+    n = length(array)
+    array, n, lenvals = chararray(array)
+    out = ccall((:lstltc_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ptr{UInt8}), 
+                string, n, lenvals, array)
+    handleerror()
+    out+1
+end
+
+function lstlt(x::AbstractFloat, array)
+    n = length(array)
+    array = Vector{SpiceDouble}(array)
+    out = ccall((:lstltd_c, libcspice), SpiceInt, (SpiceDouble, SpiceInt, Ptr{SpiceDouble}), 
+                x, n, array)
+    out + 1
+end
+
+function lstlt(x::Signed, array)
+    n = length(array)
+    array = Vector{SpiceInt}(array)
+    out = ccall((:lstlti_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, Ptr{SpiceInt}), 
+                x, n, array)
+    out + 1
+end
+
+"""
+    ltime(etobs, obs, dir, targ)
+    
+This routine computes the transmit (or receive) time 
+of a signal at a specified target, given the receive 
+(or transmit) time at a specified observer. The elapsed 
+time between transmit and receive is also returned. 
+
+### Arguments ###
+
+- `etobs`: Epoch of a signal at some observer
+- `obs`: NAIF ID of some observer 
+- `dir`: Direction the signal travels ( "->" or "<-" ) 
+- `targ`: Time between transmit and receipt of the signal
+
+### Output ###
+
+Returns the tuple `(ettarg, elapsd)`.
+
+- `ettarg`: Epoch of the signal at the target 
+- `obs`: NAIF ID of some observer 
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ltime_c.html)
+"""
+function ltime(etobs, obs, dir, targ)
+    ettarg = Ref{SpiceDouble}()
+    elapsd = Ref{SpiceDouble}()
+    ccall((:ltime_c, libcspice), Cvoid, 
+          (SpiceDouble, SpiceInt, Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}), 
+          etobs, obs, dir, targ, ettarg, elapsd)
+    ettarg[], elapsd[]
+end
+
+"""
+    lx4dec(string, first)
+    
+Scan a string from a specified starting position for the 
+end of a decimal number. 
+
+### Arguments ###
+
+- `string`: Any character string
+- `first`: First character to scan from in string
+
+### Output ###
+
+Returns the tuple `(last, nchar)`.
+
+- `last`: Last character that is part of a decimal number. If there is no such
+          character, last will be returned with the value first-1.
+- `nchar`: Number of characters in the decimal number
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lx4dec_c.html)
+"""
+function lx4dec(string, first)
+    last = Ref{SpiceInt}()
+    nchar = Ref{SpiceInt}()
+    ccall((:lx4dec_c, libcspice), Cvoid, 
+          (Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}), 
+          string, first - 1, last, nchar)
+    handleerror()
+    last[] + 1, nchar[]
+end
+
+"""
+    lx4num(string, first)
+    
+Scan a string from a specified starting position for the 
+end of a number. 
+
+### Arguments ###
+
+- `string`: Any character string
+- `first`: First character to scan from in string
+
+### Output ###
+
+Returns the tuple `(last, nchar)`.
+
+- `last`: Last character that is part of a number. If there is no such
+          character, last will be returned with the value first-1.
+- `nchar`: Number of characters in the number
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lx4num_c.html)
+"""
+function lx4num(string, first)
+    last = Ref{SpiceInt}()
+    nchar = Ref{SpiceInt}()
+    ccall((:lx4num_c, libcspice), Cvoid, 
+          (Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}), 
+          string, first - 1, last, nchar)
+    handleerror()
+    last[] + 1, nchar[]
+end
+
+"""
+    lx4sgn(string, first)
+    
+Scan a string from a specified starting position for the 
+end of a signed integer. 
+
+### Arguments ###
+
+- `string`: Any character string
+- `first`: First character to scan from in string
+
+### Output ###
+
+Returns the tuple `(last, nchar)`.
+
+- `last`: Last character that is part of a signed integer. If there is no such
+          character, last will be returned with the value first-1.
+- `nchar`: Number of characters in the signed integer
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lx4sgn_c.html)
+"""
+function lx4sgn(string, first)
+    last = Ref{SpiceInt}()
+    nchar = Ref{SpiceInt}()
+    ccall((:lx4sgn_c, libcspice), Cvoid, 
+          (Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}), 
+          string, first - 1, last, nchar)
+    handleerror()
+    last[] + 1, nchar[]
+end
+
+"""
+    lx4uns(string, first)
+    
+Scan a string from a specified starting position for the 
+end of a unsigned integer. 
+
+### Arguments ###
+
+- `string`: Any character string
+- `first`: First character to scan from in string
+
+### Output ###
+
+Returns the tuple `(last, nchar)`.
+
+- `last`: Last character that is part of an unsigned integer. If there is no such
+          character, last will be returned with the value first-1.
+- `nchar`: Number of characters in the unsigned integer
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lx4uns_c.html)
+"""
+function lx4uns(string, first)
+    last = Ref{SpiceInt}()
+    nchar = Ref{SpiceInt}()
+    ccall((:lx4uns_c, libcspice), Cvoid, 
+          (Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}), 
+          string, first - 1, last, nchar)
+    handleerror()
+    last[] + 1, nchar[]
+end
+
+function lxqstr(string, qchar, first)
+    last = Ref{SpiceInt}()
+    nchar = Ref{SpiceInt}()
+    ccall((:lxqstr_c, libcspice), Cvoid, 
+          (Cstring, SpiceChar, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}), 
+          string, qchar, first - 1, last, nchar)
+    handleerror()
+    last[] + 1, nchar[]
+end
 
 
 

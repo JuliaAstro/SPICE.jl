@@ -9,4 +9,12 @@
             @test act[i] ≈ exp[i]
         end
     end
+
+    kclear()
+    furnsh(path(CORE, :lsk))
+    let et = -527644192.5403653
+        output = et2utc(et, :J, 6)
+        @test output == "JD 2445438.006415"
+    end
+    kclear()
 end
