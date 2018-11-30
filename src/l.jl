@@ -20,6 +20,7 @@ export
     lstltc,
     lstltd,
     lstlti,
+    lstlt,
     ltime,
     lx4dec,
     lx4num,
