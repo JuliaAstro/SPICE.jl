@@ -4,7 +4,7 @@
         sx = sxform("J2000", "IAU_JUPITER", 0.0)
         eulang, unique = xf2eul(sx, 3, 1, 3)
         @test eulang ≈ [-3.10768, 0.44513, -1.83172, -0.0, 0.0, 0.0] rtol=1e-5
-        @test_throws SpiceException xf2eul(sx, 4, 1, 4)
+        @test_throws SpiceError xf2eul(sx, 4, 1, 4)
         unload(path(CORE, :pck))
     end
     let

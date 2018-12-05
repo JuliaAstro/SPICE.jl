@@ -39,6 +39,6 @@ function hx2dp(str)
         (Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceBoolean}, Ptr{UInt8}),
         str, 46, dp, error, errmsg
     )
-    error[] == 1 && throw(SpiceException(unsafe_string(pointer(errmsg))))
+    error[] == 1 && throw(SpiceError(unsafe_string(pointer(errmsg))))
     dp[]
 end

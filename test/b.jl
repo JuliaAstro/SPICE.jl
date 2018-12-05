@@ -4,14 +4,14 @@
 
     furnsh(path(CORE, :pck))
     @test badkpv("SPICE.jl", "BODY399_RADII", "=", 3, 1, "N") == false
-    @test_throws SpiceException badkpv("SPICE.jl", "BODY399_RADII", "=", 3, 1, "C")
+    @test_throws SpiceError badkpv("SPICE.jl", "BODY399_RADII", "=", 3, 1, "C")
     unload(path(CORE, :pck))
 
     idset = bltfrm(-1)
     @test length(idset) >= 126
 
     @test bodc2n(399) == "EARTH"
-    @test_throws SpiceException bodc2n(typemax(Cint))
+    @test_throws SpiceError bodc2n(typemax(Cint))
 
     @test bodc2s(399) == "EARTH"
     @test bodc2s(typemax(Cint)) == string(typemax(Cint))
@@ -25,24 +25,24 @@
     unload(path(CORE, :pck))
 
     @test bodn2c("EARTH") == 399
-    @test_throws SpiceException bodn2c("Norbert")
+    @test_throws SpiceError bodn2c("Norbert")
 
     @test bods2c("EARTH") == 399
     @test bods2c("888888") == 888888
-    @test_throws SpiceException bodn2c("Norbert")
+    @test_throws SpiceError bodn2c("Norbert")
 
     furnsh(path(CORE, :pck))
     @test bodvcd(399, "RADII") == [6378.1366, 6378.1366, 6356.7519]
     @test bodvcd(399, "RADII") == [6378.1366, 6378.1366, 6356.7519]
-    @test_throws SpiceException bodvcd(399, "Norbert")
-    @test_throws SpiceException bodvcd(999999, "RADII")
+    @test_throws SpiceError bodvcd(399, "Norbert")
+    @test_throws SpiceError bodvcd(999999, "RADII")
     unload(path(CORE, :pck))
 
     furnsh(path(CORE, :pck))
     @test bodvrd("EARTH", "RADII") == [6378.1366, 6378.1366, 6356.7519]
     @test bodvrd("EARTH", "RADII") == [6378.1366, 6378.1366, 6356.7519]
-    @test_throws SpiceException bodvrd("EARTH", "Norbert")
-    @test_throws SpiceException bodvrd("Norbert", "RADII")
+    @test_throws SpiceError bodvrd("EARTH", "Norbert")
+    @test_throws SpiceError bodvrd("Norbert", "RADII")
     unload(path(CORE, :pck))
 
     @test SPICE._brcktd(4.0, 1.0, 3.0) == clamp(4.0, 1.0, 3.0)

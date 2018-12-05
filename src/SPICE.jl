@@ -1,8 +1,6 @@
-#= __precompile__() =#
-
 module SPICE
 
-export SpiceException
+export SpiceError
 
 deps = abspath(joinpath(splitdir(@__FILE__)[1], "..", "deps", "deps.jl"))
 if isfile(deps)
@@ -18,11 +16,11 @@ function __init__()
     ccall((:errprt_c, libcspice), Cvoid, (Cstring, Cint, Cstring), "SET", 0, "NONE")
 end
 
-struct SpiceException <: Exception
+struct SpiceError <: Exception
     msg::String
 end
 
-Base.show(io::IO, ex::SpiceException) = print(io, ex.msg)
+Base.show(io::IO, ex::SpiceError) = print(io, ex.msg)
 
 function handleerror()
     failed = ccall((:failed_c, libcspice), Bool, ())
@@ -33,7 +31,7 @@ function handleerror()
         message = unsafe_string(pointer(msg))
         # Reset error status and throw Julia error
         ccall((:reset_c, libcspice), Cvoid, ())
-        throw(SpiceException(message))
+        throw(SpiceError(message))
     end
 end
 

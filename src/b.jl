@@ -121,7 +121,7 @@ function bodc2n(code)
     found = Ref{SpiceBoolean}()
     ccall((:bodc2n_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ptr{UInt8}, Ref{SpiceBoolean}),
           code, 36, name, found)
-    found[] == 0 && throw(SpiceException("No body with code $code found."))
+    found[] == 0 && throw(SpiceError("No body with code $code found."))
     unsafe_string(pointer(name))
 end
 
@@ -166,7 +166,7 @@ Define a body name/ID code pair for later translation via [`bodn2c`](@ref) or [`
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/boddef_c.html)
 """
 function boddef(name, code)
-    length(name) > 35 && throw(SpiceException("The maximum allowed length for a name is 35 characters."))
+    length(name) > 35 && throw(SpiceError("The maximum allowed length for a name is 35 characters."))
     ccall((:boddef_c, libcspice), Cvoid, (Cstring, SpiceInt), name, code)
 end
 
@@ -215,7 +215,7 @@ function bodn2c(name)
     found = Ref{SpiceBoolean}()
     ccall((:bodn2c_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}, Ref{SpiceBoolean}),
           name, code, found)
-    found[] == 0 && throw(SpiceException("No body with name '$name' found."))
+    found[] == 0 && throw(SpiceError("No body with name '$name' found."))
     Int(code[])
 end
 
@@ -241,7 +241,7 @@ function bods2c(name)
     found = Ref{SpiceBoolean}()
     ccall((:bods2c_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}, Ref{SpiceBoolean}),
           name, code, found)
-    found[] == 0 && throw(SpiceException("Neither a body with name '$name' found nor is it an integer."))
+    found[] == 0 && throw(SpiceError("Neither a body with name '$name' found nor is it an integer."))
     Int(code[])
 end
 

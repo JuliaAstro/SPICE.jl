@@ -59,7 +59,7 @@ function ccifrm(frclss, clssid)
           frclss, clssid, lenout, frcode, frname, center, found,
          )
     handleerror()
-    found[] == 0 && throw(SpiceException("No frame with class $frclss and class ID $clssid found."))
+    found[] == 0 && throw(SpiceError("No frame with class $frclss and class ID $clssid found."))
     frcode[], unsafe_string(pointer(frname)), center[]
 end
 
@@ -315,7 +315,7 @@ function cidfrm(cent)
     found = Ref{SpiceBoolean}()
     ccall((:cidfrm_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}, Ref{SpiceBoolean}),
           cent, lenout, frcode, frname, found)
-    found[] == 0 && throw(SpiceException("No frame associated with body $cent found."))
+    found[] == 0 && throw(SpiceError("No frame associated with body $cent found."))
     frcode[], unsafe_string(pointer(frname))
 end
 

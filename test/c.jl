@@ -2,10 +2,10 @@ using Random: randstring
 
 @testset "C" begin
     @test ccifrm(2, 3000) == (13000, "ITRF93", 399)
-    @test_throws SpiceException ccifrm(9999, 3000)
+    @test_throws SpiceError ccifrm(9999, 3000)
 
     @test cidfrm(399) == (10013, "IAU_EARTH")
-    @test_throws SpiceException cidfrm(999999)
+    @test_throws SpiceError cidfrm(999999)
 
     @test clight() == 299792.458
 
@@ -154,8 +154,8 @@ using Random: randstring
 
     @test convrt(300.0, "statute_miles", "km") == 482.8032
     @test convrt(1.0, "parsecs", "lightyears") ≈ 3.2615638
-    @test_throws SpiceException convrt(1.0, "parsecs", "hours")
-    @test_throws SpiceException convrt(1.0, "parsecs", "norbert")
+    @test_throws SpiceError convrt(1.0, "parsecs", "hours")
+    @test_throws SpiceError convrt(1.0, "parsecs", "norbert")
 
     let string = "BOB, JOHN, TED, AND MARTIN...."
         @test cpos(string, " ,", 1) == 4
