@@ -427,7 +427,7 @@ Returns a set containing items in the list, left justified
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lparse_c.html)
 """
 function lparss(list, delims)
-    items = SpiceCell(UInt8, length(list), length(list))
+    items = SpiceCharCell(length(list), length(list))
     ccall((:lparss_c, libcspice), Cvoid, (Cstring, Cstring, Ref{Cell{UInt8}}), 
           list, delims, Ref(items.cell))
     handleerror()

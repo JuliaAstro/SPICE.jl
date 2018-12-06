@@ -26,7 +26,7 @@ via the KEEPER interface that are of a specified type.
 """
 function ktotal(kind)
     count = Ref{SpiceInt}()
-    ccall((:ktotal_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}), kind, count)
+    ccall((:ktotal_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}), string(kind), count)
     handleerror()
     Int(count[])
 end 
