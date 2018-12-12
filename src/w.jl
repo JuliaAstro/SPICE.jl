@@ -12,8 +12,17 @@ export
     wnfetd,
     wnfild,
     wnfild!,
+    wnfltd,
+    wnfltd!,
+    wnincd,
     wninsd,
-    wninsd!
+    wninsd!,
+    wnintd,
+    wnreld,
+    wnsumd,
+    wnunid,
+    wnvald,
+    wnvald!
 
 """
     wncard(window)
@@ -251,12 +260,67 @@ function wnfild!(window, small)
 end
 
 """
+    wnfild!(window, small)
+
+Filter (remove) small intervals from a double precision window.
+
+### Arguments ###
+
+- `window`: Window to be filtered
+- `small`: Limiting measure of small intervals
+
+### Output ###
+
+Returns the updated window.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wnfltd_c.html)
+"""
+function wnfltd!(window, small)
+    ccall((:wnfltd_c, libcspice), Cvoid, (SpiceDouble, Ref{Cell{SpiceDouble}}),
+          small, window.cell)
+    handleerror()
+    window
+end
+
+@deprecate wnfltd wnfltd!
+
+"""
+    wnincd(window, left, right)
+
+Determine whether an interval is included in a double precision window.
+
+### Arguments ###
+
+- `window`: Input window
+- `left`: Left endpoint of the input interval
+- `right`: Right endpoint of the input interval
+
+### Output ###
+
+Returns `true` when `(left, right)` is contained in `window`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wnincd_c.html)
+"""
+function wnincd(window, left, right)
+    res = ccall((:wnincd_c, libcspice), SpiceBoolean,
+                (SpiceDouble, SpiceDouble, Ref{Cell{SpiceDouble}}),
+                left, right, window.cell)
+    handleerror()
+    Bool(res)
+end
+
+"""
     wninsd!(window, left, right)
 
 Insert an interval into a double precision window.
 
 ### Arguments ###
 
+- `window`: Input window
 - `left`: Left endpoint of the new interval
 - `right`: Right endpoint of the new interval
 
@@ -277,3 +341,164 @@ function wninsd!(window, left, right)
 end
 
 @deprecate wninsd wninsd!
+
+"""
+    wnintd(a, b)
+
+Place the intersection of two double precision windows into a third window.
+
+### Arguments ###
+
+- `a`: Input window
+- `b`: Input window
+
+### Output ###
+
+Returns a window containing the intersection of `a` and `b`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wnintd_c.html)
+"""
+function wnintd(a, b)
+    c = SpiceDoubleCell(2 * (wncard(a) + wncard(b)))
+    ccall((:wnintd_c, libcspice), Cvoid,
+          (Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+          a.cell, b.cell, c.cell)
+    handleerror()
+    c
+end
+
+"""
+    wnreld(a, op, b)
+
+Compare two double precision windows.
+
+!!! note
+
+    Consider using overloaded operators instead, i.e. `a == b`, `a ⊆ b`, and `a ⊊ b`.
+
+### Arguments ###
+
+- `a`: First window
+- `op`: Comparison operator
+- `b`: Second window
+
+### Output ###
+
+Returns the result of comparison `a (op) b`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wnreld_c.html)
+"""
+function wnreld(a, op, b)
+    if op == :(==)
+        op = "="
+    elseif op == :(!=)
+        op = "<>"
+    else
+        op = string(op)
+    end
+    res = ccall((:wnreld_c, libcspice), SpiceBoolean,
+                (Ref{Cell{SpiceDouble}}, Cstring, Ref{Cell{SpiceDouble}}),
+                a.cell, op, b.cell)
+    handleerror()
+    Bool(res)
+end
+
+Base.:(==)(a::SpiceDoubleCell, b::SpiceDoubleCell) = wnreld(a, :(==), b)
+Base.:(⊆)(a::SpiceDoubleCell, b::SpiceDoubleCell) = wnreld(a, :<=, b)
+Base.:(⊊)(a::SpiceDoubleCell, b::SpiceDoubleCell) = wnreld(a, :<, b)
+
+"""
+    wnsumd(window)
+
+Summarize the contents of a double precision window.
+
+### Arguments ###
+
+- `window`: Window to be summarized
+
+### Output ###
+
+Returns a tuple consisting of:
+
+- `meas`: Total measure of intervals in window
+- `avg`: Average measure
+- `stddev`: Standard deviation
+- `shortest`: Location of shortest interval
+- `longest`: Location of longest interval 
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wnsumd_c.html)
+"""
+function wnsumd(window)
+    meas = Ref{SpiceDouble}()
+    avg = Ref{SpiceDouble}()
+    stddev = Ref{SpiceDouble}()
+    shortest = Ref{SpiceInt}()
+    longest = Ref{SpiceInt}()
+    ccall((:wnsumd_c, libcspice), Cvoid,
+          (Ref{Cell{SpiceDouble}}, Ref{SpiceDouble}, Ref{SpiceDouble},
+           Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceInt}),
+          window.cell, meas, avg, stddev, shortest, longest)
+    handleerror()
+    meas[], avg[], stddev[], shortest[] + 1, longest[] + 1
+end
+
+"""
+    wnunid(a, b)
+
+Place the union of two double precision windows into a third window.
+
+### Arguments ###
+
+- `a`: Input window
+- `b`: Input window
+
+### Output ###
+
+Returns a window containing the union of `a` and `b`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wnunid_c.html)
+"""
+function wnunid(a, b)
+    c = SpiceDoubleCell(2 * (wncard(a) + wncard(b)))
+    ccall((:wnunid_c, libcspice), Cvoid,
+          (Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+          a.cell, b.cell, c.cell)
+    handleerror()
+    c
+end
+
+"""
+    wnvald!(window)
+
+Form a valid double precision window from the contents of a window array.
+
+### Arguments ###
+
+- `window`: A (possibly uninitialized) `SpiceDoubleCell` containing endpoints of
+    (possibly unordered and non-disjoint) intervals. 
+
+### Output ###
+
+Returns the validated window.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wnvald_c.html)
+"""
+function wnvald!(window)
+    ccall((:wnvald_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, Ref{Cell{SpiceDouble}}),
+          window.cell.size, card(window), window.cell)
+    handleerror()
+    window
+end
+
+@deprecate wnvald wnvald!
