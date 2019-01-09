@@ -33,6 +33,7 @@ function handleerror()
         ccall((:reset_c, libcspice), Cvoid, ())
         throw(SpiceError(message))
     end
+    nothing
 end
 
 # CSPICE data types

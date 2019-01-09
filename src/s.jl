@@ -1,4 +1,6 @@
 export
+    scard,
+    scard!,
     spd,
     spkcls,
     spkcpo,
@@ -10,7 +12,30 @@ export
     swpool,
     sxform
 
+"""
+    scard!(cell::SpiceCell{T}, card) where T
 
+Set the cardinality of a cell.
+
+### Arguments ###
+
+- `cell`: The cell
+- `card`: Cardinality of (number of elements in) the cell
+
+### Output ###
+
+Returns `cell` with its cardinality set to `card`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/scard_c.html)
+"""
+function scard!(cell::SpiceCell{T}, card) where T
+    ccall((:scard_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{T}}), card, cell.cell)
+    cell
+end
+
+@deprecate scard scard!
 
 function str2et(string)
     et = Ref{Cdouble}(0)
