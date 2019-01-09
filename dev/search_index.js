@@ -1,0 +1,1755 @@
+var documenterSearchIndex = {"docs": [
+
+{
+    "location": "#",
+    "page": "Home",
+    "title": "Home",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "api/#",
+    "page": "API",
+    "title": "API",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "api/#SPICE.SpiceCharCell-Tuple{Int64,Int64}",
+    "page": "API",
+    "title": "SPICE.SpiceCharCell",
+    "category": "method",
+    "text": "SpiceCharCell(size, length)\n\nCreate a SpiceCharCell that can contain up to size strings with length characters.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.SpiceDoubleCell-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.SpiceDoubleCell",
+    "category": "method",
+    "text": "SpiceDoubleCell(size)\n\nCreate a SpiceDoubleCell that can contain up to size elements.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.SpiceIntCell-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.SpiceIntCell",
+    "category": "method",
+    "text": "SpiceIntCell(size)\n\nCreate a SpiceIntCell that can contain up to size elements.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#Base.append!-Tuple{SPICE.SpiceCell,Any}",
+    "page": "API",
+    "title": "Base.append!",
+    "category": "method",
+    "text": "append!(cell, collection)\n\nAppend all items from collection to the char/double/integer SpiceCell cell.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#Base.copy-Union{Tuple{SpiceCell{T,N}}, Tuple{N}, Tuple{T}} where N where T",
+    "page": "API",
+    "title": "Base.copy",
+    "category": "method",
+    "text": "copy(cell::SpiceCell)\n\nDuplicate the SpiceCell cell.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#Base.length-Tuple{SPICE.SpiceCell}",
+    "page": "API",
+    "title": "Base.length",
+    "category": "method",
+    "text": "length(cell)\n\nReturns the cardinality (number of elements) of a SpiceCell cell.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#Base.push!-Tuple{SPICE.SpiceCell,Vararg{Any,N} where N}",
+    "page": "API",
+    "title": "Base.push!",
+    "category": "method",
+    "text": "push!(cell, items...)\n\nInsert one or more items at the end of the char/double/integer SpiceCell cell.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#Base.union-Union{Tuple{T}, Tuple{S}, Tuple{T,T}} where T<:(SPICE.SpiceCell{S,N} where N) where S",
+    "page": "API",
+    "title": "Base.union",
+    "category": "method",
+    "text": "union(a::T, b::T) where T <: SpiceCell\n\nCompute the union of two sets of any data type to form a third set.\n\nArguments\n\na: First input set\nb: Second input set\n\nOutput\n\nReturns a cell containing the union of a and b. \n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.appnd-Tuple{Any,SPICE.SpiceCell{UInt8,N} where N}",
+    "page": "API",
+    "title": "SPICE.appnd",
+    "category": "method",
+    "text": "appnd(item, cell)\n\nAppend an item to the char/double/integer SpiceCell cell.\n\nhttps://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/appndcc.html https://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/appnddc.html https://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/appndic.html\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.axisar-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.axisar",
+    "category": "method",
+    "text": "axisar(axis, angle)\n\nConstruct a rotation matrix that rotates vectors by a specified angle about a specified axis.\n\nArguments\n\naxis: Rotation axis\nangle: Rotation angle in radians\n\nOutput\n\nRotation matrix corresponding to axis and angle\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.b1900-Tuple{}",
+    "page": "API",
+    "title": "SPICE.b1900",
+    "category": "method",
+    "text": "b1900()\n\nReturns the Julian Date corresponding to Besselian date 1900.0.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.b1950-Tuple{}",
+    "page": "API",
+    "title": "SPICE.b1950",
+    "category": "method",
+    "text": "b1950()\n\nReturns the Julian Date corresponding to Besselian date 1950.0.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.badkpv-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.badkpv",
+    "category": "method",
+    "text": "badkpv(caller, name, comp, size, divby, typ)\n\nDetermine if a kernel pool variable is present and if so that it has the correct size and type.\n\nArguments\n\ncaller: Name of the routine calling this routine\nname: Name of a kernel pool variable\ncomp: Comparison operator\nsize: Expected size of the kernel pool variable\ndivby: A divisor of the size of the kernel pool variable\ntype: Expected type of the kernel pool variable\n\nOutput\n\nThe function returns false if the kernel pool variable is OK otherwise an exception is thrown.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.bltfrm-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.bltfrm",
+    "category": "method",
+    "text": "bltfrm(frmcls)\n\nReturn a SPICE set containing the frame IDs of all built-in frames of a specified class.\n\nArguments\n\nfrmcls: Frame class\n\nOutput\n\nidset: Set of ID codes of frames of the specified class\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.bodc2n-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.bodc2n",
+    "category": "method",
+    "text": "bodc2n(code)\n\nTranslate the SPICE integer code of a body into a common name for that body.\n\nArguments\n\ncode: Integer ID code to be translated into a name\n\nOutput\n\nname: A common name for the body identified by code\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.bodc2s-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.bodc2s",
+    "category": "method",
+    "text": "bodc2s(code)\n\nTranslate a body ID code to either the corresponding name or if no name to ID code mapping exists, the string representation of the body ID value.\n\nArguments\n\ncode: Integer ID code to translate to a string\n\nOutput\n\nname: String corresponding to code\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.boddef-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.boddef",
+    "category": "method",
+    "text": "boddef(name, code)\n\nDefine a body name/ID code pair for later translation via bodn2c or bodc2n.\n\nArguments\n\nname: Common name of some body\ncode: Integer code for that body\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.bodfnd-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.bodfnd",
+    "category": "method",
+    "text": "bodfnd(body, item)\n\nDetermine whether values exist for some item for any body in the kernel pool.\n\nArguments\n\nbody: ID code of body\nitem: Item to find (\"RADII\", \"NUTAMPRA\", etc.)\n\nOutput\n\nfound: true if the item is in the kernel pool and false if it is not.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.bodn2c-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.bodn2c",
+    "category": "method",
+    "text": "bodn2c(name)\n\nTranslate the name of a body or object to the corresponding SPICE integer ID code.\n\nArguments\n\nname: Body name to be translated into a SPICE ID code\n\nOutput\n\ncode: SPICE integer ID code for the named body\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.bods2c-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.bods2c",
+    "category": "method",
+    "text": "bods2c(name)\n\nTranslate a string containing a body name or ID code to an integer code.\n\nArguments\n\nname: String to be translated to an ID code\n\nOutput\n\ncode: Integer ID code corresponding to name\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.bodvcd-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.bodvcd",
+    "category": "method",
+    "text": "bodvcd(bodyid, item)\n\nFetch from the kernel pool the double precision values of an item associated with a body, where the body is specified by an integer ID code.\n\nArguments\n\nbodyid: Body ID code\nitem: Item for which values are desired. (\"RADII\", \"NUTPRECANGLES\", etc.)\n\nOutput\n\nvalues: Values\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.bodvrd",
+    "page": "API",
+    "title": "SPICE.bodvrd",
+    "category": "function",
+    "text": "bodvrd(bodynm, item)\n\nFetch from the kernel pool the double precision values of an item associated with a body.\n\nArguments\n\nbodynm: Body name\nitem: Item for which values are desired. (\"RADII\", \"NUTPRECANGLES\", etc.)\nmaxn: Maximum number of values that may be returned.\n\nOutput\n\nvalues: Values\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.brcktd",
+    "page": "API",
+    "title": "SPICE.brcktd",
+    "category": "function",
+    "text": "brcktd(number, e1, e2)\n\nDeprecated: Use clamp from Julia\'s standard library instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.brckti",
+    "page": "API",
+    "title": "SPICE.brckti",
+    "category": "function",
+    "text": "brckti(number, e1, e2)\n\nDeprecated: Use clamp from Julia\'s standard library instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.bschoc",
+    "page": "API",
+    "title": "SPICE.bschoc",
+    "category": "function",
+    "text": "bschoc(value, array, order)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.bschoi",
+    "page": "API",
+    "title": "SPICE.bschoi",
+    "category": "function",
+    "text": "bschoi(value, array, order)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.bsrchc",
+    "page": "API",
+    "title": "SPICE.bsrchc",
+    "category": "function",
+    "text": "bsrchc(value, array)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.bsrchd",
+    "page": "API",
+    "title": "SPICE.bsrchd",
+    "category": "function",
+    "text": "bsrchd(value, array)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.bsrchi",
+    "page": "API",
+    "title": "SPICE.bsrchi",
+    "category": "function",
+    "text": "bsrchi(value, array)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.card-Tuple{SPICE.SpiceCell}",
+    "page": "API",
+    "title": "SPICE.card",
+    "category": "method",
+    "text": "card(cell)\n\nReturns the cardinality (number of elements) of a SpiceCell cell.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ccifrm-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.ccifrm",
+    "category": "method",
+    "text": "ccifrm(frclss, clssid)\n\nReturn the frame name, frame ID, and center associated with a given frame class and class ID.\n\nArguments\n\nfrclss: Class of frame\nclssid: Class ID of frame\n\nOutput\n\nReturn the tuple (frcode, frname, center).\n\nfrcode: ID code of the frame\nfrname: Name of the frame\ncenter: ID code of the center of the frame\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.cgv2el-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.cgv2el",
+    "category": "method",
+    "text": "cgv2el(center, vec1, vec2)\n\nForm a CSPICE ellipse from a center vector and two generating vectors.\n\nArguments\n\ncenter: Center vector\nvec1: Generating vector\nvec2: Generating vector\n\nOutput\n\nThe CSPICE ellipse defined by the input vectors.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.cidfrm-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.cidfrm",
+    "category": "method",
+    "text": "cidfrm(cent)\n\nRetrieve frame ID code and name to associate with a frame center.\n\nArguments\n\ncent: ID code for an object for which there is a preferred reference frame\n\nOutput\n\nReturns the tuple (frcode, frname)\n\nfrcode: The ID code of the frame associated with cent\nfrname: The name of the frame with ID frcode\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ckcls-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.ckcls",
+    "category": "method",
+    "text": "ckcls(handle)\n\nClose an open CK file.\n\nArguments\n\nhandle: Handle of the CK file to be closed\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ckcov!-NTuple{7,Any}",
+    "page": "API",
+    "title": "SPICE.ckcov!",
+    "category": "method",
+    "text": "ckcov!(ck, idcode, needav, level, tol, timsys, cover)\n\nFind the coverage window for a specified object in a specified CK file.\n\nArguments\n\nck: Name of CK file\nidcode: ID code of object\nneedav: Flag indicating whether angular velocity is needed\nlevel: Coverage level:  \"SEGMENT\" OR \"INTERVAL\"\ntol: Tolerance in ticks\ntimsys: Time system used to represent coverage\ncover: Window giving coverage for idcode. Data already present in cover   will be combined with coverage found for the object designated by idcode   in the file ck.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ckcov-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.ckcov",
+    "category": "method",
+    "text": "ckcov(ck, idcode, needav, level, tol, timsys)\n\nFind the coverage window for a specified object in a specified CK file.\n\nArguments\n\nck: Name of CK file\nidcode: ID code of object\nneedav: Flag indicating whether angular velocity is needed\nlevel: Coverage level:  \"SEGMENT\" OR \"INTERVAL\"\ntol: Tolerance in ticks\ntimsys: Time system used to represent coverage\n\nOutput\n\nWindow giving coverage for idcode\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ckgp-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.ckgp",
+    "category": "method",
+    "text": "ckgp(inst, sclkdp, tol, ref)\n\nGet pointing (attitude) for a specified spacecraft clock time.\n\nArguments\n\ninst: NAIF ID of instrument, spacecraft, or structure\nsclkdp: Encoded spacecraft clock time\ntol: Time tolerance\nref: Reference frame\n\nOutputs\n\ncmat: C-matrix pointing data\nclkout: Output encoded spacecraft clock time\nfound: true when requested pointing is available\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ckgpav-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.ckgpav",
+    "category": "method",
+    "text": "ckgpav(inst, sclkdp, tol, ref)\n\nGet pointing (attitude) and angular velocity for a specified spacecraft clock time.\n\nArguments\n\ninst: NAIF ID of instrument, spacecraft, or structure\nsclkdp: Encoded spacecraft clock time\ntol: Time tolerance\nref: Reference frame\n\nOutputs\n\ncmat: C-matrix pointing data\nav: Angular velocity vector\nclkout: Output encoded spacecraft clock time\nfound: true when requested pointing is available\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.cklpf-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.cklpf",
+    "category": "method",
+    "text": "cklpf(filename)\n\nLoad a CK pointing file for use by the CK readers.  Return that file\'s handle, to be used by other CK routines to refer to the file.\n\nArguments\n\nfilename: Name of the CK file to be loaded\n\nOutput\n\nLoaded file\'s handle\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ckobj!-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.ckobj!",
+    "category": "method",
+    "text": "ckobj!(ck, ids)\n\nFind the set of ID codes of all objects in a specified CK file.\n\nArguments\n\nck: Name of CK file\nids: Set of ID codes of objects in CK file. Data already present in   ids will be combined with ID code set found for the file ck.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ckobj-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.ckobj",
+    "category": "method",
+    "text": "ckobj(ck)\n\nFind the set of ID codes of all objects in a specified CK file.\n\nArguments\n\nck: Name of CK file\n\nOutput\n\nSet of ID codes of objects in CK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ckopn",
+    "page": "API",
+    "title": "SPICE.ckopn",
+    "category": "function",
+    "text": "ckopn(fname, ifname=\"CK_file\", ncomch=0)\n\nOpen a new CK file, returning the handle of the opened file.\n\nArguments\n\nfname: The name of the CK file to be opened\nifname=\"CK_file\": The internal filename for the CK, default is \"CK_file\"\nncomch=0: The number of characters to reserve for comments, default is zero\n\nOutput\n\nhandle: The handle of the opened CK file\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ckupf-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.ckupf",
+    "category": "method",
+    "text": "ckupf(handle)\n\nUnload a CK pointing file so that it will no longer be searched by the readers.\n\nArguments\n\nhandle: Handle of CK file to be unloaded\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ckw01",
+    "page": "API",
+    "title": "SPICE.ckw01",
+    "category": "function",
+    "text": "ckw01(handle, inst, ref, segid, sclkdp, quats, avvs=Matrix{SpiceDouble}(0,0);\n    begtim=sclkdp[1], endtim=sclkdp[end])\n\nAdd a type 1 segment to a C-kernel.\n\nArguments\n\nhandle: Handle of an open CK file\ninst: The NAIF instrument ID code\nref: The reference frame of the segment\nsegid: Segment identifier\nsclkdp: Encoded SCLK times\nquats: Quaternions representing instrument pointing\navvs: Angular velocity vectors (optional)\nbegtim: The beginning encoded SCLK of the segment (optional)\nendtim: The ending encoded SCLK of the segment (optional)\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.clight-Tuple{}",
+    "page": "API",
+    "title": "SPICE.clight",
+    "category": "method",
+    "text": "clight()\n\nReturns the speed of light in vacuo (km/sec).\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.clpool-Tuple{}",
+    "page": "API",
+    "title": "SPICE.clpool",
+    "category": "method",
+    "text": "clpool()\n\nRemove all variables from the kernel pool. Watches on kernel variables are retained.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.cmprss-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.cmprss",
+    "category": "method",
+    "text": "cmprss(delim, n, input)\n\nCompress a character string by removing occurrences of more than n consecutive occurrences of a specified character.\n\nArguments\n\ndelim: Delimiter to be compressed\nn: Maximum consecutive occurrences of delim\ninput: Input string\n\nOutput\n\nReturns the compressed string.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.cnmfrm",
+    "page": "API",
+    "title": "SPICE.cnmfrm",
+    "category": "function",
+    "text": "cnmfrm(cname)\n\nRetrieve frame ID code and name to associate with an object.\n\nArguments\n\ncname: Name of the object to find a frame for\n\nOutput\n\nReturns a tuple of the ID code and the name of the frame associated with cname or nothing if no frame is found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.conics-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.conics",
+    "category": "method",
+    "text": "conics(elts, et)\n\nDetermine the state (position, velocity) of an orbiting body from a set of elliptic, hyperbolic, or parabolic orbital elements.\n\nArguments\n\nelts: Conic elements\net: Input time\n\nOutput\n\nReturns the state of orbiting body at et.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.convrt-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.convrt",
+    "category": "method",
+    "text": "convrt(x, in, out)\n\nTake a measurement x, the units associated with x, and units to which x should be converted; return y - the value of the measurement in the output units.\n\nArguments\n\nx: Number representing a measurement in some units\nin: The units in which x is measured\nout: Desired units for the measurement\n\nOutput\n\nReturns the measurement in the desired units.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.cpos-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.cpos",
+    "category": "method",
+    "text": "cpos(str, chars, start)\n\nFind the first occurrence in a string of a character belonging to a collection of characters, starting at a specified location, searching forward.\n\nArguments\n\nstr: Any character string\nchars: A collection of characters\nstart: Position to begin looking for one of chars\n\nOutput\n\nReturns the index of the first character of str that is one of the characters in string chars. Returns -1 if none of the characters was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.cposr-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.cposr",
+    "category": "method",
+    "text": "cposr(str, chars, start)\n\nFind the first occurrence in a string of a character belonging to a collection of characters, starting at a specified location, searching in reverse.\n\nArguments\n\nstr: Any character string\nchars: A collection of characters\nstart: Position to begin looking for one of chars\n\nOutput\n\nReturns the index of the last character of str that is one of the characters in string chars. Returns -1 if none of the characters was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.cvpool-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.cvpool",
+    "category": "method",
+    "text": "cvpool(agent)\n\nIndicate whether or not any watched kernel variables that have a specified agent on their notification list have been updated.\n\nArguments\n\nagent: Name of the agent to check for notices\n\nOutput\n\ntrue if variables for agent have been updated.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.cyllat-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.cyllat",
+    "category": "method",
+    "text": "cyllat(r, lonc, z)\n\nConvert from cylindrical to latitudinal coordinates.\n\nArguments\n\nr: Distance of point from z axis\nlonc: Cylindrical angle of point from XZ plane (radians)\nz: Height of point above XY plane\n\nOutput\n\nReturns a tuple of radius, longitude (radians), and latitude (radians).\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.cylrec-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.cylrec",
+    "category": "method",
+    "text": "cylrec(r, lon, z)\n\nConvert from cylindrical to rectangular coordinates.\n\nArguments\n\nr: Distance of the point of interest from z axis\nlon: Cylindrical angle (in radians) of the point of interest from XZ plane\nz: Height of the point above XY plane\n\nOutput\n\nReturns rectangular coordinates of the point of interest.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.cylsph-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.cylsph",
+    "category": "method",
+    "text": "cylsph(r, lonc, z)\n\nConvert from cylindrical to spherical coordinates.\n\nArguments\n\nr: Distance of point from z axis\nlonc: Angle (radians) of point from XZ plane\nz: Height of point above XY plane\n\nOutput\n\nReturns a tuple of distance of the point from the origin, polar angle (co-latitude in radians), and azimuthal angle (longitude).\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dtpool-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dtpool",
+    "category": "method",
+    "text": "dtpool(name)\n\nReturn the data about a kernel pool variable. \n\nArguments\n\nname: Name of the variable whose value is to be returned\n\nOutput\n\nReturns the tuple (n ,vartype).\n\nn: Number of values returned for name\nvartype: Type of the variable\n:C if the data is character data\n:N if the data is numeric\n:X if there is no variable name in the pool\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.et2utc-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.et2utc",
+    "category": "method",
+    "text": "et2utc(et, format, prec)\n\nConvert an input time from ephemeris seconds past J2000 to Calendar, Day-of-Year, or Julian Date format, UTC.\n\nArguments\n\net: Input epoch, given in ephemeris seconds past J2000\nformat: Format of output epoch. It may be any of the following:\n:C: Calendar format, UTC\n:D: Day-of-Year format, UTC\n:J: Julian Date format, UTC\n:ISOC: ISO Calendar format, UTC\n:ISOD: ISO Day-of-Year format, UTC\nprec: Digits of precision in fractional seconds or days\n\nOutput\n\nReturns an output time string equivalent to the input epoch, in the specified format.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.etcal",
+    "page": "API",
+    "title": "SPICE.etcal",
+    "category": "function",
+    "text": "etcal(et, lenout=128)\n\nConvert from an ephemeris epoch measured in seconds past the epoch of J2000 to a calendar string format using a formal calendar free of leapseconds.\n\nArguments\n\net: Ephemeris time measured in seconds past J2000\nlenout: Length of output string (default: 128)\n\nOutput\n\nReturns a standard calendar representation of et.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.eul2m-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.eul2m",
+    "category": "method",
+    "text": "eul2m(angle3, angle2, angle1, axis3, axis2, axis1)\n\nConstruct a rotation matrix from a set of Euler angles.\n\nArguments\n\nangle3, angle2, angle1: Rotation angles about third, second, and first rotation axes (radians)\naxis3, axis2, axis1: Axis numbers of third, second, and first rotation axes\n\nOutput\n\nA rotation matrix corresponding to the product of the 3 rotations.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gdpool-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.gdpool",
+    "category": "method",
+    "text": "gdpool(name; start=1, room=100)\n\nReturn the value of a kernel variable from the kernel pool.\n\nArguments\n\nname: Name of the variable whose value is to be returned\nstart: Which component to start retrieving for name (default: 1)\nroom: The largest number of values to return (default: 100)\n\nOutput\n\nReturns an array of values if the variable exists or nothing if not.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.halfpi",
+    "page": "API",
+    "title": "SPICE.halfpi",
+    "category": "function",
+    "text": "halfpi()\n\nDeprecated: Use π/2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.hx2dp-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.hx2dp",
+    "category": "method",
+    "text": "hx2dp(str)\n\nConvert a string representing a double precision number in a base 16 \"scientific notation\" into its equivalent double precision number.\n\nArguments\n\nstr: Hex form string to convert to double precision\n\nOutput\n\ndp: Double precision value to be returned\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.j1900-Tuple{}",
+    "page": "API",
+    "title": "SPICE.j1900",
+    "category": "method",
+    "text": "j1900()\n\nReturns the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5).\n\nhttps://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/j1900c.html\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.j1950-Tuple{}",
+    "page": "API",
+    "title": "SPICE.j1950",
+    "category": "method",
+    "text": "j1950()\n\nReturns the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0).\n\nhttps://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/j1950c.html\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.j2000-Tuple{}",
+    "page": "API",
+    "title": "SPICE.j2000",
+    "category": "method",
+    "text": "j2000()\n\nReturns the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5).\n\nhttps://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/j2000c.html\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.j2100-Tuple{}",
+    "page": "API",
+    "title": "SPICE.j2100",
+    "category": "method",
+    "text": "j2100()\n\nReturns the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5).\n\nhttps://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/j2100c.html\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.jyear-Tuple{}",
+    "page": "API",
+    "title": "SPICE.jyear",
+    "category": "method",
+    "text": "jyear()\n\nReturns the number of seconds per Julian year.\n\nhttps://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/jyearc.html\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.kclear-Tuple{}",
+    "page": "API",
+    "title": "SPICE.kclear",
+    "category": "method",
+    "text": "kclear()\n\nClear the KEEPER subsystem: unload all kernels, clear the kernel pool, and re-initialize the subsystem. Existing watches on kernel variables are retained.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ktotal-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.ktotal",
+    "category": "method",
+    "text": "ktotal(kind)\n\nReturn the current number of kernels that have been loaded  via the KEEPER interface that are of a specified type. \n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lastnb-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.lastnb",
+    "category": "method",
+    "text": "lastnb(str)\n\nReturn the index of the last non-blank character in a character string.\n\nArguments\n\nstr: Input character string\n\nOutput\n\nThe function returns the one-based index of the last non-blank  character in a character string. If the string is entirely blank  or is empty, the value 0 is returned.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.latcyl-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.latcyl",
+    "category": "method",
+    "text": "latcyl(radius, lon, lat)\n\nConvert from latitudinal coordinates to cylindrical coordinates.\n\nArguments\n\nradius: Distance of a point from the origin\nlon: Angle of the point from the XZ plane in radians\nlat: Angle of the point from the XY plane in radians\n\nOutput\n\nReturn the tuple (r, lonc, z).\n\nr: Distance of the point from the z axis\nlonc: Angle of the point from the XZ plane in radians. \'lonc\' is set equal to \'lon\'\nz: Height of the point above the XY plane\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.latrec-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.latrec",
+    "category": "method",
+    "text": "latrec(radius, lon, lat)\n\nConvert from latitudinal coordinates to rectangular coordinates.\n\nArguments\n\nradius: Distance of a point from the origin\nlon: Angle of the point from the XZ plane in radians\nlat: Angle of the point from the XY plane in radians\n\nOutput\n\nReturn the rectangular coordinates vector of the point.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.latsph-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.latsph",
+    "category": "method",
+    "text": "latsph(radius, lon, lat)\n\nConvert from latitudinal coordinates to rectangular coordinates.\n\nArguments\n\nradius: Distance of a point from the origin\nlon: Angle of the point from the XZ plane in radians\nlat: Angle of the point from the XY plane in radians\n\nOutput\n\nReturn the tuple (rho, colat, lons).\n\nrho: Distance of the point from the origin\ncolat: Angle of the point from positive z axis (radians)\nlons: Angle of the point from the XZ plane (radians)\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.latsrf-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.latsrf",
+    "category": "method",
+    "text": "latsrf(method, target, et, fixref, npts, lonlat)\n\nMap array of planetocentric longitude/latitude coordinate pairs  to surface points on a specified target body. \n\nThe surface of the target body may be represented by a triaxial  ellipsoid or by topographic data provided by DSK files. \n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in TDB seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nnpts: Number of coordinate pairs in input array\nlonlat: Array of longitude/latitude coordinate pairs\n\nOutput\n\nReturns an array of surface points\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lcase",
+    "page": "API",
+    "title": "SPICE.lcase",
+    "category": "function",
+    "text": "lcase(in)\n\nDeprecated: Use lowercase(in) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ldpool-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.ldpool",
+    "category": "method",
+    "text": "ldpool(kernel)\n\nLoad the variables contained in a NAIF ASCII kernel file into the  kernel pool. \n\nArguments\n\nkernel: Name of the kernel file\n\nOutput\n\nNone\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lgrind-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.lgrind",
+    "category": "method",
+    "text": "lgrind(xvals, yvals, x)\n\nEvaluate a Lagrange interpolating polynomial for a specified set of coordinate pairs, at a specified abscissa value. Return the value of both polynomial and derivative.\n\nArguments\n\nxvals: Abscissa values of coordinate pairs\nyvals: Ordinate values of coordinate pairs\nx: Point at which to interpolate the polynomial\n\nOutput\n\nReturns the tuple (p, dp).\n\np: The value at x of the unique polynomial of      degree n-1 that fits the points in the plane      defined by xvals and yvals\ndp: The derivative at x of the interpolating       polynomial described above\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.limbpt-NTuple{13,Any}",
+    "page": "API",
+    "title": "SPICE.limbpt",
+    "category": "method",
+    "text": "limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp, ncuts, schstp, soltol, maxn)\n\nFind limb points on a target body. The limb is the set of points  of tangency on the target of rays emanating from the observer.  The caller specifies half-planes bounded by the observer-target  center vector in which to search for limb points. \n\nThe surface of the target body may be represented either by a  triaxial ellipsoid or by topographic data. \n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in ephemeris seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nabcorr: Aberration correction\ncorloc: Aberration correction locus\nobsrvr: Name of observing body\nrefvec: Reference vector for cutting half-planes\nrolstp: Roll angular step for cutting half-planes\nncuts: Number of cutting half-planes\nschstp: Angular step size for searching\nsoltol: Solution convergence tolerance\nmaxn: Maximum number of entries in output arrays\n\nOutput\n\nReturns the tuple (npts, points, epochs, tangts).\n\nnpts: Counts of limb points corresponding to cuts\npoints: Limb points\nepochs: Times associated with limb points\ntangts: Tangent vectors emanating from the observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lmpool-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.lmpool",
+    "category": "method",
+    "text": "lmpool(cvals)\n\nLoad the variables contained in an internal buffer into the  kernel pool.\n\nArguments\n\ncvals: An array that contains a SPICE text kernel\n\nOutput\n\nNone\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lparse-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.lparse",
+    "category": "method",
+    "text": "lparse(list, delim, nmax)\n\nParse a list of items delimited by a single character.\n\nArguments\n\nlist: List of items delimited by delim\ndelim: Single character used to delimit items\nnmax: Maximum number of items to return\n\nOutput\n\nReturns an array with the items in the list, left justified.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lparsm-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.lparsm",
+    "category": "method",
+    "text": "lparsm(list, delims, nmax)\n\nParse a list of items separated by multiple delimiters. \n\nArguments\n\nlist: List of items delimited by delim\ndelims: Single characters which delimit items\nnmax: Maximum number of items to return\n\nOutput\n\nReturns an array with the items in the list, left justified.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lparss-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.lparss",
+    "category": "method",
+    "text": "lparss(list, delims)\n\nParse a list of items separated by multiple delimiters, placing the resulting items into a set.\n\nArguments\n\nlist: List of items delimited by delim\ndelims: Single characters which delimit items\n\nOutput\n\nReturns a set containing items in the list, left justified\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lspcn-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.lspcn",
+    "category": "method",
+    "text": "lspcn(body, et, abcorr)\n\nCompute L_s, the planetocentric longitude of the sun, as seen  from a specified body. \n\nArguments\n\nbody: Name of the central body\net: Epoch in seconds past J2000 TDB\nabcorr: Aberration correction\n\nOutput\n\nReturns the planetocentric longitude of the sun for the specified body  at the specified time in radians.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lstle",
+    "page": "API",
+    "title": "SPICE.lstle",
+    "category": "function",
+    "text": "lstle(x, array)\n\nGiven an element x and an array of non-decreasing elements (floats, integers, or strings),  find the index of the largest array element less than or equal to x.\n\nArguments\n\nx: Value to search against\narrays: Array of possible lower bounds \n\nOutput\n\nReturns the index of the highest-indexed element in the  input array that is less than or equal to x.  The routine assumes the array elements are sorted in non-decreasing order.\n\nIf all elements of the input array are greater than x, the function returns 0.\n\nReferences\n\nNAIF Documentation\nNAIF Documentation\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lstlt",
+    "page": "API",
+    "title": "SPICE.lstlt",
+    "category": "function",
+    "text": "lstle(x, array)\n\nGiven an element x and an array of non-decreasing elements (floats, integers, or strings),  find the index of the largest array element less than x.\n\nArguments\n\nx: Value to search against\narrays: Array of possible lower bounds \n\nOutput\n\nReturns the index of the highest-indexed element in the  input array that is less than x.  The routine assumes the array elements are sorted in non-decreasing order.\n\nIf all elements of the input array are greater than or equal to x, the function returns 0.\n\nReferences\n\nNAIF Documentation\nNAIF Documentation\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ltime-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.ltime",
+    "category": "method",
+    "text": "ltime(etobs, obs, dir, targ)\n\nThis routine computes the transmit (or receive) time  of a signal at a specified target, given the receive  (or transmit) time at a specified observer. The elapsed  time between transmit and receive is also returned. \n\nArguments\n\netobs: Epoch of a signal at some observer\nobs: NAIF ID of some observer \ndir: Direction the signal travels ( \"->\" or \"<-\" ) \ntarg: Time between transmit and receipt of the signal\n\nOutput\n\nReturns the tuple (ettarg, elapsd).\n\nettarg: Epoch of the signal at the target \nobs: NAIF ID of some observer \n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lx4dec-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.lx4dec",
+    "category": "method",
+    "text": "lx4dec(string, first)\n\nScan a string from a specified starting position for the  end of a decimal number. \n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of a decimal number. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the decimal number\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lx4num-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.lx4num",
+    "category": "method",
+    "text": "lx4num(string, first)\n\nScan a string from a specified starting position for the  end of a number. \n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of a number. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the number\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lx4sgn-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.lx4sgn",
+    "category": "method",
+    "text": "lx4sgn(string, first)\n\nScan a string from a specified starting position for the  end of a signed integer. \n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of a signed integer. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the signed integer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lx4uns-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.lx4uns",
+    "category": "method",
+    "text": "lx4uns(string, first)\n\nScan a string from a specified starting position for the  end of a unsigned integer. \n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of an unsigned integer. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the unsigned integer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.m2eul-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.m2eul",
+    "category": "method",
+    "text": "m2eul(r, axis3, axis2, axis1)\n\nFactor a rotation matrix as a product of three rotations about specified coordinate axes.\n\nArguments\n\nr: A rotation matrix to be factored\naxis3: Number of the third rotation axis\naxis2: Number of the second rotation axis\naxis1: Number of the first rotation axis\n\nOutput\n\nA tuple consisting of the third, second, and first Euler angles in radians.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.m2q-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.m2q",
+    "category": "method",
+    "text": "m2q(r)\n\nFind a unit quaternion corresponding to a specified rotation matrix.\n\nArguments\n\nr: A rotation matrix\n\nOutput\n\nA unit quaternion representing `r\'\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.matchi-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.matchi",
+    "category": "method",
+    "text": "matchi(string, templ, wstr, wchar)\n\nDetermine whether a string is matched by a template containing wild cards. The pattern comparison is case-insensitive.\n\nArguments\n\nstring: String to be tested\ntempl: Template (with wild cards) to test against string\nwstr: Wild string token\nwchr: Wild character token\n\nOutput\n\nReturns true if the string matches.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.matchw-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.matchw",
+    "category": "method",
+    "text": "matchw(string, templ, wstr, wchar)\n\nDetermine whether a string is matched by a template containing wild cards.\n\nArguments\n\nstring: String to be tested\ntempl: Template (with wild cards) to test against string\nwstr: Wild string token\nwchr: Wild character token\n\nOutput\n\nReturns true if the string matches.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.maxd",
+    "page": "API",
+    "title": "SPICE.maxd",
+    "category": "function",
+    "text": "maxd(args...)\n\nDeprecated: Use max(args...) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.maxi",
+    "page": "API",
+    "title": "SPICE.maxi",
+    "category": "function",
+    "text": "maxi(args...)\n\nDeprecated: Use max(args...) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.mequ",
+    "page": "API",
+    "title": "SPICE.mequ",
+    "category": "function",
+    "text": "mequ(m1, mout)\n\nDeprecated: Use mout .= m1 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.mequg",
+    "page": "API",
+    "title": "SPICE.mequg",
+    "category": "function",
+    "text": "mequg(m1, mout)\n\nDeprecated: Use mout .= m1 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.mind",
+    "page": "API",
+    "title": "SPICE.mind",
+    "category": "function",
+    "text": "mind(args...)\n\nDeprecated: Use min(args...) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.mini",
+    "page": "API",
+    "title": "SPICE.mini",
+    "category": "function",
+    "text": "mini(args...)\n\nDeprecated: Use min(args...) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.mtxm",
+    "page": "API",
+    "title": "SPICE.mtxm",
+    "category": "function",
+    "text": "mtxm(m1, m2)\n\nDeprecated: Use m1\' * m2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.mtxmg",
+    "page": "API",
+    "title": "SPICE.mtxmg",
+    "category": "function",
+    "text": "mtxmg(m1, m2)\n\nDeprecated: Use m1\' * m2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.mtxv",
+    "page": "API",
+    "title": "SPICE.mtxv",
+    "category": "function",
+    "text": "mtxv(m1,v2)\n\nDeprecated: Use m1\' * v2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.mtxvg",
+    "page": "API",
+    "title": "SPICE.mtxvg",
+    "category": "function",
+    "text": "mtxvg(m1,v2)\n\nDeprecated: Use m1\' * v2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.mxm",
+    "page": "API",
+    "title": "SPICE.mxm",
+    "category": "function",
+    "text": "mxm(m1, m2)\n\nDeprecated: Use m1 * m2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.mxmg",
+    "page": "API",
+    "title": "SPICE.mxmg",
+    "category": "function",
+    "text": "mxmg(m1, m2)\n\nDeprecated: Use m1 * m2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.mxmt",
+    "page": "API",
+    "title": "SPICE.mxmt",
+    "category": "function",
+    "text": "mxmt(m1, m2)\n\nDeprecated: Use m1 * m2\' instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.mxmtg",
+    "page": "API",
+    "title": "SPICE.mxmtg",
+    "category": "function",
+    "text": "mxmtg(m1, m2)\n\nDeprecated: Use m1 * m2\' instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.mxv",
+    "page": "API",
+    "title": "SPICE.mxv",
+    "category": "function",
+    "text": "mxv(m1,v2)\n\nDeprecated: Use m1 * v2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.mxvg",
+    "page": "API",
+    "title": "SPICE.mxvg",
+    "category": "function",
+    "text": "mxvg(m1,v2)\n\nDeprecated: Use m1 * v2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.namfrm-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.namfrm",
+    "category": "method",
+    "text": "namfrm(frname)\n\nLook up the frame ID code associated with a string.\n\nArguments\n\nfrname: The name of some reference frame\n\nOutput\n\nThe SPICE ID code of the frame.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ncpos-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.ncpos",
+    "category": "method",
+    "text": "ncpos(str, chars, start)\n\nFind the first occurrence in a string of a character NOT belonging to a collection of characters, starting at a specified location, searching forward.\n\nArguments\n\nstr: A string\nchars: A collection of characters\nstart: Position to begin looking for a character not in chars\n\nOutput\n\nReturns the index of the first character of str at or following index start that is not in the collection chars.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ncposr-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.ncposr",
+    "category": "method",
+    "text": "ncposr(str, chars, start)\n\nFind the first occurrence in a string of a character NOT belonging to a collection of characters, starting at a specified location, searching in reverse.\n\nArguments\n\nstr: A string\nchars: A collection of characters\nstart: Position to begin looking for a character not in chars\n\nOutput\n\nReturns the index of the last character of str at or before index start that is not in the collection chars.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.nearpt-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.nearpt",
+    "category": "method",
+    "text": "nearpt(positn, a, b, c)\n\nThis routine locates the point on the surface of an ellipsoid that is nearest to a specified position. It also returns the altitude of the position above the ellipsoid.\n\nArguments\n\npositn: Position of a point in the bodyfixed frame\na: Length of semi-axis parallel to x-axis\nb: Length of semi-axis parallel to y-axis\nc: Length on semi-axis parallel to z-axis\n\nOutput\n\nReturns a tuple consisting of npoint and alt.\n\nnpoint: Point on the ellipsoid closest to positn\nalt: Altitude of positn above the ellipsoid\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.npedln-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.npedln",
+    "category": "method",
+    "text": "npedln(a, b, c, linept, linedr)\n\nFind nearest point on a triaxial ellipsoid to a specified line, and the distance from the ellipsoid to the line.\n\nArguments\n\na: Length of semi-axis in the x direction \nb: Length of semi-axis in the y direction \nc: Length of semi-axis in the z direction \nlinept: Point on line \nlinedr: Direction vector of line \n\nOutput\n\nReturns a tuple consisting of pnear and dist.\n\npnear: Nearest point on ellipsoid to line \ndist: Distance of ellipsoid from line\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.npelpt-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.npelpt",
+    "category": "method",
+    "text": "npelpt(point, ellips)\n\nFind the nearest point on an ellipse to a specified point, both in three-dimensional space, and find the distance between the ellipse and the point.\n\nArguments\n\npoint: Point whose distance to an ellipse is to be found\nellips: A SPICE ellipse\n\nOutput\n\nReturns a tuple consisting of pnear and dist.\n\npnear: Nearest point on ellipse to input point\ndist: Distance of input point to ellipse\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.nplnpt-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.nplnpt",
+    "category": "method",
+    "text": "nplnpt(linept, linedr, point)\n\nFind the nearest point on a line to a specified point, and find the distance between the two points.\n\nArguments\n\nlinept: Point on line \nlinedr: Direction vector of line \npoint: A second point\n\nOutput\n\nReturns a tuple consisting of pnear and dist.\n\npnear: Nearest point on the line to point\ndist: Distance between point and pnear\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.nvc2pl-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.nvc2pl",
+    "category": "method",
+    "text": "nvc2pl(norm, point)\n\nMake a SPICE plane from a normal vector and a point.\n\nArguments\n\nnorm: A normal vector...\nconstant: ...and a constant defining a plane\n\nOutput\n\nReturns a struct representing the plane.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.nvp2pl-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.nvp2pl",
+    "category": "method",
+    "text": "nvp2pl(norm, point)\n\nMake a SPICE plane from a normal vector and a point.\n\nArguments\n\nnorm: A normal vector...\npoint: ...and a point defining a plane\n\nOutput\n\nReturns a struct representing the plane.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.oscelt-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.oscelt",
+    "category": "method",
+    "text": "oscelt(state, et, mu)\n\nDetermine the set of osculating conic orbital elements that corresponds to the state (position, velocity) of a body at some epoch.\n\nArguments\n\nstate: State of body at epoch of elements\net: Epoch of elements\nmu: Gravitational parameter (GM) of primary body\n\nOutput\n\nReturns the equivalent conic elements.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pdpool-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.pdpool",
+    "category": "method",
+    "text": "pdpool(name, vals)\n\nInsert double precision data into the kernel pool.\n\nArguments\n\nname: The kernel pool name to associate with vals\nvals: An array of values to insert into the kernel pool\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pxform-Tuple{String,String,Float64}",
+    "page": "API",
+    "title": "SPICE.pxform",
+    "category": "method",
+    "text": "Return the matrix that transforms position vectors from one specified frame to another at a specified epoch.\n\nhttps://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/pxformc.html\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.q2m-Tuple",
+    "page": "API",
+    "title": "SPICE.q2m",
+    "category": "method",
+    "text": "q2m(q...)\n\nFind the rotation matrix corresponding to a specified unit quaternion.\n\nArguments\n\nq: A unit quaternion (as any kind of iterable with four elements)\n\nOutput\n\nA rotation matrix corresponding to q.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.qdq2av-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.qdq2av",
+    "category": "method",
+    "text": "qdq2av(q,dq)\n\nDerive angular velocity from a unit quaternion and its derivative  with respect to time. \n\nArguments\n\nq: Unit SPICE quaternion (as any kind of iterable with four elements)\ndq: Derivative of `q\' with respect to time\n\nOutput\n\nAngular velocity vector defined by q\' anddq\'\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.qxq-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.qxq",
+    "category": "method",
+    "text": "qxq(q1,q2)\n\nMultiply two quaternions. \n\nArguments\n\nq1: First SPICE quaternion factor (as any kind of iterable with four elements)\nq2: Second SPICE quaternion factor (as any kind of iterable with four elements)\n\nOutput\n\nA quaternion corresponding to the product of q1\' andq2\'\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.rav2xf-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.rav2xf",
+    "category": "method",
+    "text": "rav2xf(rot, av)\n\nDetermine a state transformation matrix from a rotation matrix and the angular velocity of the rotation.\n\nArguments\n\nrot: Rotation matrix\nav: Angular velocity vector\n\nOutput\n\nReturns state transformation matrix associated with rot and av.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.recrad-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.recrad",
+    "category": "method",
+    "text": "recrad(rectan)\n\nConvert rectangular coordinates to range, right ascension, and declination.\n\nArguments\n\nrectan: Rectangular coordinates of a point\n\nOutput\n\nReturn the tuple (range, ra, dec).\n\nrange: Distance of the point from the origin\nra: Right ascension in radians\ndec: Declination in radians\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.rotate-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.rotate",
+    "category": "method",
+    "text": "rotate(angle, iaxis)\n\nCalculate the 3x3 rotation matrix generated by a rotation  of a specified angle about a specified axis. This rotation  is thought of as rotating the coordinate system. \n\nArguments\n\nangle: Angle of rotation (radians)\niaxis: Axis of rotation (X=1, Y=2, Z=3)\n\nOutput\n\nReturns rotation matrix associated with angle and iaxis.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spd-Tuple{}",
+    "page": "API",
+    "title": "SPICE.spd",
+    "category": "method",
+    "text": "Returns the number of seconds in a day.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkcpo-NTuple{7,Any}",
+    "page": "API",
+    "title": "SPICE.spkcpo",
+    "category": "method",
+    "text": "Returns the state of a target body relative to a constant-position observer location.\n\nhttps://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/spkcpoc.html\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkezr-Tuple{AbstractString,Float64,AbstractString,AbstractString}",
+    "page": "API",
+    "title": "SPICE.spkezr",
+    "category": "method",
+    "text": "Returns the state of a target body relative to an observing body.\n\nNAIF documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkpos-Tuple{AbstractString,Float64,AbstractString,AbstractString}",
+    "page": "API",
+    "title": "SPICE.spkpos",
+    "category": "method",
+    "text": "Returns the state of a target body relative to an observing body.\n\nNAIF documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.swpool-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.swpool",
+    "category": "method",
+    "text": "swpool(agent, names)\n\nAdd a name to the list of agents to notify whenever a member of a list of kernel variables is updated.\n\nArguments\n\nagent: The name of an agent to be notified after updates\nnames: Variable names whose update causes the notice\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.sxform-Tuple{String,String,Float64}",
+    "page": "API",
+    "title": "SPICE.sxform",
+    "category": "method",
+    "text": "Return the state transformation matrix from one frame to another at a specified epoch.\n\nhttps://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/sxformc.html\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.timdef",
+    "page": "API",
+    "title": "SPICE.timdef",
+    "category": "function",
+    "text": "timdef(action, item, value=\"\")\n\nSet and retrieve the defaults associated with calendar input strings.\n\nArguments\n\naction: The kind of action to take, either :SET or :GET\nitem: The default item of interest. The items that may be requested are:\n:CALENDAR with allowed values:\n\"GREGORIAN\"\n\"JULIAN\"\n\"MIXED\"\n:SYSTEM with allowed values:\n\"TDB\"\n\"TDT\"\n\"UTC\"\n:ZONE with allowed values (0 <= HR < 13 and 0 <= MN < 60):\n\"EST\"\n\"EDT\"\n\"CST\"\n\"CDT\"\n\"MST\"\n\"MDT\"\n\"PST\"\n\"PDT\"\n\"UTC+$HR\"\n\"UTC-$HR\"\n\"UTC+$HR:$MN\"\n\"UTC-$HR:$MN\"\n\nOutput\n\nReturns the value associated with the default item.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.timout",
+    "page": "API",
+    "title": "SPICE.timout",
+    "category": "function",
+    "text": "timout(et, pictur, lenout=128)\n\nThis routine converts an input epoch represented in TDB seconds past the TDB epoch of J2000 to a character string formatted to the specifications of a user\'s format picture.\n\nArguments\n\net: An epoch in seconds past the ephemeris epoch J2000\npictur: A format specification for the output string\nlenout: The length of the output string plus 1 (default: 128)\n\nOutput\n\nReturns a string representation of the input epoch.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.tipbod-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.tipbod",
+    "category": "method",
+    "text": "tipbod(ref, body, et)\n\nReturn a 3x3 matrix that transforms positions in inertial coordinates to positions in body-equator-and-prime-meridian coordinates.\n\nArguments\n\nref: Name of inertial reference frame to transform from\nbody: ID code of body\net: Epoch of transformation\n\nOutput\n\nReturns transformation matrix from intertial position to prime meridian.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.tisbod-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.tisbod",
+    "category": "method",
+    "text": "tisbod(ref, body, et)\n\nReturn a 6x6 matrix that transforms states in inertial coordinates to states in body-equator-and-prime-meridian coordinates.\n\nArguments\n\nref: Name of inertial reference frame to transform from\nbody: ID code of body\net: Epoch of transformation\n\nOutput\n\nReturns transformation matrix from intertial state to prime meridian.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.tkvrsn",
+    "page": "API",
+    "title": "SPICE.tkvrsn",
+    "category": "function",
+    "text": "tkvrsn(item=:TOOLKIT)\n\nGiven an item such as the Toolkit or an entry point name, return the latest version string.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.tparse-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.tparse",
+    "category": "method",
+    "text": "tparse(string)\n\nParse a time string and return seconds past the J2000 epoch on a formal calendar. \n\nArguments\n\nstring: Input time string in UTC\n\nOutput\n\nReturns UTC expressed in seconds since J2000.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.tpictr",
+    "page": "API",
+    "title": "SPICE.tpictr",
+    "category": "function",
+    "text": "tpictr(sample, lenout=80)\n\nGiven a sample time string, create a time format picture suitable for use by the routine timout.\n\nArguments\n\nsample: A sample time string\nlenout: The length for the output picture string (default: 80)\n\nOutput\n\nReturns a format picture that describes sample.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.trace",
+    "page": "API",
+    "title": "SPICE.trace",
+    "category": "function",
+    "text": "trace(matrix)\n\nDeprecated: Use LinearAlgebra.tr(matrix) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.tsetyr-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.tsetyr",
+    "category": "method",
+    "text": "tsetyr(year)\n\nSet the lower bound on the 100 year range.\n\nArguments\n\n-year: Lower bound on the 100 year interval of expansion\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.twopi",
+    "page": "API",
+    "title": "SPICE.twopi",
+    "category": "function",
+    "text": "twopi()\n\nDeprecated: Use 2π instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.twovec-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.twovec",
+    "category": "method",
+    "text": "twovec(axdef, indexa, plndef, indexp)\n\nFind the transformation to the right-handed frame having a given vector as a specified axis and having a second given vector lying in a specified coordinate plane.\n\nArguments\n\naxdef: Vector defining a principal axis\nindexa: Principal axis number of axdef (X=1, Y=2, Z=3)\nplndef: Vector defining (with axdef) a principal plane\nindexp: Second axis number (with indexa) of principal plane\n\nOutput\n\nReturns output rotation matrix.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.tyear-Tuple{}",
+    "page": "API",
+    "title": "SPICE.tyear",
+    "category": "method",
+    "text": "tyear()\n\nReturns the number of seconds per tropical year.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ucase",
+    "page": "API",
+    "title": "SPICE.ucase",
+    "category": "function",
+    "text": "ucase(in)\n\nDeprecated: Use uppercase(in) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ucrss",
+    "page": "API",
+    "title": "SPICE.ucrss",
+    "category": "function",
+    "text": "ucrss(v1, v2)\n\nDeprecated: Use LinearAlgebra.normalize(LinearAlgebra.cross(v1, v2)) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.uddf-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.uddf",
+    "category": "method",
+    "text": "uddf(udfunc, x, dx)\n\nRoutine to calculate the first derivative of a caller-specified function using a three-point estimation.\n\nArguments\n\nudfunc: A callable that computes the scalar value of interest,   e.g. f(x::Float64) -> Float64.\nx: Independent variable of \'udfunc\'\ndx: Interval from x for derivative calculation\n\nOutput\n\nReturns the approximate derivative of udfunc at x.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.unitim-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.unitim",
+    "category": "method",
+    "text": "unitim(epoch, insys, outsys)\n\nTransform time from one uniform scale to another.\n\nArguments\n\nepoch: An epoch to be converted\ninsys: The time scale associated with the input epoch\noutsys: The time scale associated with the function value\n\nThe uniform time scales are:\n\n:TAI\n:TDT\n:TDB\n:ET\n:JED\n:JDTDB\n:JDTDT\n\nOutput\n\nReturns the time in the system specified by outsys that is equivalent to the epoch in the insys time scale.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.unload-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.unload",
+    "category": "method",
+    "text": "unload(file)\n\nUnload a SPICE kernel.\n\nArguments\n\nfile: The file name of a kernel to unload\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.unorm",
+    "page": "API",
+    "title": "SPICE.unorm",
+    "category": "function",
+    "text": "unorm(v1)\n\nDeprecated: Use (LinearAlgebra.normalize(v1), LinearAlgebra.norm(v1)) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.unormg",
+    "page": "API",
+    "title": "SPICE.unormg",
+    "category": "function",
+    "text": "unormg(v1)\n\nDeprecated: Use (LinearAlgebra.normalize(v1), LinearAlgebra.norm(v1)) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.utc2et-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.utc2et",
+    "category": "method",
+    "text": "utc2et(utcstr)\n\nConvert an input time from Calendar or Julian Date format, UTC, to ephemeris seconds past J2000.\n\nArguments\n\nutcstr: Input time string, UTC\n\nOutput\n\nReturns the equivalent of utcstr, expressed in ephemeris seconds past J2000.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vadd",
+    "page": "API",
+    "title": "SPICE.vadd",
+    "category": "function",
+    "text": "vadd(v1, v2)\n\nDeprecated: Use v1 .+ v2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vaddg",
+    "page": "API",
+    "title": "SPICE.vaddg",
+    "category": "function",
+    "text": "vaddg(v1, v2)\n\nDeprecated: Use v1 .+ v2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.valid!-Union{Tuple{SpiceCell{T,N} where N}, Tuple{T}} where T",
+    "page": "API",
+    "title": "SPICE.valid!",
+    "category": "method",
+    "text": "valid!(set::SpiceCell{T}) where T\n\nCreate a valid SPICE set from a SPICE Cell of any data type.\n\nArguments\n\nset: Set to be validated\n\nOutput\n\nReturns the validated set with ordered elements and duplicates removed.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vcrss",
+    "page": "API",
+    "title": "SPICE.vcrss",
+    "category": "function",
+    "text": "vcrss(v1, v2)\n\nDeprecated: Use LinearAlgebra.cross(v1, v2) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vdist",
+    "page": "API",
+    "title": "SPICE.vdist",
+    "category": "function",
+    "text": "vdist(v1, v2)\n\nDeprecated: Use LinearAlgebra.norm(v1 .- v2) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vdistg",
+    "page": "API",
+    "title": "SPICE.vdistg",
+    "category": "function",
+    "text": "vdistg(v1, v2)\n\nDeprecated: Use LinearAlgebra.norm(v1 .- v2) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vdot",
+    "page": "API",
+    "title": "SPICE.vdot",
+    "category": "function",
+    "text": "vdot(v1, v2)\n\nDeprecated: Use LinearAlgebra.dot(v1, v2) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vdotg",
+    "page": "API",
+    "title": "SPICE.vdotg",
+    "category": "function",
+    "text": "vdotg(v1, v2)\n\nDeprecated: Use LinearAlgebra.dot(v1, v2) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vequ",
+    "page": "API",
+    "title": "SPICE.vequ",
+    "category": "function",
+    "text": "vequ(v1, v2)\n\nDeprecated: Use v1 .= v2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vequg",
+    "page": "API",
+    "title": "SPICE.vequg",
+    "category": "function",
+    "text": "vequg(v1, v2)\n\nDeprecated: Use v1 .= v2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vhat",
+    "page": "API",
+    "title": "SPICE.vhat",
+    "category": "function",
+    "text": "vhat(v1)\n\nDeprecated: Use LinearAlgebra.normalize(v1) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vhatg",
+    "page": "API",
+    "title": "SPICE.vhatg",
+    "category": "function",
+    "text": "vhatg(v1)\n\nDeprecated: Use LinearAlgebra.normalize(v1) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vlcom",
+    "page": "API",
+    "title": "SPICE.vlcom",
+    "category": "function",
+    "text": "vlcom(a, v1, b, v2)\n\nDeprecated: Use a .* v1 .+ b .* v2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vlcom3",
+    "page": "API",
+    "title": "SPICE.vlcom3",
+    "category": "function",
+    "text": "vlcom3(a, v1, b, v2, c, v3)\n\nDeprecated: Use a .* v1 .+ b .* v2 .+ c .* v3 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vlcomg",
+    "page": "API",
+    "title": "SPICE.vlcomg",
+    "category": "function",
+    "text": "vlcomg(a, v1, b, v2)\n\nDeprecated: Use a .* v1 .+ b .* v2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vminug",
+    "page": "API",
+    "title": "SPICE.vminug",
+    "category": "function",
+    "text": "vminug(vin)\n\nDeprecated: Use -vin instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vminus",
+    "page": "API",
+    "title": "SPICE.vminus",
+    "category": "function",
+    "text": "vminus(vin)\n\nDeprecated: Use -vin instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vnorm",
+    "page": "API",
+    "title": "SPICE.vnorm",
+    "category": "function",
+    "text": "vnorm(v1)\n\nDeprecated: Use LinearAlgebra.norm(v1) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vnormg",
+    "page": "API",
+    "title": "SPICE.vnormg",
+    "category": "function",
+    "text": "vnormg(v1, v2)\n\nDeprecated: Use LinearAlgebra.norm(v1) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vpack",
+    "page": "API",
+    "title": "SPICE.vpack",
+    "category": "function",
+    "text": "vpack(x, y, z)\n\nDeprecated: Use [x, y, z] instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vperp-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.vperp",
+    "category": "method",
+    "text": "vperp(a, b)\n\nFind the component of a vector that is perpendicular to a second vector.\n\nArguments\n\na: The vector whose orthogonal component is sought\nb: The vector used as the orthogonal reference\n\nOutput\n\nReturns the component a orthogonal to b.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vprjp-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.vprjp",
+    "category": "method",
+    "text": "vprjp(vin, plane)\n\nProject a vector onto a specified plane, orthogonally.\n\nArguments\n\nvin: Vector to be projected\nplane: Plane onto which vin is projected\n\nOutput\n\nReturns the vector resulting from the projection.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vprjpi-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.vprjpi",
+    "category": "method",
+    "text": "vprjpi(vin, projpl, invpl)\n\nFind the vector in a specified plane that maps to a specified vector in another plane under orthogonal projection.\n\nArguments\n\nvin: The projected vector\nprojpl: Plane containing vin\ninvpl: Plane containing inverse image of vin\n\nOutput\n\nReturns the inverse projection of vin or nothing if vin could not be calculated.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vproj-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.vproj",
+    "category": "method",
+    "text": "vproj(a, b)\n\nFinds the projection of one vector onto another vector. All vectors are 3-dimensional.\n\nArguments\n\na: The vector to be projected\nb: The vector onto which a is to be projected\n\nOutput\n\nReturns the projection of a onto b.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vrel-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.vrel",
+    "category": "method",
+    "text": "vrel(v1, v2)\n\nReturn the relative difference between two 3-dimensional vectors.\n\nArguments\n\nv1, v2: Two three-dimensional input vectors\n\nOutput\n\nReturns the relative differences between v1 and v2.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vrelg-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.vrelg",
+    "category": "method",
+    "text": "vrelg(v1, v2)\n\nReturn the relative difference between two vectors.\n\nArguments\n\nv1, v2: Input vectors\n\nOutput\n\nReturns the relative differences between v1 and v2.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vrotv-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.vrotv",
+    "category": "method",
+    "text": "vrotv(v, axis, theta)\n\nRotate a vector about a specified axis vector by a specified angle and return the rotated vector.\n\nArguments\n\nv: Vector to be rotated\naxis: Axis of the rotation\ntheta: Angle of rotation (radians)\n\nOutput\n\nResult of rotating v about axis by theta.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vscl",
+    "page": "API",
+    "title": "SPICE.vscl",
+    "category": "function",
+    "text": "vscl(s, v1)\n\nDeprecated: Use s .* v1 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vsclg",
+    "page": "API",
+    "title": "SPICE.vsclg",
+    "category": "function",
+    "text": "vsclg(s, v1)\n\nDeprecated: Use s .* v1 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vsep-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.vsep",
+    "category": "method",
+    "text": "vsep(v1, v2)\n\nReturn the sepative difference between two 3-dimensional vectors.\n\nArguments\n\nv1, v2: Two three-dimensional input vectors\n\nOutput\n\nReturns the angle between v1 and v2 in radians.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vsepg-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.vsepg",
+    "category": "method",
+    "text": "vsepg(v1, v2)\n\nReturn the sepative difference between two vectors.\n\nArguments\n\nv1, v2: Input vectors\n\nOutput\n\nReturns the angle between v1 and v2 in radians.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vsub",
+    "page": "API",
+    "title": "SPICE.vsub",
+    "category": "function",
+    "text": "vsub(v1, v2)\n\nDeprecated: Use v1 .- v2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vsubg",
+    "page": "API",
+    "title": "SPICE.vsubg",
+    "category": "function",
+    "text": "vsubg(v1, v2)\n\nDeprecated: Use v1 .- v2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vtmv",
+    "page": "API",
+    "title": "SPICE.vtmv",
+    "category": "function",
+    "text": "vtmv(v1, matrix, v2)\n\nDeprecated: Use v1\' * matrix * v2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vtmvg",
+    "page": "API",
+    "title": "SPICE.vtmvg",
+    "category": "function",
+    "text": "vtmvg(v1, matrix, v2)\n\nDeprecated: Use v1\' * matrix * v2 instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vupack",
+    "page": "API",
+    "title": "SPICE.vupack",
+    "category": "function",
+    "text": "vupack(v)\n\nDeprecated: Use x, y, z = v instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vzero",
+    "page": "API",
+    "title": "SPICE.vzero",
+    "category": "function",
+    "text": "vzero(v1)\n\nDeprecated: Use iszero(v1) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.vzerog",
+    "page": "API",
+    "title": "SPICE.vzerog",
+    "category": "function",
+    "text": "vzerog(v1, v2)\n\nDeprecated: Use iszero(v1) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wncard-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.wncard",
+    "category": "method",
+    "text": "wncard(window)\n\nReturn the cardinality (number of intervals) of a double precision window.\n\nArguments\n\nwindow: Input window\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wncomd-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.wncomd",
+    "category": "method",
+    "text": "wncomd(window, left, right)\n\nDetermine the complement of a double precision window with respect to a specified interval.\n\nArguments\n\nwindow: Input window. \nleft:  Left endpoint of the complement interval\nright:  Right endpoint of the complement interval\n\nOutput\n\nReturns the complement of window with respect to [left,right].\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wncond!-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.wncond!",
+    "category": "method",
+    "text": "wncond!(window, left, right)\n\nContract each of the intervals of a double precision window.\n\nArguments\n\nwindow: Window to be contracted\nleft:  Amount added to each left endpoint\nright: Amount subtracted from each right endpoint\n\nOutput\n\nReturns the contracted window.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wndifd-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.wndifd",
+    "category": "method",
+    "text": "wndifd(a, b)\n\nPlace the difference of two double precision windows into a third window.\n\nArguments\n\na: Input window\nb: Input window\n\nOutput\n\nReturns a window containing the difference of a and b.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wnelmd-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.wnelmd",
+    "category": "method",
+    "text": "wnelmd(window, point)\n\nDetermine whether a point is an element of a double precision window.\n\nArguments\n\nwindow: Input window\npoint: Input point\n\nOutput\n\nReturns true if point is an element of window.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wnexpd!-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.wnexpd!",
+    "category": "method",
+    "text": "wnexpd(window, left, right)\n\nExpand each of the intervals of a double precision window.\n\nArguments\n\nleft: Amount subtracted from each left endpoint\nright: Amount added to each right endpoint\n\nOutput\n\nReturns the expanded window.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wnextd!-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.wnextd!",
+    "category": "method",
+    "text": "wnextd!(window, side)\n\nExtract the left or right endpoints from a double precision window.\n\nArguments\n\nwindow: Window to be extracted\nside: Extract left (:L) or right (:R) endpoints\n\nOutput\n\nReturns the extracted window.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wnfetd-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.wnfetd",
+    "category": "method",
+    "text": "wnfetd(window, n)\n\nFetch a particular interval from a double precision window.\n\nArguments\n\nwindow: Input window\nn: Index of interval to be fetched\n\nOutput\n\nReturns a tuple consisting of the left and right endpoints of the n-th interval in the input window.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wnfild!-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.wnfild!",
+    "category": "method",
+    "text": "wnfild!(window, small)\n\nFill small gaps between adjacent intervals of a double precision window.\n\nArguments\n\nwindow: Window to be filled\nsmall: Limiting measure of small gaps\n\nOutput\n\nReturns the updated window.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wnfltd!-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.wnfltd!",
+    "category": "method",
+    "text": "wnfild!(window, small)\n\nFilter (remove) small intervals from a double precision window.\n\nArguments\n\nwindow: Window to be filtered\nsmall: Limiting measure of small intervals\n\nOutput\n\nReturns the updated window.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wnincd-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.wnincd",
+    "category": "method",
+    "text": "wnincd(window, left, right)\n\nDetermine whether an interval is included in a double precision window.\n\nArguments\n\nwindow: Input window\nleft: Left endpoint of the input interval\nright: Right endpoint of the input interval\n\nOutput\n\nReturns true when (left, right) is contained in window.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wninsd!-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.wninsd!",
+    "category": "method",
+    "text": "wninsd!(window, left, right)\n\nInsert an interval into a double precision window.\n\nArguments\n\nwindow: Input window\nleft: Left endpoint of the new interval\nright: Right endpoint of the new interval\n\nOutput\n\nReturns the updated windows.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wnintd-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.wnintd",
+    "category": "method",
+    "text": "wnintd(a, b)\n\nPlace the intersection of two double precision windows into a third window.\n\nArguments\n\na: Input window\nb: Input window\n\nOutput\n\nReturns a window containing the intersection of a and b.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wnreld-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.wnreld",
+    "category": "method",
+    "text": "wnreld(a, op, b)\n\nCompare two double precision windows.\n\nnote: Note\nConsider using overloaded operators instead, i.e. a == b, a ⊆ b, and a ⊊ b.\n\nArguments\n\na: First window\nop: Comparison operator\nb: Second window\n\nOutput\n\nReturns the result of comparison a (op) b.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wnsumd-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.wnsumd",
+    "category": "method",
+    "text": "wnsumd(window)\n\nSummarize the contents of a double precision window.\n\nArguments\n\nwindow: Window to be summarized\n\nOutput\n\nReturns a tuple consisting of:\n\nmeas: Total measure of intervals in window\navg: Average measure\nstddev: Standard deviation\nshortest: Location of shortest interval\nlongest: Location of longest interval \n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wnunid-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.wnunid",
+    "category": "method",
+    "text": "wnunid(a, b)\n\nPlace the union of two double precision windows into a third window.\n\nArguments\n\na: Input window\nb: Input window\n\nOutput\n\nReturns a window containing the union of a and b.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.wnvald!-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.wnvald!",
+    "category": "method",
+    "text": "wnvald!(window)\n\nForm a valid double precision window from the contents of a window array.\n\nArguments\n\nwindow: A (possibly uninitialized) SpiceDoubleCell containing endpoints of   (possibly unordered and non-disjoint) intervals. \n\nOutput\n\nReturns the validated window.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.xf2eul-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.xf2eul",
+    "category": "method",
+    "text": "xf2eul(xform, axisa, axisb, axisc)\n\nConvert a state transformation matrix to Euler angles and their derivatives with respect to a specified set of axes.\n\nArguments\n\nxform: A state transformation matrix\naxisa: Axis A of the Euler angle factorization\naxisb: Axis B of the Euler angle factorization\naxisc: Axis C of the Euler angle factorization\n\nOutput\n\nReturns a tuple of an array of Euler angles and their derivatives and a boolean that indicates whether these are a unique representation.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.xf2rav-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.xf2rav",
+    "category": "method",
+    "text": "xf2rav(xform)\n\nDetermines the rotation matrix and angular velocity of the rotation from a state transformation matrix.\n\nArguments\n\nxform: State transformation matrix\n\nOutput\n\nReturns a tuple of the rotation matrix and the angular velocity vector associated with xform.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.xfmsta-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.xfmsta",
+    "category": "method",
+    "text": "xfmsta(input_state, input_coord_sys, output_coord_sys, body)\n\nTransform a state between coordinate systems.\n\nArguments\n\ninput_state: Input state\ninput_coord_sys: Current (input) coordinate system\n`outputcoordsys: Desired (output) coordinate system\nbody: Name or NAIF ID of body with which coordinates are associated (if applicable)\n\nOutput\n\nReturns the converted output state.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.xpose",
+    "page": "API",
+    "title": "SPICE.xpose",
+    "category": "function",
+    "text": "xpose(matrix)\n\nDeprecated: Use transpose(matrix) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.xpose6",
+    "page": "API",
+    "title": "SPICE.xpose6",
+    "category": "function",
+    "text": "xpose6(matrix)\n\nDeprecated: Use transpose(matrix) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.xposeg",
+    "page": "API",
+    "title": "SPICE.xposeg",
+    "category": "function",
+    "text": "xposeg(matrix)\n\nDeprecated: Use transpose(matrix) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#API-1",
+    "page": "API",
+    "title": "API",
+    "category": "section",
+    "text": "DocTestSetup = quote\n    using SPICE\nendModules = [SPICE]\nPrivate = false"
+},
+
+]}
