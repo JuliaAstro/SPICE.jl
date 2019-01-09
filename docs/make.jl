@@ -1,7 +1,9 @@
 using Documenter, SPICE
 
 makedocs(
-    format = :html,
+    format = Documenter.HTML(
+        prettyurls = get(ENV, "CI", nothing) == "true",
+    ),
     sitename = "SPICE.jl",
     authors = "Helge Eichhorn",
     pages = [
@@ -14,7 +16,4 @@ makedocs(
 deploydocs(
     repo = "github.com/JuliaAstro/SPICE.jl.git",
     target = "build",
-    deps = nothing,
-    make = nothing,
-    julia = "0.6",
 )
