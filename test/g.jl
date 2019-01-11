@@ -7,6 +7,7 @@ using Random: randstring
             pcpool("pcpool_test", data)
             cvals = gcpool("pcpool_test")
             @test data == cvals
+            @test gcpool("norbert") === nothing
         finally
             kclear()
         end

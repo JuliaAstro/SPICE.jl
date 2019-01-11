@@ -42,10 +42,12 @@ using LinearAlgebra: I
             rp = radii[3]
             f = (re - rp) / re
             rectan = pgrrec("Mars", deg2rad(90.0), deg2rad(45), 300, re, f)
-            expected = [1.604703022312521e-13, -2.620678915e+3, 2.592408909e+3]
-            @testset for i in eachindex(rectan, expected)
-                @test rectan[i] ≈ expected[i]
-            end
+            expected = [1.604650025e-13, -2.620678915e+3, 2.592408909e+3]
+            @test rectan ≈ expected
+            @test_throws SpiceError pgrrec("norbert", deg2rad(90.0), deg2rad(45), 300, re, f)
+            @test_throws SpiceError pgrrec("", deg2rad(90.0), deg2rad(45), 300, re, f)
+            @test_throws SpiceError pgrrec("Mars", deg2rad(90.0), deg2rad(45), 300, -re, f)
+            @test_throws SpiceError pgrrec("Mars", deg2rad(90.0), deg2rad(45), 300, re, f+1)
         finally
             kclear()
         end
