@@ -94,7 +94,7 @@ import LinearAlgebra
     end
     @testset "trace" begin
         a = randn(3, 3)
-        @test SPICE._trace(a) == LinearAlgebra.tr(a)
+        @test SPICE._trace(a) ≈ LinearAlgebra.tr(a)
     end
     @testset "tsetyr" begin
         # Expand 2-digit year to full year, typically 4-digit
