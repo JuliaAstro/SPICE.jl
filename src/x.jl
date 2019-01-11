@@ -103,7 +103,8 @@ end
 """
     xpose6(matrix)
 
-**Deprecated:** Use `transpose(matrix)` instead.
+!!! warning "Deprecated"
+    Use `transpose(matrix)` instead.
 """
 xpose6
 
@@ -118,7 +119,8 @@ end
 """
     xpose(matrix)
 
-**Deprecated:** Use `transpose(matrix)` instead.
+!!! warning "Deprecated"
+    Use `transpose(matrix)` instead.
 """
 xpose
 
@@ -135,7 +137,8 @@ end
 """
     xposeg(matrix)
 
-**Deprecated:** Use `transpose(matrix)` instead.
+!!! warning "Deprecated"
+    Use `transpose(matrix)` instead.
 """
 xposeg
 

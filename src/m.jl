@@ -116,7 +116,8 @@ end
 """
     maxd(args...)
 
-**Deprecated:** Use `max(args...)` instead.
+!!! warning "Deprecated"
+    Use `max(args...)` instead.
 """
 maxd
 
@@ -130,7 +131,8 @@ end
 """
     maxi(args...)
 
-**Deprecated:** Use `max(args...)` instead.
+!!! warning "Deprecated"
+    Use `max(args...)` instead.
 """
 maxi
 
@@ -143,7 +145,8 @@ end
 """
     mequ(m1, mout)
 
-**Deprecated:** Use `mout .= m1` instead.
+!!! warning "Deprecated"
+    Use `mout .= m1` instead.
 """
 mequ
 
@@ -158,7 +161,8 @@ end
 """
     mequg(m1, mout)
 
-**Deprecated:** Use `mout .= m1` instead.
+!!! warning "Deprecated"
+    Use `mout .= m1` instead.
 """
 mequg
 
@@ -172,7 +176,8 @@ end
 """
     mind(args...)
 
-**Deprecated:** Use `min(args...)` instead.
+!!! warning "Deprecated"
+    Use `min(args...)` instead.
 """
 mind
 
@@ -186,7 +191,8 @@ end
 """
     mini(args...)
 
-**Deprecated:** Use `min(args...)` instead.
+!!! warning "Deprecated"
+    Use `min(args...)` instead.
 """
 mini
 
@@ -203,7 +209,8 @@ end
 """
     mtxm(m1, m2)
 
-**Deprecated:** Use `m1' * m2` instead.
+!!! warning "Deprecated"
+    Use `m1' * m2` instead.
 """
 mtxm
 
@@ -223,7 +230,8 @@ end
 """
     mtxmg(m1, m2)
 
-**Deprecated:** Use `m1' * m2` instead.
+!!! warning "Deprecated"
+    Use `m1' * m2` instead.
 """
 mtxmg
 
@@ -241,7 +249,8 @@ end
 """
     mtxv(m1,v2)
 
-**Deprecated:** Use `m1' * v2` instead.
+!!! warning "Deprecated"
+    Use `m1' * v2` instead.
 """
 mtxv
 
@@ -262,7 +271,8 @@ end
 """
     mtxvg(m1,v2)
 
-**Deprecated:** Use `m1' * v2` instead.
+!!! warning "Deprecated"
+    Use `m1' * v2` instead.
 """
 mtxvg
 
@@ -279,7 +289,8 @@ end
 """
     mxm(m1, m2)
 
-**Deprecated:** Use `m1 * m2` instead.
+!!! warning "Deprecated"
+    Use `m1 * m2` instead.
 """
 mxm
 
@@ -299,7 +310,8 @@ end
 """
     mxmg(m1, m2)
 
-**Deprecated:** Use `m1 * m2` instead.
+!!! warning "Deprecated"
+    Use `m1 * m2` instead.
 """
 mxmg
 
@@ -316,7 +328,8 @@ end
 """
     mxmt(m1, m2)
 
-**Deprecated:** Use `m1 * m2'` instead.
+!!! warning "Deprecated"
+    Use `m1 * m2'` instead.
 """
 mxmt
 
@@ -336,7 +349,8 @@ end
 """
     mxmtg(m1, m2)
 
-**Deprecated:** Use `m1 * m2'` instead.
+!!! warning "Deprecated"
+    Use `m1 * m2'` instead.
 """
 mxmtg
 
@@ -354,7 +368,8 @@ end
 """
     mxv(m1,v2)
 
-**Deprecated:** Use `m1 * v2` instead.
+!!! warning "Deprecated"
+    Use `m1 * v2` instead.
 """
 mxv
 
@@ -375,7 +390,8 @@ end
 """
     mxvg(m1,v2)
 
-**Deprecated:** Use `m1 * v2` instead.
+!!! warning "Deprecated"
+    Use `m1 * v2` instead.
 """
 mxvg
 

@@ -7,7 +7,8 @@ end
 """
     halfpi()
 
-**Deprecated:** Use `π/2` instead.
+!!! warning "Deprecated"
+    Use `π/2` instead.
 """
 halfpi
 

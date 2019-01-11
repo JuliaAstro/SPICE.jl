@@ -21,7 +21,8 @@ end
 """
     ucase(in)
 
-**Deprecated:** Use `uppercase(in)` instead.
+!!! warning "Deprecated"
+    Use `uppercase(in)` instead.
 """
 ucase
 
@@ -38,7 +39,8 @@ end
 """
     ucrss(v1, v2)
 
-**Deprecated:** Use `LinearAlgebra.normalize(LinearAlgebra.cross(v1, v2))` instead.
+!!! warning "Deprecated"
+    Use `LinearAlgebra.normalize(LinearAlgebra.cross(v1, v2))` instead.
 """
 ucrss
 
@@ -181,8 +183,8 @@ end
 """
     unorm(v1)
 
-**Deprecated:** Use `(LinearAlgebra.normalize(v1), LinearAlgebra.norm(v1))`
-instead.
+!!! warning "Deprecated"
+    Use `(LinearAlgebra.normalize(v1), LinearAlgebra.norm(v1))` instead.
 """
 unorm
 
@@ -201,8 +203,8 @@ end
 """
     unormg(v1)
 
-**Deprecated:** Use `(LinearAlgebra.normalize(v1), LinearAlgebra.norm(v1))`
-instead.
+!!! warning "Deprecated"
+    Use `(LinearAlgebra.normalize(v1), LinearAlgebra.norm(v1))` instead.
 """
 unormg
 

@@ -48,7 +48,8 @@ end
 """
     vadd(v1, v2)
 
-**Deprecated:** Use `v1 .+ v2` instead.
+!!! warning "Deprecated"
+    Use `v1 .+ v2` instead.
 """
 vadd
 
@@ -66,7 +67,8 @@ end
 """
     vaddg(v1, v2)
 
-**Deprecated:** Use `v1 .+ v2` instead.
+!!! warning "Deprecated"
+    Use `v1 .+ v2` instead.
 """
 vaddg
 
@@ -107,7 +109,8 @@ end
 """
     vcrss(v1, v2)
 
-**Deprecated:** Use `LinearAlgebra.cross(v1, v2)` instead.
+!!! warning "Deprecated"
+    Use `LinearAlgebra.cross(v1, v2)` instead.
 """
 vcrss
 
@@ -121,7 +124,8 @@ end
 """
     vdist(v1, v2)
 
-**Deprecated:** Use `LinearAlgebra.norm(v1 .- v2)` instead.
+!!! warning "Deprecated"
+    Use `LinearAlgebra.norm(v1 .- v2)` instead.
 """
 vdist
 
@@ -136,7 +140,8 @@ end
 """
     vdistg(v1, v2)
 
-**Deprecated:** Use `LinearAlgebra.norm(v1 .- v2)` instead.
+!!! warning "Deprecated"
+    Use `LinearAlgebra.norm(v1 .- v2)` instead.
 """
 vdistg
 
@@ -150,7 +155,8 @@ end
 """
     vdot(v1, v2)
 
-**Deprecated:** Use `LinearAlgebra.dot(v1, v2)` instead.
+!!! warning "Deprecated"
+    Use `LinearAlgebra.dot(v1, v2)` instead.
 """
 vdot
 
@@ -165,7 +171,8 @@ end
 """
     vdotg(v1, v2)
 
-**Deprecated:** Use `LinearAlgebra.dot(v1, v2)` instead.
+!!! warning "Deprecated"
+    Use `LinearAlgebra.dot(v1, v2)` instead.
 """
 vdotg
 
@@ -179,7 +186,8 @@ end
 """
     vequ(v1, v2)
 
-**Deprecated:** Use `v1 .= v2` instead.
+!!! warning "Deprecated"
+    Use `v1 .= v2` instead.
 """
 vequ
 
@@ -194,7 +202,8 @@ end
 """
     vequg(v1, v2)
 
-**Deprecated:** Use `v1 .= v2` instead.
+!!! warning "Deprecated"
+    Use `v1 .= v2` instead.
 """
 vequg
 
@@ -210,7 +219,8 @@ end
 """
     vhat(v1)
 
-**Deprecated:** Use `LinearAlgebra.normalize(v1)` instead.
+!!! warning "Deprecated"
+    Use `LinearAlgebra.normalize(v1)` instead.
 """
 vhat
 
@@ -227,7 +237,8 @@ end
 """
     vhatg(v1)
 
-**Deprecated:** Use `LinearAlgebra.normalize(v1)` instead.
+!!! warning "Deprecated"
+    Use `LinearAlgebra.normalize(v1)` instead.
 """
 vhatg
 
@@ -245,7 +256,8 @@ end
 """
     vlcom3(a, v1, b, v2, c, v3)
 
-**Deprecated:** Use `a .* v1 .+ b .* v2 .+ c .* v3` instead.
+!!! warning "Deprecated"
+    Use `a .* v1 .+ b .* v2 .+ c .* v3` instead.
 """
 vlcom3
 
@@ -262,7 +274,8 @@ end
 """
     vlcom(a, v1, b, v2)
 
-**Deprecated:** Use `a .* v1 .+ b .* v2` instead.
+!!! warning "Deprecated"
+    Use `a .* v1 .+ b .* v2` instead.
 """
 vlcom
 
@@ -280,7 +293,8 @@ end
 """
     vlcomg(a, v1, b, v2)
 
-**Deprecated:** Use `a .* v1 .+ b .* v2` instead.
+!!! warning "Deprecated"
+    Use `a .* v1 .+ b .* v2` instead.
 """
 vlcomg
 
@@ -298,7 +312,8 @@ end
 """
     vminug(vin)
 
-**Deprecated:** Use `-vin` instead.
+!!! warning "Deprecated"
+    Use `-vin` instead.
 """
 vminug
 
@@ -314,7 +329,8 @@ end
 """
     vminus(vin)
 
-**Deprecated:** Use `-vin` instead.
+!!! warning "Deprecated"
+    Use `-vin` instead.
 """
 vminus
 
@@ -327,7 +343,8 @@ end
 """
     vnorm(v1)
 
-**Deprecated:** Use `LinearAlgebra.norm(v1)` instead.
+!!! warning "Deprecated"
+    Use `LinearAlgebra.norm(v1)` instead.
 """
 vnorm
 
@@ -342,7 +359,8 @@ end
 """
     vnormg(v1, v2)
 
-**Deprecated:** Use `LinearAlgebra.norm(v1)` instead.
+!!! warning "Deprecated"
+    Use `LinearAlgebra.norm(v1)` instead.
 """
 vnormg
 
@@ -359,7 +377,8 @@ end
 """
     vpack(x, y, z)
 
-**Deprecated:** Use `[x, y, z]` instead.
+!!! warning "Deprecated"
+    Use `[x, y, z]` instead.
 """
 vpack
 
@@ -556,7 +575,8 @@ end
 """
     vscl(s, v1)
 
-**Deprecated:** Use `s .* v1` instead.
+!!! warning "Deprecated"
+    Use `s .* v1` instead.
 """
 vscl
 
@@ -574,7 +594,8 @@ end
 """
     vsclg(s, v1)
 
-**Deprecated:** Use `s .* v1` instead.
+!!! warning "Deprecated"
+    Use `s .* v1` instead.
 """
 vsclg
 
@@ -636,7 +657,8 @@ end
 """
     vsub(v1, v2)
 
-**Deprecated:** Use `v1 .- v2` instead.
+!!! warning "Deprecated"
+    Use `v1 .- v2` instead.
 """
 vsub
 
@@ -654,7 +676,8 @@ end
 """
     vsubg(v1, v2)
 
-**Deprecated:** Use `v1 .- v2` instead.
+!!! warning "Deprecated"
+    Use `v1 .- v2` instead.
 """
 vsubg
 
@@ -669,7 +692,8 @@ end
 """
     vtmv(v1, matrix, v2)
 
-**Deprecated:** Use `v1' * matrix * v2` instead.
+!!! warning "Deprecated"
+    Use `v1' * matrix * v2` instead.
 """
 vtmv
 
@@ -685,7 +709,8 @@ end
 """
     vtmvg(v1, matrix, v2)
 
-**Deprecated:** Use `v1' * matrix * v2` instead.
+!!! warning "Deprecated"
+    Use `v1' * matrix * v2` instead.
 """
 vtmvg
 
@@ -704,7 +729,8 @@ end
 """
     vupack(v)
 
-**Deprecated:** Use `x, y, z = v` instead.
+!!! warning "Deprecated"
+    Use `x, y, z = v` instead.
 """
 vupack
 
@@ -717,7 +743,8 @@ end
 """
     vzero(v1)
 
-**Deprecated:** Use `iszero(v1)` instead.
+!!! warning "Deprecated"
+    Use `iszero(v1)` instead.
 """
 vzero
 
@@ -732,7 +759,8 @@ end
 """
     vzerog(v1, v2)
 
-**Deprecated:** Use `iszero(v1)` instead.
+!!! warning "Deprecated"
+    Use `iszero(v1)` instead.
 """
 vzerog
 

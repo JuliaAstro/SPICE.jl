@@ -310,7 +310,8 @@ end
 """
     brcktd(number, e1, e2)
 
-**Deprecated:** Use `clamp` from Julia's standard library instead.
+!!! warning "Deprecated"
+    Use `clamp` from Julia's standard library instead.
 """
 brcktd
 
@@ -324,7 +325,8 @@ end
 """
     brckti(number, e1, e2)
 
-**Deprecated:** Use `clamp` from Julia's standard library instead.
+!!! warning "Deprecated"
+    Use `clamp` from Julia's standard library instead.
 """
 brckti
 
@@ -343,7 +345,8 @@ end
 """
     bschoc(value, array, order)
 
-**Deprecated:** Use `findfirst(array .== value)` instead.
+!!! warning "Deprecated"
+    Use `findfirst(array .== value)` instead.
 """
 bschoc
 
@@ -363,8 +366,9 @@ end
 """
     bschoi(value, array, order)
 
-**Deprecated:** Use `findfirst(array .== value)` instead.
-"""
+!!! warning "Deprecated"
+        Use `findfirst(array .== value)` instead.
+    """
 bschoi
 
 @deprecate bschoi(value, array, order) findfirst(array .== value)
@@ -381,7 +385,8 @@ end
 """
     bsrchc(value, array)
 
-**Deprecated:** Use `findfirst(array .== value)` instead.
+!!! warning "Deprecated"
+    Use `findfirst(array .== value)` instead.
 """
 bsrchc
 
@@ -400,7 +405,8 @@ end
 """
     bsrchd(value, array)
 
-**Deprecated:** Use `findfirst(array .== value)` instead.
+!!! warning "Deprecated"
+    Use `findfirst(array .== value)` instead.
 """
 bsrchd
 
@@ -419,7 +425,8 @@ end
 """
     bsrchi(value, array)
 
-**Deprecated:** Use `findfirst(array .== value)` instead.
+!!! warning "Deprecated"
+    Use `findfirst(array .== value)` instead.
 """
 bsrchi
 

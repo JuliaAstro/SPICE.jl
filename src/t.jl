@@ -236,7 +236,8 @@ end
 """
     trace(matrix)
 
-**Deprecated:** Use `LinearAlgebra.tr(matrix)` instead.
+!!! warning "Deprecated"
+    Use `LinearAlgebra.tr(matrix)` instead.
 """
 trace
 
@@ -266,7 +267,8 @@ end
 """
     twopi()
 
-**Deprecated:** Use `2π` instead.
+!!! warning "Deprecated"
+    Use `2π` instead.
 """
 twopi
 

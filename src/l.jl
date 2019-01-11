@@ -193,7 +193,8 @@ end
 """
     lcase(in)
 
-**Deprecated:** Use `lowercase(in)` instead.
+!!! warning "Deprecated"
+    Use `lowercase(in)` instead.
 """
 lcase
 
