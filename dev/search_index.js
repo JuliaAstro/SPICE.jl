@@ -197,7 +197,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.brcktd",
     "category": "function",
-    "text": "brcktd(number, e1, e2)\n\nDeprecated: Use clamp from Julia\'s standard library instead.\n\n\n\n\n\n"
+    "text": "brcktd(number, e1, e2)\n\nwarning: Deprecated\nUse clamp from Julia\'s standard library instead.\n\n\n\n\n\n"
 },
 
 {
@@ -205,7 +205,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.brckti",
     "category": "function",
-    "text": "brckti(number, e1, e2)\n\nDeprecated: Use clamp from Julia\'s standard library instead.\n\n\n\n\n\n"
+    "text": "brckti(number, e1, e2)\n\nwarning: Deprecated\nUse clamp from Julia\'s standard library instead.\n\n\n\n\n\n"
 },
 
 {
@@ -213,7 +213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bschoc",
     "category": "function",
-    "text": "bschoc(value, array, order)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+    "text": "bschoc(value, array, order)\n\nwarning: Deprecated\nUse findfirst(array .== value) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -221,7 +221,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bschoi",
     "category": "function",
-    "text": "bschoi(value, array, order)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+    "text": "bschoi(value, array, order)\n\nwarning: Deprecated\nUse `findfirst(array .== value)` instead.\n\n\n\n\n\n"
 },
 
 {
@@ -229,7 +229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bsrchc",
     "category": "function",
-    "text": "bsrchc(value, array)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+    "text": "bsrchc(value, array)\n\nwarning: Deprecated\nUse findfirst(array .== value) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -237,7 +237,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bsrchd",
     "category": "function",
-    "text": "bsrchd(value, array)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+    "text": "bsrchd(value, array)\n\nwarning: Deprecated\nUse findfirst(array .== value) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -245,7 +245,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bsrchi",
     "category": "function",
-    "text": "bsrchi(value, array)\n\nDeprecated: Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+    "text": "bsrchi(value, array)\n\nwarning: Deprecated\nUse findfirst(array .== value) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -517,7 +517,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.halfpi",
     "category": "function",
-    "text": "halfpi()\n\nDeprecated: Use π/2 instead.\n\n\n\n\n\n"
+    "text": "halfpi()\n\nwarning: Deprecated\nUse π/2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -629,7 +629,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lcase",
     "category": "function",
-    "text": "lcase(in)\n\nDeprecated: Use lowercase(in) instead.\n\n\n\n\n\n"
+    "text": "lcase(in)\n\nwarning: Deprecated\nUse lowercase(in) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -789,7 +789,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.maxd",
     "category": "function",
-    "text": "maxd(args...)\n\nDeprecated: Use max(args...) instead.\n\n\n\n\n\n"
+    "text": "maxd(args...)\n\nwarning: Deprecated\nUse max(args...) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -797,7 +797,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.maxi",
     "category": "function",
-    "text": "maxi(args...)\n\nDeprecated: Use max(args...) instead.\n\n\n\n\n\n"
+    "text": "maxi(args...)\n\nwarning: Deprecated\nUse max(args...) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -805,7 +805,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.mequ",
     "category": "function",
-    "text": "mequ(m1, mout)\n\nDeprecated: Use mout .= m1 instead.\n\n\n\n\n\n"
+    "text": "mequ(m1, mout)\n\nwarning: Deprecated\nUse mout .= m1 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -813,7 +813,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.mequg",
     "category": "function",
-    "text": "mequg(m1, mout)\n\nDeprecated: Use mout .= m1 instead.\n\n\n\n\n\n"
+    "text": "mequg(m1, mout)\n\nwarning: Deprecated\nUse mout .= m1 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -821,7 +821,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.mind",
     "category": "function",
-    "text": "mind(args...)\n\nDeprecated: Use min(args...) instead.\n\n\n\n\n\n"
+    "text": "mind(args...)\n\nwarning: Deprecated\nUse min(args...) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -829,7 +829,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.mini",
     "category": "function",
-    "text": "mini(args...)\n\nDeprecated: Use min(args...) instead.\n\n\n\n\n\n"
+    "text": "mini(args...)\n\nwarning: Deprecated\nUse min(args...) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -837,7 +837,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.mtxm",
     "category": "function",
-    "text": "mtxm(m1, m2)\n\nDeprecated: Use m1\' * m2 instead.\n\n\n\n\n\n"
+    "text": "mtxm(m1, m2)\n\nwarning: Deprecated\nUse m1\' * m2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -845,7 +845,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.mtxmg",
     "category": "function",
-    "text": "mtxmg(m1, m2)\n\nDeprecated: Use m1\' * m2 instead.\n\n\n\n\n\n"
+    "text": "mtxmg(m1, m2)\n\nwarning: Deprecated\nUse m1\' * m2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -853,7 +853,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.mtxv",
     "category": "function",
-    "text": "mtxv(m1,v2)\n\nDeprecated: Use m1\' * v2 instead.\n\n\n\n\n\n"
+    "text": "mtxv(m1,v2)\n\nwarning: Deprecated\nUse m1\' * v2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -861,7 +861,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.mtxvg",
     "category": "function",
-    "text": "mtxvg(m1,v2)\n\nDeprecated: Use m1\' * v2 instead.\n\n\n\n\n\n"
+    "text": "mtxvg(m1,v2)\n\nwarning: Deprecated\nUse m1\' * v2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -869,7 +869,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.mxm",
     "category": "function",
-    "text": "mxm(m1, m2)\n\nDeprecated: Use m1 * m2 instead.\n\n\n\n\n\n"
+    "text": "mxm(m1, m2)\n\nwarning: Deprecated\nUse m1 * m2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -877,7 +877,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.mxmg",
     "category": "function",
-    "text": "mxmg(m1, m2)\n\nDeprecated: Use m1 * m2 instead.\n\n\n\n\n\n"
+    "text": "mxmg(m1, m2)\n\nwarning: Deprecated\nUse m1 * m2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -885,7 +885,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.mxmt",
     "category": "function",
-    "text": "mxmt(m1, m2)\n\nDeprecated: Use m1 * m2\' instead.\n\n\n\n\n\n"
+    "text": "mxmt(m1, m2)\n\nwarning: Deprecated\nUse m1 * m2\' instead.\n\n\n\n\n\n"
 },
 
 {
@@ -893,7 +893,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.mxmtg",
     "category": "function",
-    "text": "mxmtg(m1, m2)\n\nDeprecated: Use m1 * m2\' instead.\n\n\n\n\n\n"
+    "text": "mxmtg(m1, m2)\n\nwarning: Deprecated\nUse m1 * m2\' instead.\n\n\n\n\n\n"
 },
 
 {
@@ -901,7 +901,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.mxv",
     "category": "function",
-    "text": "mxv(m1,v2)\n\nDeprecated: Use m1 * v2 instead.\n\n\n\n\n\n"
+    "text": "mxv(m1,v2)\n\nwarning: Deprecated\nUse m1 * v2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -909,7 +909,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.mxvg",
     "category": "function",
-    "text": "mxvg(m1,v2)\n\nDeprecated: Use m1 * v2 instead.\n\n\n\n\n\n"
+    "text": "mxvg(m1,v2)\n\nwarning: Deprecated\nUse m1 * v2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1221,7 +1221,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.trace",
     "category": "function",
-    "text": "trace(matrix)\n\nDeprecated: Use LinearAlgebra.tr(matrix) instead.\n\n\n\n\n\n"
+    "text": "trace(matrix)\n\nwarning: Deprecated\nUse LinearAlgebra.tr(matrix) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1237,7 +1237,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.twopi",
     "category": "function",
-    "text": "twopi()\n\nDeprecated: Use 2π instead.\n\n\n\n\n\n"
+    "text": "twopi()\n\nwarning: Deprecated\nUse 2π instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1261,7 +1261,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.ucase",
     "category": "function",
-    "text": "ucase(in)\n\nDeprecated: Use uppercase(in) instead.\n\n\n\n\n\n"
+    "text": "ucase(in)\n\nwarning: Deprecated\nUse uppercase(in) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1269,7 +1269,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.ucrss",
     "category": "function",
-    "text": "ucrss(v1, v2)\n\nDeprecated: Use LinearAlgebra.normalize(LinearAlgebra.cross(v1, v2)) instead.\n\n\n\n\n\n"
+    "text": "ucrss(v1, v2)\n\nwarning: Deprecated\nUse LinearAlgebra.normalize(LinearAlgebra.cross(v1, v2)) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1301,7 +1301,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.unorm",
     "category": "function",
-    "text": "unorm(v1)\n\nDeprecated: Use (LinearAlgebra.normalize(v1), LinearAlgebra.norm(v1)) instead.\n\n\n\n\n\n"
+    "text": "unorm(v1)\n\nwarning: Deprecated\nUse (LinearAlgebra.normalize(v1), LinearAlgebra.norm(v1)) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1309,7 +1309,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.unormg",
     "category": "function",
-    "text": "unormg(v1)\n\nDeprecated: Use (LinearAlgebra.normalize(v1), LinearAlgebra.norm(v1)) instead.\n\n\n\n\n\n"
+    "text": "unormg(v1)\n\nwarning: Deprecated\nUse (LinearAlgebra.normalize(v1), LinearAlgebra.norm(v1)) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1325,7 +1325,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vadd",
     "category": "function",
-    "text": "vadd(v1, v2)\n\nDeprecated: Use v1 .+ v2 instead.\n\n\n\n\n\n"
+    "text": "vadd(v1, v2)\n\nwarning: Deprecated\nUse v1 .+ v2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1333,7 +1333,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vaddg",
     "category": "function",
-    "text": "vaddg(v1, v2)\n\nDeprecated: Use v1 .+ v2 instead.\n\n\n\n\n\n"
+    "text": "vaddg(v1, v2)\n\nwarning: Deprecated\nUse v1 .+ v2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1349,7 +1349,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vcrss",
     "category": "function",
-    "text": "vcrss(v1, v2)\n\nDeprecated: Use LinearAlgebra.cross(v1, v2) instead.\n\n\n\n\n\n"
+    "text": "vcrss(v1, v2)\n\nwarning: Deprecated\nUse LinearAlgebra.cross(v1, v2) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1357,7 +1357,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vdist",
     "category": "function",
-    "text": "vdist(v1, v2)\n\nDeprecated: Use LinearAlgebra.norm(v1 .- v2) instead.\n\n\n\n\n\n"
+    "text": "vdist(v1, v2)\n\nwarning: Deprecated\nUse LinearAlgebra.norm(v1 .- v2) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1365,7 +1365,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vdistg",
     "category": "function",
-    "text": "vdistg(v1, v2)\n\nDeprecated: Use LinearAlgebra.norm(v1 .- v2) instead.\n\n\n\n\n\n"
+    "text": "vdistg(v1, v2)\n\nwarning: Deprecated\nUse LinearAlgebra.norm(v1 .- v2) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1373,7 +1373,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vdot",
     "category": "function",
-    "text": "vdot(v1, v2)\n\nDeprecated: Use LinearAlgebra.dot(v1, v2) instead.\n\n\n\n\n\n"
+    "text": "vdot(v1, v2)\n\nwarning: Deprecated\nUse LinearAlgebra.dot(v1, v2) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1381,7 +1381,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vdotg",
     "category": "function",
-    "text": "vdotg(v1, v2)\n\nDeprecated: Use LinearAlgebra.dot(v1, v2) instead.\n\n\n\n\n\n"
+    "text": "vdotg(v1, v2)\n\nwarning: Deprecated\nUse LinearAlgebra.dot(v1, v2) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1389,7 +1389,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vequ",
     "category": "function",
-    "text": "vequ(v1, v2)\n\nDeprecated: Use v1 .= v2 instead.\n\n\n\n\n\n"
+    "text": "vequ(v1, v2)\n\nwarning: Deprecated\nUse v1 .= v2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1397,7 +1397,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vequg",
     "category": "function",
-    "text": "vequg(v1, v2)\n\nDeprecated: Use v1 .= v2 instead.\n\n\n\n\n\n"
+    "text": "vequg(v1, v2)\n\nwarning: Deprecated\nUse v1 .= v2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1405,7 +1405,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vhat",
     "category": "function",
-    "text": "vhat(v1)\n\nDeprecated: Use LinearAlgebra.normalize(v1) instead.\n\n\n\n\n\n"
+    "text": "vhat(v1)\n\nwarning: Deprecated\nUse LinearAlgebra.normalize(v1) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1413,7 +1413,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vhatg",
     "category": "function",
-    "text": "vhatg(v1)\n\nDeprecated: Use LinearAlgebra.normalize(v1) instead.\n\n\n\n\n\n"
+    "text": "vhatg(v1)\n\nwarning: Deprecated\nUse LinearAlgebra.normalize(v1) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1421,7 +1421,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vlcom",
     "category": "function",
-    "text": "vlcom(a, v1, b, v2)\n\nDeprecated: Use a .* v1 .+ b .* v2 instead.\n\n\n\n\n\n"
+    "text": "vlcom(a, v1, b, v2)\n\nwarning: Deprecated\nUse a .* v1 .+ b .* v2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1429,7 +1429,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vlcom3",
     "category": "function",
-    "text": "vlcom3(a, v1, b, v2, c, v3)\n\nDeprecated: Use a .* v1 .+ b .* v2 .+ c .* v3 instead.\n\n\n\n\n\n"
+    "text": "vlcom3(a, v1, b, v2, c, v3)\n\nwarning: Deprecated\nUse a .* v1 .+ b .* v2 .+ c .* v3 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1437,7 +1437,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vlcomg",
     "category": "function",
-    "text": "vlcomg(a, v1, b, v2)\n\nDeprecated: Use a .* v1 .+ b .* v2 instead.\n\n\n\n\n\n"
+    "text": "vlcomg(a, v1, b, v2)\n\nwarning: Deprecated\nUse a .* v1 .+ b .* v2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1445,7 +1445,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vminug",
     "category": "function",
-    "text": "vminug(vin)\n\nDeprecated: Use -vin instead.\n\n\n\n\n\n"
+    "text": "vminug(vin)\n\nwarning: Deprecated\nUse -vin instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1453,7 +1453,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vminus",
     "category": "function",
-    "text": "vminus(vin)\n\nDeprecated: Use -vin instead.\n\n\n\n\n\n"
+    "text": "vminus(vin)\n\nwarning: Deprecated\nUse -vin instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1461,7 +1461,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vnorm",
     "category": "function",
-    "text": "vnorm(v1)\n\nDeprecated: Use LinearAlgebra.norm(v1) instead.\n\n\n\n\n\n"
+    "text": "vnorm(v1)\n\nwarning: Deprecated\nUse LinearAlgebra.norm(v1) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1469,7 +1469,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vnormg",
     "category": "function",
-    "text": "vnormg(v1, v2)\n\nDeprecated: Use LinearAlgebra.norm(v1) instead.\n\n\n\n\n\n"
+    "text": "vnormg(v1, v2)\n\nwarning: Deprecated\nUse LinearAlgebra.norm(v1) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1477,7 +1477,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vpack",
     "category": "function",
-    "text": "vpack(x, y, z)\n\nDeprecated: Use [x, y, z] instead.\n\n\n\n\n\n"
+    "text": "vpack(x, y, z)\n\nwarning: Deprecated\nUse [x, y, z] instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1541,7 +1541,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vscl",
     "category": "function",
-    "text": "vscl(s, v1)\n\nDeprecated: Use s .* v1 instead.\n\n\n\n\n\n"
+    "text": "vscl(s, v1)\n\nwarning: Deprecated\nUse s .* v1 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1549,7 +1549,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vsclg",
     "category": "function",
-    "text": "vsclg(s, v1)\n\nDeprecated: Use s .* v1 instead.\n\n\n\n\n\n"
+    "text": "vsclg(s, v1)\n\nwarning: Deprecated\nUse s .* v1 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1573,7 +1573,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vsub",
     "category": "function",
-    "text": "vsub(v1, v2)\n\nDeprecated: Use v1 .- v2 instead.\n\n\n\n\n\n"
+    "text": "vsub(v1, v2)\n\nwarning: Deprecated\nUse v1 .- v2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1581,7 +1581,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vsubg",
     "category": "function",
-    "text": "vsubg(v1, v2)\n\nDeprecated: Use v1 .- v2 instead.\n\n\n\n\n\n"
+    "text": "vsubg(v1, v2)\n\nwarning: Deprecated\nUse v1 .- v2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1589,7 +1589,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vtmv",
     "category": "function",
-    "text": "vtmv(v1, matrix, v2)\n\nDeprecated: Use v1\' * matrix * v2 instead.\n\n\n\n\n\n"
+    "text": "vtmv(v1, matrix, v2)\n\nwarning: Deprecated\nUse v1\' * matrix * v2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1597,7 +1597,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vtmvg",
     "category": "function",
-    "text": "vtmvg(v1, matrix, v2)\n\nDeprecated: Use v1\' * matrix * v2 instead.\n\n\n\n\n\n"
+    "text": "vtmvg(v1, matrix, v2)\n\nwarning: Deprecated\nUse v1\' * matrix * v2 instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1605,7 +1605,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vupack",
     "category": "function",
-    "text": "vupack(v)\n\nDeprecated: Use x, y, z = v instead.\n\n\n\n\n\n"
+    "text": "vupack(v)\n\nwarning: Deprecated\nUse x, y, z = v instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1613,7 +1613,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vzero",
     "category": "function",
-    "text": "vzero(v1)\n\nDeprecated: Use iszero(v1) instead.\n\n\n\n\n\n"
+    "text": "vzero(v1)\n\nwarning: Deprecated\nUse iszero(v1) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1621,7 +1621,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.vzerog",
     "category": "function",
-    "text": "vzerog(v1, v2)\n\nDeprecated: Use iszero(v1) instead.\n\n\n\n\n\n"
+    "text": "vzerog(v1, v2)\n\nwarning: Deprecated\nUse iszero(v1) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1789,7 +1789,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.xpose",
     "category": "function",
-    "text": "xpose(matrix)\n\nDeprecated: Use transpose(matrix) instead.\n\n\n\n\n\n"
+    "text": "xpose(matrix)\n\nwarning: Deprecated\nUse transpose(matrix) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1797,7 +1797,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.xpose6",
     "category": "function",
-    "text": "xpose6(matrix)\n\nDeprecated: Use transpose(matrix) instead.\n\n\n\n\n\n"
+    "text": "xpose6(matrix)\n\nwarning: Deprecated\nUse transpose(matrix) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1805,7 +1805,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.xposeg",
     "category": "function",
-    "text": "xposeg(matrix)\n\nDeprecated: Use transpose(matrix) instead.\n\n\n\n\n\n"
+    "text": "xposeg(matrix)\n\nwarning: Deprecated\nUse transpose(matrix) instead.\n\n\n\n\n\n"
 },
 
 {
