@@ -9,6 +9,8 @@ export
     spkpos,
     spkw13,
     str2et,
+    subpnt,
+    subslr,
     swpool,
     sxform
 
@@ -127,6 +129,88 @@ end
 function spd()
     ccall((:spd_c, libcspice), Cdouble, ())
 end
+
+
+
+
+
+"""
+    subpnt(method, target, et, fixref, obsrvr, abcorr)
+
+Compute the rectangular coordinates of the sub-observer point on 
+a target body at a specified epoch, optionally corrected for 
+light time and stellar aberration. 
+
+### Arguments ###
+
+- `method`: Computation method. 
+- `target`: Name of target body. 
+- `et`: Epoch in ephemeris seconds past J2000 TDB. 
+- `fixref`: Body-fixed, body-centered target body frame.  
+- `obsrvr`: Name of observing body. 
+- `abcorr`: Aberration correction.
+
+### Output ###
+
+- `spoint`: Sub-solar point on the target body. 
+- `trgepc`: Sub-solar point epoch. 
+- `srfvec`: Vector from observer to sub-solar point.
+
+Returns `cell` with its cardinality set to `card`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/subslr_c.html)
+"""
+function subpnt(method::AbstractString, target::AbstractString, et::Float64, fixref::AbstractString, obsrvr::AbstractString; abcorr::AbstractString="NONE")
+    spoint = Array{Cdouble}(undef, 3)
+    trgepc = Ref{Cdouble}(0)
+    srfvec = Array{Cdouble}(undef, 3)
+    ccall((:subpnt_c, libcspice), Cvoid, (Cstring, Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}, Ptr{Cdouble}), method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec) 
+    handleerror()
+    return spoint, trgepc[], srfvec
+end
+
+
+"""
+    subslr(method, target, et, fixref, obsrvr, abcorr)
+
+Compute the rectangular coordinates of the sub-solar point on 
+a target body at a specified epoch, optionally corrected for 
+light time and stellar aberration.
+
+### Arguments ###
+
+- `method`: Computation method. 
+- `target`: Name of target body. 
+- `et`: Epoch in ephemeris seconds past J2000 TDB. 
+- `fixref`: Body-fixed, body-centered target body frame. 
+- `obsrvr`: Name of observing body. 
+- `abcorr`: Aberration correction. 
+
+### Output ###
+
+- `spoint`: Sub-solar point on the target body. 
+- `trgepc`: Sub-solar point epoch. 
+- `srfvec`: Vector from observer to sub-solar point.
+
+Returns `cell` with its cardinality set to `card`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/subslr_c.html)
+"""
+function subslr(method::AbstractString, target::AbstractString, et::Float64, fixref::AbstractString, obsrvr::AbstractString; abcorr::AbstractString="NONE")
+    spoint = Array{Cdouble}(undef, 3)
+    trgepc = Ref{Cdouble}(0)
+    srfvec = Array{Cdouble}(undef, 3)
+    ccall((:subslr_c, libcspice), Cvoid, (Cstring, Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}, Ptr{Cdouble}), method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec) 
+    handleerror()
+    return spoint, trgepc[], srfvec
+end
+
+
+
 
 """
     swpool(agent, names)

@@ -1,7 +1,9 @@
 export 
     rav2xf,
-    rotate,
-    recrad
+    reclat,
+    recpgr,
+    recrad,
+    rotate
 
 """
     rav2xf(rot, av)
@@ -29,6 +31,74 @@ function rav2xf(rot, av)
           rot, av, xform)
     xform
 end
+
+
+
+
+"""
+    reclat(rectan)
+
+    Convert from rectangular coordinates to latitudinal coordinates.
+
+### Arguments ###
+
+- `rectan`: Rectangular coordinates of a point.
+
+### Output ###
+
+- `rad`: Distance of the point from the origin
+- `lon`: Planetographic longitude of the point (radians).
+- `lat`: Planetographic latitude of the point (radians).
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/reclat_c.html)
+"""
+function reclat(rectan)
+    lon = Ref{Cdouble}()
+    lat = Ref{Cdouble}()
+    rad = Ref{Cdouble}()
+    ccall((:reclat_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), rectan, rad, lon, lat)
+    return rad[], lon[], lat[]
+end
+
+
+
+
+
+
+"""
+    recpgr(body, rectan, re, f)
+
+    Convert rectangular coordinates to planetographic coordinates.
+
+### Arguments ###
+
+- `body`: Body with which coordinate system is associated
+- `rectan`: Rectangular coordinates of a point
+- `re`: Equatorial radius of the reference spheroid
+- `f`: flattening coefficient
+
+### Output ###
+
+- `lon`: Planetographic longitude of the point (radians).
+- `lat`: Planetographic latitude of the point (radians).
+- `alt`: Altitude of the point above reference spheroid.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/recpgr_c.html)
+"""
+function recpgr(body::AbstractString, rectan, re::Float64, f::Float64)
+    lon = Ref{Cdouble}()
+    lat = Ref{Cdouble}()
+    alt = Ref{Cdouble}()
+    ccall((:recpgr_c, libcspice), Cvoid, (Cstring, Ptr{SpiceDouble}, Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), body, rectan, re, f, lon, lat, alt)
+    handleerror()
+    return lon[], lat[], alt[]
+end
+
+
 
 """
     rotate(angle, iaxis)
