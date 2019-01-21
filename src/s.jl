@@ -160,15 +160,17 @@ Returns `cell` with its cardinality set to `card`.
 
 ### References ###
 
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/subslr_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/subpnt_c.html)
 """
-function subpnt(method::AbstractString, target::AbstractString, et::Float64, fixref::AbstractString, obsrvr::AbstractString; abcorr::AbstractString="NONE")
-    spoint = Array{Cdouble}(undef, 3)
-    trgepc = Ref{Cdouble}(0)
-    srfvec = Array{Cdouble}(undef, 3)
-    ccall((:subpnt_c, libcspice), Cvoid, (Cstring, Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}, Ptr{Cdouble}), method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec) 
+function subpnt(method, target, et, fixref, obsrvr; abcorr="NONE")
+    spoint = Array{SpiceDouble}(undef, 3)
+    trgepc = Ref{SpiceDouble}(0)
+    srfvec = Array{SpiceDouble}(undef, 3)
+    ccall((:subpnt_c, libcspice), Cvoid,
+          (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}, Ptr{SpiceDouble}),
+          method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec) 
     handleerror()
-    return spoint, trgepc[], srfvec
+    spoint, trgepc[], srfvec
 end
 
 
