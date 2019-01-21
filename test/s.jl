@@ -33,7 +33,7 @@ using LinearAlgebra: I
                 path(CORE, :lsk),
                 path(CORE, :pck),
                 path(CORE, :spk),
-            ) 
+            )
             et = str2et("2008 aug 11 00:00:00")
             re, _, rp = bodvrd("MARS", "RADII", 3)
             f = (re - rp) / re

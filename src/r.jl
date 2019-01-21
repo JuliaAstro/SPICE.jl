@@ -32,45 +32,41 @@ function rav2xf(rot, av)
     xform
 end
 
-
-
-
 """
     reclat(rectan)
 
-    Convert from rectangular coordinates to latitudinal coordinates.
+Convert from rectangular coordinates to latitudinal coordinates.
 
 ### Arguments ###
 
-- `rectan`: Rectangular coordinates of a point.
+- `rectan`: Rectangular coordinates of a point as an iterable with three elements.
 
 ### Output ###
 
+Returns a tuple consisting of:
+
 - `rad`: Distance of the point from the origin
-- `lon`: Planetographic longitude of the point (radians).
-- `lat`: Planetographic latitude of the point (radians).
+- `lon`: Planetographic longitude of the point (radians)
+- `lat`: Planetographic latitude of the point (radians)
 
 ### References ###
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/reclat_c.html)
 """
 function reclat(rectan)
-    lon = Ref{Cdouble}()
-    lat = Ref{Cdouble}()
-    rad = Ref{Cdouble}()
-    ccall((:reclat_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), rectan, rad, lon, lat)
-    return rad[], lon[], lat[]
+    lon = Ref{SpiceDouble}()
+    lat = Ref{SpiceDouble}()
+    rad = Ref{SpiceDouble}()
+    ccall((:reclat_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          collect(rectan), rad, lon, lat)
+    rad[], lon[], lat[]
 end
-
-
-
-
-
 
 """
     recpgr(body, rectan, re, f)
 
-    Convert rectangular coordinates to planetographic coordinates.
+Convert rectangular coordinates to planetographic coordinates.
 
 ### Arguments ###
 
@@ -89,16 +85,16 @@ end
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/recpgr_c.html)
 """
-function recpgr(body::AbstractString, rectan, re::Float64, f::Float64)
-    lon = Ref{Cdouble}()
-    lat = Ref{Cdouble}()
-    alt = Ref{Cdouble}()
-    ccall((:recpgr_c, libcspice), Cvoid, (Cstring, Ptr{SpiceDouble}, Cdouble, Cdouble, Ref{Cdouble}, Ref{Cdouble}, Ref{Cdouble}), body, rectan, re, f, lon, lat, alt)
+function recpgr(body, rectan, re, f)
+    lon = Ref{SpiceDouble}()
+    lat = Ref{SpiceDouble}()
+    alt = Ref{SpiceDouble}()
+    ccall((:recpgr_c, libcspice), Cvoid,
+          (Cstring, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          body, rectan, re, f, lon, lat, alt)
     handleerror()
-    return lon[], lat[], alt[]
+    lon[], lat[], alt[]
 end
-
-
 
 """
     rotate(angle, iaxis)
@@ -152,6 +148,8 @@ function recrad(rectan)
     range = Ref{SpiceDouble}()
     ra = Ref{SpiceDouble}()
     dec = Ref{SpiceDouble}()
-    ccall((:recrad_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}), rectan, range, ra, dec)
+    ccall((:recrad_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          rectan, range, ra, dec)
     range[], ra[], dec[]
 end
