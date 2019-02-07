@@ -129,7 +129,7 @@ using LinearAlgebra: I, norm
                 odist = norm(srfvec)
                 @test odist ≈ expected[2]
                 spglon, spglat, spgalt = recpgr("mars", spoint, re, f)
-                @test spgalt ≈ expected[3]
+                @test spgalt ≈ expected[3] atol=sqrt(eps())
                 @test rad2deg(spglon) ≈ expected[4]
                 @test rad2deg(spglat) ≈ expected[6]
                 spcrad, spclon, spclat = reclat(spoint)
