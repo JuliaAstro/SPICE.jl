@@ -96,7 +96,8 @@ end
 """
     edterm(trmtyp, source, target, et, fixref, obsrvr, abcorr)
 
-Construct a rotation matrix from a set of Euler angles.
+Compute a set of points on the umbral or penumbral terminator of a specified
+target body, where the target shape is modeled as an ellipsoid.
 
 ### Arguments ###
 
