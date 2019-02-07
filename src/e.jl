@@ -1,7 +1,8 @@
 export 
     et2utc,
     etcal,
-    eul2m
+    eul2m,
+    edterm
 
 """
     et2utc(et, format, prec)
@@ -90,4 +91,41 @@ function eul2m(angle3, angle2, angle1, axis3, axis2, axis1)
           angle3, angle2, angle1, axis3, axis2, axis1, r)
     handleerror()
     permutedims(r)
+end
+
+"""
+    edterm(trmtyp, source, target, et, fixref, obsrvr, abcorr)
+
+Construct a rotation matrix from a set of Euler angles.
+
+### Arguments ###
+
+- `trmtyp`: Terminator type.
+- `source`: Light source.
+- `target`: Target body.
+- `et`: Observation epoch.
+- `fixref`: Body-fixed frame associated with target.
+- `obsrvr`: Observer.
+- `npts`: Number of points in terminator set.
+- `abcorr`: Aberration correction.
+
+### Output ###
+
+- `trgepc`: Epoch associated with target center.
+- `obspos`: Position of observer in body-fixed frame.
+- `trmpts`: Terminator point set.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/edterm_c.html)
+"""
+function edterm(trmtyp, source, target, et, fixref, obsrvr, npts; abcorr="NONE")
+    trgepc = Ref{SpiceDouble}(0)
+    obspos = Array{SpiceDouble}(undef, 3)
+    trmpts = Array{SpiceDouble}(undef, 3, npts)
+    ccall((:edterm_c, libcspice), Cvoid,
+          (Cstring, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, SpiceInt, Ref{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          trmtyp, source, target, et, fixref, abcorr, obsrvr, npts, trgepc, obspos, trmpts)
+    handleerror()
+    trgepc[], obspos, trmpts 
 end
