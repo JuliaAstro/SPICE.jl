@@ -1,7 +1,9 @@
 export 
     rav2xf,
-    rotate,
-    recrad
+    reclat,
+    recpgr,
+    recrad,
+    rotate
 
 """
     rav2xf(rot, av)
@@ -28,6 +30,70 @@ function rav2xf(rot, av)
           (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
           rot, av, xform)
     xform
+end
+
+"""
+    reclat(rectan)
+
+Convert from rectangular coordinates to latitudinal coordinates.
+
+### Arguments ###
+
+- `rectan`: Rectangular coordinates of a point as an iterable with three elements.
+
+### Output ###
+
+Returns a tuple consisting of:
+
+- `rad`: Distance of the point from the origin
+- `lon`: Planetographic longitude of the point (radians)
+- `lat`: Planetographic latitude of the point (radians)
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/reclat_c.html)
+"""
+function reclat(rectan)
+    lon = Ref{SpiceDouble}()
+    lat = Ref{SpiceDouble}()
+    rad = Ref{SpiceDouble}()
+    ccall((:reclat_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          collect(rectan), rad, lon, lat)
+    rad[], lon[], lat[]
+end
+
+"""
+    recpgr(body, rectan, re, f)
+
+Convert rectangular coordinates to planetographic coordinates.
+
+### Arguments ###
+
+- `body`: Body with which coordinate system is associated
+- `rectan`: Rectangular coordinates of a point
+- `re`: Equatorial radius of the reference spheroid
+- `f`: flattening coefficient
+
+### Output ###
+
+- `lon`: Planetographic longitude of the point (radians).
+- `lat`: Planetographic latitude of the point (radians).
+- `alt`: Altitude of the point above reference spheroid.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/recpgr_c.html)
+"""
+function recpgr(body, rectan, re, f)
+    lon = Ref{SpiceDouble}()
+    lat = Ref{SpiceDouble}()
+    alt = Ref{SpiceDouble}()
+    ccall((:recpgr_c, libcspice), Cvoid,
+          (Cstring, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          body, rectan, re, f, lon, lat, alt)
+    handleerror()
+    lon[], lat[], alt[]
 end
 
 """
@@ -82,6 +148,8 @@ function recrad(rectan)
     range = Ref{SpiceDouble}()
     ra = Ref{SpiceDouble}()
     dec = Ref{SpiceDouble}()
-    ccall((:recrad_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}), rectan, range, ra, dec)
+    ccall((:recrad_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          rectan, range, ra, dec)
     range[], ra[], dec[]
 end
