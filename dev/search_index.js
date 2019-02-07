@@ -473,6 +473,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.edterm-NTuple{7,Any}",
+    "page": "API",
+    "title": "SPICE.edterm",
+    "category": "method",
+    "text": "edterm(trmtyp, source, target, et, fixref, obsrvr, abcorr)\n\nCompute a set of points on the umbral or penumbral terminator of a specified target body, where the target shape is modeled as an ellipsoid.\n\nArguments\n\ntrmtyp: Terminator type.\nsource: Light source.\ntarget: Target body.\net: Observation epoch.\nfixref: Body-fixed frame associated with target.\nobsrvr: Observer.\nnpts: Number of points in terminator set.\nabcorr: Aberration correction.\n\nOutput\n\ntrgepc: Epoch associated with target center.\nobspos: Position of observer in body-fixed frame.\ntrmpts: Terminator point set.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.et2utc-Tuple{Any,Any,Any}",
     "page": "API",
     "title": "SPICE.et2utc",
@@ -526,6 +534,22 @@ var documenterSearchIndex = {"docs": [
     "title": "SPICE.hx2dp",
     "category": "method",
     "text": "hx2dp(str)\n\nConvert a string representing a double precision number in a base 16 \"scientific notation\" into its equivalent double precision number.\n\nArguments\n\nstr: Hex form string to convert to double precision\n\nOutput\n\ndp: Double precision value to be returned\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.illumg-NTuple{7,Any}",
+    "page": "API",
+    "title": "SPICE.illumg",
+    "category": "method",
+    "text": "illumg(method, target, ilusrc, et, fixref, obsrvr, spoint, abcorr)\n\nFind the illumination angles (phase, incidence, and emission) at a specified surface point of a target body. \n\nThe surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files. \n\nThe illumination source is a specified ephemeris object. \n\nArguments\n\nmethod: Computation method. \ntarget: Name of target body. \nilusrc: Name of illumination source.\net: Epoch in ephemeris seconds past J2000 TDB. \nfixref: Body-fixed, body-centered target body frame.  \nobsrvr: Name of observing body. \nspoint: Body-fixed coordinates of a target surface point.\nabcorr: Aberration correction.\n\nOutput\n\ntrgepc: Sub-solar point epoch. \nsrfvec: Vector from observer to sub-solar point.\nphase: Phase angle at the surface point. \nincdnc: Solar incidence angle at the surface point. \nemissn: Emission angle at the surface point. \n\nReferences\n\n[NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/illumgc.html\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ilumin-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.ilumin",
+    "category": "method",
+    "text": "ilumin(method, target, et, fixref, obsrvr, spoint, abcorr)\n\nFind the illumination angles (phase, solar incidence, and emission) at a specified surface point of a target body.\n\nArguments\n\nmethod: Computation method. \ntarget: Name of target body. \net: Epoch in ephemeris seconds past J2000 TDB. \nfixref: Body-fixed, body-centered target body frame.  \nobsrvr: Name of observing body. \nspoint: Body-fixed coordinates of a target surface point.\nabcorr: Aberration correction.\n\nOutput\n\ntrgepc: Sub-solar point epoch. \nsrfvec: Vector from observer to sub-solar point.\nphase: Phase angle at the surface point. \nincdnc: Solar incidence angle at the surface point. \nemissn: Emission angle at the surface point. \n\nReferences\n\n[NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/iluminc.html\n\n\n\n\n\n"
 },
 
 {
@@ -1089,6 +1113,22 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.reclat-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.reclat",
+    "category": "method",
+    "text": "reclat(rectan)\n\nConvert from rectangular coordinates to latitudinal coordinates.\n\nArguments\n\nrectan: Rectangular coordinates of a point as an iterable with three elements.\n\nOutput\n\nReturns a tuple consisting of:\n\nrad: Distance of the point from the origin\nlon: Planetographic longitude of the point (radians)\nlat: Planetographic latitude of the point (radians)\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.recpgr-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.recpgr",
+    "category": "method",
+    "text": "recpgr(body, rectan, re, f)\n\nConvert rectangular coordinates to planetographic coordinates.\n\nArguments\n\nbody: Body with which coordinate system is associated\nrectan: Rectangular coordinates of a point\nre: Equatorial radius of the reference spheroid\nf: flattening coefficient\n\nOutput\n\nlon: Planetographic longitude of the point (radians).\nlat: Planetographic latitude of the point (radians).\nalt: Altitude of the point above reference spheroid.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.recrad-Tuple{Any}",
     "page": "API",
     "title": "SPICE.recrad",
@@ -1142,6 +1182,22 @@ var documenterSearchIndex = {"docs": [
     "title": "SPICE.spkpos",
     "category": "method",
     "text": "Returns the state of a target body relative to an observing body.\n\nNAIF documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.subpnt-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.subpnt",
+    "category": "method",
+    "text": "subpnt(method, target, et, fixref, obsrvr, abcorr)\n\nCompute the rectangular coordinates of the sub-observer point on  a target body at a specified epoch, optionally corrected for  light time and stellar aberration. \n\nArguments\n\nmethod: Computation method. \ntarget: Name of target body. \net: Epoch in ephemeris seconds past J2000 TDB. \nfixref: Body-fixed, body-centered target body frame.  \nobsrvr: Name of observing body. \nabcorr: Aberration correction.\n\nOutput\n\nspoint: Sub-solar point on the target body. \ntrgepc: Sub-solar point epoch. \nsrfvec: Vector from observer to sub-solar point.\n\nReturns cell with its cardinality set to card.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.subslr-Tuple{AbstractString,AbstractString,Float64,AbstractString,AbstractString}",
+    "page": "API",
+    "title": "SPICE.subslr",
+    "category": "method",
+    "text": "subslr(method, target, et, fixref, obsrvr, abcorr)\n\nCompute the rectangular coordinates of the sub-solar point on  a target body at a specified epoch, optionally corrected for  light time and stellar aberration.\n\nArguments\n\nmethod: Computation method. \ntarget: Name of target body. \net: Epoch in ephemeris seconds past J2000 TDB. \nfixref: Body-fixed, body-centered target body frame. \nobsrvr: Name of observing body. \nabcorr: Aberration correction. \n\nOutput\n\nspoint: Sub-solar point on the target body. \ntrgepc: Sub-solar point epoch. \nsrfvec: Vector from observer to sub-solar point.\n\nReturns cell with its cardinality set to card.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
