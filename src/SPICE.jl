@@ -57,6 +57,33 @@ function chararray(strings)
     out, m, n
 end
 
+function array_to_cmatrix(array; n=0)
+    cmat = hcat(array...)
+    if n != 0
+        m = size(cmat, 1)
+        m != n && throw(ArgumentError("Expected each vector to have $n elements."))
+    end
+    cmat
+end
+
+function array_to_cmatrix(array::Vector{Vector{Int}}; n=0)
+    array = map(x->SpiceInt.(x), array)
+    cmat = hcat(array...)
+    if n != 0
+        m = size(cmat, 1)
+        m != n && throw(ArgumentError("Expected each vector to have $n elements."))
+    end
+    cmat
+end
+
+function cmatrix_to_array(matrix)
+    [matrix[:, i] for i in 1:size(matrix, 2)]
+end
+
+function cmatrix_to_array(matrix::Matrix{SpiceInt})
+    [Int.(matrix[:, i]) for i in 1:size(matrix, 2)]
+end
+
 include("cells.jl")
 include("types.jl")
 

@@ -1,6 +1,10 @@
 export
     gcpool,
-    gdpool
+    gdpool,
+    georec,
+    gfpa,
+    gfpa!,
+    gipool
 
 """
     gcpool(name; start=1, room=100, lenout=128)
@@ -64,4 +68,108 @@ function gdpool(name; start=1, room=100)
           name, start - 1, room, n, values, found)
     handleerror()
     Bool(found[]) ? values[1:n[]] : nothing
+end
+
+"""
+    georec(lon, lat, alt, re, f)
+
+Convert geodetic coordinates to rectangular coordinates.
+
+### Arguments ###
+
+- `lon`: Geodetic longitude of point (radians)
+- `lat`: Geodetic latitude  of point (radians)
+- `alt`: Altitude of point above the reference spheroid
+- `re`: Equatorial radius of the reference spheroid
+- `f`: Flattening coefficient
+
+### Output ###
+
+Returns the rectangular coordinates of point.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/georec_c.html)
+"""
+function georec(lon, lat, alt, re, f)
+    rectan = Array{SpiceDouble}(undef, 3)
+    ccall((:georec_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble,
+           Ptr{SpiceDouble}),
+          lon, lat, alt, re, f, rectan)
+    handleerror()
+    rectan
+end
+
+"""
+    gfpa!(cnfine, result, target, illmn, abcorr, obsrvr, relate, refval, adjust, step, nintvls)
+
+Determine time intervals for which a specified constraint on the phase angle between an
+illumination source, a target, and observer body centers is met.
+
+### Arguments ###
+
+- `cnfine`: Window to which the search is confined
+- `target`: Name of the target body
+- `illmn`: Name of the illuminating body
+- `abcorr`: Aberration correction flag
+- `obsrvr`: Name of the observing body
+- `relate`: Relational operator
+- `refval`: Reference value
+- `adjust`: Adjustment value for absolute extrema searches
+- `step`: Step size used for locating extrema and roots
+- `nintvls`: Workspace window interval count
+
+### Output ###
+
+Returns a tuple consisting of
+
+- `cnfine`: Window to which the search is confined.
+- `result`: Window containing results.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfpa_c.html)
+"""
+function gfpa!(cnfine, result, target, illmn, abcorr, obsrvr, relate, refval, adjust, step, nintvls)
+    ccall((:gfpa_c, libcspice), Cvoid,
+          (Cstring, Cstring, Cstring, Cstring, Cstring,
+           SpiceDouble, SpiceDouble, SpiceDouble,
+           SpiceInt,
+           Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+          target, illmn, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnfine.cell, result.cell)
+    handleerror()
+    cnfine, result
+end
+
+@deprecate gfpa gfpa!
+
+"""
+    gipool(name; start=1, room=100)
+
+Return the value of a kernel variable from the kernel pool.
+
+### Arguments ###
+
+- `name`: Name of the variable whose value is to be returned
+- `start`: Which component to start retrieving for name (default: 1)
+- `room`: The largest number of values to return (default: 100)
+
+### Output ###
+
+Returns an array of values if the variable exists or `nothing` if not.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gipool_c.html)
+"""
+function gipool(name; start=1, room=100)
+    n = Ref{SpiceInt}()
+    values = Array{SpiceInt}(undef, room)
+    found = Ref{SpiceBoolean}()
+    ccall((:gipool_c, libcspice), Cvoid,
+          (Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{SpiceInt}, Ref{SpiceBoolean}),
+          name, start - 1, room, n, values, found)
+    handleerror()
+    Bool(found[]) ? Int.(values[1:n[]]) : nothing
 end

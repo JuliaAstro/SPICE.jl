@@ -1,4 +1,4 @@
-using LinearAlgebra: I
+using LinearAlgebra: I, ⋅
 
 @testset "P" begin
     @testset "pckcov" begin
@@ -52,266 +52,307 @@ using LinearAlgebra: I
             kclear()
         end
     end
+    @testset "phaseq" begin
+        relate = ["=", "<", ">", "LOCMIN", "ABSMIN", "LOCMAX", "ABSMAX"]
+        expected = Dict(
+            "="=> [
+                0.575988450,
+                0.575988450,
+                0.575988450,
+                0.575988450,
+                0.575988450,
+                0.575988450,
+                0.575988450,
+                0.575988450,
+                0.575988450,
+                0.575988450,
+            ],
+            "<"=> [0.575988450, 0.575988450, 0.575988450, 0.575988450, 0.575988450, 0.468279091],
+            ">"=> [0.940714974, 0.575988450, 0.575988450, 0.575988450, 0.575988450, 0.575988450],
+            "LOCMIN"=> [0.086121423, 0.086121423, 0.079899769, 0.079899769],
+            "ABSMIN"=> [0.079899769, 0.079899769],
+            "LOCMAX"=> [3.055062862, 3.055062862, 3.074603891, 3.074603891],
+            "ABSMAX"=> [3.074603891, 3.074603891],
+        )
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
+            et0 = str2et("2006 DEC 01")
+            et1 = str2et("2007 JAN 31")
+            cnfine = SpiceDoubleCell(2)
+            wninsd!(cnfine, et0, et1)
+            result = SpiceDoubleCell(10000)
+            for relation in relate
+                gfpa!(cnfine, result, "Moon", "Sun", "LT+S", "Earth", relation, 0.57598845, 0.0, spd(), 5000)
+                count = wncard(result)
+                @test count > 0
+                if count > 0
+                    results = Float64[]
+                    for i in 1:count
+                        start, stop = wnfetd(result, i)
+                        start_phase = phaseq(start, "moon", "sun", "earth", "lt+s")
+                        stop_phase = phaseq(stop, "moon", "sun", "earth", "lt+s")
+                        push!(results, start_phase)
+                        push!(results, stop_phase)
+                    end
+                    exp = expected[relation]
+                    @testset for i in eachindex(results, exp)
+                        @test round(results[i], digits=9) ≈ exp[i] atol=1e-6
+                    end
+                end
+            end
+            start, stop = wnfetd(result, 1)
+            @test_throws SpiceError phaseq(start, "moon", "moon", "moon", "lt+s")
+        finally
+            kclear()
+        end
+    end
+    @testset "pi" begin
+        @test SPICE._pi() ≈ π
+    end
+    @testset "pjelpl" begin
+        cent = [1.0, 1.0, 1.0]
+        vec1 = [2.0, 0.0, 0.0]
+        vec2 = [0.0, 1.0, 1.0]
+        normal = [0.0, 0.0, 1.0]
+        plane = nvc2pl(normal, 0.0)
+        elin = cgv2el(cent, vec1, vec2)
+        ellipse = pjelpl(elin, plane)
+        expected_smajor = [2.0, 0.0, 0.0]
+        expected_sminor = [0.0, 1.0, 0.0]
+        expected_center = [1.0, 1.0, 0.0]
+        @test expected_center ≈ center(ellipse)
+        @test expected_smajor ≈ semi_major(ellipse)
+        @test expected_sminor ≈ semi_minor(ellipse)
+    end
+    @testset "pl2nvc" begin
+        normal = [-1.0, 5.0, -3.5]
+        point = [9.0, -0.65, -12.0]
+        plane = nvp2pl(normal, point)
+        normal, constant = pl2nvc(plane)
+        expected_normal = [-0.16169042, 0.80845208, -0.56591646]
+        @test constant ≈ 4.8102899
+        @test expected_normal ≈ normal
+    end
+    @testset "pl2nvp" begin
+        plane_norm = [2.44, -5.0 / 3.0, 11.0 / 9.0]
+        con = 3.141592654
+        plane = nvc2pl(plane_norm, con)
+        norm_vec, point = pl2nvp(plane)
+        expected_point = [0.74966576, -0.51206678, 0.37551564]
+        @test expected_point ≈ point
+    end
+    @testset "pl2psv" begin
+        normal = [-1.0, 5.0, -3.5]
+        point = [9.0, -0.65, -12.0]
+        plane = nvp2pl(normal, point)
+        point, span1, span2 = pl2psv(plane)
+        @test point ⋅ span1 ≈ 0 atol=sqrt(eps())
+        @test point ⋅ span2 ≈ 0 atol=sqrt(eps())
+        @test span1 ⋅ span2 ≈ 0 atol=sqrt(eps())
+    end
+    @testset "pltar" begin
+        vrtces = [[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
+        plates = [[1, 4, 3], [1, 2, 4], [1, 3, 2], [2, 3, 4]]
+        @test pltar(vrtces, plates) ≈ 2.3660254037844
+    end
+    @testset "pltexp" begin
+        iverts = [[sqrt(3.0) / 2.0, -0.5, 7.0], [0.0, 1.0, 7.0], [-sqrt(3.0) / 2.0, -0.5, 7.0]]
+        overts = pltexp(iverts, 1.0)
+        expected = [[1.732050807569, -1.0, 7.0], [0.0, 2.0, 7.0], [-1.732050807569, -1.0, 7.0]]
+        @test all(expected ≈ overts)
+    end
+    @testset "pltnp" begin
+        point = [2.0, 2.0, 2.0]
+        v1 = [1.0, 0.0, 0.0]
+        v2 = [0.0, 1.0, 0.0]
+        v3 = [0.0, 0.0, 1.0]
+        near, distance = pltnp(point, v1, v2, v3)
+        @test [1.0/3.0, 1.0/3.0, 1.0/3.0] ≈ near
+        @test round(distance, digits=7) ≈ 2.8867513
+        @test_throws ArgumentError pltnp(point[1:2], v1, v2, v3)
+        @test_throws ArgumentError pltnp(point, v1[1:2], v2, v3)
+        @test_throws ArgumentError pltnp(point, v1, v2[1:2], v3)
+        @test_throws ArgumentError pltnp(point, v1, v2, v3[1:2])
+    end
+    @testset "pltnrm" begin
+        v1 = [sqrt(3.0) / 2.0, -0.5, 0.0]
+        v2 = [0.0, 1.0, 0.0]
+        v3 = [-sqrt(3.0) / 2.0, -0.5, 0.0]
+        @test [0.0, 0.0, 2.59807621135] ≈ pltnrm(v1, v2, v3)
+        @test_throws ArgumentError pltnrm(v1[1:2], v2, v3)
+        @test_throws ArgumentError pltnrm(v1, v2[1:2], v3)
+        @test_throws ArgumentError pltnrm(v1, v2, v3[1:2])
+    end
+    @testset "pltvol" begin
+        vrtces = [[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
+        plates = [[1, 4, 3], [1, 2, 4], [1, 3, 2], [2, 3, 4]]
+        @test pltvol(vrtces, plates) ≈ 1.0 / 6.0
+        vrtces1 = [[0.0, 0.0], [1.0, 0.0], [0.0, 1.0], [0.0, 0.0]]
+        plates1 = [[1, 4], [1, 2], [1, 3], [2, 3]]
+        @test_throws ArgumentError pltvol(vrtces1, plates)
+        @test_throws ArgumentError pltvol(vrtces, plates1)
+    end
+    @testset "polyds" begin
+        result = polyds([1.0, 3.0, 0.5, 1.0, 0.5, -1.0, 1.0], 3, 1)
+        @test result ≈ [6.0, 10.0, 23.0, 78.0]
+    end
+    @testset "pos" begin
+        string = "AN ANT AND AN ELEPHANT        "
+        @test SPICE._pos(string, "AN", 1) == 1
+        @test SPICE._pos(string, "AN", 3) == 4
+        @test SPICE._pos(string, "AN", 6) == 8
+        @test SPICE._pos(string, "AN", 10) == 12
+        @test SPICE._pos(string, "AN", 14) == 20
+        @test SPICE._pos(string, "AN", 22) == -1
+        @test SPICE._pos(string, "AN", -6) == 1
+        @test SPICE._pos(string, "AN", -1) == 1
+        @test SPICE._pos(string, "AN", 31) == -1
+        @test SPICE._pos(string, "AN", 44) == -1
+        @test SPICE._pos(string, " AN", 1) == 3
+        @test SPICE._pos(string, " AN ", 1) == 11
+        @test SPICE._pos(string, " AN  ", 1) == -1
 
+        @test first(findnext("AN", string, 1)) == SPICE._pos(string, "AN", 1)
+        @test first(findnext("AN", string, 3)) == SPICE._pos(string, "AN", 3)
+        @test first(findnext("AN", string, 6)) == SPICE._pos(string, "AN", 6)
+        @test first(findnext("AN", string, 10)) == SPICE._pos(string, "AN", 10)
+        @test first(findnext(" AN", string, 1)) == SPICE._pos(string, " AN", 1)
+        @test first(findnext(" AN ", string, 1)) == SPICE._pos(string, " AN ", 1)
+    end
+    @testset "posr" begin
+        string = "AN ANT AND AN ELEPHANT        "
+        @test SPICE._posr(string, "AN", 30) == 20
+        @test SPICE._posr(string, "AN", 19) == 12
+        @test SPICE._posr(string, "AN", 11) == 8
+        @test SPICE._posr(string, "AN", 7) == 4
+        @test SPICE._posr(string, "AN", 3) == 1
+        @test SPICE._posr(string, "AN", -6) == -1
+        @test SPICE._posr(string, "AN", -1) == -1
+        @test SPICE._posr(string, "AN", 31) == 20
+        @test SPICE._posr(string, "AN", 44) == 20
+        @test SPICE._posr(string, " AN", 30) == 11
+        @test SPICE._posr(string, " AN ", 30) == 11
+        @test SPICE._posr(string, " AN ", 10) == -1
+        @test SPICE._posr(string, " AN  ", 30) == -1
 
-# def test_phaseq():
-#     relate = ["=", "<", ">", "LOCMIN", "ABSMIN", "LOCMAX", "ABSMAX"]
-#     expected = {"=": [0.575988450, 0.575988450, 0.575988450, 0.575988450, 0.575988450,
-#                       0.575988450, 0.575988450, 0.575988450, 0.575988450, 0.575988450],
-#                 "<": [0.575988450, 0.575988450, 0.575988450, 0.575988450, 0.575988450, 0.468279091],
-#                 ">": [0.940714974, 0.575988450, 0.575988450, 0.575988450, 0.575988450, 0.575988450],
-#                 "LOCMIN": [0.086121423, 0.086121423, 0.079899769, 0.079899769],
-#                 "ABSMIN": [0.079899769, 0.079899769],
-#                 "LOCMAX": [3.055062862, 3.055062862, 3.074603891, 3.074603891],
-#                 "ABSMAX": [3.074603891, 3.074603891]
-#     }
-#     spice.kclear()
-#     spice.furnsh(CoreKernels.testMetaKernel)
-#     et0 = spice.str2et('2006 DEC 01')
-#     et1 = spice.str2et('2007 JAN 31')
-#     cnfine = spice.stypes.SPICEDOUBLE_CELL(2)
-#     spice.wninsd(et0, et1, cnfine)
-#     result = spice.stypes.SPICEDOUBLE_CELL(10000)
-#     for relation in relate:
-#         spice.gfpa("Moon", "Sun", "LT+S", "Earth", relation, 0.57598845,
-#                    0.0, spice.spd(), 5000, cnfine, result)
-#         count = spice.wncard(result)
-#         if count > 0:
-#             tempResults = []
-#             for i in range(0, count):
-#                 start, stop = spice.wnfetd(result, i)
-#                 startPhase = spice.phaseq(start, "moon", "sun", "earth", "lt+s")
-#                 stopPhase = spice.phaseq(stop, "moon", "sun", "earth", "lt+s")
-#                 tempResults.append(startPhase)
-#                 tempResults.append(stopPhase)
-#             npt.assert_array_almost_equal(tempResults, expected.get(relation))
-#     spice.kclear()
+        @test first(findprev("AN", string, 30)) == SPICE._posr(string, "AN", 30)
+        @test first(findprev("AN", string, 19)) == SPICE._posr(string, "AN", 19)
+        @test first(findprev("AN", string, 11)) == SPICE._posr(string, "AN", 11)
+        @test first(findprev("AN", string, 7)) == SPICE._posr(string, "AN", 7)
+        @test first(findprev("AN", string, 3)) == SPICE._posr(string, "AN", 3)
+        @test first(findprev("AN", string, 31)) == SPICE._posr(string, "AN", 31)
+        @test first(findprev("AN", string, 44)) == SPICE._posr(string, "AN", 44)
+        @test first(findprev(" AN", string, 30)) == SPICE._posr(string, " AN", 30)
+        @test first(findprev(" AN ", string, 30)) == SPICE._posr(string, " AN ", 30)
+    end
+    @testset "prop2b" begin
+        mu = 398600.45
+        r = 1.0e8
+        speed = sqrt(mu / r)
+        t = π * (r / speed)
+        pvinit = [0.0, r / sqrt(2.0), r / sqrt(2.0), 0.0, -speed / sqrt(2.0), speed / sqrt(2.0)]
+        state = prop2b(mu, pvinit, t)
+        @test state ≈ -1.0 * pvinit
+        @test_throws SpiceError prop2b(-mu, pvinit, t)
+        @test_throws SpiceError prop2b(mu, [pvinit[1:3]; zeros(3)], t)
+        @test_throws SpiceError prop2b(mu, [zeros(3); pvinit[4:6]], t)
+        @test_throws SpiceError prop2b(mu, [pvinit[4:6] .* 1e3; pvinit[4:6]], t)
+    end
+    @testset "prsdp" begin
+        # What an awful idea!
+        @test SPICE._prsdp("-1. 000") == -1.0
 
+        @test parse(Float64, "-1.0") == SPICE._prsdp("-1.0")
+    end
+    @testset "prsint" begin
+        # This is an abomination!
+        @test SPICE._prsint("PI") == 3
 
-# def test_pi():
-#     assert spice.pi() == np.pi
+        @test parse(Int, "-1") == SPICE._prsdp("-1")
+    end
+    @testset "psv2pl" begin
+        epoch = "Jan 1 2005"
+        frame = "ECLIPJ2000"
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :spk))
+            et = str2et(epoch)
+            state, ltime = spkezr("EARTH", et, frame, "Solar System Barycenter")
+            es_plane = psv2pl(state[1:3], state[1:3], state[4:6])
+            es_norm, es_const = pl2nvc(es_plane)
+            mstate, mltime = spkezr("MOON", et, frame, "EARTH BARYCENTER")
+            em_plane = psv2pl(mstate[1:3], mstate[1:3], mstate[4:6])
+            em_norm, em_const = pl2nvc(em_plane)
+            @test rad2deg(vsep(es_norm, em_norm)) ≈ 5.0424941
+            @test_throws SpiceError psv2pl(mstate[1:3], mstate[1:3], mstate[1:3])
+            @test_throws ArgumentError psv2pl(mstate[1:2], mstate[1:3], mstate[4:6])
+            @test_throws ArgumentError psv2pl(mstate[1:3], mstate[1:2], mstate[4:6])
+            @test_throws ArgumentError psv2pl(mstate[1:3], mstate[1:3], mstate[4:5])
+        finally
+            kclear()
+        end
+    end
+    @testset "pxform" begin
+        kclear()
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
+            lon = deg2rad(118.25)
+            lat = deg2rad(34.05)
+            alt = 0.0
+            utc = "January 1, 2005"
+            et = str2et(utc)
+            abc = bodvrd("EARTH", "RADII", 3)
+            equatr = abc[1]
+            polar = abc[3]
+            f = (equatr - polar) / equatr
+            epos = georec(lon, lat, alt, equatr, f)
+            rotate = pxform("IAU_EARTH", "J2000", et)
+            jstate = rotate * epos
+            expected = [5042.1309421, 1603.52962986, 3549.82398086]
+            @test jstate ≈ expected
+            @test pxform("J2000", "J2000", 0.) ≈ Array{Float64}(I, 3, 3)
+            @test_throws SpiceError pxform("Norbert", "J2000", 0.0)
+        finally
+            kclear()
+        end
+    end
+    @testset "pxfrm2" begin
+        try
+            # load kernels
+            furnsh(path(CORE, :lsk),
+                   path(CORE, :pck),
+                   path(CORE, :spk),
+                   path(CASSINI, :pck),
+                   path(CASSINI, :sat_spk),
+                   path(CASSINI, :tour_spk),
+                   path(CASSINI, :fk),
+                   path(CASSINI, :ck),
+                   path(CASSINI, :sclk),
+                   path(CASSINI, :ik))
 
-
-# def test_pipool():
-#     spice.kclear()
-#     data = np.arange(0, 10)
-#     spice.pipool('pipool_array', data)
-#     ivals = spice.gipool('pipool_array', 0, 50)
-#     npt.assert_array_almost_equal(data, ivals)
-#     spice.kclear()
-
-
-# def test_pjelpl():
-#     center = [1.0, 1.0, 1.0]
-#     vec1 = [2.0, 0.0, 0.0]
-#     vec2 = [0.0, 1.0, 1.0]
-#     normal = [0.0, 0.0, 1.0]
-#     plane = spice.nvc2pl(normal, 0.0)
-#     elin = spice.cgv2el(center, vec1, vec2)
-#     ellipse = spice.pjelpl(elin, plane)
-#     expectedSmajor = [2.0, 0.0, 0.0]
-#     expectedSminor = [0.0, 1.0, 0.0]
-#     expectedCenter = [1.0, 1.0, 0.0]
-#     npt.assert_array_almost_equal(expectedCenter, ellipse.center)
-#     npt.assert_array_almost_equal(expectedSmajor, ellipse.semi_major)
-#     npt.assert_array_almost_equal(expectedSminor, ellipse.semi_minor)
-
-
-# def test_pl2nvc():
-#     normal = [-1.0, 5.0, -3.5]
-#     point = [9.0, -0.65, -12.0]
-#     plane = spice.nvp2pl(normal, point)
-#     normal, constant = spice.pl2nvc(plane)
-#     expectedNormal = [-0.16169042, 0.80845208, -0.56591646]
-#     npt.assert_almost_equal(constant, 4.8102899, decimal=6)
-#     npt.assert_array_almost_equal(expectedNormal, normal, decimal=6)
-
-
-# def test_pl2nvp():
-#     plane_norm = [2.44, -5.0 / 3.0, 11.0 / 9.0]
-#     const = 3.141592654
-#     plane = spice.nvc2pl(plane_norm, const)
-#     norm_vec, point = spice.pl2nvp(plane)
-#     expectedPoint = [0.74966576, -0.51206678, 0.37551564]
-#     npt.assert_array_almost_equal(expectedPoint, point)
-
-
-# def test_pl2psv():
-#     normal = [-1.0, 5.0, -3.5]
-#     point = [9.0, -0.65, -12.0]
-#     plane = spice.nvp2pl(normal, point)
-#     point, span1, span2 = spice.pl2psv(plane)
-#     npt.assert_almost_equal(spice.vdot(point, span1), 0)
-#     npt.assert_almost_equal(spice.vdot(point, span2), 0)
-#     npt.assert_almost_equal(spice.vdot(span1, span2), 0)
-
-
-# def test_pltar():
-#     vrtces = [[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
-#     plates = [[1, 4, 3], [1, 2, 4], [1, 3, 2], [2, 3, 4]]
-#     assert spice.pltar(vrtces, plates) == pytest.approx(2.3660254037844)
-
-
-# def test_pltexp():
-#     iverts = [[np.sqrt(3.0) / 2.0, -0.5, 7.0], [0.0, 1.0, 7.0], [-np.sqrt(3.0) / 2.0, -0.5, 7.0]]
-#     overts = spice.pltexp(iverts, 1.0)
-#     expected = [[1.732050807569, -1.0, 7.0], [0.0, 2.0, 7.0], [-1.732050807569, -1.0, 7.0]]
-#     npt.assert_array_almost_equal(expected, overts)
-
-
-# def test_pltnp():
-#     point = [2.0, 2.0, 2.0]
-#     v1 = [1.0, 0.0, 0.0]
-#     v2 = [0.0, 1.0, 0.0]
-#     v3 = [0.0, 0.0, 1.0]
-#     near, distance = spice.pltnp(point, v1, v2, v3)
-#     npt.assert_array_almost_equal([1.0/3.0, 1.0/3.0, 1.0/3.0], near)
-#     assert distance == pytest.approx(2.8867513)
-
-
-# def test_pltnrm():
-#     v1 = [np.sqrt(3.0)/2.0, -0.5, 0.0]
-#     v2 = [0.0, 1.0, 0.0]
-#     v3 = [-np.sqrt(3.0)/2.0, -0.5, 0.0]
-#     npt.assert_array_almost_equal([0.0, 0.0, 2.59807621135], spice.pltnrm(v1, v2, v3))
-
-
-# def test_pltvol():
-#     vrtces = [[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
-#     plates = [[1, 4, 3], [1, 2, 4], [1, 3, 2], [2, 3, 4]]
-#     assert spice.pltvol(vrtces, plates) == pytest.approx(1.0/6.0)
-
-
-# def test_polyds():
-#     result = spice.polyds([1., 3., 0.5, 1., 0.5, -1., 1.], 6, 3, 1)
-#     npt.assert_array_almost_equal([6.0, 10.0, 23.0, 78.0], result)
-
-
-# def test_pos():
-#     string = "AN ANT AND AN ELEPHANT        "
-#     assert spice.pos(string, "AN", 0) == 0
-#     assert spice.pos(string, "AN", 2) == 3
-#     assert spice.pos(string, "AN", 5) == 7
-#     assert spice.pos(string, "AN", 9) == 11
-#     assert spice.pos(string, "AN", 13) == 19
-#     assert spice.pos(string, "AN", 21) == -1
-#     assert spice.pos(string, "AN", -6) == 0
-#     assert spice.pos(string, "AN", -1) == 0
-#     assert spice.pos(string, "AN", 30) == -1
-#     assert spice.pos(string, "AN", 43) == -1
-#     assert spice.pos(string, "AN", 0) == 0
-#     assert spice.pos(string, " AN", 0) == 2
-#     assert spice.pos(string, " AN ", 0) == 10
-#     assert spice.pos(string, " AN  ", 0) == -1
-
-
-# def test_posr():
-#     string = "AN ANT AND AN ELEPHANT        "
-#     assert spice.posr(string, "AN", 29) == 19
-#     assert spice.posr(string, "AN", 18) == 11
-#     assert spice.posr(string, "AN", 10) == 7
-#     assert spice.posr(string, "AN", 6) == 3
-#     assert spice.posr(string, "AN", 2) == 0
-#     assert spice.posr(string, "AN", -6) == -1
-#     assert spice.posr(string, "AN", -1) == -1
-#     assert spice.posr(string, "AN", 30) == 19
-#     assert spice.posr(string, "AN", 43) == 19
-#     assert spice.posr(string, " AN", 29) == 10
-#     assert spice.posr(string, " AN ", 29) == 10
-#     assert spice.posr(string, " AN ", 9) == -1
-#     assert spice.posr(string, " AN  ", 29) == -1
-
-
-# def test_prop2b():
-#     mu = 398600.45
-#     r = 1.0e8
-#     speed = np.sqrt(mu / r)
-#     t = spice.pi() * (r / speed)
-#     pvinit = np.array([0.0, r / np.sqrt(2.0), r / np.sqrt(2.0), 0.0, -speed / np.sqrt(2.0), speed / np.sqrt(2.0)])
-#     state = np.array(spice.prop2b(mu, pvinit, t))
-#     npt.assert_array_almost_equal(state, -1.0 * pvinit, decimal=6)
-
-
-# def test_prsdp():
-#     assert spice.prsdp("-1. 000") == -1.0
-
-
-# def test_prsint():
-#     assert spice.prsint("PI") == 3
-
-
-# def test_psv2pl():
-#     spice.kclear()
-#     epoch = 'Jan 1 2005'
-#     frame = 'ECLIPJ2000'
-#     spice.furnsh(CoreKernels.testMetaKernel)
-#     et = spice.str2et(epoch)
-#     state, ltime = spice.spkezr('EARTH', et, frame, 'NONE', 'Solar System Barycenter')
-#     es_plane = spice.psv2pl(state[0:3], state[0:3], state[3:6])
-#     es_norm, es_const = spice.pl2nvc(es_plane)
-#     mstate, mltime = spice.spkezr('MOON', et, frame, 'NONE', 'EARTH BARYCENTER')
-#     em_plane = spice.psv2pl(mstate[0:3], mstate[0:3], mstate[3:6])
-#     em_norm, em_const = spice.pl2nvc(em_plane)
-#     spice.kclear()
-#     npt.assert_almost_equal(spice.vsep(es_norm, em_norm) * spice.dpr(), 5.0424941, decimal=6)
-
-
-# def test_pxform():
-#     spice.kclear()
-#     spice.furnsh(CoreKernels.testMetaKernel)
-#     lon = 118.25 * spice.rpd()
-#     lat = 34.05 * spice.rpd()
-#     alt = 0.0
-#     utc = 'January 1, 2005'
-#     et = spice.str2et(utc)
-#     len, abc = spice.bodvrd('EARTH', 'RADII', 3)
-#     equatr = abc[0]
-#     polar = abc[2]
-#     f = (equatr - polar) / equatr
-#     epos = spice.georec(lon, lat, alt, equatr, f)
-#     rotate = np.array(spice.pxform('IAU_EARTH', 'J2000', et))
-#     spice.kclear()
-#     jstate = np.dot(epos, rotate)
-#     expected = np.array([5042.1309421, 1603.52962986, 3549.82398086])
-#     npt.assert_array_almost_equal(jstate, expected, decimal=4)
-
-
-# def test_pxfrm2():
-#     spice.kclear()
-#     # load kernels
-#     spice.furnsh(CoreKernels.testMetaKernel)
-#     spice.furnsh(CassiniKernels.cassSclk)
-#     spice.furnsh(CassiniKernels.cassFk)
-#     spice.furnsh(CassiniKernels.cassPck)
-#     spice.furnsh(CassiniKernels.cassIk)
-#     spice.furnsh(CassiniKernels.cassSclk)
-#     spice.furnsh(CassiniKernels.satSpk)
-#     spice.furnsh(CassiniKernels.cassTourSpk)
-#     spice.furnsh(CassiniKernels.cassCk)
-#     # start of test
-#     etrec = spice.str2et("2013 FEB 25 11:50:00 UTC")
-#     camid = spice.bodn2c("CASSINI_ISS_NAC")
-#     shape, obsref, bsight, n, bounds = spice.getfov(camid, 4)
-#     # run sincpt on boresight vector
-#     spoint, etemit, srfvec = spice.sincpt("Ellipsoid", 'Enceladus', etrec, "IAU_ENCELADUS", "CN+S", "CASSINI", obsref, bsight)
-#     rotate = spice.pxfrm2(obsref, "IAU_ENCELADUS", etrec, etemit)
-#     # get radii
-#     num_vals, radii = spice.bodvrd("Enceladus", "RADII", 3)
-#     # find position of center with respect to MGS
-#     pcassmr = spice.vsub(spoint, srfvec)
-#     # rotate into IAU_MARS
-#     bndvec = spice.mxv(rotate, spice.vlcom(0.9999,bsight,0.0001,bounds[1]))
-#     # get surface point
-#     spoint = spice.surfpt(pcassmr, bndvec, radii[0], radii[1], radii[2])
-#     radius, lon, lat = spice.reclat(spoint)
-#     lon *= spice.dpr()
-#     lat *= spice.dpr()
-#     # test output
-#     npt.assert_almost_equal(radius, 250.14507342586242, decimal=5)
-#     npt.assert_almost_equal(lon,    125.42089677611104, decimal=5)
-#     npt.assert_almost_equal(lat,    -6.3718522103931585, decimal=5)
-#     # end of test
-#     spice.kclear()
-    @test pxform("J2000", "J2000", 0.) ≈ Matrix{Float64}(I, 3, 3)
-    @test_throws SpiceError pxform("Norbert", "J2000",0.)
+            # start of test
+            etrec = str2et("2013 FEB 25 11:50:00 UTC")
+            camid = bodn2c("CASSINI_ISS_NAC")
+            shape, obsref, bsight, n, bounds = getfov(camid, 4)
+            # run sincpt on boresight vector
+            spoint, etemit, srfvec = sincpt("ELLIPSOID", "ENCELADUS",
+                                            etrec, "IAU_ENCELADUS", "CN+S", "CASSINI", obsref, bsight)
+            rotate = pxfrm2(obsref, "IAU_ENCELADUS", etrec, etemit)
+            # get radii
+            num_vals, radii = bodvrd("ENCELADUS", "RADII", 3)
+            # find position of center with respect to MGS
+            pcassmr = vsub(spoint, srfvec)
+            # rotate into IAU_MARS
+            bndvec = rotate * vlcom(0.9999,bsight,0.0001,bounds[1])
+            # get surface point
+            spoint = surfpt(pcassmr, bndvec, radii[0], radii[1], radii[2])
+            radius, lon, lat = reclat(spoint)
+            lon = rad2deg(lon)
+            lat = rad2deg(lat)
+            @test radius ≈ 250.14507342586242
+            @test lon ≈ 125.42089677611104
+            @test lat ≈ -6.3718522103931585
+        finally
+            kclear()
+        end
+    end
 end

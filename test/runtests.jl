@@ -8,22 +8,22 @@ const BASE_URL = "https://raw.githubusercontent.com/AndrewAnnex/SpiceyPyTestKern
 const KERNEL_DIR = joinpath(@__DIR__, "kernels")
 
 @RemoteFileSet CASSINI "Cassini Kernels" begin
-    pck     = @RemoteFile BASE_URL * "cpck05Mar2004.tpc" dir=KERNEL_DIR
-    sat_spk = @RemoteFile BASE_URL * "130220AP_SE_13043_13073.bsp" dir=KERNEL_DIR
+    pck      = @RemoteFile BASE_URL * "cpck05Mar2004.tpc" dir=KERNEL_DIR
+    sat_spk  = @RemoteFile BASE_URL * "130220AP_SE_13043_13073.bsp" dir=KERNEL_DIR
     tour_spk = @RemoteFile BASE_URL * "130212AP_SK_13043_13058.bsp" dir=KERNEL_DIR
-    fk      = @RemoteFile BASE_URL * "cas_v40.tf" dir=KERNEL_DIR
-    ck      = @RemoteFile BASE_URL * "13056_13057ra.bc" dir=KERNEL_DIR
-    sclk    = @RemoteFile BASE_URL * "cas00167.tsc" dir=KERNEL_DIR
-    ik      = @RemoteFile BASE_URL * "cas_iss_v10.ti" dir=KERNEL_DIR
+    fk       = @RemoteFile BASE_URL * "cas_v40.tf" dir=KERNEL_DIR
+    ck       = @RemoteFile BASE_URL * "13056_13057ra.bc" dir=KERNEL_DIR
+    sclk     = @RemoteFile BASE_URL * "cas00167.tsc" dir=KERNEL_DIR
+    ik       = @RemoteFile BASE_URL * "cas_iss_v10.ti" dir=KERNEL_DIR
 end
 
 @RemoteFileSet EXTRA "Extra Kernels" begin
-    voyager_sclk     = @RemoteFile BASE_URL * "vg200022.tsc" dir=KERNEL_DIR
-    earth_topo_tf     = @RemoteFile BASE_URL * "earth_topo_050714.tf" dir=KERNEL_DIR
-    earth_stn_spk     = @RemoteFile BASE_URL * "earthstns_itrf93_050714.bsp" dir=KERNEL_DIR
+    voyager_sclk       = @RemoteFile BASE_URL * "vg200022.tsc" dir=KERNEL_DIR
+    earth_topo_tf      = @RemoteFile BASE_URL * "earth_topo_050714.tf" dir=KERNEL_DIR
+    earth_stn_spk      = @RemoteFile BASE_URL * "earthstns_itrf93_050714.bsp" dir=KERNEL_DIR
     earth_high_per_pck = @RemoteFile BASE_URL * "earth_031228_231229_predict.bpc" dir=KERNEL_DIR
-    phobos_dsk       = @RemoteFile BASE_URL * "phobos_lores.bds" dir=KERNEL_DIR
-    mars_spk         = @RemoteFile BASE_URL * "mar022-1.bsp" dir=KERNEL_DIR
+    phobos_dsk         = @RemoteFile BASE_URL * "phobos_lores.bds" dir=KERNEL_DIR
+    mars_spk           = @RemoteFile BASE_URL * "mar022-1.bsp" dir=KERNEL_DIR
 end
 
 @RemoteFileSet CORE "Core Kernels" begin
@@ -93,6 +93,34 @@ download(CORE)
         cell = SpiceIntCell(1)
         @test_throws ErrorException cell[1]
         @test_throws ErrorException cell[2]
+    end
+    @testset "Utils" begin
+        let
+            arr = [[1, 2, 3, 4], [1, 2, 3, 4]]
+            cmat = SPICE.array_to_cmatrix(arr)
+            @test size(cmat) == (4, 2)
+            @test eltype(cmat) == SPICE.SpiceInt
+
+            arr2 = [[1, 2, 3], [1, 2, 3]]
+            @test_throws ArgumentError SPICE.array_to_cmatrix(arr2, n=4)
+
+            cmat1 = [1 1; 2 2; 3 3; 4 4]
+            arr1 = SPICE.cmatrix_to_array(cmat1)
+            @test arr1 == arr
+        end
+        let
+            arr = [[1.0, 2.0, 3.0, 4.0], [1.0, 2.0, 3.0, 4.0]]
+            cmat = SPICE.array_to_cmatrix(arr)
+            @test size(cmat) == (4, 2)
+            @test eltype(cmat) == SPICE.SpiceDouble
+
+            arr2 = [[1.0, 2.0, 3.0], [1.0, 2.0, 3.0]]
+            @test_throws ArgumentError SPICE.array_to_cmatrix(arr2, n=4)
+
+            cmat1 = [1.0 1.0; 2.0 2.0; 3.0 3.0; 4.0 4.0]
+            arr1 = SPICE.cmatrix_to_array(cmat1)
+            @test arr1 == arr
+        end
     end
 
     include("a.jl")
