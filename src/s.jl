@@ -9,6 +9,8 @@ export
     spkpos,
     spkw13,
     str2et,
+    subpnt,
+    subslr,
     swpool,
     sxform
 
@@ -38,8 +40,8 @@ end
 @deprecate scard scard!
 
 function str2et(string)
-    et = Ref{Cdouble}(0)
-    ccall((:str2et_c, libcspice), Cvoid, (Cstring, Ref{Cdouble}), string, et)
+    et = Ref{SpiceDouble}(0)
+    ccall((:str2et_c, libcspice), Cvoid, (Cstring, Ref{SpiceDouble}), string, et)
     handleerror()
     return et[]
 end
@@ -50,9 +52,9 @@ Returns the state of a target body relative to an observing body.
 - [NAIF documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkezr_c.html)
 """
 function spkezr(targ::AbstractString, et::Float64, ref::AbstractString, obs::AbstractString; abcorr::AbstractString="NONE")
-    starg = Array{Cdouble}(undef, 6)
-    lt = Ref{Cdouble}(0)
-    ccall((:spkezr_c, libcspice), Cvoid, (Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}), targ, et, ref, abcorr, obs, starg, lt)
+    starg = Array{SpiceDouble}(undef, 6)
+    lt = Ref{SpiceDouble}(0)
+    ccall((:spkezr_c, libcspice), Cvoid, (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}), targ, et, ref, abcorr, obs, starg, lt)
     handleerror()
     return starg, lt[]
 end
@@ -66,9 +68,9 @@ Returns the state of a target body relative to an observing body.
 - [NAIF documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkpos_c.html)
 """
 function spkpos(targ::AbstractString, et::Float64, ref::AbstractString, obs::AbstractString; abcorr::AbstractString="NONE")
-    starg = Array{Cdouble}(undef, 3)
-    lt = Ref{Cdouble}(0)
-    ccall((:spkpos_c, libcspice), Cvoid, (Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}), targ, et, ref, abcorr, obs, starg, lt)
+    starg = Array{SpiceDouble}(undef, 3)
+    lt = Ref{SpiceDouble}(0)
+    ccall((:spkpos_c, libcspice), Cvoid, (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}), targ, et, ref, abcorr, obs, starg, lt)
     handleerror()
     return starg, lt[]
 end
@@ -83,11 +85,11 @@ Returns the state of a target body relative to a constant-position observer loca
 (https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcpo_c.html)
 """
 function spkcpo(target, et, outref, refloc, obspos, obsctr, obsref; abcorr="NONE")
-    state = Array{Cdouble}(6)
-    lt = Ref{Cdouble}(0)
+    state = Array{SpiceDouble}(6)
+    lt = Ref{SpiceDouble}(0)
     ccall(
         (:spkcpo_c, libcspice), Cvoid,
-        (Cstring, Cdouble, Cstring, Cstring, Cstring, Ptr{Cdouble}, Cstring, Cstring, Ptr{Cdouble}, Ref{Cdouble}),
+        (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}),
         target, et, outref, refloc, abcorr, obspos, obsctr, obsref, state, lt
     )
     handleerror()
@@ -117,7 +119,7 @@ function spkw13(handle, body, center, frame, first, last, segid, degree, states,
     n = length(epochs)
     ccall(
         (:spkw13_c, libcspice), Cvoid,
-        (Cint, Cint, Cint, Cstring, Cdouble, Cdouble, Cstring, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}),
+        (Cint, Cint, Cint, Cstring, SpiceDouble, SpiceDouble, Cstring, Cint, Cint, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
         handle[], body, center, frame, first, last, segid, degree, n, states, epochs
     )
     handleerror()
@@ -125,8 +127,92 @@ end
 
 "Returns the number of seconds in a day."
 function spd()
-    ccall((:spd_c, libcspice), Cdouble, ())
+    ccall((:spd_c, libcspice), SpiceDouble, ())
 end
+
+
+
+
+
+"""
+    subpnt(method, target, et, fixref, obsrvr, abcorr)
+
+Compute the rectangular coordinates of the sub-observer point on 
+a target body at a specified epoch, optionally corrected for 
+light time and stellar aberration. 
+
+### Arguments ###
+
+- `method`: Computation method. 
+- `target`: Name of target body. 
+- `et`: Epoch in ephemeris seconds past J2000 TDB. 
+- `fixref`: Body-fixed, body-centered target body frame.  
+- `obsrvr`: Name of observing body. 
+- `abcorr`: Aberration correction.
+
+### Output ###
+
+- `spoint`: Sub-solar point on the target body. 
+- `trgepc`: Sub-solar point epoch. 
+- `srfvec`: Vector from observer to sub-solar point.
+
+Returns `cell` with its cardinality set to `card`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/subpnt_c.html)
+"""
+function subpnt(method, target, et, fixref, obsrvr; abcorr="NONE")
+    spoint = Array{SpiceDouble}(undef, 3)
+    trgepc = Ref{SpiceDouble}(0)
+    srfvec = Array{SpiceDouble}(undef, 3)
+    ccall((:subpnt_c, libcspice), Cvoid,
+          (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}, Ptr{SpiceDouble}),
+          method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec) 
+    handleerror()
+    spoint, trgepc[], srfvec
+end
+
+
+"""
+    subslr(method, target, et, fixref, obsrvr, abcorr)
+
+Compute the rectangular coordinates of the sub-solar point on 
+a target body at a specified epoch, optionally corrected for 
+light time and stellar aberration.
+
+### Arguments ###
+
+- `method`: Computation method. 
+- `target`: Name of target body. 
+- `et`: Epoch in ephemeris seconds past J2000 TDB. 
+- `fixref`: Body-fixed, body-centered target body frame. 
+- `obsrvr`: Name of observing body. 
+- `abcorr`: Aberration correction. 
+
+### Output ###
+
+- `spoint`: Sub-solar point on the target body. 
+- `trgepc`: Sub-solar point epoch. 
+- `srfvec`: Vector from observer to sub-solar point.
+
+Returns `cell` with its cardinality set to `card`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/subslr_c.html)
+"""
+function subslr(method::AbstractString, target::AbstractString, et::Float64, fixref::AbstractString, obsrvr::AbstractString; abcorr::AbstractString="NONE")
+    spoint = Array{SpiceDouble}(undef, 3)
+    trgepc = Ref{SpiceDouble}(0)
+    srfvec = Array{SpiceDouble}(undef, 3)
+    ccall((:subslr_c, libcspice), Cvoid, (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}, Ptr{SpiceDouble}), method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec) 
+    handleerror()
+    return spoint, trgepc[], srfvec
+end
+
+
+
 
 """
     swpool(agent, names)
@@ -156,8 +242,8 @@ Return the state transformation matrix from one frame to another at a specified 
 https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sxform_c.html
 """
 function sxform(from::String, to::String, et::Float64)
-    rot = Array{Cdouble}(undef, 6, 6)
-    ccall((:sxform_c, libcspice), Cvoid, (Cstring, Cstring, Cdouble, Ptr{Cdouble}), from, to, et, rot)
+    rot = Array{SpiceDouble}(undef, 6, 6)
+    ccall((:sxform_c, libcspice), Cvoid, (Cstring, Cstring, SpiceDouble, Ptr{SpiceDouble}), from, to, et, rot)
     handleerror()
     return rot
 end
