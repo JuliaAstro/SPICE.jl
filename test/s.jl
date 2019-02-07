@@ -66,7 +66,7 @@ using LinearAlgebra: I, norm
                 spoint, trgepc, srfvec = subslr(method, "Mars", et, "IAU_MARS", "Earth", abcorr="LT+S")
                 spglon, spglat, spgalt = recpgr("mars", spoint, re, f)
 
-                @test spgalt ≈ expected[1]
+                @test spgalt ≈ expected[1] atol=sqrt(eps())
                 @test rad2deg(spglon) ≈ expected[2]
                 @test rad2deg(spglat) ≈ expected[3]
                 spcrad, spclon, spclat = reclat(spoint)
