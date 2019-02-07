@@ -6,7 +6,6 @@ export
     ilumin(method, target, et, fixref, obsrvr, spoint, abcorr)
 
 Find the illumination angles (phase, solar incidence, and emission) at a specified surface point of a target body.
-This routine supersedes illum_c.
 
 ### Arguments ###
 
