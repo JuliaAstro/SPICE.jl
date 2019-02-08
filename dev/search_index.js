@@ -1397,7 +1397,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.surfpt",
     "category": "method",
-    "text": "positn     I   Position of the observer in body-fixed frame. u          I   Vector from the observer in some direction. a          I   Length of the ellipsoid semi-axis along the x-axis. b          I   Length of the ellipsoid semi-axis along the y-axis. c          I   Length of the ellipsoid semi-axis along the z-axis. point      O   Point on the ellipsoid pointed to by u. found      O   Flag indicating if u points at the ellipsoid.\n\n\n\n\n\n"
+    "text": "surfpt(positn, u, a, b, c)\n\nDetermine the intersection of a line-of-sight vector with the surface of an ellipsoid.\n\nArguments\n\npositn: Position of the observer in body-fixed frame\nu: Vector from the observer in some direction\na: Length of the ellipsoid semi-axis along the x-axis\nb: Length of the ellipsoid semi-axis along the y-axis\nc: Length of the ellipsoid semi-axis along the z-axis\n\nOutput\n\nReturns the point on the ellipsoid pointed to by u or nothing if none was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
