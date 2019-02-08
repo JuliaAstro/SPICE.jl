@@ -67,32 +67,31 @@ using Random: randstring
 #     assert outtype == "LSK"
 
 
-# @testset "getfov" begin
-#     kclear()
-#     kernel = os.path.join(cwd, "getfov_test.ti")
-#     if exists(kernel):
-#         os.remove(kernel) # pragma: no cover
-#     with open(kernel, "w") as kernelFile:
-#         kernelFile.write("\\begindata\n")
-#         kernelFile.write("INS-999004_FOV_SHAPE            = "POLYGON"\n")
-#         kernelFile.write("INS-999004_FOV_FRAME            = "SC999_INST004"\n")
-#         kernelFile.write("INS-999004_BORESIGHT            = (  0.0,  1.0,  0.0 )\n")
-#         kernelFile.write("INS-999004_FOV_BOUNDARY_CORNERS = (  0.0,  0.8,  0.5,\n")
-#         kernelFile.write("                                     0.4,  0.8, -0.2,\n")
-#         kernelFile.write("                                    -0.4,  0.8, -0.2,\n")
-#         kernelFile.write("\\begintext\n")
-#         kernelFile.close()
-#     furnsh(kernel)
-#     shape, frame, bsight, n, bounds = getfov(-999004, 4, 32, 32)
-#     assert shape == "POLYGON"
-#     assert frame == "SC999_INST004"
-#     npt.assert_array_almost_equal(bsight, [0.0, 1.0, 0.0])
-#     assert n == 3
-#     expected = np.array([[0.0, 0.8, 0.5], [0.4, 0.8, -0.2], [-0.4, 0.8, -0.2]])
-#     npt.assert_array_almost_equal(expected, bounds)
-#     kclear()
-#     if exists(kernel):
-#         os.remove(kernel) # pragma: no cover
+    @testset "getfov" begin
+        try
+            kernel = tempfile()
+            open(kernel, "w") do kernel_file
+                write(kernel_file, "\\begindata\n")
+                write(kernel_file, "INS-999004_FOV_SHAPE            = 'POLYGON'\n")
+                write(kernel_file, "INS-999004_FOV_FRAME            = 'SC999_INST004'\n")
+                write(kernel_file, "INS-999004_BORESIGHT            = (  0.0,  1.0,  0.0 )\n")
+                write(kernel_file, "INS-999004_FOV_BOUNDARY_CORNERS = (  0.0,  0.8,  0.5,\n")
+                write(kernel_file, "                                     0.4,  0.8, -0.2,\n")
+                write(kernel_file, "                                    -0.4,  0.8, -0.2,\n")
+                write(kernel_file, "\\begintext\n")
+            end
+            furnsh(kernel)
+            shape, frame, bsight, bounds = getfov(-999004, 4, 32, 32)
+            @test shape == "POLYGON"
+            @test frame == "SC999_INST004"
+            @test bsight ≈ [0.0, 1.0, 0.0]
+            @test length(bounds) == 3
+            expected = [[0.0, 0.8, 0.5], [0.4, 0.8, -0.2], [-0.4, 0.8, -0.2]]
+            @test expected ≈ bounds
+        finally
+            kclear()
+        end
+    end
 
 
 # @testset "getmsg" begin

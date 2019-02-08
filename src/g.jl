@@ -2,6 +2,7 @@ export
     gcpool,
     gdpool,
     georec,
+    getfov,
     gfpa,
     gfpa!,
     gipool
@@ -99,6 +100,47 @@ function georec(lon, lat, alt, re, f)
           lon, lat, alt, re, f, rectan)
     handleerror()
     rectan
+end
+
+"""
+    getfov(instid, room=10, shapelen=128, framelen=128)
+
+Return the field-of-view (FOV) parameters for a specified instrument.
+The instrument is specified by its NAIF ID code.
+
+### Arguments ###
+
+- `instid  `: NAIF ID of an instrument
+- `room    `: Maximum number of vectors that can be returned (default: 10)
+- `shapelen`: Space available in the string `shape` (default: 128)
+- `framelen`: Space available in the string `frame` (default: 128)
+
+### Output ###
+
+Returns a tuple consisting of
+
+- `shape `: Instrument FOV shape
+- `frame `: Name of the frame in which FOV vectors are defined
+- `bsight`: Boresight vector
+- `bounds`: FOV boundary vectors
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/getfov_c.html)
+"""
+function getfov(instid, room=10, shapelen=128, framelen=128)
+    shape = Array{UInt8}(undef, shapelen)
+    frame = Array{UInt8}(undef, framelen)
+    bsight = Array{SpiceDouble}(undef, 3)
+    n = Ref{SpiceInt}()
+    bounds = Array{SpiceDouble}(undef, 3, room)
+    ccall((:getfov_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, SpiceInt,
+           Ptr{UInt8}, Ptr{UInt8}, Ptr{SpiceDouble}, Ref{SpiceInt}, Ptr{SpiceDouble}),
+          instid, room, shapelen, framelen, shape, frame, bsight, n, bounds)
+    handleerror()
+    arr_bounds = cmatrix_to_array(bounds)
+    unsafe_string(pointer(shape)), unsafe_string(pointer(frame)), bsight, arr_bounds[1:n[]]
 end
 
 """

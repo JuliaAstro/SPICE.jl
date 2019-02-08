@@ -1,6 +1,7 @@
 export
     scard,
     scard!,
+    sincpt,
     spd,
     spkcls,
     spkcpo,
@@ -11,6 +12,7 @@ export
     str2et,
     subpnt,
     subslr,
+    surfpt,
     swpool,
     sxform
 
@@ -39,11 +41,63 @@ end
 
 @deprecate scard scard!
 
+"""
+    sincpt(method, target, et, fixref, abcorr, obsrvr, dref, dvec)
+
+Given an observer and a direction vector defining a ray, compute the surface intercept
+of the ray on a target body at a specified epoch, optionally corrected for light time
+and stellar aberration.
+
+The surface of the target body may be represented by a triaxial ellipsoid or by
+topographic data provided by DSK files.
+
+### Arguments ###
+
+- `method`: Computation method
+- `target`: Name of target body
+- `et`: Epoch in TDB seconds past J2000 TDB
+- `fixref`: Body-fixed, body-centered target body frame
+- `abcorr`: Aberration correction flag
+- `obsrvr`: Name of observing body
+- `dref`: Reference frame of ray's direction vector
+- `dvec`: Ray's direction vector
+
+### Output ###
+
+Returns a tuple consisting of the following data or `nothing` if no intercept was found.
+
+- `spoint`: Surface intercept point on the target body
+- `trgepc`: Intercept epoch
+- `srfvec`: Vector from observer to intercept point
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sincpt_c.html)
+"""
+function sincpt(method, target, et, fixref, abcorr, obsrvr, dref, dvec)
+    length(dvec) != 3 && throw(ArgumentError("Length of `dvec` must be 3."))
+
+    spoint = Array{SpiceDouble}(undef, 3)
+    trgepc = Ref{SpiceDouble}()
+    srfvec = Array{SpiceDouble}(undef, 3)
+    found = Ref{SpiceBoolean}()
+
+    ccall((:sincpt_c, libcspice), Cvoid,
+          (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Cstring, Ptr{SpiceDouble},
+           Ptr{SpiceDouble}, Ref{SpiceDouble}, Ptr{SpiceDouble}, Ref{SpiceInt}),
+          method, target, et, fixref, abcorr, obsrvr, dref, dvec, spoint, trgepc, srfvec, found)
+
+    handleerror()
+    Bool(found[]) || return nothing
+
+    spoint, trgepc[], srfvec
+end
+
 function str2et(string)
     et = Ref{SpiceDouble}(0)
     ccall((:str2et_c, libcspice), Cvoid, (Cstring, Ref{SpiceDouble}), string, et)
     handleerror()
-    return et[]
+    et[]
 end
 
 """
@@ -135,65 +189,25 @@ end
 
 
 """
-    subpnt(method, target, et, fixref, obsrvr, abcorr)
-
-Compute the rectangular coordinates of the sub-observer point on 
-a target body at a specified epoch, optionally corrected for 
-light time and stellar aberration. 
-
-### Arguments ###
-
-- `method`: Computation method. 
-- `target`: Name of target body. 
-- `et`: Epoch in ephemeris seconds past J2000 TDB. 
-- `fixref`: Body-fixed, body-centered target body frame.  
-- `obsrvr`: Name of observing body. 
-- `abcorr`: Aberration correction.
-
-### Output ###
-
-- `spoint`: Sub-solar point on the target body. 
-- `trgepc`: Sub-solar point epoch. 
-- `srfvec`: Vector from observer to sub-solar point.
-
-Returns `cell` with its cardinality set to `card`.
-
-### References ###
-
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/subpnt_c.html)
-"""
-function subpnt(method, target, et, fixref, obsrvr; abcorr="NONE")
-    spoint = Array{SpiceDouble}(undef, 3)
-    trgepc = Ref{SpiceDouble}(0)
-    srfvec = Array{SpiceDouble}(undef, 3)
-    ccall((:subpnt_c, libcspice), Cvoid,
-          (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}, Ptr{SpiceDouble}),
-          method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec) 
-    handleerror()
-    spoint, trgepc[], srfvec
-end
-
-
-"""
     subslr(method, target, et, fixref, obsrvr, abcorr)
 
-Compute the rectangular coordinates of the sub-solar point on 
-a target body at a specified epoch, optionally corrected for 
+Compute the rectangular coordinates of the sub-solar point on
+a target body at a specified epoch, optionally corrected for
 light time and stellar aberration.
 
 ### Arguments ###
 
-- `method`: Computation method. 
-- `target`: Name of target body. 
-- `et`: Epoch in ephemeris seconds past J2000 TDB. 
-- `fixref`: Body-fixed, body-centered target body frame. 
-- `obsrvr`: Name of observing body. 
-- `abcorr`: Aberration correction. 
+- `method`: Computation method.
+- `target`: Name of target body.
+- `et`: Epoch in ephemeris seconds past J2000 TDB.
+- `fixref`: Body-fixed, body-centered target body frame.
+- `obsrvr`: Name of observing body.
+- `abcorr`: Aberration correction.
 
 ### Output ###
 
-- `spoint`: Sub-solar point on the target body. 
-- `trgepc`: Sub-solar point epoch. 
+- `spoint`: Sub-solar point on the target body.
+- `trgepc`: Sub-solar point epoch.
 - `srfvec`: Vector from observer to sub-solar point.
 
 Returns `cell` with its cardinality set to `card`.
@@ -202,17 +216,79 @@ Returns `cell` with its cardinality set to `card`.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/subslr_c.html)
 """
-function subslr(method::AbstractString, target::AbstractString, et::Float64, fixref::AbstractString, obsrvr::AbstractString; abcorr::AbstractString="NONE")
+function subslr(method, target, et, fixref, obsrvr; abcorr="NONE")
     spoint = Array{SpiceDouble}(undef, 3)
-    trgepc = Ref{SpiceDouble}(0)
+    trgepc = Ref{SpiceDouble}()
     srfvec = Array{SpiceDouble}(undef, 3)
-    ccall((:subslr_c, libcspice), Cvoid, (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}, Ptr{SpiceDouble}), method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec) 
+    ccall((:subslr_c, libcspice), Cvoid,
+          (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring,
+           Ptr{SpiceDouble}, Ref{SpiceDouble}, Ptr{SpiceDouble}),
+          method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec)
     handleerror()
-    return spoint, trgepc[], srfvec
+    spoint, trgepc[], srfvec
 end
 
+"""
+    subpnt(method, target, et, fixref, obsrvr, abcorr)
 
+Compute the rectangular coordinates of the sub-observer point on
+a target body at a specified epoch, optionally corrected for
+light time and stellar aberration.
 
+### Arguments ###
+
+- `method`: Computation method.
+- `target`: Name of target body.
+- `et`: Epoch in ephemeris seconds past J2000 TDB.
+- `fixref`: Body-fixed, body-centered target body frame.
+- `obsrvr`: Name of observing body.
+- `abcorr`: Aberration correction.
+
+### Output ###
+
+- `spoint`: Sub-solar point on the target body.
+- `trgepc`: Sub-solar point epoch.
+- `srfvec`: Vector from observer to sub-solar point.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/subpnt_c.html)
+"""
+function subpnt(method, target, et, fixref, obsrvr; abcorr="NONE")
+    spoint = Array{SpiceDouble}(undef, 3)
+    trgepc = Ref{SpiceDouble}()
+    srfvec = Array{SpiceDouble}(undef, 3)
+    ccall((:subpnt_c, libcspice), Cvoid,
+          (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring,
+           Ptr{SpiceDouble}, Ref{SpiceDouble}, Ptr{SpiceDouble}),
+          method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec)
+    handleerror()
+    spoint, trgepc[], srfvec
+end
+
+"""
+positn     I   Position of the observer in body-fixed frame.
+u          I   Vector from the observer in some direction.
+a          I   Length of the ellipsoid semi-axis along the x-axis.
+b          I   Length of the ellipsoid semi-axis along the y-axis.
+c          I   Length of the ellipsoid semi-axis along the z-axis.
+point      O   Point on the ellipsoid pointed to by u.
+found      O   Flag indicating if u points at the ellipsoid.
+"""
+function surfpt(positn, u, a, b, c)
+    length(positn) != 3 && throw(ArgumentError("Length of `positn` must be 3."))
+    length(u) != 3 && throw(ArgumentError("Length of `u` must be 3."))
+    point = Array{SpiceDouble}(undef, 3)
+    found = Ref{SpiceBoolean}()
+    ccall((:surfpt_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble, SpiceDouble,
+           Ptr{SpiceDouble}, Ref{SpiceBoolean}),
+          positn, u, a, b, c, point, found)
+    handleerror()
+    !Bool(found[]) && return nothing
+
+    point
+end
 
 """
     swpool(agent, names)
@@ -229,9 +305,9 @@ Add a name to the list of agents to notify whenever a member of a list of kernel
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/swpool_c.html)
 """
 function swpool(agent, names)
-    _names, m, n = chararray(names)
+    names, m, n = chararray(names)
     ccall((:swpool_c, libcspice), Cvoid, (Cstring, SpiceInt, SpiceInt, Ptr{SpiceChar}),
-          agent, m, n, _names)
+          agent, m, n, names)
     handleerror()
     nothing
 end

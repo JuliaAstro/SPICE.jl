@@ -77,11 +77,11 @@ function array_to_cmatrix(array::Vector{Vector{Int}}; n=0)
 end
 
 function cmatrix_to_array(matrix)
-    [matrix[:, i] for i in 1:size(matrix, 2)]
+    arr = [matrix[:, i] for i in 1:size(matrix, 2)]
 end
 
 function cmatrix_to_array(matrix::Matrix{SpiceInt})
-    [Int.(matrix[:, i]) for i in 1:size(matrix, 2)]
+    arr = [Int.(matrix[:, i]) for i in 1:size(matrix, 2)]
 end
 
 include("cells.jl")

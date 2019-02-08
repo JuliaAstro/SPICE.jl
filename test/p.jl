@@ -306,9 +306,17 @@ using LinearAlgebra: I, ⋅
             f = (equatr - polar) / equatr
             epos = georec(lon, lat, alt, equatr, f)
             rotate = pxform("IAU_EARTH", "J2000", et)
-            jstate = rotate * epos
+            jstate = rotate' * epos
             expected = [5042.1309421, 1603.52962986, 3549.82398086]
-            @test jstate ≈ expected
+            rot_exp = [-0.18437048 -0.98285670 0.00048614;
+                       0.98285681 -0.18437050 -2.71973868E-07;
+                       8.98973426E-05 0.00047776 0.99999988]
+            @testset for i = eachindex(rotate, rot_exp)
+                @test rotate[i] ≈ rot_exp[i] atol=1e-6
+            end
+            @testset for i = eachindex(jstate, expected)
+                @test jstate[i] ≈ expected[i]
+            end
             @test pxform("J2000", "J2000", 0.) ≈ Array{Float64}(I, 3, 3)
             @test_throws SpiceError pxform("Norbert", "J2000", 0.0)
         finally
@@ -332,25 +340,28 @@ using LinearAlgebra: I, ⋅
             # start of test
             etrec = str2et("2013 FEB 25 11:50:00 UTC")
             camid = bodn2c("CASSINI_ISS_NAC")
-            shape, obsref, bsight, n, bounds = getfov(camid, 4)
+            shape, obsref, bsight, bounds = getfov(camid, 4)
             # run sincpt on boresight vector
             spoint, etemit, srfvec = sincpt("ELLIPSOID", "ENCELADUS",
                                             etrec, "IAU_ENCELADUS", "CN+S", "CASSINI", obsref, bsight)
             rotate = pxfrm2(obsref, "IAU_ENCELADUS", etrec, etemit)
             # get radii
-            num_vals, radii = bodvrd("ENCELADUS", "RADII", 3)
+            radii = bodvrd("ENCELADUS", "RADII", 3)
             # find position of center with respect to MGS
-            pcassmr = vsub(spoint, srfvec)
-            # rotate into IAU_MARS
-            bndvec = rotate * vlcom(0.9999,bsight,0.0001,bounds[1])
+            pcassmr = spoint .- srfvec
+            # rotate into IAU_ENCELADUS
+            bndvec = rotate * (0.9999 .* bsight .+ 0.0001 .* bounds[2])
             # get surface point
-            spoint = surfpt(pcassmr, bndvec, radii[0], radii[1], radii[2])
-            radius, lon, lat = reclat(spoint)
-            lon = rad2deg(lon)
-            lat = rad2deg(lat)
-            @test radius ≈ 250.14507342586242
-            @test lon ≈ 125.42089677611104
-            @test lat ≈ -6.3718522103931585
+            spoint = surfpt(pcassmr, bndvec, radii[1], radii[2], radii[3])
+            @test spoint !== nothing
+            if spoint !== nothing
+                radius, lon, lat = reclat(spoint)
+                lon = rad2deg(lon)
+                lat = rad2deg(lat)
+                @test radius ≈ 250.14507342586242
+                @test lon ≈ 125.42089677611104
+                @test lat ≈ -6.3718522103931585
+            end
         finally
             kclear()
         end
