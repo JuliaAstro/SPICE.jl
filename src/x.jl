@@ -28,6 +28,7 @@ that indicates whether these are a unique representation.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/xf2eul_c.html)
 """
 function xf2eul(xform, axisa, axisb, axisc)
+    size(xform) != (6, 6) && throw(ArgumentError("`xform` must be a 6x6 matrix."))
     eulang = Array{SpiceDouble}(undef, 6)
     unique = Ref{SpiceBoolean}()
     ccall((:xf2eul_c, libcspice), Cvoid,
@@ -57,12 +58,13 @@ associated with `xform`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/xf2rav_c.html)
 """
 function xf2rav(xform)
+    size(xform) != (6, 6) && throw(ArgumentError("`xform` must be a 6x6 matrix."))
     rot = Array{SpiceDouble}(undef, 3, 3)
     av = Array{SpiceDouble}(undef, 3)
     ccall((:xf2rav_c, libcspice), Cvoid,
           (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
-          xform, rot, av)
-    rot, av
+          permutedims(xform), rot, av)
+    permutedims(rot), av
 end
 
 """
@@ -86,6 +88,7 @@ Returns the converted output state.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/xfmsta_c.html)
 """
 function xfmsta(input_state, input_coord_sys, output_coord_sys, body)
+    length(input_state) != 6 && throw(ArgumentError("Lenght of `input_state` must be 6."))
     output_state = Array{SpiceDouble}(undef, 6)
     ccall((:xfmsta_c, libcspice), Cvoid,
           (Ptr{SpiceDouble}, Cstring, Cstring, Cstring, Ptr{SpiceDouble}),

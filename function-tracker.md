@@ -227,7 +227,7 @@
 * [ ] [GETCML_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/getcml_c.html) - Get the command line
 * [ ] [GETELM_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/getelm_c.html) - Get the components from two-line elements
 * [ ] [GETFAT_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/getfat_c.html) - Get file architecture and type
-* [ ] [GETFOV_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/getfov_c.html) - Get instrument FOV parameters
+* [x] [GETFOV_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/getfov_c.html) - Get instrument FOV parameters
 * [ ] [GETMSG_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/getmsg_c.html) - Get Error Message
 * [ ] [GFBAIL_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfbail_c.html) - GF, interrupt signal indicator
 * [ ] [GFCLRH_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfclrh_c.html) - GF, clear interrupt signal handler status
@@ -483,7 +483,7 @@
 * [ ] [SHELLD_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/shelld_c.html) - Shell sort a double precision array
 * [ ] [SHELLI_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/shelli_c.html) - Shell sort an integer array
 * [ ] [SIGERR_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sigerr_c.html) - Signal Error Condition
-* [ ] [SINCPT_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sincpt_c.html) - Surface intercept
+* [x] [SINCPT_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sincpt_c.html) - Surface intercept
 * [ ] [SIZE_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/size_c.html) - Size of a cell
 * [ ] [SPD_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spd_c.html) - Seconds per day
 * [ ] [SPHCYL_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sphcyl_c.html) - Spherical to cylindrical coordinates
@@ -552,9 +552,9 @@
 * [ ] [SUMAD_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sumad_c.html) - Sum of a double precision array
 * [ ] [SUMAI_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sumai_c.html) - Sum of an integer array
 * [ ] [SURFNM_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/surfnm_c.html) - Surface normal vector on an ellipsoid
-* [ ] [SURFPT_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/surfpt_c.html) - Surface point on an ellipsoid
+* [x] [SURFPT_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/surfpt_c.html) - Surface point on an ellipsoid
 * [ ] [SURFPV_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/surfpv_c.html) - Surface point and velocity
-* [ ] [SWPOOL_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/swpool_c.html) - Set watch on a pool variable
+* [x] [SWPOOL_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/swpool_c.html) - Set watch on a pool variable
 * [ ] [SXFORM_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sxform_c.html) - State Transformation Matrix
 * [ ] [SZPOOL_C](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/szpool_c.html) - Get size limitations of the kernel pool
 
