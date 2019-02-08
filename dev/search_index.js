@@ -521,6 +521,38 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.georec-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.georec",
+    "category": "method",
+    "text": "georec(lon, lat, alt, re, f)\n\nConvert geodetic coordinates to rectangular coordinates.\n\nArguments\n\nlon: Geodetic longitude of point (radians)\nlat: Geodetic latitude  of point (radians)\nalt: Altitude of point above the reference spheroid\nre: Equatorial radius of the reference spheroid\nf: Flattening coefficient\n\nOutput\n\nReturns the rectangular coordinates of point.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.getfov",
+    "page": "API",
+    "title": "SPICE.getfov",
+    "category": "function",
+    "text": "getfov(instid, room=10, shapelen=128, framelen=128)\n\nReturn the field-of-view (FOV) parameters for a specified instrument. The instrument is specified by its NAIF ID code.\n\nArguments\n\ninstid: NAIF ID of an instrument\nroom: Maximum number of vectors that can be returned (default: 10)\nshapelen: Space available in the string shape (default: 128)\nframelen: Space available in the string frame (default: 128)\n\nOutput\n\nReturns a tuple consisting of\n\nshape: Instrument FOV shape\nframe: Name of the frame in which FOV vectors are defined\nbsight: Boresight vector\nbounds: FOV boundary vectors\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfpa!-NTuple{11,Any}",
+    "page": "API",
+    "title": "SPICE.gfpa!",
+    "category": "method",
+    "text": "gfpa!(cnfine, result, target, illmn, abcorr, obsrvr, relate, refval, adjust, step, nintvls)\n\nDetermine time intervals for which a specified constraint on the phase angle between an illumination source, a target, and observer body centers is met.\n\nArguments\n\ncnfine: Window to which the search is confined\ntarget: Name of the target body\nillmn: Name of the illuminating body\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\nrelate: Relational operator\nrefval: Reference value\nadjust: Adjustment value for absolute extrema searches\nstep: Step size used for locating extrema and roots\nnintvls: Workspace window interval count\n\nOutput\n\nReturns a tuple consisting of\n\ncnfine: Window to which the search is confined.\nresult: Window containing results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gipool-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.gipool",
+    "category": "method",
+    "text": "gipool(name; start=1, room=100)\n\nReturn the value of a kernel variable from the kernel pool.\n\nArguments\n\nname: Name of the variable whose value is to be returned\nstart: Which component to start retrieving for name (default: 1)\nroom: The largest number of values to return (default: 100)\n\nOutput\n\nReturns an array of values if the variable exists or nothing if not.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.halfpi",
     "page": "API",
     "title": "SPICE.halfpi",
@@ -613,7 +645,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lastnb",
     "category": "method",
-    "text": "lastnb(str)\n\nReturn the index of the last non-blank character in a character string.\n\nArguments\n\nstr: Input character string\n\nOutput\n\nThe function returns the one-based index of the last non-blank  character in a character string. If the string is entirely blank  or is empty, the value 0 is returned.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lastnb(str)\n\nReturn the index of the last non-blank character in a character string.\n\nArguments\n\nstr: Input character string\n\nOutput\n\nThe function returns the one-based index of the last non-blank character in a character string. If the string is entirely blank or is empty, the value 0 is returned.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -645,7 +677,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.latsrf",
     "category": "method",
-    "text": "latsrf(method, target, et, fixref, npts, lonlat)\n\nMap array of planetocentric longitude/latitude coordinate pairs  to surface points on a specified target body. \n\nThe surface of the target body may be represented by a triaxial  ellipsoid or by topographic data provided by DSK files. \n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in TDB seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nnpts: Number of coordinate pairs in input array\nlonlat: Array of longitude/latitude coordinate pairs\n\nOutput\n\nReturns an array of surface points\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "latsrf(method, target, et, fixref, npts, lonlat)\n\nMap array of planetocentric longitude/latitude coordinate pairs to surface points on a specified target body.\n\nThe surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files.\n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in TDB seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nnpts: Number of coordinate pairs in input array\nlonlat: Array of longitude/latitude coordinate pairs\n\nOutput\n\nReturns an array of surface points\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -661,7 +693,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.ldpool",
     "category": "method",
-    "text": "ldpool(kernel)\n\nLoad the variables contained in a NAIF ASCII kernel file into the  kernel pool. \n\nArguments\n\nkernel: Name of the kernel file\n\nOutput\n\nNone\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "ldpool(kernel)\n\nLoad the variables contained in a NAIF ASCII kernel file into the kernel pool.\n\nArguments\n\nkernel: Name of the kernel file\n\nOutput\n\nNone\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -677,7 +709,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.limbpt",
     "category": "method",
-    "text": "limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp, ncuts, schstp, soltol, maxn)\n\nFind limb points on a target body. The limb is the set of points  of tangency on the target of rays emanating from the observer.  The caller specifies half-planes bounded by the observer-target  center vector in which to search for limb points. \n\nThe surface of the target body may be represented either by a  triaxial ellipsoid or by topographic data. \n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in ephemeris seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nabcorr: Aberration correction\ncorloc: Aberration correction locus\nobsrvr: Name of observing body\nrefvec: Reference vector for cutting half-planes\nrolstp: Roll angular step for cutting half-planes\nncuts: Number of cutting half-planes\nschstp: Angular step size for searching\nsoltol: Solution convergence tolerance\nmaxn: Maximum number of entries in output arrays\n\nOutput\n\nReturns the tuple (npts, points, epochs, tangts).\n\nnpts: Counts of limb points corresponding to cuts\npoints: Limb points\nepochs: Times associated with limb points\ntangts: Tangent vectors emanating from the observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp, ncuts, schstp, soltol, maxn)\n\nFind limb points on a target body. The limb is the set of points of tangency on the target of rays emanating from the observer. The caller specifies half-planes bounded by the observer-target center vector in which to search for limb points.\n\nThe surface of the target body may be represented either by a triaxial ellipsoid or by topographic data.\n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in ephemeris seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nabcorr: Aberration correction\ncorloc: Aberration correction locus\nobsrvr: Name of observing body\nrefvec: Reference vector for cutting half-planes\nrolstp: Roll angular step for cutting half-planes\nncuts: Number of cutting half-planes\nschstp: Angular step size for searching\nsoltol: Solution convergence tolerance\nmaxn: Maximum number of entries in output arrays\n\nOutput\n\nReturns the tuple (npts, points, epochs, tangts).\n\nnpts: Counts of limb points corresponding to cuts\npoints: Limb points\nepochs: Times associated with limb points\ntangts: Tangent vectors emanating from the observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -685,7 +717,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lmpool",
     "category": "method",
-    "text": "lmpool(cvals)\n\nLoad the variables contained in an internal buffer into the  kernel pool.\n\nArguments\n\ncvals: An array that contains a SPICE text kernel\n\nOutput\n\nNone\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lmpool(cvals)\n\nLoad the variables contained in an internal buffer into the kernel pool.\n\nArguments\n\ncvals: An array that contains a SPICE text kernel\n\nOutput\n\nNone\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -701,7 +733,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lparsm",
     "category": "method",
-    "text": "lparsm(list, delims, nmax)\n\nParse a list of items separated by multiple delimiters. \n\nArguments\n\nlist: List of items delimited by delim\ndelims: Single characters which delimit items\nnmax: Maximum number of items to return\n\nOutput\n\nReturns an array with the items in the list, left justified.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lparsm(list, delims, nmax)\n\nParse a list of items separated by multiple delimiters.\n\nArguments\n\nlist: List of items delimited by delim\ndelims: Single characters which delimit items\nnmax: Maximum number of items to return\n\nOutput\n\nReturns an array with the items in the list, left justified.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -717,7 +749,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lspcn",
     "category": "method",
-    "text": "lspcn(body, et, abcorr)\n\nCompute L_s, the planetocentric longitude of the sun, as seen  from a specified body. \n\nArguments\n\nbody: Name of the central body\net: Epoch in seconds past J2000 TDB\nabcorr: Aberration correction\n\nOutput\n\nReturns the planetocentric longitude of the sun for the specified body  at the specified time in radians.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lspcn(body, et, abcorr)\n\nCompute L_s, the planetocentric longitude of the sun, as seen from a specified body.\n\nArguments\n\nbody: Name of the central body\net: Epoch in seconds past J2000 TDB\nabcorr: Aberration correction\n\nOutput\n\nReturns the planetocentric longitude of the sun for the specified body at the specified time in radians.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -725,7 +757,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lstle",
     "category": "function",
-    "text": "lstle(x, array)\n\nGiven an element x and an array of non-decreasing elements (floats, integers, or strings),  find the index of the largest array element less than or equal to x.\n\nArguments\n\nx: Value to search against\narrays: Array of possible lower bounds \n\nOutput\n\nReturns the index of the highest-indexed element in the  input array that is less than or equal to x.  The routine assumes the array elements are sorted in non-decreasing order.\n\nIf all elements of the input array are greater than x, the function returns 0.\n\nReferences\n\nNAIF Documentation\nNAIF Documentation\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lstle(x, array)\n\nGiven an element x and an array of non-decreasing elements (floats, integers, or strings), find the index of the largest array element less than or equal to x.\n\nArguments\n\nx: Value to search against\narrays: Array of possible lower bounds\n\nOutput\n\nReturns the index of the highest-indexed element in the input array that is less than or equal to x.  The routine assumes the array elements are sorted in non-decreasing order.\n\nIf all elements of the input array are greater than x, the function returns 0.\n\nReferences\n\nNAIF Documentation\nNAIF Documentation\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -733,7 +765,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lstlt",
     "category": "function",
-    "text": "lstle(x, array)\n\nGiven an element x and an array of non-decreasing elements (floats, integers, or strings),  find the index of the largest array element less than x.\n\nArguments\n\nx: Value to search against\narrays: Array of possible lower bounds \n\nOutput\n\nReturns the index of the highest-indexed element in the  input array that is less than x.  The routine assumes the array elements are sorted in non-decreasing order.\n\nIf all elements of the input array are greater than or equal to x, the function returns 0.\n\nReferences\n\nNAIF Documentation\nNAIF Documentation\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lstle(x, array)\n\nGiven an element x and an array of non-decreasing elements (floats, integers, or strings), find the index of the largest array element less than x.\n\nArguments\n\nx: Value to search against\narrays: Array of possible lower bounds\n\nOutput\n\nReturns the index of the highest-indexed element in the input array that is less than x.  The routine assumes the array elements are sorted in non-decreasing order.\n\nIf all elements of the input array are greater than or equal to x, the function returns 0.\n\nReferences\n\nNAIF Documentation\nNAIF Documentation\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -741,7 +773,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.ltime",
     "category": "method",
-    "text": "ltime(etobs, obs, dir, targ)\n\nThis routine computes the transmit (or receive) time  of a signal at a specified target, given the receive  (or transmit) time at a specified observer. The elapsed  time between transmit and receive is also returned. \n\nArguments\n\netobs: Epoch of a signal at some observer\nobs: NAIF ID of some observer \ndir: Direction the signal travels ( \"->\" or \"<-\" ) \ntarg: Time between transmit and receipt of the signal\n\nOutput\n\nReturns the tuple (ettarg, elapsd).\n\nettarg: Epoch of the signal at the target \nobs: NAIF ID of some observer \n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "ltime(etobs, obs, dir, targ)\n\nThis routine computes the transmit (or receive) time of a signal at a specified target, given the receive (or transmit) time at a specified observer. The elapsed time between transmit and receive is also returned.\n\nArguments\n\netobs: Epoch of a signal at some observer\nobs: NAIF ID of some observer\ndir: Direction the signal travels ( \"->\" or \"<-\" )\ntarg: Time between transmit and receipt of the signal\n\nOutput\n\nReturns the tuple (ettarg, elapsd).\n\nettarg: Epoch of the signal at the target\nobs: NAIF ID of some observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -749,7 +781,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lx4dec",
     "category": "method",
-    "text": "lx4dec(string, first)\n\nScan a string from a specified starting position for the  end of a decimal number. \n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of a decimal number. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the decimal number\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lx4dec(string, first)\n\nScan a string from a specified starting position for the end of a decimal number.\n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of a decimal number. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the decimal number\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -757,7 +789,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lx4num",
     "category": "method",
-    "text": "lx4num(string, first)\n\nScan a string from a specified starting position for the  end of a number. \n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of a number. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the number\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lx4num(string, first)\n\nScan a string from a specified starting position for the end of a number.\n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of a number. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the number\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -765,7 +797,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lx4sgn",
     "category": "method",
-    "text": "lx4sgn(string, first)\n\nScan a string from a specified starting position for the  end of a signed integer. \n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of a signed integer. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the signed integer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lx4sgn(string, first)\n\nScan a string from a specified starting position for the end of a signed integer.\n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of a signed integer. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the signed integer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -773,7 +805,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lx4uns",
     "category": "method",
-    "text": "lx4uns(string, first)\n\nScan a string from a specified starting position for the  end of a unsigned integer. \n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of an unsigned integer. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the unsigned integer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lx4uns(string, first)\n\nScan a string from a specified starting position for the end of a unsigned integer.\n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of an unsigned integer. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the unsigned integer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1069,15 +1101,167 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.pgrrec",
     "category": "method",
-    "text": "pgrrec(body, lon, lat, alt, re, f)\n\nConvert planetographic coordinates to rectangular coordinates.\n\nArguments\n\nbody: Body with which coordinate system is associated. \nlon: Planetographic longitude of a point (radians). \nlat: Planetographic latitude of a point (radians). \nalt: Altitude of a point above reference spheroid. \nre: Equatorial radius of the reference spheroid. \nf: Flattening coefficient. \n\nOutput\n\nReturns the rectangular coordinates of the point.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "pgrrec(body, lon, lat, alt, re, f)\n\nConvert planetographic coordinates to rectangular coordinates.\n\nArguments\n\nbody: Body with which coordinate system is associated.\nlon: Planetographic longitude of a point (radians).\nlat: Planetographic latitude of a point (radians).\nalt: Altitude of a point above reference spheroid.\nre: Equatorial radius of the reference spheroid.\nf: Flattening coefficient.\n\nOutput\n\nReturns the rectangular coordinates of the point.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
-    "location": "api/#SPICE.pxform-Tuple{String,String,Float64}",
+    "location": "api/#SPICE.phaseq-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.phaseq",
+    "category": "method",
+    "text": "phaseq(et, target, illmn, obsrvr, abcorr)\n\nCompute the apparent phase angle for a target, observer, illuminator set of ephemeris objects.\n\nArguments\n\net: Ephemeris seconds past J2000 TDB\ntarget: Target body name\nillmn: Illuminating body name\nobsrvr: Observer body\nabcorr: Aberration correction flag\n\nOutput\n\nReturns the value of the phase angle.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pipool-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.pipool",
+    "category": "method",
+    "text": "pipool(name, ivals)\n\nInsert integer data into the kernel pool.\n\nArguments\n\nname: The kernel pool name to associate with the values\nivals: An array of integers to insert into the pool\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pjelpl-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.pjelpl",
+    "category": "method",
+    "text": "pjelpl(elin, plane)\n\nProject an ellipse onto a plane, orthogonally.\n\nArguments\n\nelin: An ellipse to be projected\nplane: A plane onto which elin is to be projected\n\nOutput\n\nReturns the ellipse resulting from the projection.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pl2nvc-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.pl2nvc",
+    "category": "method",
+    "text": "pl2nvc(plane)\n\nReturn a unit normal vector and constant that define a specified plane.\n\nArguments\n\nplane: A plane\n\nOutput\n\nReturns a tuple consisting of\n\nnormal: A normal vector and...\nconstant: ... constant defining the geometric plane represented by plane\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pl2nvp-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.pl2nvp",
+    "category": "method",
+    "text": "pl2nvp(plane)\n\nReturn a unit normal vector and point that define a specified plane.\n\nArguments\n\nplane: A plane\n\nOutput\n\nReturns a tuple consisting of\n\nnormal: A normal vector and...\npoint: ... point defining the geometric plane represented by plane\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pl2psv-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.pl2psv",
+    "category": "method",
+    "text": "pl2psv(plane)\n\nReturn a point and two orthogonal spanning vectors that define a specified plane.\n\nArguments\n\nplane: A plane\n\nOutput\n\nReturns a tuple consisting of a point in the plane and two vectors spanning the input plane.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pltar-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.pltar",
+    "category": "method",
+    "text": "pltar(vrtces, plates)\n\nCompute the total area of a collection of triangular plates.\n\nArguments\n\nvrtces: Array of vertices\nplates: Array of plates\n\nOutput\n\nReturns the area.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pltexp-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.pltexp",
+    "category": "method",
+    "text": "pltexp(iverts, delta)\n\nExpand a triangular plate by a specified amount. The expanded plate is co-planar with, and has the same orientation as, the original. The centroids of the two plates coincide.\n\nArguments\n\niverts: Vertices of the plate to be expanded\ndelta: Fraction by which the plate is to be expanded\n\nOutput\n\nReturns the vertices of the expanded plate.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pltnp-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.pltnp",
+    "category": "method",
+    "text": "pltnp(point, v1, v2, v3)\n\nFind the nearest point on a triangular plate to a given point.\n\nArguments\n\npoint: A point in 3-dimensional space.\nv1, v2, v3: Vertices of a triangular plate\n\nOutput\n\nReturns a tuple consisting of\n\npnear: Nearest point on the plate to point\ndist: Distance between pnear and point\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pltnrm-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.pltnrm",
+    "category": "method",
+    "text": "pltnrm(v1, v2, v3)\n\nCompute an outward normal vector of a triangular plate.  The vector does not necessarily have unit length.\n\nArguments\n\nv1, v2, v3: Vertices of a plate\n\nOutput\n\nReturns the plate\'s outward normal vector.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pltvol-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.pltvol",
+    "category": "method",
+    "text": "pltvol(vrtces, plates)\n\nCompute the volume of a three-dimensional region bounded by a collection of triangular plates.\n\nArguments\n\nvrtces: Array of vertices\nplates: Array of plates\n\nOutput\n\nReturns the volume of the spatial region bounded by the plates.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.polyds-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.polyds",
+    "category": "method",
+    "text": "polyds(coeffs, nderiv, t)\n\nCompute the value of a polynomial and it\'s first nderiv derivatives at the value t.\n\nArguments\n\ncoeffs: Coefficients of the polynomial to be evaluated\nnderiv: Number of derivatives to compute\nt: Point to evaluate the polynomial and derivatives\n\nOutput\n\nReturns the value of the polynomial and the derivatives as an array.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pos",
+    "page": "API",
+    "title": "SPICE.pos",
+    "category": "function",
+    "text": "pos(str, substr, start)\n\nwarning: Deprecated\nUse first(findnext(substr, str, start)) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.posr",
+    "page": "API",
+    "title": "SPICE.posr",
+    "category": "function",
+    "text": "posr(str, substr, start)\n\nwarning: Deprecated\nUse first(findprev(substr, str, start)) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.prop2b-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.prop2b",
+    "category": "method",
+    "text": "prop2b(gm, pvinit, dt)\n\nGiven a central mass and the state of massless body at time t_0, this routine determines the state as predicted by a two-body force model at time t_0 + dt.\n\nArguments\n\ngm: Gravity of the central mass.\npvinit: Initial state from which to propagate a state.\ndt: Time offset from initial state to propagate to.\n\nOutput\n\nReturns the propagated state.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.prsdp",
+    "page": "API",
+    "title": "SPICE.prsdp",
+    "category": "function",
+    "text": "prsdp(str)\n\nwarning: Deprecated\nUse parse(Float64, str) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.prsint",
+    "page": "API",
+    "title": "SPICE.prsint",
+    "category": "function",
+    "text": "prsint(str)\n\nwarning: Deprecated\nUse parse(Int, str) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.psv2pl-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.psv2pl",
+    "category": "method",
+    "text": "psv2pl(point, span1, span2)\n\nMake a plane from a point and two spanning vectors.\n\nArguments\n\npoint, span1, span2: A point and two spanning vectors defining a plane\n\nOutput\n\nReturns the plane.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pxform-Tuple{Any,Any,Any}",
     "page": "API",
     "title": "SPICE.pxform",
     "category": "method",
-    "text": "Return the matrix that transforms position vectors from one specified frame to another at a specified epoch.\n\nhttps://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/pxformc.html\n\n\n\n\n\n"
+    "text": "pxform(from, to, et)\n\nReturn the matrix that transforms position vectors from one specified frame to another at a specified epoch.\n\nArguments\n\nfrom: Name of the frame to transform from\nto: Name of the frame to transform to\net: Epoch of the rotation matrix\n\nOutput\n\nReturns the rotation matrix.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pxfrm2-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.pxfrm2",
+    "category": "method",
+    "text": "pxfrm2(from, to, etfrom, etto)\n\nReturn the 3x3 matrix that transforms position vectors from one specified frame at a specified epoch to another specified frame at another specified epoch.\n\nArguments\n\nfrom: Name of the frame to transform from\nto: Name of the frame to transform to\netfrom: Evaluation time of from frame\netto: Evaluation time of to frame\n\nOutput\n\nReturns a position transformation matrix from frame from to frame to.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1153,6 +1337,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.sincpt-NTuple{8,Any}",
+    "page": "API",
+    "title": "SPICE.sincpt",
+    "category": "method",
+    "text": "sincpt(method, target, et, fixref, abcorr, obsrvr, dref, dvec)\n\nGiven an observer and a direction vector defining a ray, compute the surface intercept of the ray on a target body at a specified epoch, optionally corrected for light time and stellar aberration.\n\nThe surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files.\n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in TDB seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nabcorr: Aberration correction flag\nobsrvr: Name of observing body\ndref: Reference frame of ray\'s direction vector\ndvec: Ray\'s direction vector\n\nOutput\n\nReturns a tuple consisting of the following data or nothing if no intercept was found.\n\nspoint: Surface intercept point on the target body\ntrgepc: Intercept epoch\nsrfvec: Vector from observer to intercept point\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.spd-Tuple{}",
     "page": "API",
     "title": "SPICE.spd",
@@ -1189,15 +1381,23 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.subpnt",
     "category": "method",
-    "text": "subpnt(method, target, et, fixref, obsrvr, abcorr)\n\nCompute the rectangular coordinates of the sub-observer point on  a target body at a specified epoch, optionally corrected for  light time and stellar aberration. \n\nArguments\n\nmethod: Computation method. \ntarget: Name of target body. \net: Epoch in ephemeris seconds past J2000 TDB. \nfixref: Body-fixed, body-centered target body frame.  \nobsrvr: Name of observing body. \nabcorr: Aberration correction.\n\nOutput\n\nspoint: Sub-solar point on the target body. \ntrgepc: Sub-solar point epoch. \nsrfvec: Vector from observer to sub-solar point.\n\nReturns cell with its cardinality set to card.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "subpnt(method, target, et, fixref, obsrvr, abcorr)\n\nCompute the rectangular coordinates of the sub-observer point on a target body at a specified epoch, optionally corrected for light time and stellar aberration.\n\nArguments\n\nmethod: Computation method.\ntarget: Name of target body.\net: Epoch in ephemeris seconds past J2000 TDB.\nfixref: Body-fixed, body-centered target body frame.\nobsrvr: Name of observing body.\nabcorr: Aberration correction.\n\nOutput\n\nspoint: Sub-solar point on the target body.\ntrgepc: Sub-solar point epoch.\nsrfvec: Vector from observer to sub-solar point.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
-    "location": "api/#SPICE.subslr-Tuple{AbstractString,AbstractString,Float64,AbstractString,AbstractString}",
+    "location": "api/#SPICE.subslr-NTuple{5,Any}",
     "page": "API",
     "title": "SPICE.subslr",
     "category": "method",
-    "text": "subslr(method, target, et, fixref, obsrvr, abcorr)\n\nCompute the rectangular coordinates of the sub-solar point on  a target body at a specified epoch, optionally corrected for  light time and stellar aberration.\n\nArguments\n\nmethod: Computation method. \ntarget: Name of target body. \net: Epoch in ephemeris seconds past J2000 TDB. \nfixref: Body-fixed, body-centered target body frame. \nobsrvr: Name of observing body. \nabcorr: Aberration correction. \n\nOutput\n\nspoint: Sub-solar point on the target body. \ntrgepc: Sub-solar point epoch. \nsrfvec: Vector from observer to sub-solar point.\n\nReturns cell with its cardinality set to card.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "subslr(method, target, et, fixref, obsrvr, abcorr)\n\nCompute the rectangular coordinates of the sub-solar point on a target body at a specified epoch, optionally corrected for light time and stellar aberration.\n\nArguments\n\nmethod: Computation method.\ntarget: Name of target body.\net: Epoch in ephemeris seconds past J2000 TDB.\nfixref: Body-fixed, body-centered target body frame.\nobsrvr: Name of observing body.\nabcorr: Aberration correction.\n\nOutput\n\nspoint: Sub-solar point on the target body.\ntrgepc: Sub-solar point epoch.\nsrfvec: Vector from observer to sub-solar point.\n\nReturns cell with its cardinality set to card.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.surfpt-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.surfpt",
+    "category": "method",
+    "text": "positn     I   Position of the observer in body-fixed frame. u          I   Vector from the observer in some direction. a          I   Length of the ellipsoid semi-axis along the x-axis. b          I   Length of the ellipsoid semi-axis along the y-axis. c          I   Length of the ellipsoid semi-axis along the z-axis. point      O   Point on the ellipsoid pointed to by u. found      O   Flag indicating if u points at the ellipsoid.\n\n\n\n\n\n"
 },
 
 {
