@@ -1,10 +1,9 @@
 @testset "R" begin
-#= @testset "radrec" begin =#
-#=     npt.assert_array_almost_equal([1.0, 0.0, 0.0], radrec(1.0, 0.0, 0.0)) =#
-#=     npt.assert_array_almost_equal([0.0, 1.0, 0.0], radrec(1.0, 90.0 * rpd(), 0.0)) =#
-#=     npt.assert_array_almost_equal([0.0, 0.0, 1.0], radrec(1.0, 0.0, 90.0 * rpd())) =#
-#=  =#
-#=  =#
+    @testset "radrec" begin
+        @test [1.0, 0.0, 0.0] ≈ radrec(1.0, 0.0, 0.0)
+        @test [0.0, 1.0, 0.0] ≈ radrec(1.0, π/2, 0.0)
+        @test [0.0, 0.0, 1.0] ≈ radrec(1.0, 0.0, π/2)
+    end
     @testset "rav2xf" begin
         e = [1.0, 0.0, 0.0]
         rz = [0.0 1.0 0.0; -1.0 0.0 0.0; 0.0 0.0 1.0]
@@ -19,38 +18,45 @@
             @test exp[i] ≈ act[i]
         end
     end
-#= @testset "raxisa" begin =#
-#=     axis = [1.0, 2.0, 3.0] =#
-#=     angle = 0.1 * twopi() =#
-#=     rotate_matrix = axisar(axis, angle) =#
-#=     axout, angout = raxisa(rotate_matrix) =#
-#=     expectedAngout = [0.26726124, 0.53452248, 0.80178373] =#
-#=     npt.assert_approx_equal(angout, 0.62831853, significant=7) =#
-#=     npt.assert_array_almost_equal(axout, expectedAngout) =#
-#=  =#
-#=  =#
-#= @testset "reccyl" begin =#
-#=     expected1 = array([0.0, 0.0, 0.0]) =#
-#=     expected2 = array([1.0, 90.0 * rpd(), 0.0]) =#
-#=     expected3 = array([1.0, 270.0 * rpd(), 0.0]) =#
-#=     npt.assert_array_almost_equal(expected1, reccyl([0.0, 0.0, 0.0]), decimal=7) =#
-#=     npt.assert_array_almost_equal(expected2, reccyl([0.0, 1.0, 0.0]), decimal=7) =#
-#=     npt.assert_array_almost_equal(expected3, reccyl([0.0, -1.0, 0.0]), decimal=7) =#
-#=  =#
-#=  =#
-#= @testset "recgeo" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     num_vals, radii = bodvrd("EARTH", "RADII", 3) =#
-#=     flat = (radii[0] - radii[2]) / radii[0] =#
-#=     x = [-2541.748162, 4780.333036, 3360.428190] =#
-#=     lon, lat, alt = recgeo(x, radii[0], flat) =#
-#=     actual = [lon * dpr(), lat * dpr(), alt] =#
-#=     expected = [118.000000, 32.000000, 0.001915518] =#
-#=     npt.assert_array_almost_equal(actual, expected, decimal=4) =#
-#=     kclear() =#
-#=  =#
-#=  =#
+    @testset "raxisa" begin
+        axis = [1.0, 2.0, 3.0]
+        angle = 0.2π
+        rotate_matrix = axisar(axis, angle)
+        axout, angout = raxisa(rotate_matrix)
+        expected_angout = [0.26726124, 0.53452248, 0.80178373]
+        @test angout ≈ 0.62831853
+        @test axout ≈ expected_angout
+        @test_throws SpiceError raxisa(randn(3, 3))
+        @test_throws ArgumentError raxisa(randn(2, 2))
+    end
+    @testset "reccyl" begin
+        expected1 = (0.0, 0.0, 0.0)
+        expected2 = (1.0, π/2, 0.0)
+        expected3 = (1.0, 3/2 * π, 0.0)
+        @test all(reccyl([0.0, 0.0, 0.0]) .≈ expected1)
+        @test all(reccyl([0.0, 1.0, 0.0]) .≈ expected2)
+        @test all(reccyl([0.0, -1.0, 0.0]) .≈ expected3)
+        @test_throws ArgumentError reccyl([0.0, -1.0])
+    end
+    @testset "recgeo" begin
+        try
+            furnsh(path(CORE, :pck))
+            radii = bodvrd("EARTH", "RADII", 3)
+            flat = (radii[1] - radii[3]) / radii[1]
+            x = [-2541.748162, 4780.333036, 3360.428190]
+            lon, lat, alt = recgeo(x, radii[1], flat)
+            actual = [rad2deg(lon), rad2deg(lat), alt]
+            expected = [118.0, 32.0, 0.001915518]
+            @testset for i in eachindex(actual, expected)
+                @test actual[i] ≈ expected[i] rtol=1e-4
+            end
+            @test_throws ArgumentError recgeo(x[1:2], radii[1], flat)
+            @test_throws SpiceError recgeo(x, -radii[1], flat)
+            @test_throws SpiceError recgeo(x, radii[1], 1.0)
+        finally
+            kclear()
+        end
+    end
     @testset "reclat" begin
         act1 = reclat([1.0, 0.0, 0.0])
         act2 = reclat([0.0, 1.0, 0.0])
@@ -58,6 +64,7 @@
         @test [act1[1], act1[2], act1[3]] ≈ [1.0, 0.0, 0.0]
         @test [act2[1], act2[2], act2[3]] ≈ [1.0, deg2rad(90.0), 0.0]
         @test [act3[1], act3[2], act3[3]] ≈ [1.0, deg2rad(180.0), 0.0]
+        @test_throws ArgumentError reclat([1.0, 2.0])
     end
     @testset "recpgr" begin
         try
@@ -69,6 +76,9 @@
             actual = [rad2deg(lon), rad2deg(lat), alt]
             expected = [90., 45, 300]
             @test actual ≈ expected
+            @test_throws ArgumentError recpgr("MARS", x[1:2], radii[1], flat)
+            @test_throws SpiceError recpgr("MARS", x, -radii[1], flat)
+            @test_throws SpiceError recpgr("MARS", x, radii[1], 1.0)
         finally
             kclear()
         end
@@ -90,11 +100,10 @@
             @test act3[i] ≈ exp3[i]
         end
     end
-#= @testset "recsph" begin =#
-#=     v1 = array([-1.0, 0.0, 0.0]) =#
-#=     assert recsph(v1) == (1.0, pi/2, pi) =#
-#=  =#
-#=  =#
+    @testset "recsph" begin
+        v1 = [-1.0, 0.0, 0.0]
+        @test all(recsph(v1) .≈ (1.0, π/2, π))
+    end
 #= @testset "removc" begin =#
 #=     cell = cell_char(10, 10) =#
 #=     items = ["one", "two", "three", "four"] =#
