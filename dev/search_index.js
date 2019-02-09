@@ -1289,6 +1289,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.radrec-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.radrec",
+    "category": "method",
+    "text": "radrec(range, ra, dec)\n\nConvert from range, right ascension, and declination to rectangular coordinates.\n\nArguments\n\nrange      I   Distance of a point from the origin. ra         I   Right ascension of point in radians. dec        I   Declination of point in radians.\n\nOutput\n\nReturns the rectangular coordinates of the point.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.rav2xf-Tuple{Any,Any}",
     "page": "API",
     "title": "SPICE.rav2xf",
@@ -1297,11 +1305,35 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.raxisa-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.raxisa",
+    "category": "method",
+    "text": "raxisa(matrix)\n\nCompute the axis of the rotation given by an input matrix and the angle of the rotation about that axis.\n\nArguments\n\nmatrix: A 3x3 rotation matrix\n\nOutput\n\naxis: Axis of the rotation\nangle: Angle through which the rotation is performed\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.reccyl-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.reccyl",
+    "category": "method",
+    "text": "reccyl(rectan)\n\nConvert from rectangular to cylindrical coordinates.\n\nArguments\n\nrectan: Rectangular coordinates of a point\n\nOutput\n\nr: Distance of the point from the Z axis\nlon: Angle (radians) of the point from the XZ plane\nz: Height of the point above the XY plane\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.recgeo-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.recgeo",
+    "category": "method",
+    "text": "recgeo(rectan, re, f)\n\nConvert from rectangular coordinates to geodetic coordinates.\n\nArguments\n\nrectan: Rectangular coordinates of a point\nre: Equatorial radius of the reference spheroid\nf: Flattening coefficient\n\nOutput\n\nlon: Geodetic longitude of the point (radians)\nlat: Geodetic latitude  of the point (radians)\nalt: Altitude of the point above reference spheroid\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.reclat-Tuple{Any}",
     "page": "API",
     "title": "SPICE.reclat",
     "category": "method",
-    "text": "reclat(rectan)\n\nConvert from rectangular coordinates to latitudinal coordinates.\n\nArguments\n\nrectan: Rectangular coordinates of a point as an iterable with three elements.\n\nOutput\n\nReturns a tuple consisting of:\n\nrad: Distance of the point from the origin\nlon: Planetographic longitude of the point (radians)\nlat: Planetographic latitude of the point (radians)\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "reclat(rectan)\n\nConvert from rectangular coordinates to latitudinal coordinates.\n\nArguments\n\nrectan: Rectangular coordinates of a point\n\nOutput\n\nReturns a tuple consisting of:\n\nrad: Distance of the point from the origin\nlon: Planetographic longitude of the point (radians)\nlat: Planetographic latitude of the point (radians)\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1318,6 +1350,14 @@ var documenterSearchIndex = {"docs": [
     "title": "SPICE.recrad",
     "category": "method",
     "text": "recrad(rectan)\n\nConvert rectangular coordinates to range, right ascension, and declination.\n\nArguments\n\nrectan: Rectangular coordinates of a point\n\nOutput\n\nReturn the tuple (range, ra, dec).\n\nrange: Distance of the point from the origin\nra: Right ascension in radians\ndec: Declination in radians\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.recsph-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.recsph",
+    "category": "method",
+    "text": "recsph(rectan)\n\nConvert from rectangular coordinates to spherical coordinates.\n\nArguments\n\nrectan: Rectangular coordinates of a point\n\nOutput\n\nr: Distance of the point from the origin\ncolat: Angle of the point from the Z-axis in radian\nlon: Longitude of the point in radians\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
