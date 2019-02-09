@@ -609,6 +609,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.hrmint-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.hrmint",
+    "category": "method",
+    "text": "hrmint(xvals, yvals, x)\n\nEvaluate a Hermite interpolating polynomial at a specified abscissa value.\n\nArguments\n\nxvals: Abscissa values\nyvals: Ordinate and derivative values\nx: Point at which to interpolate the polynomial\n\nOutput\n\nf: Interpolated function value at x\ndf: Interpolated function\'s derivative at x\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.hx2dp-Tuple{Any}",
     "page": "API",
     "title": "SPICE.hx2dp",
