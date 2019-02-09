@@ -505,6 +505,54 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.fovray-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.fovray",
+    "category": "method",
+    "text": "fovray(inst, raydir, rframe, abcorr, observer, et)\n\nDetermine if a specified ray is within the field-of-view (FOV) of a specified instrument at a given time.\n\nArguments\n\ninst: Name or ID code string of the instrument\nraydir: Ray\'s direction vector\nrframe: Body-fixed, body-centered frame for target body\nabcorr: Aberration correction flag\nobserver: Name or ID code string of the observer\net: Time of the observation (seconds past J2000)\n\nOutput\n\nReturns true if the ray is visible.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.fovtrg-NTuple{7,Any}",
+    "page": "API",
+    "title": "SPICE.fovtrg",
+    "category": "method",
+    "text": "fovtrg(inst, target, tshape, tframe, abcorr, obsrvr, et)\n\nDetermine if a specified ephemeris object is within the field-of-view (FOV) of a specified instrument at a given time.\n\nArguments\n\ninst: Name or ID code string of the instrument.\ntarget: Name or ID code string of the target.\ntshape: Type of shape model used for the target.\ntframe: Body-fixed, body-centered frame for target body.\nabcorr: Aberration correction flag.\nobsrvr: Name or ID code string of the observer.\net: Time of the observation (seconds past J2000).\n\nOutput\n\nReturns true if the object is visible.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.frame-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.frame",
+    "category": "method",
+    "text": "frame(x)\n\nGiven a vector x, this routine builds a right handed orthonormal frame x, y, z where the output x is parallel to the input x.\n\nArguments\n\nx: Input vector\n\nOutput\n\nx: Unit vector parallel to x on output\ny: Unit vector in the plane orthogonal to x\nz: Unit vector given by x × y\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.frinfo-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.frinfo",
+    "category": "method",
+    "text": "frinfo(frcode)\n\nRetrieve the minimal attributes associated with a frame needed for converting transformations to and from it.\n\nArguments\n\nfrcode: The id code for a reference frame\n\nOutput\n\ncent: The center of the frame\nfrclss: The class (type) of the frame\nclssid: The idcode for the frame within its class\n\nReturns nothing if no frame with id frcode could be found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.frmnam-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.frmnam",
+    "category": "method",
+    "text": "frmnam(frcode)\n\nRetrieve the name of a reference frame associated with an id code.\n\nArguments\n\nfrcode: The id code for a reference frame\n\nOutput\n\nReturns the name associated with the reference frame.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.furnsh-Tuple",
+    "page": "API",
+    "title": "SPICE.furnsh",
+    "category": "method",
+    "text": "furnsh(kernels...)\n\nLoad one or more SPICE kernels into a program.\n\nArguments\n\nkernels: Path(s) of SPICE kernels to load\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.gcpool-Tuple{Any}",
     "page": "API",
     "title": "SPICE.gcpool",
