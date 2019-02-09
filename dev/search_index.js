@@ -17,26 +17,26 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.SpiceCharCell-Tuple{Int64,Int64}",
+    "location": "api/#SPICE.SpiceCharCell",
     "page": "API",
     "title": "SPICE.SpiceCharCell",
-    "category": "method",
+    "category": "type",
     "text": "SpiceCharCell(size, length)\n\nCreate a SpiceCharCell that can contain up to size strings with length characters.\n\n\n\n\n\n"
 },
 
 {
-    "location": "api/#SPICE.SpiceDoubleCell-Tuple{Any}",
+    "location": "api/#SPICE.SpiceDoubleCell",
     "page": "API",
     "title": "SPICE.SpiceDoubleCell",
-    "category": "method",
+    "category": "type",
     "text": "SpiceDoubleCell(size)\n\nCreate a SpiceDoubleCell that can contain up to size elements.\n\n\n\n\n\n"
 },
 
 {
-    "location": "api/#SPICE.SpiceIntCell-Tuple{Any}",
+    "location": "api/#SPICE.SpiceIntCell",
     "page": "API",
     "title": "SPICE.SpiceIntCell",
-    "category": "method",
+    "category": "type",
     "text": "SpiceIntCell(size)\n\nCreate a SpiceIntCell that can contain up to size elements.\n\n\n\n\n\n"
 },
 
@@ -49,7 +49,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#Base.copy-Union{Tuple{SpiceCell{T,N}}, Tuple{N}, Tuple{T}} where N where T",
+    "location": "api/#Base.copy-Union{Tuple{SpiceCell{T,T1,N} where N where T1}, Tuple{T}} where T",
     "page": "API",
     "title": "Base.copy",
     "category": "method",
@@ -61,7 +61,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "Base.length",
     "category": "method",
-    "text": "length(cell)\n\nReturns the cardinality (number of elements) of a SpiceCell cell.\n\n\n\n\n\n"
+    "text": "length(cell)\n\nReturns the cardinality (number of elements) of cell.\n\n\n\n\n\n"
 },
 
 {
@@ -73,15 +73,15 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#Base.union-Union{Tuple{T}, Tuple{S}, Tuple{T,T}} where T<:(SPICE.SpiceCell{S,N} where N) where S",
+    "location": "api/#Base.union-Union{Tuple{T}, Tuple{S}, Tuple{T,T}} where T<:(SPICE.SpiceCell{S,T,N} where N where T) where S",
     "page": "API",
     "title": "Base.union",
     "category": "method",
-    "text": "union(a::T, b::T) where T <: SpiceCell\n\nCompute the union of two sets of any data type to form a third set.\n\nArguments\n\na: First input set\nb: Second input set\n\nOutput\n\nReturns a cell containing the union of a and b. \n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "union(a::T, b::T) where T <: SpiceCell\n\nCompute the union of two sets of any data type to form a third set.\n\nArguments\n\na: First input set\nb: Second input set\n\nOutput\n\nReturns a cell containing the union of a and b.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
-    "location": "api/#SPICE.appnd-Tuple{Any,SPICE.SpiceCell{UInt8,N} where N}",
+    "location": "api/#SPICE.appnd-Tuple{Any,SPICE.SpiceCell{UInt8,T,N} where N where T}",
     "page": "API",
     "title": "SPICE.appnd",
     "category": "method",
@@ -253,7 +253,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.card",
     "category": "method",
-    "text": "card(cell)\n\nReturns the cardinality (number of elements) of a SpiceCell cell.\n\n\n\n\n\n"
+    "text": "card(cell)\n\nReturns the cardinality (number of elements) of cell.\n\n\n\n\n\n"
 },
 
 {
@@ -473,6 +473,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.edlimb-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.edlimb",
+    "category": "method",
+    "text": "edlimb(a, b, c, viewpt)\n\nFind the limb of a triaxial ellipsoid, viewed from a specified point.\n\nArguments\n\na: Length of ellipsoid semi-axis lying on the x-axis\nb: Length of ellipsoid semi-axis lying on the y-axis\nc: Length of ellipsoid semi-axis lying on the z-axis\nviewpt: Location of viewing point\n\nOutput\n\nReturns the limb of the ellipsoid as seen from the viewing point.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.edterm-NTuple{7,Any}",
     "page": "API",
     "title": "SPICE.edterm",
@@ -625,11 +633,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.illumf-NTuple{8,Any}",
+    "page": "API",
+    "title": "SPICE.illumf",
+    "category": "method",
+    "text": "illumf(method, target, ilusrc, et, fixref, abcorr, obsrvr, spoint)\n\nCompute the illumination angles - phase, incidence, and emission - at a specified point on a target body. Return logical flags indicating whether the surface point is visible from the observer\'s position and whether the surface point is illuminated.\n\nThe target body\'s surface is represented using topographic data provided by DSK files, or by a reference ellipsoid.\n\nThe illumination source is a specified ephemeris object.\n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\nilusrc: Name of illumination source\net: Epoch in TDB seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nabcorr: Aberration correction flag\nobsrvr: Name of observing body\nspoint: Body-fixed coordinates of a target surface point\n\nOutput\n\ntrgepc: Target surface point epoch\nsrfvec: Vector from observer to target surface point\nphase: Phase angle at the surface point\nincdnc: Source incidence angle at the surface point\nemissn: Emission angle at the surface point\nvisibl: Visibility flag (true if visible)\nlit: Illumination flag (true if illuminated)\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.illumg-NTuple{7,Any}",
     "page": "API",
     "title": "SPICE.illumg",
     "category": "method",
-    "text": "illumg(method, target, ilusrc, et, fixref, obsrvr, spoint, abcorr)\n\nFind the illumination angles (phase, incidence, and emission) at a specified surface point of a target body. \n\nThe surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files. \n\nThe illumination source is a specified ephemeris object. \n\nArguments\n\nmethod: Computation method. \ntarget: Name of target body. \nilusrc: Name of illumination source.\net: Epoch in ephemeris seconds past J2000 TDB. \nfixref: Body-fixed, body-centered target body frame.  \nobsrvr: Name of observing body. \nspoint: Body-fixed coordinates of a target surface point.\nabcorr: Aberration correction.\n\nOutput\n\ntrgepc: Sub-solar point epoch. \nsrfvec: Vector from observer to sub-solar point.\nphase: Phase angle at the surface point. \nincdnc: Solar incidence angle at the surface point. \nemissn: Emission angle at the surface point. \n\nReferences\n\n[NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/illumgc.html\n\n\n\n\n\n"
+    "text": "illumg(method, target, ilusrc, et, fixref, obsrvr, spoint, abcorr)\n\nFind the illumination angles (phase, incidence, and emission) at a specified surface point of a target body.\n\nThe surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files.\n\nThe illumination source is a specified ephemeris object.\n\nArguments\n\nmethod: Computation method.\ntarget: Name of target body.\nilusrc: Name of illumination source.\net: Epoch in ephemeris seconds past J2000 TDB.\nfixref: Body-fixed, body-centered target body frame.\nobsrvr: Name of observing body.\nspoint: Body-fixed coordinates of a target surface point.\nabcorr: Aberration correction.\n\nOutput\n\ntrgepc: Sub-solar point epoch.\nsrfvec: Vector from observer to sub-solar point.\nphase: Phase angle at the surface point.\nincdnc: Solar incidence angle at the surface point.\nemissn: Emission angle at the surface point.\n\nReferences\n\n[NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/illumgc.html\n\n\n\n\n\n"
 },
 
 {
@@ -637,7 +653,63 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.ilumin",
     "category": "method",
-    "text": "ilumin(method, target, et, fixref, obsrvr, spoint, abcorr)\n\nFind the illumination angles (phase, solar incidence, and emission) at a specified surface point of a target body.\n\nArguments\n\nmethod: Computation method. \ntarget: Name of target body. \net: Epoch in ephemeris seconds past J2000 TDB. \nfixref: Body-fixed, body-centered target body frame.  \nobsrvr: Name of observing body. \nspoint: Body-fixed coordinates of a target surface point.\nabcorr: Aberration correction.\n\nOutput\n\ntrgepc: Sub-solar point epoch. \nsrfvec: Vector from observer to sub-solar point.\nphase: Phase angle at the surface point. \nincdnc: Solar incidence angle at the surface point. \nemissn: Emission angle at the surface point. \n\nReferences\n\n[NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/iluminc.html\n\n\n\n\n\n"
+    "text": "ilumin(method, target, et, fixref, obsrvr, spoint, abcorr)\n\nFind the illumination angles (phase, solar incidence, and emission) at a specified surface point of a target body.\n\nArguments\n\nmethod: Computation method.\ntarget: Name of target body.\net: Epoch in ephemeris seconds past J2000 TDB.\nfixref: Body-fixed, body-centered target body frame.\nobsrvr: Name of observing body.\nspoint: Body-fixed coordinates of a target surface point.\nabcorr: Aberration correction.\n\nOutput\n\ntrgepc: Sub-solar point epoch.\nsrfvec: Vector from observer to sub-solar point.\nphase: Phase angle at the surface point.\nincdnc: Solar incidence angle at the surface point.\nemissn: Emission angle at the surface point.\n\nReferences\n\n[NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/iluminc.html\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.inedpl-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.inedpl",
+    "category": "method",
+    "text": "inedpl(a, b, c, plane)\n\nFind the intersection of a triaxial ellipsoid and a plane.\n\nArguments\n\na: Length of ellipsoid semi-axis lying on the x-axis\nb: Length of ellipsoid semi-axis lying on the y-axis\nc: Length of ellipsoid semi-axis lying on the z-axis\nplane: Plane that intersects ellipsoid\n\nOutput\n\nellipse: Intersection ellipse\n\nReturns nothing if no ellipse could be found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.inelpl-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.inelpl",
+    "category": "method",
+    "text": "inelpl(ellips, plane)\n\nFind the intersection of an ellipse and a plane.\n\nArguments\n\nellips: An ellipse\nplane: A plane\n\nOutput\n\nnxpts: Number of intersection points of ellipse and plane\nxpt1, xpt2: Intersection points\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.inrypl-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.inrypl",
+    "category": "method",
+    "text": "inrypl(vertex, dir, plane)\n\nFind the intersection of a ray and a plane.\n\nArguments\n\nvertex, dir: Vertex and direction vector of ray\nplane: A plane\n\nOutput\n\nnxpts: Number of intersection points of ray and plane\nxpt1, xpt2: Intersection points\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.insrtc!-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.insrtc!",
+    "category": "method",
+    "text": "insrtc!(set, item)\n\nInsert an item into a character set.\n\nArguments\n\nset: Insertion set\nitem: Item to be inserted\n\nOutput\n\nReturns the updated set.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.insrtd!-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.insrtd!",
+    "category": "method",
+    "text": "insrtd!(set, item)\n\nInsert an item into a double set.\n\nArguments\n\nset: Insertion set\nitem: Item to be inserted\n\nOutput\n\nReturns the updated set.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.insrti!-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.insrti!",
+    "category": "method",
+    "text": "insrti!(set, item)\n\nInsert an item into a character set.\n\nArguments\n\nset: Insertion set\nitem: Item to be inserted\n\nOutput\n\nReturns the updated set.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.inter-Union{Tuple{T}, Tuple{S}, Tuple{T,T}} where T<:(SPICE.SpiceCell{S,T,N} where N where T) where S",
+    "page": "API",
+    "title": "SPICE.inter",
+    "category": "method",
+    "text": "inter(a, b)\n\nIntersect two sets of any data type to form a third set.\n\nArguments\n\na: First input set\nb: Second input set\n\nOutput\n\nReturns intersection of a and b.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1425,7 +1497,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.scard!-Union{Tuple{T}, Tuple{SpiceCell{T,N} where N,Any}} where T",
+    "location": "api/#SPICE.scard!-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,Any}} where T",
     "page": "API",
     "title": "SPICE.scard!",
     "category": "method",
@@ -1689,7 +1761,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.valid!-Union{Tuple{SpiceCell{T,N} where N}, Tuple{T}} where T",
+    "location": "api/#SPICE.valid!-Union{Tuple{SpiceCell{T,T1,N} where N where T1}, Tuple{T}} where T",
     "page": "API",
     "title": "SPICE.valid!",
     "category": "method",
