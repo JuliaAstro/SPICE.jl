@@ -1,8 +1,39 @@
-export 
+export
+    edlimb,
     et2utc,
     etcal,
     eul2m,
     edterm
+
+"""
+    edlimb(a, b, c, viewpt)
+
+Find the limb of a triaxial ellipsoid, viewed from a specified point.
+
+### Arguments ###
+
+- `a`: Length of ellipsoid semi-axis lying on the x-axis
+- `b`: Length of ellipsoid semi-axis lying on the y-axis
+- `c`: Length of ellipsoid semi-axis lying on the z-axis
+- `viewpt`: Location of viewing point
+
+### Output ###
+
+Returns the limb of the ellipsoid as seen from the viewing point.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/edlimb_c.html)
+"""
+function edlimb(a, b, c, viewpt)
+    length(viewpt) != 3 && throw(ArgumentError("Length of `viewpt` must be 3."))
+    limb = Ellipse()
+    ccall((:edlimb_c, libcspice), Cvoid,
+           (SpiceDouble, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}, Ref{Ellipse}),
+           a, b, c, viewpt, limb)
+    handleerror()
+    limb
+end
 
 """
     et2utc(et, format, prec)
@@ -23,8 +54,7 @@ to Calendar, Day-of-Year, or Julian Date format, UTC.
 
 ### Output ###
 
-Returns an output time string equivalent to the input
-epoch, in the specified format.
+Returns an output time string equivalent to the input epoch, in the specified format.
 
 ### References ###
 
@@ -128,5 +158,5 @@ function edterm(trmtyp, source, target, et, fixref, obsrvr, npts; abcorr="NONE")
           (Cstring, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, SpiceInt, Ref{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
           trmtyp, source, target, et, fixref, abcorr, obsrvr, npts, trgepc, obspos, trmpts)
     handleerror()
-    trgepc[], obspos, trmpts 
+    trgepc[], obspos, trmpts
 end

@@ -93,14 +93,13 @@ Compute the union of two sets of any data type to form a third set.
 
 ### Output ###
 
-Returns a cell containing the union of a and b. 
+Returns a cell containing the union of `a` and `b`.
 
 ### References ###
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/union_c.html)
 """
-function Base.union(a::T, b::T) where {
-    T <: SpiceCell{S}} where S
+function Base.union(a::T, b::T) where {T <: SpiceCell{S}} where S
     size = max(a.cell.size, b.cell.size)
     if S <: SpiceChar
         length = max(a.cell.length, b.cell.length)
