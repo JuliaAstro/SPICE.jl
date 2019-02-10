@@ -73,7 +73,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#Base.union-Union{Tuple{T}, Tuple{S}, Tuple{T,T}} where T<:(SPICE.SpiceCell{S,T,N} where N where T) where S",
+    "location": "api/#Base.union-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,SpiceCell{T,T1,N} where N where T1}} where T",
     "page": "API",
     "title": "Base.union",
     "category": "method",
@@ -705,11 +705,91 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.inter-Union{Tuple{T}, Tuple{S}, Tuple{T,T}} where T<:(SPICE.SpiceCell{S,T,N} where N where T) where S",
+    "location": "api/#SPICE.inter-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,SpiceCell{T,T1,N} where N where T1}} where T",
     "page": "API",
     "title": "SPICE.inter",
     "category": "method",
     "text": "inter(a, b)\n\nIntersect two sets of any data type to form a third set.\n\nArguments\n\na: First input set\nb: Second input set\n\nOutput\n\nReturns intersection of a and b.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.intmax",
+    "page": "API",
+    "title": "SPICE.intmax",
+    "category": "function",
+    "text": "intmax()\n\n!!! warning Deprecated     Use typemax(Cint) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.intmin",
+    "page": "API",
+    "title": "SPICE.intmin",
+    "category": "function",
+    "text": "intmin()\n\n!!! warning Deprecated     Use typemin(Cint) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.invert",
+    "page": "API",
+    "title": "SPICE.invert",
+    "category": "function",
+    "text": "invert(matrix)\n\n!!! warning Deprecated     Use inv(matrix) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.invort",
+    "page": "API",
+    "title": "SPICE.invort",
+    "category": "function",
+    "text": "invort(matrix)\n\n!!! warning Deprecated     Use inv(matrix) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.isordv",
+    "page": "API",
+    "title": "SPICE.isordv",
+    "category": "function",
+    "text": "isordv(vec)\n\n!!! warning Deprecated     Use isperm(vec) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.isrchc",
+    "page": "API",
+    "title": "SPICE.isrchc",
+    "category": "function",
+    "text": "isrchc(value, array)\n\n!!! warning Deprecated     Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.isrchd",
+    "page": "API",
+    "title": "SPICE.isrchd",
+    "category": "function",
+    "text": "isrchd(value, array)\n\n!!! warning Deprecated     Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.isrchi",
+    "page": "API",
+    "title": "SPICE.isrchi",
+    "category": "function",
+    "text": "isrchi(value, array)\n\n!!! warning Deprecated     Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.isrot-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.isrot",
+    "category": "method",
+    "text": "isrot(m, ntol, dtol)\n\nIndicate whether a 3x3 matrix is a rotation matrix.\n\nArguments\n\nm: A matrix to be tested\nntol: Tolerance for the norms of the columns of m\ndtol: Tolerance for the determinant of a matrix whose columns are the unitized columns of m\n\nOutput\n\nReturns true if m is a rotation matrix.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.iswhsp",
+    "page": "API",
+    "title": "SPICE.iswhsp",
+    "category": "function",
+    "text": "iswhsp(str)\n\n!!! warning Deprecated     Use isempty(strip(str)) instead.\n\n\n\n\n\n"
 },
 
 {
