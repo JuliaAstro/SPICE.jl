@@ -215,64 +215,53 @@ using LinearAlgebra: I, norm
         out = inter(c1, c2)
         @test out == ["1"]
     end
-
-
-        #= @testset "intmax" begin =#
-        #=     @test intmax() >= 2147483647 or intmax() >= 32768 =#
-        #=  =#
-        #=  =#
-        #= @testset "intmin" begin =#
-        #=     @test intmin() <= -2147483648 or intmin() <= -32768 =#
-        #=  =#
-        #=  =#
-        #= @testset "invert" begin =#
-        #=     m1 = array([[0.0, -1.0, 0.0], [0.5, 0.0, 0.0], [0.0, 0.0, 1.0]]) =#
-        #=     expected = array([[0.0, 2.0, 0.0], [-1.0, 0.0, 0.0], [0.0, 0.0, 1.0]]) =#
-        #=     mout = invert(m1) =#
-        #=     @test array_equal(expected, mout) =#
-        #=  =#
-        #=  =#
-        #= @testset "invort" begin =#
-        #=     # I think this is valid... =#
-        #=     m = ident() =#
-        #=     mit = invort(m) =#
-        #=     npt.@test_array_almost_equal(m, mit) =#
-        #=  =#
-        #=  =#
-        #= @testset "isordv" begin =#
-        #=     @test isordv([0, 1], 2) =#
-        #=     @test isordv([0, 1, 2], 3) =#
-        #=     @test isordv([0, 1, 2, 3], 4) =#
-        #=     @test isordv([1, 1, 1], 3) is False =#
-        #=  =#
-        #=  =#
-        #= @testset "isrchc" begin =#
-        #=     array = ["1", "0", "4", "2"] =#
-        #=     @test isrchc("4", 4, 3, array) == 2 =#
-        #=     @test isrchc("2", 4, 3, array) == 3 =#
-        #=     @test isrchc("3", 4, 3, array) == -1 =#
-        #=  =#
-        #=  =#
-        #= @testset "isrchd" begin =#
-        #=     array = [1.0, 0.0, 4.0, 2.0] =#
-        #=     @test isrchd(4.0, 4, array) == 2 =#
-        #=     @test isrchd(2.0, 4, array) == 3 =#
-        #=     @test isrchd(3.0, 4, array) == -1 =#
-        #=  =#
-        #=  =#
-        #= @testset "isrchi" begin =#
-        #=     array = [1, 0, 4, 2] =#
-        #=     @test isrchi(4, 4, array) == 2 =#
-        #=     @test isrchi(2, 4, array) == 3 =#
-        #=     @test isrchi(3, 4, array) == -1 =#
-        #=  =#
-        #=  =#
-        #= @testset "isrot" begin =#
-        #=     @test isrot(ident(), 0.0001, 0.0001) =#
-        #=  =#
-        #=  =#
-        #= @testset "iswhsp" begin =#
-        #=     @test iswhsp("       ") =#
-        #=     @test iswhsp("spice") is False =#
+	@testset "intmax" begin
+		@test SPICE._intmax() == typemax(SPICE.SpiceInt)
+	end
+	@testset "intmin" begin
+		@test SPICE._intmin() == typemin(SPICE.SpiceInt)
+	end
+    @testset "invert" begin
+        m1 = [0.0 -1.0 0.0; 0.5 0.0 0.0; 0.0 0.0 1.0]
+        expected = [0.0 2.0 0.0; -1.0 0.0 0.0; 0.0 0.0 1.0]
+        mout = SPICE._invert(m1)
+        @test expected ≈ mout
+        @test inv(m1) ≈ mout
     end
+    @testset "invort" begin
+        m1 = eul2m(3, 2, 1, 3, 2, 1)
+        @test inv(m1) ≈ SPICE._invort(m1)
+    end
+    @testset "isordv" begin
+        @test isperm([1, 2]) == SPICE._isordv([1, 2])
+        @test isperm([1, 2, 3]) == SPICE._isordv([1, 2, 3])
+        @test isperm([1, 2, 3, 4]) == SPICE._isordv([1, 2, 3, 4])
+        @test isperm([1, 1, 1]) == SPICE._isordv([1, 1, 1])
+    end
+    @testset "isrchc" begin
+        array = ["1", "0", "4", "2"]
+        @test SPICE._isrchc("4", array) == findfirst(array .== "4")
+        @test SPICE._isrchc("2", array) == findfirst(array .== "2")
+    end
+    @testset "isrchd" begin
+        array = [1.0, 0.0, 4.0, 2.0]
+        @test SPICE._isrchd(4.0, array) == findfirst(array .== 4.0)
+        @test SPICE._isrchd(2.0, array) == findfirst(array .== 2.0)
+    end
+    @testset "isrchi" begin
+        array = [1, 0, 4, 2]
+        @test SPICE._isrchi(4, array) == findfirst(array .== 4)
+        @test SPICE._isrchi(2, array) == findfirst(array .== 2)
+    end
+    @testset "isrot" begin
+        m = eul2m(3, 2, 1, 3, 2, 1)
+        @test isrot(m, 0.0001, 0.0001)
+        @test_throws ArgumentError isrot(m[1:2, 1:2], 0.0001, 0.0001)
+        @test_throws SpiceError isrot(m, -0.0001, 0.0001)
+    end
+    @testset "iswhsp" begin
+        @test isempty(strip("   ")) == SPICE._iswhsp("   ")
+        @test isempty(strip("spice")) == SPICE._iswhsp("spice")
+    end
+end
 

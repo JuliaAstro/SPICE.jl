@@ -99,16 +99,15 @@ Returns a cell containing the union of `a` and `b`.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/union_c.html)
 """
-function Base.union(a::T, b::T) where {T <: SpiceCell{S}} where S
+function Base.union(a::SpiceCell{T}, b::SpiceCell{T}) where T
     size = max(a.cell.size, b.cell.size)
-    if S <: SpiceChar
+    if T <: SpiceChar
         length = max(a.cell.length, b.cell.length)
-        out = SpiceCell{S}(size, length)
+        out = SpiceCell{T}(size, length)
     else
-        out = SpiceCell{S}(size)
+        out = SpiceCell{T}(size)
     end
-    ccall((:union_c, libcspice), Cvoid,
-          (Ref{Cell{S}}, Ref{Cell{S}}, Ref{Cell{S}}),
+    ccall((:union_c, libcspice), Cvoid, (Ref{Cell{T}}, Ref{Cell{T}}, Ref{Cell{T}}),
           a.cell, b.cell, out.cell)
     handleerror()
     out

@@ -144,7 +144,7 @@ Convert from rectangular coordinates to geodetic coordinates.
 
 ### References ###
 
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/XXX_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/recgeo_c.html)
 """
 function recgeo(rectan, re, f)
     length(rectan) != 3 && throw(ArgumentError("Length of `rectan` must be 3."))

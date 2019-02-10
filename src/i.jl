@@ -15,7 +15,17 @@ export
     insrtd,
     insrti!,
     insrti,
-    inter
+    inter,
+    intmax,
+    intmin,
+    invert,
+    invort,
+    isordv,
+    isrchc,
+    isrchd,
+    isrchi,
+    isrot,
+    iswhsp
 
 function _ident()
     matrix = Array{SpiceDouble}(undef, 3, 3)
@@ -198,7 +208,7 @@ Returns `nothing` if no ellipse could be found.
 
 ### References ###
 
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/XXX_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/inedpl_c.html)
 """
 function inedpl(a, b, c, plane)
     ellipse = Ellipse()
@@ -365,14 +375,201 @@ Returns intersection of a and b.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/inter_c.html)
 """
-function inter(a::T, b::T) where {T <: SpiceCell{S}} where S
+function inter(a::SpiceCell{T}, b::SpiceCell{T}) where {T}
 	n = card(a) + card(b)
 	l = max(a.cell.length, b.cell.length)
-	out = SpiceCell{S}(n, l)
+	out = SpiceCell{T}(n, l)
 	ccall((:inter_c, libcspice), Cvoid,
-		  (Ref{Cell{S}}, Ref{Cell{S}}, Ref{Cell{S}}),
+		  (Ref{Cell{T}}, Ref{Cell{T}}, Ref{Cell{T}}),
 		  a.cell, b.cell, out.cell)
 	handleerror()
 	out
 end
+
+function _intmax()
+    ccall((:intmax_c, libcspice), SpiceInt, ())
+end
+
+@deprecate intmax() typemax(Cint)
+
+"""
+    intmax()
+
+!!! warning Deprecated
+    Use `typemax(Cint)` instead.
+"""
+intmax
+
+function _intmin()
+    ccall((:intmin_c, libcspice), SpiceInt, ())
+end
+
+@deprecate intmin() typemin(Cint)
+
+"""
+    intmin()
+
+!!! warning Deprecated
+    Use `typemin(Cint)` instead.
+"""
+intmin
+
+function _invert(matrix)
+    out = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:invert_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          matrix, out)
+    out
+end
+
+@deprecate invert inv
+
+"""
+    invert(matrix)
+
+!!! warning Deprecated
+    Use `inv(matrix)` instead.
+"""
+invert
+
+function _invort(matrix)
+    out = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:invort_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          matrix, out)
+    out
+end
+
+@deprecate invort inv
+
+"""
+    invort(matrix)
+
+!!! warning Deprecated
+    Use `inv(matrix)` instead.
+"""
+invort
+
+function _isordv(vec)
+    vec = SpiceInt.(copy(vec) .- 1)
+    n = length(vec)
+    res = ccall((:isordv_c, libcspice), SpiceBoolean,
+                (Ptr{SpiceInt}, SpiceInt),
+                vec, n)
+    Bool(res[])
+end
+
+@deprecate isordv isperm
+
+"""
+    isordv(vec)
+
+!!! warning Deprecated
+    Use `isperm(vec)` instead.
+"""
+isordv
+
+function _isrchc(value, array)
+    data, m, n = chararray(array)
+    res = ccall((:isrchc_c, libcspice), SpiceInt,
+                (Cstring, SpiceInt, SpiceInt, Ptr{SpiceChar}),
+                value, m, n, data)
+    handleerror()
+    res[] + 1
+end
+
+@deprecate isrchc(value, array) findfirst(array .== item)
+
+"""
+    isrchc(value, array)
+
+!!! warning Deprecated
+    Use `findfirst(array .== value)` instead.
+"""
+isrchc
+
+function _isrchd(value, array)
+    n = length(array)
+    res = ccall((:isrchd_c, libcspice), SpiceBoolean,
+                (SpiceDouble, SpiceInt, Ptr{SpiceDouble}),
+                value, n, array)
+    handleerror()
+    res[] + 1
+end
+
+@deprecate isrchd(value, array) findfirst(array .== item)
+
+"""
+    isrchd(value, array)
+
+!!! warning Deprecated
+    Use `findfirst(array .== value)` instead.
+"""
+isrchd
+
+function _isrchi(value, array)
+    array = SpiceInt.(copy(array))
+    n = length(array)
+    res = ccall((:isrchi_c, libcspice), SpiceBoolean,
+                (SpiceInt, SpiceInt, Ptr{SpiceInt}),
+                value, n, array)
+    handleerror()
+    res[] + 1
+end
+
+@deprecate isrchi(value, array) findfirst(array .== item)
+
+"""
+    isrchi(value, array)
+
+!!! warning Deprecated
+    Use `findfirst(array .== value)` instead.
+"""
+isrchi
+
+"""
+    isrot(m, ntol, dtol)
+
+Indicate whether a 3x3 matrix is a rotation matrix.
+
+### Arguments ###
+
+- `m`: A matrix to be tested
+- `ntol`: Tolerance for the norms of the columns of `m`
+- `dtol`: Tolerance for the determinant of a matrix whose columns are the unitized columns of `m`
+
+### Output ###
+
+Returns `true` if `m` is a rotation matrix.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/isrot_c.html)
+"""
+function isrot(m, ntol, dtol)
+    size(m) != (3, 3) && throw(ArgumentError("`m` must be a 3x3 matrix."))
+    res = ccall((:isrot_c, libcspice), SpiceBoolean,
+                (Ptr{SpiceDouble}, SpiceDouble, SpiceDouble),
+                m, ntol, dtol)
+    handleerror()
+    Bool(res[])
+end
+
+function _iswhsp(str)
+    res = ccall((:iswhsp_c, libcspice), SpiceBoolean,
+                (Cstring,),
+                str)
+    handleerror()
+    Bool(res[])
+end
+
+@deprecate iswhsp(str) isempty(strip(str))
+
+"""
+    iswhsp(str)
+
+!!! warning Deprecated
+    Use `isempty(strip(str))` instead.
+"""
+iswhsp
 
