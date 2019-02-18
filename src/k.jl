@@ -81,7 +81,7 @@ Returns `nothing` if no kernel was found or a tuple consisting of
 
 ### References ###
 
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/XXX_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/kinfo_c.html)
 """
 function kinfo(file, srclen=256)
     typlen = 5
