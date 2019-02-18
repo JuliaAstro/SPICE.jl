@@ -1,6 +1,10 @@
 export
     kclear,
-    ktotal
+    kdata,
+    kinfo,
+    kplfrm,
+    ktotal,
+    kxtrct
 
 """
     kclear()
@@ -19,10 +23,112 @@ function kclear()
 end
 
 """
-    ktotal(kind) 
+    kdata(which, kind, fillen=1024, srclen=256)
 
-Return the current number of kernels that have been loaded 
-via the KEEPER interface that are of a specified type. 
+Return data for the n-th kernel that is among a list of specified kernel types.
+
+### Arguments ###
+
+- `which`: Index of kernel to fetch from the list of kernels
+- `kind`: The kind of kernel to which fetches are limited
+- `fillen`: Available space in output file string
+- `srclen`: Available space in output source string
+
+### Output ###
+
+Returns `nothing` if no kernel was found or a tuple consisting of
+
+- `file`: The name of the kernel file
+- `filtyp`: The type of the kernel
+- `source`: Name of the source file used to load file
+- `handle`: The handle attached to file
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/kdata_c.html)
+"""
+function kdata(which, kind, fillen=1024, srclen=256)
+    typlen = 5
+    file = Array{SpiceChar}(undef, fillen)
+    filtyp = Array{SpiceChar}(undef, typlen)
+    source = Array{SpiceChar}(undef, srclen)
+    handle = Ref{SpiceInt}()
+    found = Ref{SpiceBoolean}()
+    ccall((:kdata_c, libcspice), Cvoid,
+          (SpiceInt, Cstring, SpiceInt, SpiceInt, SpiceInt,
+           Ptr{SpiceChar}, Ptr{SpiceChar}, Ptr{SpiceChar}, Ref{SpiceInt}, Ref{SpiceBoolean}),
+          which - 1, kind, fillen, typlen, srclen, file, filtyp, source, handle, found)
+    handleerror()
+    Bool(found[]) || return nothing
+    unsafe_string(pointer(file)), unsafe_string(pointer(filtyp)), unsafe_string(pointer(source)), handle[]
+end
+
+"""
+    kinfo(file, srclen=256)
+
+### Arguments ###
+
+- `file`: Name of a kernel to fetch information for
+- `srclen`: Available space in output source string
+
+### Output ###
+
+Returns `nothing` if no kernel was found or a tuple consisting of
+
+- `filtyp`: The type of the kernel
+- `source`: Name of the source file used to load file
+- `handle`: The handle attached to file
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/XXX_c.html)
+"""
+function kinfo(file, srclen=256)
+    typlen = 5
+    filtyp = Array{SpiceChar}(undef, typlen)
+    source = Array{SpiceChar}(undef, srclen)
+    handle = Ref{SpiceInt}()
+    found = Ref{SpiceBoolean}()
+    ccall((:kinfo_c, libcspice), Cvoid,
+          (Cstring, SpiceInt, SpiceInt,
+           Ptr{SpiceChar}, Ptr{SpiceChar}, Ref{SpiceInt}, Ref{SpiceBoolean}),
+          file, typlen, srclen, filtyp, source, handle, found)
+    handleerror()
+    Bool(found[]) || return nothing
+    unsafe_string(pointer(filtyp)), unsafe_string(pointer(source)), handle[]
+end
+
+"""
+    kplfrm(frmcls)
+
+Return a SPICE set containing the frame IDs of all reference frames of a given class having
+specifications in the kernel pool.
+
+### Arguments ###
+
+- `frmcls`: Frame class
+- `size`: Size of the output set
+
+### Output ###
+
+Returns the set of ID codes of frames of the specified class.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/kplfrm_c.html)
+"""
+function kplfrm(frmcls, size=128)
+    cell = SpiceIntCell(size)
+    ccall((:kplfrm_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{SpiceInt}}), frmcls, cell.cell)
+    handleerror()
+    cell
+end
+
+"""
+    ktotal(kind)
+
+Return the current number of kernels that have been loaded via the KEEPER interface that are of a
+specified type.
 
 ### References ###
 
@@ -33,4 +139,48 @@ function ktotal(kind)
     ccall((:ktotal_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}), string(kind), count)
     handleerror()
     Int(count[])
-end 
+end
+
+"""
+    kxtrct(keywd, terms, string)
+
+Locate a keyword in a string and extract the substring from the beginning of the first word
+following the keyword to the beginning of the first subsequent recognized terminator of a list.
+
+### Arguments ###
+
+keywd      I   Word that marks the beginning of text of interest.
+termlen    I   Length of strings in string array term.
+terms      I   Set of words, any of which marks the end of text.
+nterms     I   Number of terms.
+stringlen  I   Available space in argument string.
+substrlen  I   Available space in output substring.
+string    I/O  String containing a sequence of words.
+
+### Output ###
+
+found      O   SPICETRUE if the keyword is found in the string.
+substr     O   String from end of keywd to beginning of first
+              terms item found.
+
+Returns `nothing` if no kernel was found or
+
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/kxtrct_c.html)
+"""
+function kxtrct(keywd, terms, string, substrlen=256)
+    terms, nterms, termlen = chararray(terms)
+    stringlen = length(string) + 1
+    string = Array{SpiceChar}(string)
+    found = Ref{SpiceBoolean}()
+    substr = Array{SpiceChar}(undef, substrlen)
+    ccall((:kxtrct_c, libcspice), Cvoid,
+          (Cstring, SpiceInt, Ptr{SpiceChar}, SpiceInt, SpiceInt, SpiceInt,
+           Ptr{SpiceChar}, Ref{SpiceBoolean}, Ptr{SpiceChar}),
+          keywd, termlen, terms, nterms, stringlen, substrlen, string, found, substr)
+    Bool(found[]) || return nothing
+    unsafe_string(pointer(string)), unsafe_string(pointer(substr))
+end
+
