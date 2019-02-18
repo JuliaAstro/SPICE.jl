@@ -149,22 +149,16 @@ following the keyword to the beginning of the first subsequent recognized termin
 
 ### Arguments ###
 
-keywd      I   Word that marks the beginning of text of interest.
-termlen    I   Length of strings in string array term.
-terms      I   Set of words, any of which marks the end of text.
-nterms     I   Number of terms.
-stringlen  I   Available space in argument string.
-substrlen  I   Available space in output substring.
-string    I/O  String containing a sequence of words.
+- `keywd`: Word that marks the beginning of text of interest
+- `terms`: Set of words, any of which marks the end of text
+- `string`: String containing a sequence of words
 
 ### Output ###
 
-found      O   SPICETRUE if the keyword is found in the string.
-substr     O   String from end of keywd to beginning of first
-              terms item found.
+Returns `nothing` if `keywd` was found or a tuple consisting of
 
-Returns `nothing` if no kernel was found or
-
+- `string`: The input `string` with the text of interest removed
+- `substr`: String from end of `keywd` to beginning of first `terms` item found
 
 ### References ###
 
