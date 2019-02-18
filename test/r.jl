@@ -1,3 +1,5 @@
+using LinearAlgebra: I
+
 @testset "R" begin
     @testset "radrec" begin
         @test [1.0, 0.0, 0.0] ≈ radrec(1.0, 0.0, 0.0)
@@ -104,126 +106,78 @@
         v1 = [-1.0, 0.0, 0.0]
         @test all(recsph(v1) .≈ (1.0, π/2, π))
     end
-#= @testset "removc" begin =#
-#=     cell = cell_char(10, 10) =#
-#=     items = ["one", "two", "three", "four"] =#
-#=     for i in items: =#
-#=         insrtc(i, cell) =#
-#=     removeItems = ["three", "four"] =#
-#=     for r in removeItems: =#
-#=         removc(r, cell) =#
-#=     expected = ["one", "two"] =#
-#=     assert expected == [x for x in cell] =#
-#=  =#
-#=  =#
-#= @testset "removd" begin =#
-#=     cell = cell_double(10) =#
-#=     items = [0.0, 1.0, 1.0, 2.0, 3.0, 5.0, 8.0, 13.0, 21.0] =#
-#=     for i in items: =#
-#=         insrtd(i, cell) =#
-#=     removeItems = [0.0, 2.0, 4.0, 6.0, 8.0, 12.0] =#
-#=     for r in removeItems: =#
-#=         removd(r, cell) =#
-#=     expected = [1.0, 3.0, 5.0, 13.0, 21.0] =#
-#=     for x, y in zip(cell, expected): =#
-#=         assert x == y =#
-#=  =#
-#=  =#
-#= @testset "removi" begin =#
-#=     cell = cell_int(10) =#
-#=     items = [0, 1, 1, 2, 3, 5, 8, 13, 21] =#
-#=     for i in items: =#
-#=         insrti(i, cell) =#
-#=     removeItems = [0, 2, 4, 6, 8, 12] =#
-#=     for r in removeItems: =#
-#=         removi(r, cell) =#
-#=     expected = [1, 3, 5, 13, 21] =#
-#=     for x, y in zip(cell, expected): =#
-#=         assert x == y =#
-#=  =#
-#=  =#
-#= @testset "reordc" begin =#
-#=     array = ["one", "three", "two", "zero"] =#
-#=     iorder = [3, 0, 2, 1] =#
-#=     outarray = reordc(iorder, 4, 5, array) =#
-#=     # reordc appears to be broken... =#
-#=     with pytest.raises(AssertionError): =#
-#=         assert outarray == ["zero", "one", "two", "three"] =#
-#=  =#
-#= @testset "reordd" begin =#
-#=     array = [1.0, 3.0, 2.0] =#
-#=     iorder = [0, 2, 1] =#
-#=     outarray = reordd(iorder, 3, array) =#
-#=     npt.assert_array_almost_equal(outarray, [1.0, 2.0, 3.0]) =#
-#=  =#
-#=  =#
-#= @testset "reordi" begin =#
-#=     array = [1, 3, 2] =#
-#=     iorder = [0, 2, 1] =#
-#=     outarray = reordi(iorder, 3, array) =#
-#=     npt.assert_array_almost_equal(outarray, [1, 2, 3]) =#
-#=  =#
-#=  =#
-#= @testset "reordl" begin =#
-#=     array = [True, True, False] =#
-#=     iorder = [0, 2, 1] =#
-#=     outarray = reordl(iorder, 3, array) =#
-#=     npt.assert_array_almost_equal(outarray, [True, False, True]) =#
-#=  =#
-#=  =#
-#= @testset "repmc" begin =#
-#=     stringtestone = "The truth is #" =#
-#=     outstringone = repmc(stringtestone, "#", "SPICE") =#
-#=     assert outstringone == "The truth is SPICE" =#
-#=  =#
-#=  =#
-#= @testset "repmct" begin =#
-#=     stringtestone = "The value is #" =#
-#=     outstringone = repmct(stringtestone, '#', 5, 'U') =#
-#=     outstringtwo = repmct(stringtestone, '#', 5, 'l') =#
-#=     assert outstringone == "The value is FIVE" =#
-#=     assert outstringtwo == "The value is five" =#
-#=  =#
-#=  =#
-#= @testset "repmd" begin =#
-#=     stringtestone = "The value is #" =#
-#=     outstringone = repmd(stringtestone, '#', 5.0e11, 1) =#
-#=     assert outstringone == "The value is 5.E+11" =#
-#=  =#
-#=  =#
-#= @testset "repmf" begin =#
-#=     stringtestone = "The value is #" =#
-#=     outstringone = repmf(stringtestone, '#', 5.0e3, 5, 'f') =#
-#=     outstringtwo = repmf(stringtestone, '#', -5.2e-9, 3, 'e') =#
-#=     assert outstringone == "The value is 5000.0" =#
-#=     assert outstringtwo == "The value is -5.20E-09" =#
-#=  =#
-#=  =#
-#= @testset "repmi" begin =#
-#=     stringtest = "The value is <opcode>" =#
-#=     outstring = repmi(stringtest, "<opcode>", 5) =#
-#=     assert outstring == "The value is 5" =#
-#=  =#
-#=  =#
-#= @testset "repmot" begin =#
-#=     stringtestone = "The value is #" =#
-#=     outstringone = repmot(stringtestone, '#', 5, 'U') =#
-#=     outstringtwo = repmot(stringtestone, '#', 5, 'l') =#
-#=     assert outstringone == "The value is FIFTH" =#
-#=     assert outstringtwo == "The value is fifth" =#
-#=  =#
-#=  =#
-#= @testset "reset" begin =#
-#=     reset() =#
-#=     assert not failed() =#
-#=  =#
-#=  =#
-#= @testset "return_c" begin =#
-#=     reset() =#
-#=     assert not return_c() =#
-#=     reset() =#
-#=  =#
-#=  =#
+    @testset "removc" begin
+        cell = SpiceCharCell(10, 10)
+        items = ["one", "two", "three", "four"]
+        for i in items
+            insrtc!(cell, i)
+        end
+        remove_items = ["three", "four"]
+        for r in remove_items
+            removc!(cell, r)
+        end
+        expected = ["one", "two"]
+        @test cell == expected
+    end
+    @testset "removd" begin
+        cell = SpiceDoubleCell(10)
+        items = [0.0, 1.0, 1.0, 2.0, 3.0, 5.0, 8.0, 13.0, 21.0]
+        for i in items
+            insrtd!(cell, i)
+        end
+        remove_items = [0.0, 2.0, 4.0, 6.0, 8.0, 12.0]
+        for r in remove_items
+            removd!(cell, r)
+        end
+        expected = [1.0, 3.0, 5.0, 13.0, 21.0]
+        @testset for i in eachindex(cell, expected)
+            @test cell[i] == expected[i]
+        end
+    end
+    @testset "removi" begin
+        cell = SpiceIntCell(10)
+        items = [0, 1, 1, 2, 3, 5, 8, 13, 21]
+        for i in items
+            insrti!(cell, i)
+        end
+        remove_items = [0, 2, 4, 6, 8, 12]
+        for r in remove_items
+            removi!(cell, r)
+        end
+        expected = [1, 3, 5, 13, 21]
+        @testset for i in eachindex(cell, expected)
+            @test cell[i] == expected[i]
+        end
+    end
+    @testset "reordc" begin
+        array = ["one", "three", "two", "zero"]
+        iorder = [4, 1, 3, 2]
+        outarray = SPICE._reordc(iorder, copy(array))
+        @test_skip outarray == array[iorder]
+    end
+    @testset "reordd" begin
+        array = [1.0, 3.0, 2.0]
+        iorder = [1, 3, 2]
+        outarray = SPICE._reordd(iorder, copy(array))
+        @test outarray == array[iorder]
+    end
+    @testset "reordi" begin
+        array = [1, 3, 2]
+        iorder = [1, 3, 2]
+        outarray = SPICE._reordi(iorder, copy(array))
+        @test outarray == array[iorder]
+    end
+    @testset "reordl" begin
+        array = [true, true, false]
+        iorder = [1, 3, 2]
+        outarray = SPICE._reordl(iorder, copy(array))
+        @test outarray == array[iorder]
+    end
+    @testset "repmc" begin
+        stringtestone = "The truth is #"
+        outstringone = SPICE._repmc(stringtestone, "#", "SPICE")
+        @test replace(stringtestone, "#" => "SPICE") == outstringone
+    end
     @testset "rotate" begin
         act = rotate(π / 4, 3)
         exp = [sqrt(2) / 2.0 sqrt(2) / 2.0 0.0;
@@ -233,33 +187,34 @@
              @test act[i] ≈ exp[i]
         end
     end
-#= @testset "rotmat" begin =#
-#=     ident = ident() =#
-#=     expectedR = [[0.0, 0.0, -1.0], =#
-#=                  [0.0, 1.0, 0.0], =#
-#=                  [1.0, 0.0, 0.0]] =#
-#=     rOut = rotmat(ident, halfpi(), 2) =#
-#=     npt.assert_array_almost_equal(rOut, expectedR) =#
-#=  =#
-#=  =#
-#= @testset "rotvec" begin =#
-#=     vin = [sqrt(2), 0.0, 0.0] =#
-#=     angle = pi() / 4 =#
-#=     iaxis = 3 =#
-#=     vExpected = [1.0, -1.0, 0.0] =#
-#=     vout = rotvec(vin, angle, iaxis) =#
-#=     npt.assert_array_almost_equal(vout, vExpected) =#
-#=  =#
-#=  =#
-#= @testset "rpd" begin =#
-#=     assert rpd() == arccos(-1.0) / 180.0 =#
-#=  =#
-#=  =#
-#= @testset "rquad" begin =#
-#=     # solve x^2 + 2x + 3 = 0 =#
-#=     root1, root2 = rquad(1.0, 2.0, 3.0) =#
-#=     expectedRootOne = [-1.0, sqrt(2.0)] =#
-#=     expectedRootTwo = [-1.0, -sqrt(2.0)] =#
-#=     npt.assert_array_almost_equal(root1, expectedRootOne) =#
-#= npt.assert_array_almost_equal(root2, expectedRootTwo) =#
+    @testset "rotmat" begin
+        ident = Array{Float64}(I, 3, 3)
+        expected_r = [0.0 0.0 -1.0;
+                      0.0 1.0 0.0;
+                      1.0 0.0 0.0]
+        r_out = rotmat(ident, π/2, 2)
+        @test r_out ≈ expected_r
+        @test_throws ArgumentError rotmat(ident[1:2, 1:2], 0.0, 3)
+    end
+    @testset "rotvec" begin
+        vin = [sqrt(2), 0.0, 0.0]
+        angle = π / 4
+        iaxis = 3
+        v_expected = [1.0, -1.0, 0.0]
+        vout = rotvec(vin, angle, iaxis)
+        @test vout ≈ v_expected
+        @test_throws ArgumentError rotvec(vin[1:2], angle, iaxis)
+    end
+    @testset "rpd" begin
+        @test deg2rad(1.0) == SPICE._rpd()
+    end
+    @testset "rquad" begin
+        # solve x^2 + 2x + 3 = 0
+        root1, root2 = rquad(1.0, 2.0, 3.0)
+        expected_root1 = [-1.0, sqrt(2.0)]
+        expected_root2 = [-1.0, -sqrt(2.0)]
+        @test root1 == expected_root1
+        @test root2 == expected_root2
+        #= @test_throws SpiceError rquad(0.0, 0.0, 3.0) =#
+    end
 end

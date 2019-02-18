@@ -335,7 +335,7 @@ end
 """
     insrti!(set, item)
 
-Insert an item into a character set.
+Insert an item into an integer set.
 
 ### Arguments ###
 

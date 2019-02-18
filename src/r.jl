@@ -8,7 +8,17 @@ export
     recpgr,
     recsph,
     recrad,
-    rotate
+    removc!,
+    removc,
+    removd!,
+    removd,
+    removi!,
+    removi,
+    rotate,
+    rotmat,
+    rotvec,
+    rpd,
+    rquad
 
 """
     radrec(range, ra, dec)
@@ -17,9 +27,9 @@ Convert from range, right ascension, and declination to rectangular coordinates.
 
 ### Arguments ###
 
-range      I   Distance of a point from the origin.
-ra         I   Right ascension of point in radians.
-dec        I   Declination of point in radians.
+- `range`: Distance of a point from the origin
+- `ra`: Right ascension of point in radians
+- `dec`: Declination of point in radians
 
 ### Output ###
 
@@ -226,6 +236,37 @@ function recpgr(body, rectan, re, f)
     lon[], lat[], alt[]
 end
 
+"""
+    recrad(rectan)
+
+Convert rectangular coordinates to range, right ascension, and
+declination.
+
+### Arguments ###
+
+- `rectan`: Rectangular coordinates of a point
+
+### Output ###
+
+Return the tuple `(range, ra, dec)`.
+
+- `range`: Distance of the point from the origin
+- `ra`: Right ascension in radians
+- `dec`: Declination in radians
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/recrad_c.html)
+"""
+function recrad(rectan)
+    range = Ref{SpiceDouble}()
+    ra = Ref{SpiceDouble}()
+    dec = Ref{SpiceDouble}()
+    ccall((:recrad_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          rectan, range, ra, dec)
+    range[], ra[], dec[]
+end
 
 """
     recsph(rectan)
@@ -258,6 +299,229 @@ function recsph(rectan)
 end
 
 """
+    removc!(set, item)
+
+Remove an item from a character set.
+
+### Arguments ###
+
+- `set`: A set
+- `item`: Item to be removed
+
+### Output ###
+
+Returns the updated set.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/removc_c.html)
+"""
+function removc!(set, item)
+    ccall((:removc_c, libcspice), Cvoid, (Cstring, Ref{Cell{SpiceChar}}), item, set.cell)
+    set
+end
+
+@deprecate removc removc!
+
+"""
+    removd!(set, item)
+
+Remove an item from a double set.
+
+### Arguments ###
+
+- `set`: A set
+- `item`: Item to be removed
+
+### Output ###
+
+Returns the updated set.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/removd_c.html)
+"""
+function removd!(set, item)
+    ccall((:removd_c, libcspice), Cvoid, (SpiceDouble, Ref{Cell{SpiceDouble}}), item, set.cell)
+    set
+end
+
+@deprecate removd removd!
+
+"""
+    removi!(set, item)
+
+Remove an item from a character set.
+
+### Arguments ###
+
+- `set`: A set
+- `item`: Item to be removed
+
+### Output ###
+
+Returns the updated set.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/removi_c.html)
+"""
+function removi!(set, item)
+    ccall((:removi_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{SpiceInt}}), item, set.cell)
+    set
+end
+
+@deprecate removi removi!
+
+function _reordc(iorder, array)
+    iorder = SpiceInt.(iorder .- 1)
+    array, m, n = chararray(array)
+    ccall((:reordc_c, libcspice), Cvoid,
+          (Ptr{SpiceInt}, SpiceInt, SpiceInt, Ptr{SpiceChar}),
+          iorder, m, n, array)
+    [unsafe_string(pointer(array[:, i])) for i = 1:m]
+end
+
+@deprecate reordc(iorder, array) array[iorder]
+
+"""
+    reordc(iorder, array)
+
+!!! warning Deprecated
+    Use `array[iorder]` instead.
+"""
+reordc
+
+function _reordd(iorder, array)
+    iorder = SpiceInt.(iorder .- 1)
+    n = length(iorder)
+    ccall((:reordd_c, libcspice), Cvoid,
+          (Ptr{SpiceInt}, SpiceInt, Ptr{SpiceDouble}),
+          iorder, n, array)
+    array
+end
+
+@deprecate reordd(iorder, array) array[iorder]
+
+"""
+    reordd(iorder, array)
+
+!!! warning Deprecated
+    Use `array[iorder]` instead.
+"""
+reordd
+
+function _reordi(iorder, array)
+    iorder = SpiceInt.(iorder .- 1)
+    array = SpiceInt.(array)
+    n = length(iorder)
+    ccall((:reordi_c, libcspice), Cvoid,
+          (Ptr{SpiceInt}, SpiceInt, Ptr{SpiceInt}),
+          iorder, n, array)
+    Int.(array)
+end
+
+@deprecate reordi(iorder, array) array[iorder]
+
+"""
+    reordi(iorder, array)
+
+!!! warning Deprecated
+    Use `array[iorder]` instead.
+"""
+reordi
+
+function _reordl(iorder, array)
+    iorder = SpiceInt.(iorder .- 1)
+    array = SpiceBoolean.(array)
+    n = length(iorder)
+    ccall((:reordl_c, libcspice), Cvoid,
+          (Ptr{SpiceInt}, SpiceInt, Ptr{SpiceBoolean}),
+          iorder, n, array)
+    Bool.(array)
+end
+
+@deprecate reordl(iorder, array) array[iorder]
+
+"""
+    reordl(iorder, array)
+
+!!! warning Deprecated
+    Use `array[iorder]` instead.
+"""
+reordl
+
+function _repmc(input, marker, value)
+    lenout = length(input) - length(marker) + length(value) + 1
+    out = Array{SpiceChar}(undef, lenout)
+    ccall((:repmc_c, libcspice), Cvoid,
+          (Cstring, Cstring, Cstring, SpiceInt, Ptr{SpiceChar}),
+          input, marker, value, lenout, out)
+    handleerror()
+    unsafe_string(pointer(out))
+end
+
+@deprecate repmc(input, marker, value) replace(input, marker=>value)
+
+"""
+    repmc(input, marker, value)
+
+!!! warning Deprecated
+    Use `replace(input, marker=>value)` instead.
+"""
+repmc
+
+@deprecate repmct replace
+
+"""
+    repmct
+
+!!! warning Deprecated
+    Use `replace` instead.
+"""
+repmct
+
+@deprecate repmd replace
+
+"""
+    repmd
+
+!!! warning Deprecated
+    Use `replace` instead.
+"""
+repmd
+
+@deprecate repmf replace
+
+"""
+    repmf
+
+!!! warning Deprecated
+    Use `replace` instead.
+"""
+repmf
+
+@deprecate repmi replace
+
+"""
+    repmi
+
+!!! warning Deprecated
+    Use `replace` instead.
+"""
+repmi
+
+@deprecate repmot replace
+
+"""
+    repmot
+
+!!! warning Deprecated
+    Use `replace` instead.
+"""
+repmot
+
+"""
     rotate(angle, iaxis)
 
 Calculate the 3x3 rotation matrix generated by a rotation
@@ -284,33 +548,98 @@ function rotate(angle, iaxis)
 end
 
 """
-    recrad(rectan)
+    rotmat(m1, angle, iaxis)
 
-Convert rectangular coordinates to range, right ascension, and
-declination.
+Applies a rotation of `angle` radians about axis `iaxis` to a matrix `m1`. This rotation is thought
+of as rotating the coordinate system.
 
 ### Arguments ###
 
-- `rectan`: Rectangular coordinates of a point
+- `m1`: Matrix to be rotated
+- `angle`: Angle of rotation (radians)
+- `iaxis`: Axis of rotation (X=1, Y=2, Z=3)
 
 ### Output ###
 
-Return the tuple `(range, ra, dec)`.
-
-- `range`: Distance of the point from the origin
-- `ra`: Right ascension in radians
-- `dec`: Declination in radians
+Returns the resulting rotated matrix.
 
 ### References ###
 
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/recrad_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/rotmat_c.html)
 """
-function recrad(rectan)
-    range = Ref{SpiceDouble}()
-    ra = Ref{SpiceDouble}()
-    dec = Ref{SpiceDouble}()
-    ccall((:recrad_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
-          rectan, range, ra, dec)
-    range[], ra[], dec[]
+function rotmat(m1, angle, iaxis)
+    size(m1) != (3, 3) && throw(ArgumentError("`m1` must be 3x3 matrix."))
+    mout = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:rotmat_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, SpiceDouble, SpiceInt, Ptr{SpiceDouble}),
+          permutedims(m1), angle, iaxis, mout)
+    permutedims(mout)
 end
+
+"""
+    rotvec(v1, angle, iaxis)
+
+Transform a vector to a new coordinate system rotated by `angle` radians about axis `iaxis`.
+This transformation rotates `v1` by `-angle` radians about the specified axis.
+
+### Arguments ###
+
+- `v1`: Vector whose coordinate system is to be rotated
+- `angle`: Angle of rotation in radians
+- `iaxis`: Axis of rotation (X=1, Y=2, Z=3)
+
+### Output ###
+
+Returns the resulting vector expressed in the new coordinate system.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/rotvec_c.html)
+"""
+function rotvec(v1, angle, iaxis)
+    length(v1) != 3 && throw(ArgumentError("`v1` must have three elements."))
+    vout = Array{SpiceDouble}(undef, 3)
+    ccall((:rotvec_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, SpiceDouble, SpiceInt, Ptr{SpiceDouble}),
+          v1, angle, iaxis, vout)
+    vout
+end
+
+function _rpd()
+    ccall((:rpd_c, libcspice), SpiceDouble, ())
+end
+
+@deprecate rpd() deg2rad(1.0)
+
+"""
+    rpd()
+
+!!! warning Deprecated
+    Use `deg2rad` instead.
+"""
+rpd
+
+"""
+
+### Arguments ###
+
+
+### Output ###
+
+Returns `nothing` if no kernel was found or
+
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/XXX_c.html)
+"""
+function rquad(a, b, c)
+    root1 = Array{SpiceDouble}(undef, 2)
+    root2 = Array{SpiceDouble}(undef, 2)
+    ccall((:rquad_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          a, b, c, root1, root2)
+    handleerror()
+    root1, root2
+end
+
