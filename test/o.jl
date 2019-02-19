@@ -84,7 +84,7 @@
         try
             furnsh(path(CORE, :lsk), path(CORE, :spk), path(CORE, :gm_pck))
             et = str2et("Dec 25, 2007")
-            state, ltime = spkezr("Moon", et, "J2000", "EARTH", abcorr="LT+S")
+            state, ltime = spkezr("Moon", et, "J2000", "LT+S", "EARTH")
             mu_earth = bodvrd("EARTH", "GM", 1)
             ele = oscelt(state, et, mu_earth[1])
             elex = oscltx(state, et, mu_earth[1])

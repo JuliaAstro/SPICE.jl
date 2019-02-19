@@ -243,7 +243,7 @@ using LinearAlgebra: I, norm
                           3.0501, 3.0502, 3.0503, 3.0601, 3.0602, 3.0603, 450.0, 50.0, 4.0101,
                           4.0102, 4.0103, 4.0201, 4.0202, 4.0203, 4.0301, 4.0302, 4.0303, 4.0401,
                           4.0402, 4.0403, 4.0501, 4.0502, 4.0503, 4.0601, 4.0602, 4.0603]
-        spk14 = tempfile()
+        spk14 = tempname()
         try
             handle = spkopn(spk14, "Type 14 SPK internal file name.", 1024)
             init_size = filesize(spk14)
@@ -331,191 +331,220 @@ using LinearAlgebra: I, norm
             kclear()
         end
     end
-#= @testset "spkcpo" begin =#
-#=     kclear() =#
-#=     furnsh(ExtraKernels.earthStnSpk) =#
-#=     furnsh(ExtraKernels.earthHighPerPck) =#
-#=     furnsh(ExtraKernels.earthTopoTf ) =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("2003 Oct 13 06:00:00") =#
-#=     obspos = [-2353.6213656676991, -4641.3414911499403, 3677.0523293197439] =#
-#=     state, lt = spkcpo("SUN", et, "DSS-14_TOPO", "OBSERVER", "CN+S", obspos, "EARTH", "ITRF93") =#
-#=     kclear() =#
-#=     expected_lt = 497.93167787805714 =#
-#=     expected_state = [6.25122733012810498476e+07,   5.89674929926417097449e+07, =#
-#=                      -1.22059095879866167903e+08,   2.47597313358008614159e+03, =#
-#=                      -9.87026711803482794494e+03,  -3.49990805659246507275e+03] =#
-#=     npt.@test_almost_equal(lt, expected_lt) =#
-#=     npt.@test_array_almost_equal(state, expected_state, decimal=6) =#
-#= @testset "spkcpt" begin =#
-#=     kclear() =#
-#=     furnsh(ExtraKernels.earthStnSpk) =#
-#=     furnsh(ExtraKernels.earthHighPerPck) =#
-#=     furnsh(ExtraKernels.earthTopoTf ) =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     obstime = str2et("2003 Oct 13 06:00:00") =#
-#=     trgpos = [-2353.6213656676991, -4641.3414911499403, 3677.0523293197439] =#
-#=     state, lt = spkcpt(trgpos, "EARTH", "ITRF93", obstime, "ITRF93", "TARGET", "CN+S", "SUN") =#
-#=     kclear() =#
-#=     expected_lt = 497.9321928250503 =#
-#=     expected_state = [-3.41263006568005401641e+06,  -1.47916331564148992300e+08, =#
-#=                       1.98124035009580813348e+07,  -1.07582448117249587085e+04, =#
-#=                       2.50028331500427839273e+02,   1.11355285621842696742e+01] =#
-#=     npt.@test_almost_equal(lt, expected_lt) =#
-#=     npt.@test_array_almost_equal(state, expected_state, decimal=6) =#
-#= @testset "spkcvo" begin =#
-#=     kclear() =#
-#=     furnsh(ExtraKernels.earthStnSpk) =#
-#=     furnsh(ExtraKernels.earthHighPerPck) =#
-#=     furnsh(ExtraKernels.earthTopoTf ) =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     obstime = str2et("2003 Oct 13 06:00:00") =#
-#=     obstate = [-2353.6213656676991, -4641.3414911499403, 3677.0523293197439, -0.00000000000057086, 0.00000000000020549, =#
-#=                -0.00000000000012171] =#
-#=     state, lt = spkcvo("SUN", obstime, "DSS-14_TOPO", "OBSERVER", "CN+S", obstate, 0.0, "EARTH", "ITRF93") =#
-#=     kclear() =#
-#=     expected_lt = 497.93167787798325 =#
-#=     expected_state = [6.25122733012975975871e+07,   5.89674929925705492496e+07, =#
-#=                      -1.22059095879864960909e+08,   2.47597313358015026097e+03, =#
-#=                      -9.87026711803497346409e+03,  -3.49990805659256830040e+03] =#
-#=     npt.@test_almost_equal(lt, expected_lt) =#
-#=     npt.@test_array_almost_equal(state, expected_state, decimal=6) =#
-#= @testset "spkcvt" begin =#
-#=     kclear() =#
-#=     furnsh(ExtraKernels.earthStnSpk) =#
-#=     furnsh(ExtraKernels.earthHighPerPck) =#
-#=     furnsh(ExtraKernels.earthTopoTf ) =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     obstime = str2et("2003 Oct 13 06:00:00") =#
-#=     trgstate = [-2353.6213656676991, -4641.3414911499403, 3677.0523293197439, -0.00000000000057086, 0.00000000000020549, =#
-#=                 -0.00000000000012171] =#
-#=     state, lt = spkcvt(trgstate, 0.0, "EARTH", "ITRF93", obstime, "ITRF93", "TARGET", "CN+S", "SUN") =#
-#=     kclear() =#
-#=     expected_lt = 497.932192824968 =#
-#=     expected_state = [-3.41263006574816117063e+06,  -1.47916331564124494791e+08, =#
-#=                       1.98124035009435638785e+07,  -1.07582448117247804475e+04, =#
-#=                       2.50028331500423831812e+02,   1.11355285621839659171e+01] =#
-#=     npt.@test_almost_equal(lt, expected_lt) =#
-#=     npt.@test_array_almost_equal(state, expected_state, decimal=6) =#
-#= @testset "spkez" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("July 4, 2003 11:00 AM PST") =#
-#=     state, lt = spkez(499, et, "J2000", "LT+S", 399) =#
-#=     expected_lt = 269.6898813661505 =#
-#=     expected_state = [7.38222353105354905128e+07,  -2.71279189984722770751e+07, =#
-#=                       -1.87413063014898747206e+07,  -6.80851334001380692484e+00, =#
-#=                        7.51399612408221173609e+00,   3.00129849265935222391e+00] =#
-#=     npt.@test_almost_equal(lt, expected_lt) =#
-#=     npt.@test_array_almost_equal(state, expected_state) =#
-#=     kclear() =#
-#= @testset "spkezp" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("July 4, 2003 11:00 AM PST") =#
-#=     pos, lt = spkezp(499, et, "J2000", "LT+S", 399) =#
-#=     expected_lt = 269.6898813661505 =#
-#=     expected_pos = [73822235.31053550541400909424, -27127918.99847228080034255981, =#
-#=                     -18741306.30148987472057342529] =#
-#=     npt.@test_almost_equal(lt, expected_lt) =#
-#=     npt.@test_array_almost_equal(pos, expected_pos) =#
-#=     kclear() =#
-#= @testset "spkezr" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("July 4, 2003 11:00 AM PST") =#
-#=     state, lt = spkezr("Mars", et, "J2000", "LT+S", "Earth") =#
-#=     expected_lt = 269.6898813661505 =#
-#=     expected_state = [7.38222353105354905128e+07,  -2.71279189984722770751e+07, =#
-#=                       -1.87413063014898747206e+07,  -6.80851334001380692484e+00, =#
-#=                        7.51399612408221173609e+00,   3.00129849265935222391e+00] =#
-#=     npt.@test_almost_equal(lt, expected_lt) =#
-#=     npt.@test_array_almost_equal(state, expected_state) =#
-#=     kclear() =#
-#= @testset "spkezr_vectorized" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = full((100,), str2et("July 4, 2003 11:00 AM PST")) =#
-#=     state, lt = spkezr("Mars", et, "J2000", "LT+S", "Earth") =#
-#=     expected_lt = full((100,), 269.6898816177049) =#
-#=     expected_state = full((100, 6), [73822235.33116072, -27127919.178592984, =#
-#=                                         -18741306.284863796, =#
-#=                                         -6.808513317178952, 7.513996167680786, =#
-#=                                         3.001298515816776]) =#
-#=     npt.@test_allclose(lt, expected_lt) =#
-#=     npt.@test_allclose(state, expected_state) =#
-#=     kclear() =#
-#= @testset "spkgeo" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("July 4, 2003 11:00 AM PST") =#
-#=     state, lt = spkgeo(499, et, "J2000", 399) =#
-#=     expected_lt = 269.70264751151603 =#
-#=     expected_state = [7.38262164145559966564e+07,  -2.71280305524311661720e+07, =#
-#=                       -1.87419738849752545357e+07,  -6.80950358877040429206e+00, =#
-#=                        7.51381423681132254444e+00,   3.00129002640705921934e+00] =#
-#=     npt.@test_almost_equal(lt, expected_lt) =#
-#=     npt.@test_array_almost_equal(state, expected_state) =#
-#=     kclear() =#
-#= @testset "spkgps" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("July 4, 2003 11:00 AM PST") =#
-#=     pos, lt = spkgps(499, et, "J2000", 399) =#
-#=     expected_lt = 269.70264751151603 =#
-#=     expected_pos = [73826216.41455599665641784668, -27128030.55243116617202758789, =#
-#=                     -18741973.88497525453567504883] =#
-#=     npt.@test_almost_equal(lt, expected_lt) =#
-#=     npt.@test_array_almost_equal(pos, expected_pos) =#
-#=     kclear() =#
-#= @testset "spklef" begin =#
-#=     kclear() =#
-#=     handle = spklef(CoreKernels.spk) =#
-#=     @test handle != -1 =#
-#=     spkuef(handle) =#
-#=     kclear() =#
-#= @testset "spkltc" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("2000 JAN 1 12:00:00 TDB") =#
-#=     stobs = spkssb(399, et, "j2000") =#
-#=     state, lt, dlt = spkltc(301, et, "j2000", "lt", stobs) =#
-#=     expectedOneWayLt = 1.342310610325 =#
-#=     expectedLt = 1.07316909e-07 =#
-#=     expectedState = [-2.91569268313527107239e+05,  -2.66709183005481958389e+05, =#
-#=                      -7.60991494675353169441e+04,   6.43530600728670520994e-01, =#
-#=                      -6.66081825882520739412e-01,  -3.01322833716675120286e-01] =#
-#=     npt.@test_almost_equal(lt, expectedOneWayLt) =#
-#=     npt.@test_almost_equal(dlt, expectedLt) =#
-#=     npt.@test_array_almost_equal(state, expectedState, decimal=5) =#
-#=     kclear() =#
-#= @testset "spkopa" begin =#
-#=     SPKOPA = os.path.join(cwd, "testspkopa.bsp") =#
-#=     if exists(SPKOPA): =#
-#=         os.remove(SPKOPA) # pragma: no cover =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("2002 APR 27 00:00:00.000 TDB") =#
-#=     # load subset from kernels =#
-#=     handle, descr, ident = spksfs(5, et, 41) =#
-#=     body, center, frame, otype, first, last, begin, end = spkuds(descr) =#
-#=     # create empty spk kernel =#
-#=     handle_test = spkopn(SPKOPA, "Test Kernel for spkopa unit test.", 4) =#
-#=     # created empty spk kernel, write to it =#
-#=     spksub(handle, descr, ident, first, last, handle_test) =#
-#=     # close kernel =#
-#=     spkcls(handle_test) =#
-#=     # open the file to append to it =#
-#=     handle_spkopa = spkopa(SPKOPA) =#
-#=     et2 = str2et("2003 APR 27 00:00:00.000 TDB") =#
-#=     handle, descr, ident = spksfs(5, et2, 41) =#
-#=     body, center, frame, otype, first, last, begin, end = spkuds(descr) =#
-#=     spksub(handle, descr, ident, first, last, handle_spkopa) =#
-#=     spkcls(handle_spkopa) =#
-#=     # clean up =#
-#=     if exists(SPKOPA): =#
-#=         os.remove(SPKOPA) # pragma: no cover =#
-#=     kclear() =#
+    @testset "spkcpo" begin
+        try
+            furnsh(path(EXTRA, :earth_stn_spk),
+                   path(EXTRA, :earth_high_per_pck),
+                   path(EXTRA, :earth_topo_tf),
+                   path(CORE, :lsk), path(CORE, :spk))
+            et = str2et("2003 Oct 13 06:00:00")
+            obspos = [-2353.6213656676991, -4641.3414911499403, 3677.0523293197439]
+            state, lt = spkcpo("SUN", et, "DSS-14_TOPO", "OBSERVER", "CN+S", obspos, "EARTH", "ITRF93")
+            expected_lt = 497.93167787805714
+            expected_state = [6.25122733012810498476e+07,   5.89674929926417097449e+07,
+                             -1.22059095879866167903e+08,   2.47597313358008614159e+03,
+                             -9.87026711803482794494e+03,  -3.49990805659246507275e+03]
+            @test lt ≈ expected_lt
+            @test state ≈ expected_state
+            @test_throws ArgumentError spkcpo("SUN", et, "DSS-14_TOPO", "OBSERVER", "CN+S", obspos[1:2],
+                                              "EARTH", "ITRF93")
+        finally
+            kclear()
+        end
+    end
+    @testset "spkcpt" begin
+        try
+            furnsh(path(EXTRA, :earth_stn_spk),
+                   path(EXTRA, :earth_high_per_pck),
+                   path(EXTRA, :earth_topo_tf),
+                   path(CORE, :lsk), path(CORE, :spk))
+            obstime = str2et("2003 Oct 13 06:00:00")
+            trgpos = [-2353.6213656676991, -4641.3414911499403, 3677.0523293197439]
+            state, lt = spkcpt(trgpos, "EARTH", "ITRF93", obstime, "ITRF93", "TARGET", "CN+S", "SUN")
+            expected_lt = 497.9321928250503
+            expected_state = [-3.41263006568005401641e+06, -1.47916331564148992300e+08,
+                              1.98124035009580813348e+07,  -1.07582448117249587085e+04,
+                              2.50028331500427839273e+02,   1.11355285621842696742e+01]
+            @test lt ≈ expected_lt
+            @test state ≈ expected_state
+            @test_throws ArgumentError spkcpt(trgpos[1:2], "EARTH", "ITRF93", obstime, "ITRF93",
+                                              "TARGET", "CN+S", "SUN")
+        finally
+            kclear()
+        end
+    end
+    @testset "spkcvo" begin
+        try
+            furnsh(path(EXTRA, :earth_stn_spk),
+                   path(EXTRA, :earth_high_per_pck),
+                   path(EXTRA, :earth_topo_tf),
+                   path(CORE, :lsk), path(CORE, :spk))
+            obstime = str2et("2003 Oct 13 06:00:00")
+            obstate = [-2353.6213656676991, -4641.3414911499403, 3677.0523293197439,
+                       -0.00000000000057086, 0.00000000000020549, -0.00000000000012171]
+            state, lt = spkcvo("SUN", obstime, "DSS-14_TOPO", "OBSERVER", "CN+S", obstate, 0.0,
+                               "EARTH", "ITRF93")
+            expected_lt = 497.93167787798325
+            expected_state = [6.25122733012975975871e+07,   5.89674929925705492496e+07,
+                             -1.22059095879864960909e+08,   2.47597313358015026097e+03,
+                             -9.87026711803497346409e+03,  -3.49990805659256830040e+03]
+            @test lt ≈ expected_lt
+            @test state ≈ expected_state
+            @test_throws ArgumentError spkcvo("SUN", obstime, "DSS-14_TOPO", "OBSERVER", "CN+S",
+                                              obstate[1:5], 0.0, "EARTH", "ITRF93")
+        finally
+            kclear()
+        end
+    end
+    @testset "spkcvt" begin
+        try
+            furnsh(path(EXTRA, :earth_stn_spk),
+                   path(EXTRA, :earth_high_per_pck),
+                   path(EXTRA, :earth_topo_tf),
+                   path(CORE, :lsk), path(CORE, :spk))
+            obstime = str2et("2003 Oct 13 06:00:00")
+            trgstate = [-2353.6213656676991, -4641.3414911499403, 3677.0523293197439,
+                        -0.00000000000057086, 0.00000000000020549, -0.00000000000012171]
+            state, lt = spkcvt(trgstate, 0.0, "EARTH", "ITRF93", obstime,
+                               "ITRF93", "TARGET", "CN+S", "SUN")
+            expected_lt = 497.932192824968
+            expected_state = [-3.41263006574816117063e+06,  -1.47916331564124494791e+08,
+                              1.98124035009435638785e+07,  -1.07582448117247804475e+04,
+                              2.50028331500423831812e+02,   1.11355285621839659171e+01]
+            @test lt ≈ expected_lt
+            @test state ≈ expected_state
+            @test_throws ArgumentError spkcvt(trgstate[1:5], 0.0, "EARTH", "ITRF93", obstime,
+                                              "ITRF93", "TARGET", "CN+S", "SUN")
+        finally
+            kclear()
+        end
+    end
+    @testset "spkez" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :spk))
+            et = str2et("July 4, 2003 11:00 AM PST")
+            state, lt = spkez(499, et, "J2000", "LT+S", 399)
+            expected_lt = 269.6898813661505
+            expected_state = [7.38222353105354905128e+07, -2.71279189984722770751e+07,
+                              -1.87413063014898747206e+07, -6.80851334001380692484e+00,
+                              7.51399612408221173609e+00, 3.00129849265935222391e+00]
+            @test lt ≈ expected_lt
+            @test state ≈ expected_state
+        finally
+            kclear()
+        end
+    end
+    @testset "spkezp" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :spk))
+            et = str2et("July 4, 2003 11:00 AM PST")
+            pos, lt = spkezp(499, et, "J2000", "LT+S", 399)
+            expected_lt = 269.6898813661505
+            expected_pos = [73822235.31053550541400909424, -27127918.99847228080034255981,
+                            -18741306.30148987472057342529]
+            @test lt ≈ expected_lt
+            @test pos ≈ expected_pos
+        finally
+            kclear()
+        end
+    end
+    @testset "spkezr" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :spk))
+            et = str2et("July 4, 2003 11:00 AM PST")
+            state, lt = spkezr("Mars", et, "J2000", "LT+S", "Earth")
+            expected_lt = 269.6898813661505
+            expected_state = [7.38222353105354905128e+07,  -2.71279189984722770751e+07,
+                              -1.87413063014898747206e+07,  -6.80851334001380692484e+00,
+                               7.51399612408221173609e+00,   3.00129849265935222391e+00]
+            @test lt ≈ expected_lt
+            @test state ≈ expected_state
+        finally
+            kclear()
+        end
+    end
+    @testset "spkgeo" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :spk))
+            et = str2et("July 4, 2003 11:00 AM PST")
+            state, lt = spkgeo(499, et, "J2000", 399)
+            expected_lt = 269.70264751151603
+            expected_state = [7.38262164145559966564e+07, -2.71280305524311661720e+07,
+                              -1.87419738849752545357e+07, -6.80950358877040429206e+00,
+                              7.51381423681132254444e+00, 3.00129002640705921934e+00]
+            @test lt ≈ expected_lt
+            @test state ≈ expected_state
+        finally
+            kclear()
+        end
+    end
+    @testset "spkgps" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :spk))
+            et = str2et("July 4, 2003 11:00 AM PST")
+            pos, lt = spkgps(499, et, "J2000", 399)
+            expected_lt = 269.70264751151603
+            expected_pos = [73826216.41455599665641784668, -27128030.55243116617202758789,
+                            -18741973.88497525453567504883]
+            @test lt ≈ expected_lt
+            @test pos ≈ expected_pos
+        finally
+            kclear()
+        end
+    end
+    @testset "spklef" begin
+        try
+            handle = spklef(path(CORE, :spk))
+            @test handle != -1
+            spkuef(handle)
+        finally
+            kclear()
+        end
+    end
+    @testset "spkltc" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :spk))
+            et = str2et("2000 JAN 1 12:00:00 TDB")
+            stobs = spkssb(399, et, "J2000")
+            state, lt, dlt = spkltc(301, et, "J2000", "LT", stobs)
+            expected_lt = 1.342310610325
+            expected_dlt = 1.07316909e-07
+            expected_state = [-2.91569268313527107239e+05, -2.66709183005481958389e+05,
+                              -7.60991494675353169441e+04, 6.43530600728670520994e-01,
+                              -6.66081825882520739412e-01, -3.01322833716675120286e-01]
+            @test dlt ≈ expected_dlt rtol=1e-6
+            @test lt ≈ expected_lt
+            @test state ≈ expected_state
+            @test_throws ArgumentError spkltc(301, et, "J2000", "LT", stobs[1:5])
+        finally
+            kclear()
+        end
+    end
+    @testset "spkopa" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :spk))
+            file = tempname()
+            et = str2et("2002 APR 27 00:00:00.000 TDB")
+            # load subset from kernels
+            handle, descr, ident = spksfs(5, et)
+            body, center, frame, otype, first, last, start, stop = spkuds(descr)
+            # create empty spk kernel
+            handle_test = spkopn(file, "Test Kernel for spkopa unit test.", 4)
+            # created empty spk kernel, write to it
+            spksub!(handle_test, handle, descr, ident, first, last)
+            # close kernel
+            spkcls(handle_test)
+            # open the file to append to it
+            handle_spkopa = spkopa(file)
+            et2 = str2et("2003 APR 27 00:00:00.000 TDB")
+            handle, descr, ident = spksfs(5, et2)
+            body, center, frame, otype, first, last, start, stop = spkuds(descr)
+            spksub!(handle_spkopa, handle, descr, ident, first, last)
+            spkcls(handle_spkopa)
+        finally
+            kclear()
+        end
+    end
 #= @testset "spkopn" begin =#
 #=     # Same as test_spkw02 =#
 #=     SPK2 = os.path.join(cwd, "test2.bsp") =#

@@ -70,7 +70,7 @@
     @test SPICE._lcase("1234") == "1234"
 
     kclear()
-    let kerneltemp = tempfile()
+    let kerneltemp = tempname()
         try
             ldpoolNames = ["DELTET/DELTA_T_A", "DELTET/K", "DELTET/EB", "DELTET/M", "DELTET/DELTA_AT"]
             ldpoolLens = [1, 1, 1, 2, 46]

@@ -271,15 +271,15 @@ using LinearAlgebra: I, ⋅
         @test parse(Int, "-1") == SPICE._prsdp("-1")
     end
     @testset "psv2pl" begin
-        epoch = "Jan 1 2005"
-        frame = "ECLIPJ2000"
         try
+            epoch = "Jan 1 2005"
+            frame = "ECLIPJ2000"
             furnsh(path(CORE, :lsk), path(CORE, :spk))
             et = str2et(epoch)
-            state, ltime = spkezr("EARTH", et, frame, "Solar System Barycenter")
+            state, ltime = spkezr("EARTH", et, frame, "NONE", "SOLAR SYSTEM BARYCENTER")
             es_plane = psv2pl(state[1:3], state[1:3], state[4:6])
             es_norm, es_const = pl2nvc(es_plane)
-            mstate, mltime = spkezr("MOON", et, frame, "EARTH BARYCENTER")
+            mstate, mltime = spkezr("MOON", et, frame, "NONE", "EARTH BARYCENTER")
             em_plane = psv2pl(mstate[1:3], mstate[1:3], mstate[4:6])
             em_norm, em_const = pl2nvc(em_plane)
             @test rad2deg(vsep(es_norm, em_norm)) ≈ 5.0424941
@@ -292,7 +292,6 @@ using LinearAlgebra: I, ⋅
         end
     end
     @testset "pxform" begin
-        kclear()
         try
             furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
             lon = deg2rad(118.25)

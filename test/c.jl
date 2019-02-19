@@ -82,7 +82,7 @@ using Random: randstring
         kclear()
     end
 
-    let file = tempfile()
+    let file = tempname()
         try
             ifname = "Test CK type 1 segment created by cklpf"
             handle = ckopn(file, ifname, 10)
@@ -101,7 +101,7 @@ using Random: randstring
         end
     end
 
-    let file = tempfile()
+    let file = tempname()
         try
             handle = ckopn(file)
             quats = reshape(collect(1.0:8.0), 4, 2)
@@ -135,12 +135,12 @@ using Random: randstring
     furnsh(path(CORE, :lsk), path(CORE, :spk), path(CORE, :gm_pck))
     let
         et = str2et("Dec 25, 2007")
-        state, ltime = spkezr("Moon", et, "J2000", "EARTH")
+        state, ltime = spkezr("Moon", et, "J2000", "NONE", "EARTH")
         mu = bodvrd("EARTH", "GM")[1]
         elts = oscelt(state, et, mu)
         later = et + 7.0 * spd()
         later_state = conics(elts, later)
-        state, ltime = spkezr("Moon", later, "J2000", "EARTH")
+        state, ltime = spkezr("Moon", later, "J2000", "NONE", "EARTH")
         pert = later_state .- state
         expected_pert = [-7.48885583081946242601e+03,
                         3.97608014470621128567e+02,

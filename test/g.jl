@@ -69,7 +69,7 @@ using Random: randstring
 
     @testset "getfov" begin
         try
-            kernel = tempfile()
+            kernel = tempname()
             open(kernel, "w") do kernel_file
                 write(kernel_file, "\\begindata\n")
                 write(kernel_file, "INS-999004_FOV_SHAPE            = 'POLYGON'\n")

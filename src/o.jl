@@ -219,6 +219,7 @@ Returns the equivalent conic elements:
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/oscelt_c.html)
 """
 function oscelt(state, et, mu)
+    length(state) != 6 && throw(ArgumentError("`state` must have six elements."))
     elts = Array{SpiceDouble}(undef, 8)
     ccall((:oscelt_c, libcspice), Cvoid,
           (Ptr{SpiceDouble}, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
@@ -261,6 +262,7 @@ Returns the extended set of classical conic elements:
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/oscltx_c.html)
 """
 function oscltx(state, et, mu)
+    length(state) != 6 && throw(ArgumentError("`state` must have six elements."))
     elts = Array{SpiceDouble}(undef, 11)
     ccall((:oscltx_c, libcspice), Cvoid,
           (Ptr{SpiceDouble}, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),

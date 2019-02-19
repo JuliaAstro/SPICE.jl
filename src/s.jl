@@ -26,16 +26,31 @@ export
     spkapo,
     spkapp,
     spkaps,
-    spkcov,
-    spkcov!,
-    spkobj,
-    spkobj!,
     spkcls,
+    spkcov!,
+    spkcov,
     spkcpo,
+    spkcpt,
+    spkcvo,
+    spkcvt,
+    spkez,
+    spkezp,
     spkezr,
+    spkgeo,
+    spkgps,
+    spklef,
+    spkltc,
+    spkobj!,
+    spkobj,
+    spkopa,
     spkopn,
     spkpos,
+    spksfs,
     spkssb,
+    spksub,
+    spksub!,
+    spkuds,
+    spkuef,
     spkw13,
     str2et,
     subpnt,
@@ -898,6 +913,387 @@ Returns the extended coverage window.
 spkcov
 spkcov!
 
+"""
+    spkcpo(target, et, outref, refloc, abcorr, obspos, obsctr, obsref)
+
+Return the state of a specified target relative to an "observer,"
+where the observer has constant position in a specified reference
+frame. The observer's position is provided by the calling program
+rather than by loaded SPK files.
+
+### Arguments ###
+
+- `target`: Name of target ephemeris object
+- `et`: Observation epoch
+- `outref`: Reference frame of output state
+- `refloc`: Output reference frame evaluation locus
+- `abcorr`: Aberration correction
+- `obspos`: Observer position relative to center of motion
+- `obsctr`: Center of motion of observer
+- `obsref`: Frame of observer position
+
+### Output ###
+
+- `state`: State of target with respect to observer
+- `lt`: One way light time between target and observer
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcpo_c.html)
+"""
+function spkcpo(target, et, outref, refloc, abcorr, obspos, obsctr, obsref)
+    length(obspos) != 3 && throw(ArgumentError("`obspos` must have three elements."))
+    state = Array{SpiceDouble}(undef, 6)
+    lt = Ref{SpiceDouble}()
+    ccall((:spkcpo_c, libcspice), Cvoid,
+          (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Cstring, Cstring,
+           Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          target, et, outref, refloc, abcorr, obspos, obsctr, obsref, state, lt)
+    handleerror()
+    state, lt[]
+end
+
+"""
+
+Return the state, relative to a specified observer, of a target having constant position in a
+specified reference frame. The target's position is provided by the calling program rather than by
+loaded SPK files.
+
+### Arguments ###
+
+- `trgpos`: Target position relative to center of motion
+- `trgctr`: Center of motion of target
+- `trgref`: Frame of target position
+- `et`: Observation epoch
+- `outref`: Reference frame of output state
+- `refloc`: Output reference frame evaluation locus
+- `abcorr`: Aberration correction
+- `obsrvr`: Name of observing ephemeris object
+
+### Output ###
+
+- `state`: State of target with respect to observer
+- `lt`: One way light time between target and observer
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcpt_c.html)
+"""
+function spkcpt(trgpos, trgctr, trgref, et, outref, refloc, abcorr, obsrvr)
+    length(trgpos) != 3 && throw(ArgumentError("`trgpos` must have three elements."))
+    state = Array{SpiceDouble}(undef, 6)
+    lt = Ref{SpiceDouble}()
+    ccall((:spkcpt_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Cstring,
+           Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          trgpos, trgctr, trgref, et, outref, refloc, abcorr, obsrvr, state, lt)
+    handleerror()
+    state, lt[]
+end
+
+"""
+    spkcvo(target, et, outref, refloc, abcorr, obssta, obsepc, obsctr, obsref)
+
+Return the state of a specified target relative to an "observer," where the observer has constant
+velocity in a specified reference frame.  The observer's state is provided by the calling program
+rather than by loaded SPK files.
+
+### Arguments ###
+
+- `target`: Name of target ephemeris object
+- `et`: Observation epoch
+- `outref`: Reference frame of output state
+- `refloc`: Output reference frame evaluation locus
+- `abcorr`: Aberration correction
+- `obssta`: Observer state relative to center of motion
+- `obsepc`: Epoch of observer state
+- `obsctr`: Center of motion of observer
+- `obsref`: Frame of observer state
+
+### Output ###
+
+- `state`: State of target with respect to observer
+- `lt`: One way light time between target and observer
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcvo_c.html)
+"""
+function spkcvo(target, et, outref, refloc, abcorr, obssta, obsepc, obsctr, obsref)
+    length(obssta) != 6 && throw(ArgumentError("`obssta` must have three elements."))
+    state = Array{SpiceDouble}(undef, 6)
+    lt = Ref{SpiceDouble}()
+    ccall((:spkcvo_c, libcspice), Cvoid,
+          (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, SpiceDouble, Cstring,
+           Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          target, et, outref, refloc, abcorr, obssta, obsepc, obsctr, obsref, state, lt)
+    handleerror()
+    state, lt[]
+end
+
+"""
+    spkcvt(trgsta, trgepc, trgctr, trgref, et, outref, refloc, abcorr, obsrvr)
+
+Return the state, relative to a specified observer, of a target having constant velocity in a
+specified reference frame. The target's state is provided by the calling program rather than by
+loaded SPK files.
+
+### Arguments ###
+
+- `trgsta`: Target state relative to center of motion
+- `trgepc`: Epoch of target state
+- `trgctr`: Center of motion of target
+- `trgref`: Frame of target state
+- `et`: Observation epoch
+- `outref`: Reference frame of output state
+- `refloc`: Output reference frame evaluation locus
+- `abcorr`: Aberration correction
+- `obsrvr`: Name of observing ephemeris object
+
+### Output ###
+
+- `state`: State of target with respect to observer
+- `lt`: One way light time between target and observer
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcvt_c.html)
+"""
+function spkcvt(trgsta, trgepc, trgctr, trgref, et, outref, refloc, abcorr, obsrvr)
+    length(trgsta) != 6 && throw(ArgumentError("`trgsta` must have three elements."))
+    state = Array{SpiceDouble}(undef, 6)
+    lt = Ref{SpiceDouble}()
+    ccall((:spkcvt_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, SpiceDouble, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring,
+           Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          trgsta, trgepc, trgctr, trgref, et, outref, refloc, abcorr, obsrvr, state, lt)
+    handleerror()
+    state, lt[]
+end
+
+"""
+    spkez(targ, et, ref, abcorr, obs)
+
+Return the state (position and velocity) of a target body relative to an observing body,
+optionally corrected for light time (planetary aberration) and stellar aberration.
+
+### Arguments ###
+
+- `targ`: Target body
+- `et`: Observer epoch
+- `ref`: Reference frame of output state vector
+- `abcorr`: Aberration correction flag
+- `obs`: Observing body
+
+### Output ###
+
+- `starg`: State of target
+- `lt`: One way light time between observer and target
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkez_c.html)
+"""
+function spkez(targ, et, ref, abcorr, obs)
+    starg = Array{SpiceDouble}(undef, 6)
+    lt = Ref{SpiceDouble}()
+    ccall((:spkez_c, libcspice), Cvoid,
+          (SpiceInt, SpiceDouble, Cstring, Cstring, SpiceInt, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          targ, et, ref, abcorr, obs, starg, lt)
+    handleerror()
+    starg, lt[]
+end
+
+"""
+    spkezp(targ, et, ref, abcorr, obs)
+
+Return the position of a target body relative to an observing body,
+optionally corrected for light time (planetary aberration) and stellar aberration.
+
+### Arguments ###
+
+- `targ`: Target body
+- `et`: Observer epoch
+- `ref`: Reference frame of output state vector
+- `abcorr`: Aberration correction flag
+- `obs`: Observing body
+
+### Output ###
+
+- `ptarg`: Position of target
+- `lt`: One way light time between observer and target
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkezp_c.html)
+"""
+function spkezp(targ, et, ref, abcorr, obs)
+    ptarg = Array{SpiceDouble}(undef, 3)
+    lt = Ref{SpiceDouble}()
+    ccall((:spkezp_c, libcspice), Cvoid,
+          (SpiceInt, SpiceDouble, Cstring, Cstring, SpiceInt, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          targ, et, ref, abcorr, obs, ptarg, lt)
+    handleerror()
+    ptarg, lt[]
+end
+
+"""
+    spkezr(targ, et, ref, abcorr, obs)
+
+Return the state (position and velocity) of a target body relative to an observing body, optionally
+corrected for light time (planetary aberration) and stellar aberration.
+
+### Arguments ###
+
+- `targ`: Target body name
+- `et`: Observer epoch
+- `ref`: Reference frame of output state vector
+- `abcorr`: Aberration correction flag
+- `obs`: Observing body name
+
+### Output ###
+
+- `starg`: State of target
+- `lt`: One way light time between observer and target
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkezr_c.html)
+"""
+function spkezr(targ, et, ref, abcorr, obs)
+    starg = Array{SpiceDouble}(undef, 6)
+    lt = Ref{SpiceDouble}()
+    ccall((:spkezr_c, libcspice), Cvoid,
+          (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          targ, et, ref, abcorr, obs, starg, lt)
+    handleerror()
+    starg, lt[]
+end
+
+"""
+    spkgeo(targ, et, ref, obs)
+
+Compute the geometric state (position and velocity) of a target body relative to an observing body.
+
+### Arguments ###
+
+- `targ`: Target body.
+- `et`: Target epoch.
+- `ref`: Target reference frame.
+- `obs`: Observing body.
+
+### Output ###
+
+- `state`: State of target.
+- `lt`: Light time.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkgeo_c.html)
+"""
+function spkgeo(targ, et, ref, obs)
+    state = Array{SpiceDouble}(undef, 6)
+    lt = Ref{SpiceDouble}()
+    ccall((:spkgeo_c, libcspice), Cvoid,
+          (SpiceInt, SpiceDouble, Cstring, SpiceInt, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          targ, et, ref, obs, state, lt)
+    handleerror()
+    state, lt[]
+end
+
+"""
+    spkgps(targ, et, ref, obs)
+
+Compute the geometric position of a target body relative to an observing body.
+
+### Arguments ###
+
+- `targ`: Target body
+- `et`: Target epoch
+- `ref`: Target reference frame
+- `obs`: Observing body
+
+### Output ###
+
+- `pos`: Position of target
+- `lt`: Light time
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkgps_c.html)
+"""
+function spkgps(targ, et, ref, obs)
+    pos = Array{SpiceDouble}(undef, 3)
+    lt = Ref{SpiceDouble}()
+    ccall((:spkgps_c, libcspice), Cvoid,
+          (SpiceInt, SpiceDouble, Cstring, SpiceInt, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          targ, et, ref, obs, pos, lt)
+    handleerror()
+    pos, lt[]
+end
+
+"""
+    spklef(fname)
+
+Load an ephemeris file for use by the readers. Return that file's handle, to be used by other
+SPK routines to refer to the file.
+
+### Arguments ###
+
+- `fname`: Name of the file to be loaded
+
+### Output ###
+
+- `handle`: Loaded file's handle
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spklef_c.html)
+"""
+function spklef(fname)
+    handle = Ref{SpiceInt}()
+    ccall((:spklef_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}), fname, handle)
+    handleerror()
+    handle[]
+end
+
+"""
+    spkltc(targ, et, ref, abcorr, stobs)
+
+Return the state (position and velocity) of a target body relative to an observer, optionally
+corrected for light time, expressed relative to an inertial reference frame.
+
+### Arguments ###
+
+- `targ`: Target body
+- `et`: Observer epoch
+- `ref`: Inertial reference frame of output state
+- `abcorr`: Aberration correction flag
+- `stobs`: State of the observer relative to the SSB
+
+### Output ###
+
+- `starg`: State of target
+- `lt`: One way light time between observer and target
+- `dlt`: Derivative of light time with respect to time
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkltc_c.html)
+"""
+function spkltc(targ, et, ref, abcorr, stobs)
+    length(stobs) != 6 && throw(ArgumentError("`stobs` must have six elements."))
+    starg = Array{SpiceDouble}(undef, 6)
+    lt = Ref{SpiceDouble}()
+    dlt = Ref{SpiceDouble}()
+    ccall((:spkltc_c, libcspice), Cvoid,
+          (SpiceInt, SpiceDouble, Cstring, Cstring, Ptr{SpiceDouble},
+           Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          targ, et, ref, abcorr, stobs, starg, lt, dlt)
+    handleerror()
+    starg, lt[], dlt[]
+end
+
 function spkobj!(ids, spk)
     ccall((:spkobj_c, libcspice), Cvoid,
           (Cstring, Ref{Cell{SpiceInt}}),
@@ -931,6 +1327,30 @@ spkobj!
 spkobj
 
 """
+    spkopa(file)
+
+Open an existing SPK file for subsequent write.
+
+### Arguments ###
+
+- `file`: The name of an existing SPK file
+
+### Output ###
+
+Returns a handle attached to the SPK file opened to append.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkopa_c.html)
+"""
+function spkopa(file)
+    handle = Ref{SpiceInt}()
+    ccall((:spkopa_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}), file, handle)
+    handleerror()
+    handle[]
+end
+
+"""
     spkopn(name, ifname="", ncomch=0)
 
 Create a new SPK file, returning the handle of the opened file.
@@ -956,6 +1376,45 @@ function spkopn(name, ifname="", ncomch=0)
           name, ifname, ncomch, handle)
     handleerror()
     handle[]
+end
+
+"""
+    spksfs(body, et)
+
+Search through loaded SPK files to find the highest-priority segment applicable to the body and
+time specified.
+
+### Arguments ###
+
+- `body`: Body ID
+- `et`: Ephemeris time
+
+### Output ###
+
+Returns `nothing` if no segment was found or a tuple consisting of:
+
+- `handle`: Handle of file containing the applicable segment
+- `descr`: Descriptor of the applicable segment
+- `ident`: Identifier of the applicable segment
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spksfs_c.html)
+"""
+function spksfs(body, et)
+    SIDLEN = 40
+    idlen = SIDLEN + 1
+    handle = Ref{SpiceInt}()
+    descr = Array{SpiceDouble}(undef, 5)
+    ident = Array{SpiceChar}(undef, idlen)
+    found = Ref{SpiceBoolean}()
+    ccall((:spksfs_c, libcspice), Cvoid,
+          (SpiceInt, SpiceDouble, SpiceInt,
+           Ref{SpiceInt}, Ptr{SpiceDouble}, Ptr{SpiceChar}, Ref{SpiceBoolean}),
+          body, et, idlen, handle, descr, ident, found)
+    handleerror()
+    Bool(found[]) || return nothing
+    handle[], descr, unsafe_string(pointer(ident))
 end
 
 """
@@ -986,28 +1445,100 @@ function spkssb(targ, et, ref)
     starg
 end
 
+"""
+    spksub!(newh, handle, descr, ident, start, stop)
+
+Extract a subset of the data in an SPK segment into a separate segment.
+
+### Arguments ###
+
+- `newh`: Handle of new segment
+- `handle`: Handle of source segment
+- `descr`: Descriptor of source segment
+- `ident`: Identifier of source segment
+- `start`: Beginning (initial epoch) of subset
+- `stop`: End (final epoch) of subset
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spksub_c.html)
+"""
+function spksub!(newh, handle, descr, ident, start, stop)
+    length(descr) != 5 && throw(ArgumentError("`descr` must have five elements."))
+    ccall((:spksub_c, libcspice), Cvoid,
+          (SpiceInt, Ptr{SpiceDouble}, Cstring, SpiceDouble, SpiceDouble, SpiceInt),
+          handle, descr, ident, start, stop, newh)
+    handleerror()
+end
+
+@deprecate spksub spksub!
+
+"""
+    spkuds(descr)
+
+Unpack the contents of an SPK segment descriptor.
+
+### Arguments ###
+
+- `descr`: An SPK segment descriptor
+
+### Output ###
+
+- `body`: The NAIF ID code for the body of the segment
+- `center`: The center of motion for body
+- `frame`: The ID code for the frame of this segment
+- `type`: The type of SPK segment
+- `first`: The first epoch for which the segment is valid
+- `last`: The last  epoch for which the segment is valid
+- `start`: Beginning DAF address of the segment
+- `stop`: Ending DAF address of the segment
+
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkuds_c.html)
+"""
+function spkuds(descr)
+    length(descr) != 5 && throw(ArgumentError("`descr` must have five elements."))
+    body = Ref{SpiceInt}()
+    center = Ref{SpiceInt}()
+    frame = Ref{SpiceInt}()
+    type = Ref{SpiceInt}()
+    first = Ref{SpiceDouble}()
+    last = Ref{SpiceDouble}()
+    start = Ref{SpiceInt}()
+    stop = Ref{SpiceInt}()
+    ccall((:spkuds_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceInt},
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceInt}),
+          descr, body, center, frame, type, first, last, start, stop)
+    handleerror()
+    body[], center[], frame[], type[], first[], last[], start[], stop[]
+end
+
+"""
+    spkuef(handle)
+
+Unload an ephemeris file so that it will no longer be searched by the readers.
+
+### Arguments ###
+
+- `handle`: Handle of file to be unloaded
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkuef_c.html)
+"""
+function spkuef(handle)
+    ccall((:spkuef_c, libcspice), Cvoid, (SpiceInt,), handle)
+end
+
 function str2et(string)
     et = Ref{SpiceDouble}(0)
     ccall((:str2et_c, libcspice), Cvoid, (Cstring, Ref{SpiceDouble}), string, et)
     handleerror()
     et[]
 end
-
-"""
-Returns the state of a target body relative to an observing body.
-
-- [NAIF documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkezr_c.html)
-"""
-function spkezr(targ::AbstractString, et::Float64, ref::AbstractString, obs::AbstractString; abcorr::AbstractString="NONE")
-    starg = Array{SpiceDouble}(undef, 6)
-    lt = Ref{SpiceDouble}(0)
-    ccall((:spkezr_c, libcspice), Cvoid, (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}), targ, et, ref, abcorr, obs, starg, lt)
-    handleerror()
-    return starg, lt[]
-end
-spkezr(targ::Int, et::Float64, ref::AbstractString, obs::Int; abcorr::AbstractString="NONE") = spkezr(string(targ), et, ref, string(obs), abcorr=abcorr)
-spkezr(targ::AbstractString, et::Float64, ref::AbstractString, obs::Int; abcorr::AbstractString="NONE") = spkezr(targ, et, ref, string(obs), abcorr=abcorr)
-spkezr(targ::Int, et::Float64, ref::AbstractString, obs::AbstractString; abcorr::AbstractString="NONE") = spkezr(string(targ), et, ref, obs, abcorr=abcorr)
 
 """
 Returns the state of a target body relative to an observing body.
@@ -1024,24 +1555,6 @@ end
 spkpos(targ::Int, et::Float64, ref::AbstractString, obs::Int; abcorr::AbstractString="NONE") = spkpos(string(targ), et, ref, string(obs), abcorr=abcorr)
 spkpos(targ::AbstractString, et::Float64, ref::AbstractString, obs::Int; abcorr::AbstractString="NONE") = spkpos(targ, et, ref, string(obs), abcorr=abcorr)
 spkpos(targ::Int, et::Float64, ref::AbstractString, obs::AbstractString; abcorr::AbstractString="NONE") = spkpos(string(targ), et, ref, obs, abcorr=abcorr)
-
-"""
-Returns the state of a target body relative to a constant-position observer location.
-
-[https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcpo_c.html]
-(https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcpo_c.html)
-"""
-function spkcpo(target, et, outref, refloc, obspos, obsctr, obsref; abcorr="NONE")
-    state = Array{SpiceDouble}(6)
-    lt = Ref{SpiceDouble}(0)
-    ccall(
-        (:spkcpo_c, libcspice), Cvoid,
-        (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}),
-        target, et, outref, refloc, abcorr, obspos, obsctr, obsref, state, lt
-    )
-    handleerror()
-    return state, lt[]
-end
 
 function spkw13(handle, body, center, frame, first, last, segid, degree, states, epochs)
     n = length(epochs)

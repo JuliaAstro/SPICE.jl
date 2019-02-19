@@ -24,7 +24,7 @@
         try
             furnsh(path(CORE, :lsk), path(CORE, :spk))
             et = str2et("July 4, 2003 11:00 AM PST")
-            state, lt = spkezr("Mars", et, "J2000", "Earth", abcorr="LT+S")
+            state, lt = spkezr("Mars", et, "J2000", "LT+S", "Earth")
             expected_lt = 269.6898813661505
             expected_state = [7.38222353105354905128e+07,  -2.71279189984722770751e+07,
                               -1.87413063014898747206e+07,  -6.80851334001380692484e+00,

@@ -2,8 +2,6 @@ using SPICE
 using RemoteFiles
 using Test
 
-tempfile() = joinpath(tempdir(), randstring(6))
-
 const BASE_URL = "https://raw.githubusercontent.com/AndrewAnnex/SpiceyPyTestKernels/master/"
 const KERNEL_DIR = joinpath(@__DIR__, "kernels")
 
