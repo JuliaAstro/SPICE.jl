@@ -123,7 +123,7 @@ The illumination source is a specified ephemeris object.
 
 ### References ###
 
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/illumg_c.html
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/illumg_c.html)
 """
 function illumg(method, target, ilusrc, et, fixref, obsrvr, spoint; abcorr="NONE")
     trgepc = Ref{SpiceDouble}(0)
