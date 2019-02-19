@@ -645,7 +645,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.illumg",
     "category": "method",
-    "text": "illumg(method, target, ilusrc, et, fixref, obsrvr, spoint, abcorr)\n\nFind the illumination angles (phase, incidence, and emission) at a specified surface point of a target body.\n\nThe surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files.\n\nThe illumination source is a specified ephemeris object.\n\nArguments\n\nmethod: Computation method.\ntarget: Name of target body.\nilusrc: Name of illumination source.\net: Epoch in ephemeris seconds past J2000 TDB.\nfixref: Body-fixed, body-centered target body frame.\nobsrvr: Name of observing body.\nspoint: Body-fixed coordinates of a target surface point.\nabcorr: Aberration correction.\n\nOutput\n\ntrgepc: Sub-solar point epoch.\nsrfvec: Vector from observer to sub-solar point.\nphase: Phase angle at the surface point.\nincdnc: Solar incidence angle at the surface point.\nemissn: Emission angle at the surface point.\n\nReferences\n\n[NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/illumgc.html\n\n\n\n\n\n"
+    "text": "illumg(method, target, ilusrc, et, fixref, obsrvr, spoint, abcorr)\n\nFind the illumination angles (phase, incidence, and emission) at a specified surface point of a target body.\n\nThe surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files.\n\nThe illumination source is a specified ephemeris object.\n\nArguments\n\nmethod: Computation method.\ntarget: Name of target body.\nilusrc: Name of illumination source.\net: Epoch in ephemeris seconds past J2000 TDB.\nfixref: Body-fixed, body-centered target body frame.\nobsrvr: Name of observing body.\nspoint: Body-fixed coordinates of a target surface point.\nabcorr: Aberration correction.\n\nOutput\n\ntrgepc: Sub-solar point epoch.\nsrfvec: Vector from observer to sub-solar point.\nphase: Phase angle at the surface point.\nincdnc: Solar incidence angle at the surface point.\nemissn: Emission angle at the surface point.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -2049,19 +2049,91 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.spkcpo-NTuple{7,Any}",
+    "location": "api/#SPICE.spkcpo-NTuple{8,Any}",
     "page": "API",
     "title": "SPICE.spkcpo",
     "category": "method",
-    "text": "Returns the state of a target body relative to a constant-position observer location.\n\nhttps://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/spkcpoc.html\n\n\n\n\n\n"
+    "text": "spkcpo(target, et, outref, refloc, abcorr, obspos, obsctr, obsref)\n\nReturn the state of a specified target relative to an \"observer,\" where the observer has constant position in a specified reference frame. The observer\'s position is provided by the calling program rather than by loaded SPK files.\n\nArguments\n\ntarget: Name of target ephemeris object\net: Observation epoch\noutref: Reference frame of output state\nrefloc: Output reference frame evaluation locus\nabcorr: Aberration correction\nobspos: Observer position relative to center of motion\nobsctr: Center of motion of observer\nobsref: Frame of observer position\n\nOutput\n\nstate: State of target with respect to observer\nlt: One way light time between target and observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
-    "location": "api/#SPICE.spkezr-Tuple{AbstractString,Float64,AbstractString,AbstractString}",
+    "location": "api/#SPICE.spkcpt-NTuple{8,Any}",
+    "page": "API",
+    "title": "SPICE.spkcpt",
+    "category": "method",
+    "text": "Return the state, relative to a specified observer, of a target having constant position in a specified reference frame. The target\'s position is provided by the calling program rather than by loaded SPK files.\n\nArguments\n\ntrgpos: Target position relative to center of motion\ntrgctr: Center of motion of target\ntrgref: Frame of target position\net: Observation epoch\noutref: Reference frame of output state\nrefloc: Output reference frame evaluation locus\nabcorr: Aberration correction\nobsrvr: Name of observing ephemeris object\n\nOutput\n\nstate: State of target with respect to observer\nlt: One way light time between target and observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkcvo-NTuple{9,Any}",
+    "page": "API",
+    "title": "SPICE.spkcvo",
+    "category": "method",
+    "text": "spkcvo(target, et, outref, refloc, abcorr, obssta, obsepc, obsctr, obsref)\n\nReturn the state of a specified target relative to an \"observer,\" where the observer has constant velocity in a specified reference frame.  The observer\'s state is provided by the calling program rather than by loaded SPK files.\n\nArguments\n\ntarget: Name of target ephemeris object\net: Observation epoch\noutref: Reference frame of output state\nrefloc: Output reference frame evaluation locus\nabcorr: Aberration correction\nobssta: Observer state relative to center of motion\nobsepc: Epoch of observer state\nobsctr: Center of motion of observer\nobsref: Frame of observer state\n\nOutput\n\nstate: State of target with respect to observer\nlt: One way light time between target and observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkcvt-NTuple{9,Any}",
+    "page": "API",
+    "title": "SPICE.spkcvt",
+    "category": "method",
+    "text": "spkcvt(trgsta, trgepc, trgctr, trgref, et, outref, refloc, abcorr, obsrvr)\n\nReturn the state, relative to a specified observer, of a target having constant velocity in a specified reference frame. The target\'s state is provided by the calling program rather than by loaded SPK files.\n\nArguments\n\ntrgsta: Target state relative to center of motion\ntrgepc: Epoch of target state\ntrgctr: Center of motion of target\ntrgref: Frame of target state\net: Observation epoch\noutref: Reference frame of output state\nrefloc: Output reference frame evaluation locus\nabcorr: Aberration correction\nobsrvr: Name of observing ephemeris object\n\nOutput\n\nstate: State of target with respect to observer\nlt: One way light time between target and observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkez-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.spkez",
+    "category": "method",
+    "text": "spkez(targ, et, ref, abcorr, obs)\n\nReturn the state (position and velocity) of a target body relative to an observing body, optionally corrected for light time (planetary aberration) and stellar aberration.\n\nArguments\n\ntarg: Target body\net: Observer epoch\nref: Reference frame of output state vector\nabcorr: Aberration correction flag\nobs: Observing body\n\nOutput\n\nstarg: State of target\nlt: One way light time between observer and target\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkezp-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.spkezp",
+    "category": "method",
+    "text": "spkezp(targ, et, ref, abcorr, obs)\n\nReturn the position of a target body relative to an observing body, optionally corrected for light time (planetary aberration) and stellar aberration.\n\nArguments\n\ntarg: Target body\net: Observer epoch\nref: Reference frame of output state vector\nabcorr: Aberration correction flag\nobs: Observing body\n\nOutput\n\nptarg: Position of target\nlt: One way light time between observer and target\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkezr-NTuple{5,Any}",
     "page": "API",
     "title": "SPICE.spkezr",
     "category": "method",
-    "text": "Returns the state of a target body relative to an observing body.\n\nNAIF documentation\n\n\n\n\n\n"
+    "text": "spkezr(targ, et, ref, abcorr, obs)\n\nReturn the state (position and velocity) of a target body relative to an observing body, optionally corrected for light time (planetary aberration) and stellar aberration.\n\nArguments\n\ntarg: Target body name\net: Observer epoch\nref: Reference frame of output state vector\nabcorr: Aberration correction flag\nobs: Observing body name\n\nOutput\n\nstarg: State of target\nlt: One way light time between observer and target\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkgeo-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.spkgeo",
+    "category": "method",
+    "text": "spkgeo(targ, et, ref, obs)\n\nCompute the geometric state (position and velocity) of a target body relative to an observing body.\n\nArguments\n\ntarg: Target body.\net: Target epoch.\nref: Target reference frame.\nobs: Observing body.\n\nOutput\n\nstate: State of target.\nlt: Light time.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkgps-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.spkgps",
+    "category": "method",
+    "text": "spkgps(targ, et, ref, obs)\n\nCompute the geometric position of a target body relative to an observing body.\n\nArguments\n\ntarg: Target body\net: Target epoch\nref: Target reference frame\nobs: Observing body\n\nOutput\n\npos: Position of target\nlt: Light time\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spklef-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.spklef",
+    "category": "method",
+    "text": "spklef(fname)\n\nLoad an ephemeris file for use by the readers. Return that file\'s handle, to be used by other SPK routines to refer to the file.\n\nArguments\n\nfname: Name of the file to be loaded\n\nOutput\n\nhandle: Loaded file\'s handle\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkltc-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.spkltc",
+    "category": "method",
+    "text": "spkltc(targ, et, ref, abcorr, stobs)\n\nReturn the state (position and velocity) of a target body relative to an observer, optionally corrected for light time, expressed relative to an inertial reference frame.\n\nArguments\n\ntarg: Target body\net: Observer epoch\nref: Inertial reference frame of output state\nabcorr: Aberration correction flag\nstobs: State of the observer relative to the SSB\n\nOutput\n\nstarg: State of target\nlt: One way light time between observer and target\ndlt: Derivative of light time with respect to time\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -2070,6 +2142,14 @@ var documenterSearchIndex = {"docs": [
     "title": "SPICE.spkobj!",
     "category": "function",
     "text": "spkobj!(ids, spk)\nspkobj(spk)\n\nFind the set of ID codes of all objects in a specified SPK file.\n\nArguments\n\nids: A preallocated set of ID codes of objects in SPK file\nspk: Name of the SPK file\n\nOutput\n\nReturns the set of id codes.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkopa-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.spkopa",
+    "category": "method",
+    "text": "spkopa(file)\n\nOpen an existing SPK file for subsequent write.\n\nArguments\n\nfile: The name of an existing SPK file\n\nOutput\n\nReturns a handle attached to the SPK file opened to append.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -2089,11 +2169,43 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.spksfs-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.spksfs",
+    "category": "method",
+    "text": "spksfs(body, et)\n\nSearch through loaded SPK files to find the highest-priority segment applicable to the body and time specified.\n\nArguments\n\nbody: Body ID\net: Ephemeris time\n\nOutput\n\nReturns nothing if no segment was found or a tuple consisting of:\n\nhandle: Handle of file containing the applicable segment\ndescr: Descriptor of the applicable segment\nident: Identifier of the applicable segment\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.spkssb-Tuple{Any,Any,Any}",
     "page": "API",
     "title": "SPICE.spkssb",
     "category": "method",
     "text": "spkssb(targ, et, ref)\n\nReturn the state (position and velocity) of a target body relative to the solar system barycenter.\n\nArguments\n\ntarg: Target body\net: Target epoch\nref: Target reference frame\n\nOutput\n\nReturns the state of target.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spksub!-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.spksub!",
+    "category": "method",
+    "text": "spksub!(newh, handle, descr, ident, start, stop)\n\nExtract a subset of the data in an SPK segment into a separate segment.\n\nArguments\n\nnewh: Handle of new segment\nhandle: Handle of source segment\ndescr: Descriptor of source segment\nident: Identifier of source segment\nstart: Beginning (initial epoch) of subset\nstop: End (final epoch) of subset\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkuds-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.spkuds",
+    "category": "method",
+    "text": "spkuds(descr)\n\nUnpack the contents of an SPK segment descriptor.\n\nArguments\n\ndescr: An SPK segment descriptor\n\nOutput\n\nbody: The NAIF ID code for the body of the segment\ncenter: The center of motion for body\nframe: The ID code for the frame of this segment\ntype: The type of SPK segment\nfirst: The first epoch for which the segment is valid\nlast: The last  epoch for which the segment is valid\nstart: Beginning DAF address of the segment\nstop: Ending DAF address of the segment\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkuef-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.spkuef",
+    "category": "method",
+    "text": "spkuef(handle)\n\nUnload an ephemeris file so that it will no longer be searched by the readers.\n\nArguments\n\nhandle: Handle of file to be unloaded\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
