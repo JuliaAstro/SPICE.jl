@@ -167,14 +167,15 @@ Returns `nothing` if `keywd` was found or a tuple consisting of
 function kxtrct(keywd, terms, string, substrlen=256)
     terms, nterms, termlen = chararray(terms)
     stringlen = length(string) + 1
-    string = Array{SpiceChar}(string)
+    str = fill(0x00, stringlen)
+    str[1:end-1] .= Array{SpiceChar}(string)
     found = Ref{SpiceBoolean}()
     substr = Array{SpiceChar}(undef, substrlen)
     ccall((:kxtrct_c, libcspice), Cvoid,
           (Cstring, SpiceInt, Ptr{SpiceChar}, SpiceInt, SpiceInt, SpiceInt,
            Ptr{SpiceChar}, Ref{SpiceBoolean}, Ptr{SpiceChar}),
-          keywd, termlen, terms, nterms, stringlen, substrlen, string, found, substr)
+          keywd, termlen, terms, nterms, stringlen, substrlen, str, found, substr)
     Bool(found[]) || return nothing
-    unsafe_string(pointer(string)), unsafe_string(pointer(substr))
+    unsafe_string(pointer(str)), unsafe_string(pointer(substr))
 end
 
