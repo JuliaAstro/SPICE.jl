@@ -88,20 +88,20 @@
             mu_earth = bodvrd("EARTH", "GM", 1)
             ele = oscelt(state, et, mu_earth[1])
             elex = oscltx(state, et, mu_earth[1])
-            #= exp_true_anomaly = 0.6426866586971616 =#
-            #= exp_semi_major = elex[1] / (1 - elex[2]) =#
-            #= exp_period = 2π * sqrt(exp_semi_major^3 / mu_earth[1]) =#
-            #= @test elex[1] ≈ ele[1] =#
-            #= @test elex[2] ≈ ele[2] =#
-            #= @test elex[3] ≈ ele[3] =#
-            #= @test elex[4] ≈ ele[4] =#
-            #= @test elex[5] ≈ ele[5] =#
-            #= @test elex[6] ≈ ele[6] =#
-            #= @test elex[7] ≈ ele[7] =#
-            #= @test elex[8] ≈ ele[8] =#
-            #= @test elex[9] ≈ exp_true_anomaly =#
-            #= @test elex[10] ≈ exp_semi_major =#
-            #= @test elex[11] ≈ exp_period =#
+            exp_true_anomaly = 0.6426866586971616
+            exp_semi_major = elex[1] / (1 - elex[2])
+            exp_period = 2π * sqrt(exp_semi_major^3 / mu_earth[1])
+            @test elex[1] ≈ ele[1]
+            @test elex[2] ≈ ele[2]
+            @test elex[3] ≈ ele[3]
+            @test elex[4] ≈ ele[4]
+            @test elex[5] ≈ ele[5]
+            @test elex[6] ≈ ele[6]
+            @test elex[7] ≈ ele[7]
+            @test elex[8] ≈ ele[8]
+            @test elex[9] ≈ exp_true_anomaly
+            @test elex[10] ≈ exp_semi_major
+            @test elex[11] ≈ exp_period
         finally
             kclear()
         end
