@@ -701,7 +701,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.insrti!",
     "category": "method",
-    "text": "insrti!(set, item)\n\nInsert an item into a character set.\n\nArguments\n\nset: Insertion set\nitem: Item to be inserted\n\nOutput\n\nReturns the updated set.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "insrti!(set, item)\n\nInsert an item into an integer set.\n\nArguments\n\nset: Insertion set\nitem: Item to be inserted\n\nOutput\n\nReturns the updated set.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -841,11 +841,43 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.kdata",
+    "page": "API",
+    "title": "SPICE.kdata",
+    "category": "function",
+    "text": "kdata(which, kind, fillen=1024, srclen=256)\n\nReturn data for the n-th kernel that is among a list of specified kernel types.\n\nArguments\n\nwhich: Index of kernel to fetch from the list of kernels\nkind: The kind of kernel to which fetches are limited\nfillen: Available space in output file string\nsrclen: Available space in output source string\n\nOutput\n\nReturns nothing if no kernel was found or a tuple consisting of\n\nfile: The name of the kernel file\nfiltyp: The type of the kernel\nsource: Name of the source file used to load file\nhandle: The handle attached to file\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.kinfo",
+    "page": "API",
+    "title": "SPICE.kinfo",
+    "category": "function",
+    "text": "kinfo(file, srclen=256)\n\nArguments\n\nfile: Name of a kernel to fetch information for\nsrclen: Available space in output source string\n\nOutput\n\nReturns nothing if no kernel was found or a tuple consisting of\n\nfiltyp: The type of the kernel\nsource: Name of the source file used to load file\nhandle: The handle attached to file\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.kplfrm",
+    "page": "API",
+    "title": "SPICE.kplfrm",
+    "category": "function",
+    "text": "kplfrm(frmcls)\n\nReturn a SPICE set containing the frame IDs of all reference frames of a given class having specifications in the kernel pool.\n\nArguments\n\nfrmcls: Frame class\nsize: Size of the output set\n\nOutput\n\nReturns the set of ID codes of frames of the specified class.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.ktotal-Tuple{Any}",
     "page": "API",
     "title": "SPICE.ktotal",
     "category": "method",
-    "text": "ktotal(kind)\n\nReturn the current number of kernels that have been loaded  via the KEEPER interface that are of a specified type. \n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "ktotal(kind)\n\nReturn the current number of kernels that have been loaded via the KEEPER interface that are of a specified type.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.kxtrct",
+    "page": "API",
+    "title": "SPICE.kxtrct",
+    "category": "function",
+    "text": "kxtrct(keywd, terms, string)\n\nLocate a keyword in a string and extract the substring from the beginning of the first word following the keyword to the beginning of the first subsequent recognized terminator of a list.\n\nArguments\n\nkeywd: Word that marks the beginning of text of interest\nterms: Set of words, any of which marks the end of text\nstring: String containing a sequence of words\n\nOutput\n\nReturns nothing if keywd was found or a tuple consisting of\n\nstring: The input string with the text of interest removed\nsubstr: String from end of keywd to beginning of first terms item found\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1249,11 +1281,75 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.occult-NTuple{9,Any}",
+    "page": "API",
+    "title": "SPICE.occult",
+    "category": "method",
+    "text": "occult(targ1, shape1, frame1, targ2, shape2, frame2, abcorr, obsrvr, et)\n\nDetermines the occultation condition (not occulted, partially, etc.) of one target relative to another target as seen by an observer at a given time.\n\nThe surfaces of the target bodies may be represented by triaxial ellipsoids or by topographic data provided by DSK files.\n\nArguments\n\ntarg1: Name or ID of first target.\nshape1: Type of shape model used for first target.\nframe1: Body-fixed, body-centered frame for first body.\ntarg2: Name or ID of second target.\nshape2: Type of shape model used for second target.\nframe2: Body-fixed, body-centered frame for second body.\nabcorr: Aberration correction flag.\nobsrvr: Name or ID of the observer.\net: Time of the observation (seconds past J2000).\n\nOutput\n\nReturns the occultation identification code.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ordc-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.ordc",
+    "category": "method",
+    "text": "ordc(set, item)\n\nThe function returns the ordinal position of any given item in a character set.\n\nArguments\n\nset: A set to search for a given item\nitem: An item to locate within a set\n\nOutput\n\nReturns the ordinal position or nothing if the items does not appear in the set.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ordd-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.ordd",
+    "category": "method",
+    "text": "ordd(set, item)\n\nThe function returns the ordinal position of any given item in a character set.\n\nArguments\n\nset: A set to search for a given item\nitem: An item to locate within a set\n\nOutput\n\nReturns the ordinal position or nothing if the items does not appear in the set.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.orderc",
+    "page": "API",
+    "title": "SPICE.orderc",
+    "category": "function",
+    "text": "orderc(array)\n\n!!! warning Deprecated     Use sortperm instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.orderd",
+    "page": "API",
+    "title": "SPICE.orderd",
+    "category": "function",
+    "text": "orderd(array)\n\n!!! warning Deprecated     Use sortperm instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.orderi",
+    "page": "API",
+    "title": "SPICE.orderi",
+    "category": "function",
+    "text": "orderi(array)\n\n!!! warning Deprecated     Use sortperm instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ordi-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.ordi",
+    "category": "method",
+    "text": "ordi(set, item)\n\nThe function returns the ordinal position of any given item in a character set.\n\nArguments\n\nset: A set to search for a given item\nitem: An item to locate within a set\n\nOutput\n\nReturns the ordinal position or nothing if the items does not appear in the set.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.oscelt-Tuple{Any,Any,Any}",
     "page": "API",
     "title": "SPICE.oscelt",
     "category": "method",
-    "text": "oscelt(state, et, mu)\n\nDetermine the set of osculating conic orbital elements that corresponds to the state (position, velocity) of a body at some epoch.\n\nArguments\n\nstate: State of body at epoch of elements\net: Epoch of elements\nmu: Gravitational parameter (GM) of primary body\n\nOutput\n\nReturns the equivalent conic elements.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "oscelt(state, et, mu)\n\nDetermine the set of osculating conic orbital elements that corresponds to the state (position, velocity) of a body at some epoch.\n\nArguments\n\nstate: State of body at epoch of elements\net: Epoch of elements\nmu: Gravitational parameter (GM) of primary body\n\nOutput\n\nReturns the equivalent conic elements:\n\nrp: Perifocal distance\necc: Eccentricity\ninc: Inclination\nlnode: Longitude of the ascending node\nargp: Argument of periapsis\nm0: Mean anomaly at epoch\nt0: Epoch\nmu: Gravitational parameter\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.oscltx-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.oscltx",
+    "category": "method",
+    "text": "oscltx(state, et, mu)\n\nDetermine the set of osculating conic orbital elements that corresponds to the state (position, velocity) of a body at some epoch. In addition to the classical elements, return the true anomaly, semi-major axis, and period, if applicable.\n\nArguments\n\nstate: State of body at epoch of elements\net: Epoch of elements\nmu: Gravitational parameter (GM) of primary body\n\nOutput\n\nReturns the extended set of classical conic elements:\n\nrp: Perifocal distance.\necc: Eccentricity.\ninc: Inclination.\nlnode: Longitude of the ascending node.\nargp: Argument of periapsis.\nm0: Mean anomaly at epoch.\nt0: Epoch.\nmu: Gravitational parameter.\nnu: True anomaly at epoch.\na: Semi-major axis. A is set to zero if it is not computable.\ntau: Orbital period. Applicable only for elliptical orbits. Set to zero otherwise.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1501,7 +1597,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.radrec",
     "category": "method",
-    "text": "radrec(range, ra, dec)\n\nConvert from range, right ascension, and declination to rectangular coordinates.\n\nArguments\n\nrange      I   Distance of a point from the origin. ra         I   Right ascension of point in radians. dec        I   Declination of point in radians.\n\nOutput\n\nReturns the rectangular coordinates of the point.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "radrec(range, ra, dec)\n\nConvert from range, right ascension, and declination to rectangular coordinates.\n\nArguments\n\nrange: Distance of a point from the origin\nra: Right ascension of point in radians\ndec: Declination of point in radians\n\nOutput\n\nReturns the rectangular coordinates of the point.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1569,6 +1665,110 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.removc!-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.removc!",
+    "category": "method",
+    "text": "removc!(set, item)\n\nRemove an item from a character set.\n\nArguments\n\nset: A set\nitem: Item to be removed\n\nOutput\n\nReturns the updated set.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.removd!-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.removd!",
+    "category": "method",
+    "text": "removd!(set, item)\n\nRemove an item from a double set.\n\nArguments\n\nset: A set\nitem: Item to be removed\n\nOutput\n\nReturns the updated set.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.removi!-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.removi!",
+    "category": "method",
+    "text": "removi!(set, item)\n\nRemove an item from a character set.\n\nArguments\n\nset: A set\nitem: Item to be removed\n\nOutput\n\nReturns the updated set.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.reordc",
+    "page": "API",
+    "title": "SPICE.reordc",
+    "category": "function",
+    "text": "reordc(iorder, array)\n\n!!! warning Deprecated     Use array[iorder] instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.reordd",
+    "page": "API",
+    "title": "SPICE.reordd",
+    "category": "function",
+    "text": "reordd(iorder, array)\n\n!!! warning Deprecated     Use array[iorder] instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.reordi",
+    "page": "API",
+    "title": "SPICE.reordi",
+    "category": "function",
+    "text": "reordi(iorder, array)\n\n!!! warning Deprecated     Use array[iorder] instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.reordl",
+    "page": "API",
+    "title": "SPICE.reordl",
+    "category": "function",
+    "text": "reordl(iorder, array)\n\n!!! warning Deprecated     Use array[iorder] instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.repmc",
+    "page": "API",
+    "title": "SPICE.repmc",
+    "category": "function",
+    "text": "repmc(input, marker, value)\n\n!!! warning Deprecated     Use replace(input, marker=>value) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.repmct",
+    "page": "API",
+    "title": "SPICE.repmct",
+    "category": "function",
+    "text": "repmct\n\n!!! warning Deprecated     Use replace instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.repmd",
+    "page": "API",
+    "title": "SPICE.repmd",
+    "category": "function",
+    "text": "repmd\n\n!!! warning Deprecated     Use replace instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.repmf",
+    "page": "API",
+    "title": "SPICE.repmf",
+    "category": "function",
+    "text": "repmf\n\n!!! warning Deprecated     Use replace instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.repmi",
+    "page": "API",
+    "title": "SPICE.repmi",
+    "category": "function",
+    "text": "repmi\n\n!!! warning Deprecated     Use replace instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.repmot",
+    "page": "API",
+    "title": "SPICE.repmot",
+    "category": "function",
+    "text": "repmot\n\n!!! warning Deprecated     Use replace instead.\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.rotate-Tuple{Any,Any}",
     "page": "API",
     "title": "SPICE.rotate",
@@ -1577,11 +1777,171 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.rotmat-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.rotmat",
+    "category": "method",
+    "text": "rotmat(m1, angle, iaxis)\n\nApplies a rotation of angle radians about axis iaxis to a matrix m1. This rotation is thought of as rotating the coordinate system.\n\nArguments\n\nm1: Matrix to be rotated\nangle: Angle of rotation (radians)\niaxis: Axis of rotation (X=1, Y=2, Z=3)\n\nOutput\n\nReturns the resulting rotated matrix.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.rotvec-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.rotvec",
+    "category": "method",
+    "text": "rotvec(v1, angle, iaxis)\n\nTransform a vector to a new coordinate system rotated by angle radians about axis iaxis. This transformation rotates v1 by -angle radians about the specified axis.\n\nArguments\n\nv1: Vector whose coordinate system is to be rotated\nangle: Angle of rotation in radians\niaxis: Axis of rotation (X=1, Y=2, Z=3)\n\nOutput\n\nReturns the resulting vector expressed in the new coordinate system.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.rpd",
+    "page": "API",
+    "title": "SPICE.rpd",
+    "category": "function",
+    "text": "rpd()\n\n!!! warning Deprecated     Use deg2rad instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.rquad-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.rquad",
+    "category": "method",
+    "text": "Arguments\n\nOutput\n\nReturns nothing if no kernel was found or\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.saelgv-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.saelgv",
+    "category": "method",
+    "text": "saelgv(vec1, vec2)\n\nFind semi-axis vectors of an ellipse generated by two arbitrary three-dimensional vectors.\n\nArguments\n\nvec1, vec2: Two vectors used to generate an ellipse\n\nOutput\n\nsmajor: Semi-major axis of ellipse\nsminor: Semi-minor axis of ellipse\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.scard!-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,Any}} where T",
     "page": "API",
     "title": "SPICE.scard!",
     "category": "method",
     "text": "scard!(cell::SpiceCell{T}, card) where T\n\nSet the cardinality of a cell.\n\nArguments\n\ncell: The cell\ncard: Cardinality of (number of elements in) the cell\n\nOutput\n\nReturns cell with its cardinality set to card.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.scdecd",
+    "page": "API",
+    "title": "SPICE.scdecd",
+    "category": "function",
+    "text": "scdecd(sc, sclkdp, lenout=128)\n\nConvert double precision encoding of spacecraft clock time into a character representation.\n\nArguments\n\nsc: NAIF spacecraft identification code\nsclkdp: Encoded representation of a spacecraft clock count\nlenout: Maximum allowed length of output SCLK string\n\nOutput\n\nReturns the character representation of a clock count.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.sce2c-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.sce2c",
+    "category": "method",
+    "text": "sce2c(sc, et)\n\nConvert ephemeris seconds past J2000 (ET) to continuous encoded spacecraft clock (\"ticks\"). Non-integral tick values may be returned.\n\nArguments\n\nsc: NAIF spacecraft ID code\net: Ephemeris time, seconds past J2000\n\nOutput\n\nReturns SCLK, encoded as ticks since spacecraft clock start.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.sce2s",
+    "page": "API",
+    "title": "SPICE.sce2s",
+    "category": "function",
+    "text": "sce2s(sc, et, lenout=128)\n\nConvert an epoch specified as ephemeris seconds past J2000 (ET) to a character string representation of a spacecraft clock value (SCLK).\n\nArguments\n\nsc: NAIF spacecraft identification code\net: Ephemeris time, specified as seconds past J2000\nlenout: Maximum allowed length of output SCLK string\n\nOutput\n\nReturns an SCLK string.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.sce2t-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.sce2t",
+    "category": "method",
+    "text": "sce2t(sc, et)\n\nConvert ephemeris seconds past J2000 (ET) to integral encoded spacecraft clock (\"ticks\"). For conversion to fractional ticks, (required for C-kernel production), see the routine sce2c.\n\nArguments\n\nsc: NAIF spacecraft ID code\net: Ephemeris time, seconds past J2000\n\nOutput\n\nReturns SCLK, encoded as ticks since spacecraft clock start.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.scencd-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.scencd",
+    "category": "method",
+    "text": "scencd(sc, sclkch)\n\nEncode character representation of spacecraft clock time into a double precision number.\n\nArguments\n\nsc: NAIF spacecraft identification code\nsclkch: Character representation of a spacecraft clock\n\nOutput\n\nReturns the encoded representation of the clock count.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.scfmt",
+    "page": "API",
+    "title": "SPICE.scfmt",
+    "category": "function",
+    "text": "scfmt(sc, ticks, lenout=128)\n\nConvert encoded spacecraft clock ticks to character clock format.\n\nArguments\n\nsc: NAIF spacecraft identification code\nticks: Encoded representation of a spacecraft clock count\nlenout: Maximum allowed length of output string\n\nOutput\n\nReturns a character representation of a clock count.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.scpart-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.scpart",
+    "category": "method",
+    "text": "scpart(sc)\n\nGet spacecraft clock partition information from a spacecraft clock kernel file.\n\nArguments\n\nsc: NAIF spacecraft identification code\n\nOutput\n\nnparts: The number of spacecraft clock partitions\npstart: Array of partition start times\npstop: Array of partition stop times\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.scs2e-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.scs2e",
+    "category": "method",
+    "text": "scs2e(sc, sclkch)\n\nConvert a spacecraft clock string to ephemeris seconds past J2000 (ET).\n\nArguments\n\nsc: NAIF integer code for a spacecraft\nsclkch: An SCLK string\n\nOutput\n\nReturns ephemeris time seconds past J2000.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.sct2e-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.sct2e",
+    "category": "method",
+    "text": "sct2e(sc, sclkdp)\n\nConvert encoded spacecraft clock (\"ticks\") to ephemeris seconds past J2000 (ET).\n\nArguments\n\nsc: NAIF integer code for a spacecraft\nsclkdp: SCLK, encoded as ticks since spacecraft clock start.\n\nOutput\n\nReturns ephemeris time seconds past J2000.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.sctiks-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.sctiks",
+    "category": "method",
+    "text": "sctiks(sc, clkstr)\n\nConvert a spacecraft clock format string to number of \"ticks\".\n\nArguments\n\nsc: NAIF spacecraft identification code\nclkstr: Character representation of a spacecraft clock\n\nOutput\n\nReturns the number of ticks represented by the clock string.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.sdiff-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,SpiceCell{T,T1,N} where N where T1}} where T",
+    "page": "API",
+    "title": "SPICE.sdiff",
+    "category": "method",
+    "text": "sdiff(a::T, b::T) where T <: SpiceCell\n\nCompute the symmetric difference of two sets of any data type to form a third set.\n\nArguments\n\na: First input set\nb: Second input set\n\nOutput\n\nReturns a cell containing the symmetric difference of a and b.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.set-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,Any,SpiceCell{T,T1,N} where N where T1}} where T",
+    "page": "API",
+    "title": "SPICE.set",
+    "category": "method",
+    "text": "set(a::T, b::T) where T <: SpiceCell\n\nGiven a relational operator, compare two sets of any data type.\n\nArguments\n\na: First set\nop: Comparison operator\nb: Second set\n\nOutput\n\nReturns the result of the comparison: a (op) b.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.shellc",
+    "page": "API",
+    "title": "SPICE.shellc",
+    "category": "function",
+    "text": "shellc(array)\n\nwarning: Deprecated\nUse sort!(array) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.shelld",
+    "page": "API",
+    "title": "SPICE.shelld",
+    "category": "function",
+    "text": "shelld(array)\n\nwarning: Deprecated\nUse sort!(array) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.shelli",
+    "page": "API",
+    "title": "SPICE.shelli",
+    "category": "function",
+    "text": "shelli(array)\n\nwarning: Deprecated\nUse sort!(array) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1597,7 +1957,95 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.spd",
     "category": "method",
-    "text": "Returns the number of seconds in a day.\n\n\n\n\n\n"
+    "text": "spd()\n\nReturns the number of seconds in a day.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.sphcyl-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.sphcyl",
+    "category": "method",
+    "text": "sphcyl(radius, colat, slon)\n\nConverts from spherical coordinates to cylindrical coordinates.\n\nArguments\n\nradius: Distance of point from origin\ncolat: Polar angle (co-latitude in radians) of point\nslon: Azimuthal angle (longitude) of point (radians)\n\nOutput\n\nr: Distance of point from Z axis\nlon: Angle (radians) of point from XZ plane\nz: Height of point above XY plane\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.sphlat-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.sphlat",
+    "category": "method",
+    "text": "sphlat(r, colat, lons)\n\nConvert from spherical coordinates to latitudinal coordinates.\n\nArguments\n\nr: Distance of the point from the origin\ncolat: Angle of the point from positive z axis (radians)\nlons: Angle of the point from the XZ plane (radians)\n\nOutput\n\nradius: Distance of a point from the origin\nlon: Angle of the point from the XZ plane in radians\nlat: Angle of the point from the XY plane in radians\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.sphrec-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.sphrec",
+    "category": "method",
+    "text": "sphrec(r, colat, lon)\n\nConvert from spherical coordinates to rectangular coordinates.\n\nArguments\n\nr: Distance of a point from the origin\ncolat: Angle of the point from the Z-axis in radians\nlon: Angle of the point from the XZ plane in radians\n\nOutput\n\nReturns the rectangular coordinates of the point.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spk14a-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.spk14a",
+    "category": "method",
+    "text": "spk14a(handle, ncsets, coeffs, epochs)\n\nAdd data to a type 14 SPK segment associated with handle. See also spk14b and spk14e.\n\nArguments\n\nhandle: The handle of an SPK file open for writing\nncsets: The number of coefficient sets and epochs\ncoeffs: The collection of coefficient sets\nepochs: The epochs associated with the coefficient sets\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spk14b-NTuple{8,Any}",
+    "page": "API",
+    "title": "SPICE.spk14b",
+    "category": "method",
+    "text": "spk14b(handle, segid, body, center, frame, first, last, chbdeg)\n\nBegin a type 14 SPK segment in the SPK file associated with handle. See also spk14a and spk14e.\n\nArguments\n\nhandle: The handle of an SPK file open for writing\nsegid: The string to use for segment identifier\nbody: The NAIF ID code for the body of the segment\ncenter: The center of motion for body\nframe: The reference frame for this segment\nfirst: The first epoch for which the segment is valid\nlast: The last epoch for which the segment is valid\nchbdeg: The degree of the Chebyshev Polynomial used\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spk14e-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.spk14e",
+    "category": "method",
+    "text": "spk14e(handle)\n\nEnd the type 14 SPK segment currently being written to the SPK file associated with handle. See also spk14a and spk14b.\n\nArguments\n\nhandle: The handle of an SPK file open for writing\n\nOutput\n\nReturns the handle of the SPK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkacs-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.spkacs",
+    "category": "method",
+    "text": "spkacs(targ, et, ref, abcorr, obs, starg, lt, dlt)\n\nReturn the state (position and velocity) of a target body relative to an observer, optionally corrected for light time and stellar aberration, expressed relative to an inertial reference frame.\n\nArguments\n\ntarg: Target body\net: Observer epoch\nref: Inertial reference frame of output state\nabcorr: Aberration correction flag\nobs: Observer\n\nOutput\n\nstarg: State of target\nlt: One way light time between observer and target\ndlt: Derivative of light time with respect to time\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkapo-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.spkapo",
+    "category": "method",
+    "text": "spkapo(targ, et, ref, sobs, abcorr)\n\nReturn the position of a target body relative to an observer, optionally corrected for light time and stellar aberration.\n\nArguments\n\ntarg: Target body\net: Observer epoch\nref: Inertial reference frame of observer\'s state\nsobs: State of observer wrt. solar system barycenter\nabcorr: Aberration correction flag\n\nOutput\n\nptarg: Position of target\nlt: One way light time between observer and target\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkaps-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.spkaps",
+    "category": "method",
+    "text": "spkaps(targ, et, ref, abcorr, stobs, accobs)\n\nGiven the state and acceleration of an observer relative to the solar system barycenter, return the state (position and velocity) of a target body relative to the observer, optionally corrected for light time and stellar aberration. All input and output vectors are expressed relative to an inertial reference frame.\n\nUsers normally should call the high-level API routines spkezr or spkez rather than this routine.\n\nArguments\n\ntarg: Target body.\net: Observer epoch.\nref: Inertial reference frame of output state.\nabcorr: Aberration correction flag.\nstobs: State of the observer relative to the SSB.\naccobs: Acceleration of the observer relative to the SSB.\n\nOutput\n\nstarg: State of target.\nlt: One way light time between observer and target.\ndlt: Derivative of light time with respect to time.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkcls-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.spkcls",
+    "category": "method",
+    "text": "spkcls(handle)\n\nClose an open SPK file.\n\nArguments\n\nhandle: Handle of the SPK file to be closed\n\nOutput\n\nReturns the handle of the closed file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkcov",
+    "page": "API",
+    "title": "SPICE.spkcov",
+    "category": "function",
+    "text": "spkcov!(cover, spk, idcode)\nspkcov(spk, idcode)\n\nFind the coverage window for a specified ephemeris object in a specified SPK file.\n\nArguments\n\ncover: Window giving coverage in spk for idcode\nspk: Name of the SPK file\nidcode: ID code of ephemeris object\n\nOutput\n\nReturns the extended coverage window.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1617,11 +2065,35 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.spkobj!",
+    "page": "API",
+    "title": "SPICE.spkobj!",
+    "category": "function",
+    "text": "spkobj!(ids, spk)\nspkobj(spk)\n\nFind the set of ID codes of all objects in a specified SPK file.\n\nArguments\n\nids: A preallocated set of ID codes of objects in SPK file\nspk: Name of the SPK file\n\nOutput\n\nReturns the set of id codes.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkopn",
+    "page": "API",
+    "title": "SPICE.spkopn",
+    "category": "function",
+    "text": "spkopn(name, ifname=\"\", ncomch=0)\n\nCreate a new SPK file, returning the handle of the opened file.\n\nArguments\n\nname: The name of the new SPK file to be created\nifname: The internal filename for the SPK file (default: \"\")\nncomch: The number of characters to reserve for comments (default: 0)\n\nOutput\n\nReturns the handle of the opened SPK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.spkpos-Tuple{AbstractString,Float64,AbstractString,AbstractString}",
     "page": "API",
     "title": "SPICE.spkpos",
     "category": "method",
     "text": "Returns the state of a target body relative to an observing body.\n\nNAIF documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkssb-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.spkssb",
+    "category": "method",
+    "text": "spkssb(targ, et, ref)\n\nReturn the state (position and velocity) of a target body relative to the solar system barycenter.\n\nArguments\n\ntarg: Target body\net: Target epoch\nref: Target reference frame\n\nOutput\n\nReturns the state of target.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
