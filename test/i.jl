@@ -104,7 +104,7 @@ using LinearAlgebra: I, norm
             furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
             time = "Oct 31 2002, 12:55:00 PST"
             et = str2et(time)
-            state, ltime = spkezr("EARTH", et, "J2000", "SUN", abcorr="LT+S")
+            state, ltime = spkezr("EARTH", et, "J2000", "LT+S", "SUN")
             pos = state[1:3]
             radii = bodvrd("EARTH", "RADII", 3)
             pos = [pos[1] / radii[1]^2.0,

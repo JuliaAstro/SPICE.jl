@@ -1,4 +1,5 @@
 using SPICE
+using Random: randstring
 using RemoteFiles
 using Test
 
@@ -138,13 +139,13 @@ download(CORE)
     include("m.jl")
     include("n.jl")
     include("o.jl")
-    include("p.jl")
-    include("q.jl")
-    include("r.jl")
-    include("s.jl")
-    include("t.jl")
-    include("u.jl")
-    include("v.jl")
+    #= include("p.jl") =#
+    #= include("q.jl") =#
+    #= include("r.jl") =#
+    #= include("s.jl") =#
+    #= include("t.jl") =#
+    #= include("u.jl") =#
+    #= include("v.jl") =#
     include("w.jl")
     include("x.jl")
 end
