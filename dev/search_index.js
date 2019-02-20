@@ -585,6 +585,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.getelm-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.getelm",
+    "category": "method",
+    "text": "getelm(frstyr, lines)\n\nGiven the \"lines\" of a two-line element set, parse the lines and return the elements in units suitable for use in SPICE software.\n\nArguments\n\nfrstyr: Year of earliest representable two-line elements\nlines: A pair of \"lines\" containing two-line elements\n\nOutput\n\nepoch: The epoch of the elements in seconds past J2000\nelems: The elements converted to SPICE units\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.getfov",
     "page": "API",
     "title": "SPICE.getfov",
@@ -1953,6 +1961,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.size_c-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.size_c",
+    "category": "method",
+    "text": "size_c(cell::SpiceCell)\n\nReturns the maximum number of elements that cell can hold.\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.spd-Tuple{}",
     "page": "API",
     "title": "SPICE.spd",
@@ -2161,11 +2177,27 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.spkpos-Tuple{AbstractString,Float64,AbstractString,AbstractString}",
+    "location": "api/#SPICE.spkpds-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.spkpds",
+    "category": "method",
+    "text": "spkpds(body, center, frame, typ, first, last)\n\nPerform routine error checks and if all checks pass, pack the descriptor for an SPK segment.\n\nArguments\n\nbody: The NAIF ID code for the body of the segment\ncenter: The center of motion for body\nframe: The frame for this segment\ntype: The type of SPK segment to create\nfirst: The first epoch for which the segment is valid\nlast: The last  epoch for which the segment is valid\n\nOutput\n\nReturns an SPK segment descriptor.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkpos-NTuple{5,Any}",
     "page": "API",
     "title": "SPICE.spkpos",
     "category": "method",
-    "text": "Returns the state of a target body relative to an observing body.\n\nNAIF documentation\n\n\n\n\n\n"
+    "text": "spkpos(targ, et, ref, abcorr, obs)\n\nReturn the position of a target body relative to an observing body, optionally corrected for light time (planetary aberration) and stellar aberration.\n\nArguments\n\ntarg: Target body name\net: Observer epoch\nref: Reference frame of output position vector\nabcorr: Aberration correction flag\nobs: Observing body name\n\nOutput\n\nptarg: Position of target\nlt: One way light time between observer and target\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkpvn-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.spkpvn",
+    "category": "method",
+    "text": "spkpvn(handle, descr, et)\n\nFor a specified SPK segment and time, return the state (position and velocity) of the segment\'s target body relative to its center of motion.\n\nArguments\n\nhandle: File handle\ndescr: Segment descriptor\net: Evaluation epoch\n\nOutput\n\nref: Segment reference frame ID code\nstate: Output state vector\ncenter: Center of state\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -2209,6 +2241,190 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.spkw02-NTuple{10,Any}",
+    "page": "API",
+    "title": "SPICE.spkw02",
+    "category": "method",
+    "text": "spkw02(handle, body, center, frame, first, last, segid, intlen, cdata, btime)\n\nWrite a type 2 segment to an SPK file.\n\nArguments\n\nhandle: Handle of an SPK file open for writing\nbody: Body code for ephemeris object\ncenter: Body code for the center of motion of the body\nframe: The reference frame of the states\nfirst: First valid time for which states can be computed\nlast: Last valid time for which states can be computed\nsegid: Segment identifier\nintlen: Length of time covered by logical record\ncdata: Array of Chebyshev coefficients\nbtime: Begin time of first logical record\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkw03-NTuple{10,Any}",
+    "page": "API",
+    "title": "SPICE.spkw03",
+    "category": "method",
+    "text": "spkw03(handle, body, center, frame, first, last, segid, intlen, cdata, btime)\n\nWrite a type 3 segment to an SPK file.\n\nArguments\n\nhandle: Handle of an SPK file open for writing\nbody: Body code for ephemeris object\ncenter: Body code for the center of motion of the body\nframe: The reference frame of the states\nfirst: First valid time for which states can be computed\nlast: Last valid time for which states can be computed\nsegid: Segment identifier\nintlen: Length of time covered by logical record\ncdata: Array of Chebyshev coefficients\nbtime: Begin time of first logical record\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkw05-NTuple{10,Any}",
+    "page": "API",
+    "title": "SPICE.spkw05",
+    "category": "method",
+    "text": "spkw05(handle, body, center, frame, first, last, segid, gm, states, epochs)\n\nWrite an SPK segment of type 5 given a time-ordered set of discrete states and epochs, and the gravitational parameter of a central body.\n\nArguments\n\nhandle: Handle of an SPK file open for writing\nbody: Body code for ephemeris object\ncenter: Body code for the center of motion of the body\nframe: The reference frame of the states\nfirst: First valid time for which states can be computed\nlast: Last valid time for which states can be computed\nsegid: Segment identifier\ngm: Gravitational parameter of central body\nstates: States\nepochs: Epochs\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkw08-NTuple{11,Any}",
+    "page": "API",
+    "title": "SPICE.spkw08",
+    "category": "method",
+    "text": "spkw08(handle, body, center, frame, first, last, segid, degree, states, epoch1, step)\n\nWrite a type 8 segment to an SPK file.\n\nArguments\n\nhandle: Handle of an SPK file open for writing\nbody: Body code for ephemeris object\ncenter: Body code for the center of motion of the body\nframe: The reference frame of the states\nfirst: First valid time for which states can be computed\nlast: Last valid time for which states can be computed\nsegid: Segment identifier\ndegree: Degree of interpolating polynomials\nstates: States\nepoch1: Epoch of first state in states array\nstep: Time step separating epochs of states\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkw09-NTuple{10,Any}",
+    "page": "API",
+    "title": "SPICE.spkw09",
+    "category": "method",
+    "text": "spkw09(handle, body, center, frame, first, last, segid, degree, states, epochs)\n\nWrite a type 9 segment to an SPK file.\n\nArguments\n\nhandle: Handle of an SPK file open for writing\nbody: Body code for ephemeris object\ncenter: Body code for the center of motion of the body\nframe: The reference frame of the states\nfirst: First valid time for which states can be computed\nlast: Last valid time for which states can be computed\nsegid: Segment identifier\ndegree: Degree of interpolating polynomials\nstates: States\nepochs: Epochs\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkw10-NTuple{10,Any}",
+    "page": "API",
+    "title": "SPICE.spkw10",
+    "category": "method",
+    "text": "spkw10(handle, body, center, frame, first, last, segid, consts, elems, epochs)\n\nWrite a type 10 segment to an SPK file.\n\nArguments\n\nhandle: The handle of a DAF file open for writing\nbody: The NAIF ID code for the body of the segment\ncenter: The center of motion for body\nframe: The reference frame for this segment\nfirst: The first epoch for which the segment is valid\nlast: The last  epoch for which the segment is valid\nsegid: The string to use for segment identifier\nconsts: The array of geophysical constants for the segmen\nelems: The collection of \"two-line\" element sets\nepochs: The epochs associated with the element sets\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkw12-NTuple{11,Any}",
+    "page": "API",
+    "title": "SPICE.spkw12",
+    "category": "method",
+    "text": "spkw12(handle, body, center, frame, first, last, segid, degree, states, epoch1, step)\n\nWrite a type 12 segment to an SPK file.\n\nArguments\n\nhandle: Handle of an SPK file open for writing\nbody: Body code for ephemeris object\ncenter: Body code for the center of motion of the body\nframe: The reference frame of the states\nfirst: First valid time for which states can be computed\nlast: Last valid time for which states can be computed\nsegid: Segment identifier\ndegree: Degree of interpolating polynomials\nstates: States\nepoch1: Epoch of first state in states array\nstep: Time step separating epochs of states\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkw13-NTuple{10,Any}",
+    "page": "API",
+    "title": "SPICE.spkw13",
+    "category": "method",
+    "text": "spkw13(handle, body, center, frame, first, last, segid, degree, states, epochs)\n\nWrite a type 13 segment to an SPK file.\n\nArguments\n\nhandle: Handle of an SPK file open for writing\nbody: Body code for ephemeris object\ncenter: Body code for the center of motion of the body\nframe: The reference frame of the states\nfirst: First valid time for which states can be computed\nlast: Last valid time for which states can be computed\nsegid: Segment identifier\ndegree: Degree of interpolating polynomials\nstates: States\nepochs: Epochs\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkw15-NTuple{17,Any}",
+    "page": "API",
+    "title": "SPICE.spkw15",
+    "category": "method",
+    "text": "spkw15(handle, body, center, frame, first, last, segid,\n       epoch, tp, pa, p, ecc, j2flg, pv, gm, j2, radius)\n\nWrite a type 15 segment to an SPK file.\n\nArguments\n\nhandle: Handle of an SPK file open for writing\nbody: Body code for ephemeris object\ncenter: Body code for the center of motion of the body\nframe: The reference frame of the states\nfirst: First valid time for which states can be computed\nlast: Last valid time for which states can be computed\nsegid: Segment identifier\nepoch: Epoch of the periapse\ntp: Trajectory pole vector\npa: Periapsis vector\np: Semi-latus rectum\necc: Eccentricity\nj2flg: J2 processing flag\npv: Central body pole vector\ngm: Central body GM\nj2: Central body J2\nradius: Equatorial radius of central body\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkw17-NTuple{11,Any}",
+    "page": "API",
+    "title": "SPICE.spkw17",
+    "category": "method",
+    "text": "spkw17(handle, body, center, frame, first, last, segid, epoch, eqel, rapol, decpol)\n\nWrite a type 17 segment to an SPK file.\n\nArguments\n\nhandle: Handle of an SPK file open for writing\nbody: Body code for ephemeris object\ncenter: Body code for the center of motion of the body\nframe: The reference frame of the states\nfirst: First valid time for which states can be computed\nlast: Last valid time for which states can be computed\nsegid: Segment identifier\nepoch: Epoch of elements in seconds past J2000\neqel: Array of equinoctial elements\nrapol: Right Ascension of the pole of the reference plane\ndecpol: Declination of the pole of the reference plane\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkw18-NTuple{11,Any}",
+    "page": "API",
+    "title": "SPICE.spkw18",
+    "category": "method",
+    "text": "spkw18(handle, subtyp, body, center, frame, first, last, segid, degree, packts, epochs)\n\nWrite a type 18 segment to an SPK file.\n\nArguments\n\nhandle: Handle of an SPK file open for writing\nsubtyp: SPK type 18 subtype code, either :S18TP0 or :S18TP1\nbody: NAIF code for an ephemeris object\ncenter: NAIF code for center of motion of body\nframe: Reference frame name\nfirst: Start time of interval covered by segment\nlast: End time of interval covered by segment\nsegid: Segment identifier\ndegree: Degree of interpolating polynomials\npackts: Time-ordered array of data packets representing geometric states of body\nFor :S18TP0: [x,  y,  z,  dx/dt,  dy/dt,  dz/dt, vx, vy, vz, dvx/dt, dvy/dt, dvz/dt]\nFor :S18TP1: [x,  y,  z,  dx/dt,  dy/dt,  dz/dt]\nepochs: Array of epochs corresponding to states.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.spkw20-NTuple{13,Any}",
+    "page": "API",
+    "title": "SPICE.spkw20",
+    "category": "method",
+    "text": "spkw20(handle, body, center, frame, first, last, segid, intlen, n, polydg, cdata, dscale,\n       tscale, initjd, initfr)\n\nWrite a type 20 segment to an SPK file.\n\nArguments\n\nhandle: Handle of SPK file open for writing\nbody: NAIF code for ephemeris object\ncenter: NAIF code for the center of motion of the body\nframe: Reference frame name\nfirst: Start time of interval covered by segment\nlast: End time of interval covered by segment\nsegid: Segment identifier\nintlen: Length of time covered by logical record (days)\ncdata: Array of Chebyshev coefficients and positions\ndscale: Distance scale of data\ntscale: Time scale of data\ninitjd: Integer part of begin time (TDB Julian date) of first record\ninitfr: Fractional part of begin time (TDB Julian date) of first record\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.srfc2s-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.srfc2s",
+    "category": "method",
+    "text": "srfc2s(code, bodyid)\n\nTranslate a surface ID code, together with a body ID code, to the corresponding surface name. If no such name exists, return a string representation of the surface ID code.\n\nArguments\n\ncode: Integer surface ID code to translate to a string\nbodyid: ID code of body associated with surface\n\nOutput\n\nsrfstr: String corresponding to surface ID code\nisname: Logical flag indicating output is a surface name\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.srfcss-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.srfcss",
+    "category": "method",
+    "text": "srfcss(code, bodstr)\n\nTranslate a surface ID code, together with a body string, to the corresponding surface name. If no such surface name exists, return a string representation of the surface ID code.\n\nArguments\n\ncode: Integer surface ID code to translate to a string\nbodstr: Name or ID of body associated with surface\n\nOutput\n\nsrfstr: String corresponding to surface ID code\nisname: Logical flag indicating output is a surface name\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.srfnrm-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.srfnrm",
+    "category": "method",
+    "text": "srfnrm(method, target, et, fixref, npts, srfpts)\n\nMap array of surface points on a specified target body to the corresponding unit length outward surface normal vectors.\n\nThe surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files.\n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in TDB seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nsrfpts: Array of surface points\n\nOutput\n\nReturns an array of outward, unit length normal vectors.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.srfrec-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.srfrec",
+    "category": "method",
+    "text": "srfrec(body, longitude, latitude)\n\nConvert planetocentric latitude and longitude of a surface point on a specified body to rectangular coordinates.\n\nArguments\n\nbody: NAIF integer code of an extended body.\nlongitude: Longitude of point in radians.\nlatitude: Latitude of point in radians.\n\nOutput\n\nReturns the rectangular coordinates of the point.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.srfs2c-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.srfs2c",
+    "category": "method",
+    "text": "srfs2c(srfstr, bodstr)\n\nTranslate a surface string, together with a body string, to the corresponding surface ID code. The input strings may contain names or integer ID codes.\n\nArguments\n\nsrfstr: Surface name or ID string\nbodstr: Body name or ID string\n\nOutput\n\nReturns the surface ID code if it was found or nothing otherwise.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.srfscc-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.srfscc",
+    "category": "method",
+    "text": "srfscc(srfstr, bodyid)\n\nTranslate a surface string, together with a body ID code, to the corresponding surface ID code. The input surface string may contain a name or an integer ID code.\n\nArguments\n\nsrfstr: Surface name or ID string\nbodyid: Body ID code.\n\nOutput\n\nReturns the surface ID code if it was found or nothing otherwise.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.srfxpt",
+    "page": "API",
+    "title": "SPICE.srfxpt",
+    "category": "function",
+    "text": "srfxpt\n\n!!! warning Deprecated     Use sincpt instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ssize!-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,Any}} where T",
+    "page": "API",
+    "title": "SPICE.ssize!",
+    "category": "method",
+    "text": "ssize!(cell, size)\n\nSet the size (maximum cardinality) of a cell of any data type.\n\nArguments\n\ncell: The cell\nsize: Size (maximum cardinality) of the cell\n\nOutput\n\nReturns the updated cell.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.stelab-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.stelab",
+    "category": "method",
+    "text": "stelab(pobj, vobs)\n\nCorrect the apparent position of an object for stellar aberration.\n\nArguments\n\npobj: Position of an object with respect to the observer\nvobs: Velocity of the observer with respect to the Solar System barycenter\n\nOutput\n\nReturns the apparent position of the object with respect to the observer, corrected for stellar aberration.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.stpool",
+    "page": "API",
+    "title": "SPICE.stpool",
+    "category": "function",
+    "text": "stpool(item, nth, contin, lenout=1024)\n\nRetrieve the nth string from the kernel pool variable, where the string may be continued across several components of the kernel pool variable.\n\nArguments\n\nitem: Name of the kernel pool variable\nnth: Index of the full string to retrieve\ncontin: Character sequence used to indicate continuation\nlenout: Available space in output string (default: 1024)\n\nOutput\n\nReturns the full string concatenated across continuations if the kernel variable was found or nothing otherwise.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.str2et-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.str2et",
+    "category": "method",
+    "text": "str2et(str)\n\nConvert a string representing an epoch to a double precision value representing the number of TDB seconds past the J2000 epoch corresponding to the input epoch.\n\nArguments\n\nstr: A string representing an epoch\n\nOutput\n\nReturns the equivalent value in seconds past J2000, TDB.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.subpnt-NTuple{5,Any}",
     "page": "API",
     "title": "SPICE.subpnt",
@@ -2217,11 +2433,67 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.subslr-NTuple{5,Any}",
+    "location": "api/#SPICE.subpt",
+    "page": "API",
+    "title": "SPICE.subpt",
+    "category": "function",
+    "text": "subpt\n\n!!! warning Deprecated     Use subpnt instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.subpt_pl02",
+    "page": "API",
+    "title": "SPICE.subpt_pl02",
+    "category": "function",
+    "text": "subpt_pl02\n\n!!! warning Deprecated     Use subpnt instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.subslr-NTuple{6,Any}",
     "page": "API",
     "title": "SPICE.subslr",
     "category": "method",
-    "text": "subslr(method, target, et, fixref, obsrvr, abcorr)\n\nCompute the rectangular coordinates of the sub-solar point on a target body at a specified epoch, optionally corrected for light time and stellar aberration.\n\nArguments\n\nmethod: Computation method.\ntarget: Name of target body.\net: Epoch in ephemeris seconds past J2000 TDB.\nfixref: Body-fixed, body-centered target body frame.\nobsrvr: Name of observing body.\nabcorr: Aberration correction.\n\nOutput\n\nspoint: Sub-solar point on the target body.\ntrgepc: Sub-solar point epoch.\nsrfvec: Vector from observer to sub-solar point.\n\nReturns cell with its cardinality set to card.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "subslr(method, target, et, fixref, abcorr, obsrvr)\n\nCompute the rectangular coordinates of the sub-solar point on a target body at a specified epoch, optionally corrected for light time and stellar aberration.\n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in ephemeris seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nabcorr: Aberration correction\nobsrvr: Name of observing body\n\nOutput\n\nspoint: Sub-solar point on the target body\ntrgepc: Sub-solar point epoch\nsrfvec: Vector from observer to sub-solar point\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.subsol",
+    "page": "API",
+    "title": "SPICE.subsol",
+    "category": "function",
+    "text": "subsol\n\n!!! warning Deprecated     Use subslr instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.subsol_pl02",
+    "page": "API",
+    "title": "SPICE.subsol_pl02",
+    "category": "function",
+    "text": "subsol_pl02\n\n!!! warning Deprecated     Use subslr instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.sumad",
+    "page": "API",
+    "title": "SPICE.sumad",
+    "category": "function",
+    "text": "sumad(array)\n\n!!! warning Deprecated     Use sum(array) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.sumai",
+    "page": "API",
+    "title": "SPICE.sumai",
+    "category": "function",
+    "text": "sumai(array)\n\n!!! warning Deprecated     Use sum(array) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.surfnm-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.surfnm",
+    "category": "method",
+    "text": "surfnm(a, b, c, point)\n\nComputes the outward-pointing, unit normal vector from a point on the surface of an ellipsoid.\n\nArguments\n\na: Length of the ellisoid semi-axis along the x-axis\nb: Length of the ellisoid semi-axis along the y-axis\nc: Length of the ellisoid semi-axis along the z-axis\npoint: Body-fixed coordinates of a point on the ellipsoid\n\nOutput\n\nReturn the outward pointing unit normal to ellipsoid at point\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -2233,6 +2505,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.surfpv-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.surfpv",
+    "category": "method",
+    "text": "surfpv(stvrtx, stdir, a, b, c)\n\nFind the state (position and velocity) of the surface intercept defined by a specified ray, ray velocity, and ellipsoid.\n\nArguments\n\nstvrtx: State of ray\'s vertex\nstdir: State of ray\'s direction vector\na: Length of ellipsoid semi-axis along the x-axis\nb: Length of ellipsoid semi-axis along the y-axis\nc: Length of ellipsoid semi-axis along the z-axis\n\nOutput\n\nReturn the state of surface intercept or nothing if none was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.swpool-Tuple{Any,Any}",
     "page": "API",
     "title": "SPICE.swpool",
@@ -2241,11 +2521,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.sxform-Tuple{String,String,Float64}",
+    "location": "api/#SPICE.sxform-Tuple{Any,Any,Any}",
     "page": "API",
     "title": "SPICE.sxform",
     "category": "method",
-    "text": "Return the state transformation matrix from one frame to another at a specified epoch.\n\nhttps://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/sxformc.html\n\n\n\n\n\n"
+    "text": "sxform(from, to, et)\n\nReturn the state transformation matrix from one frame to another at a specified epoch.\n\nArguments\n\nfrom: Name of the frame to transform from\nto: Name of the frame to transform to\net: Epoch of the state transformation matrix\n\nOutput\n\nReturns the state transformation matrix.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.szpool-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.szpool",
+    "category": "method",
+    "text": "szpool(name)\n\nReturn the kernel pool size limitations.\n\nArguments\n\nname: Name of the parameter to be returned\n\nOutput\n\nReturns the value of the parameter specified by name or nothing if none was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
