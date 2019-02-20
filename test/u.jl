@@ -15,7 +15,7 @@ import LinearAlgebra
             et = str2et("JAN 1 2009")
 
             function udfunc(et_in)
-                _, new_et = spkpos("MERCURY", et_in, "J2000", "MOON", abcorr="LT+S")
+                _, new_et = spkpos("MERCURY", et_in, "J2000", "LT+S", "MOON")
                 new_et
             end
 

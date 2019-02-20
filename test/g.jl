@@ -44,21 +44,23 @@ using Random: randstring
             kclear()
         end
     end
-
-
-# @testset "getelm" begin
-#     kclear()
-#     tle = ["1 18123U 87 53  A 87324.61041692 -.00000023  00000-0 -75103-5 0 00675",
-#            "2 18123  98.8296 152.0074 0014950 168.7820 191.3688 14.12912554 21686"]
-#     furnsh(CoreKernels.testMetaKernel)
-#     epoch, elems = getelm(1950, 75, tle)
-#     expected_elems = [-6.969196665949579e-13, 0.0, -7.510300000000001e-06,
-#                       1.724901918428988, 2.653029617396028, 0.001495,
-#                       2.9458016181010693, 3.3400156455905243, 0.06164994027515544, -382310404.79526937]
-#     expected_epoch = -382310404.79526937
-#     npt.assert_array_almost_equal(expected_elems, elems)
-#     npt.assert_almost_equal(epoch, expected_epoch)
-#     kclear()
+    @testset "getelm" begin
+        try
+            tle = ["1 18123U 87 53  A 87324.61041692 -.00000023  00000-0 -75103-5 0 00675",
+                   "2 18123  98.8296 152.0074 0014950 168.7820 191.3688 14.12912554 21686"]
+            furnsh(path(CORE, :lsk))
+            epoch, elems = getelm(1950, tle)
+            expected_elems = [-6.969196665949579e-13, 0.0, -7.510300000000001e-06,
+                              1.724901918428988, 2.653029617396028, 0.001495,
+                              2.9458016181010693, 3.3400156455905243, 0.06164994027515544,
+                              -382310404.79526937]
+            expected_epoch = -382310404.79526937
+            @test expected_elems ≈ elems
+            @test epoch ≈ expected_epoch
+        finally
+            kclear()
+        end
+    end
 
 
 # @testset "getfat" begin

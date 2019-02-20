@@ -2,6 +2,7 @@ export
     gcpool,
     gdpool,
     georec,
+    getelm,
     getfov,
     gfpa,
     gfpa!,
@@ -100,6 +101,37 @@ function georec(lon, lat, alt, re, f)
           lon, lat, alt, re, f, rectan)
     handleerror()
     rectan
+end
+
+"""
+    getelm(frstyr, lines)
+
+Given the "lines" of a two-line element set, parse the lines and return the elements in units
+suitable for use in SPICE software.
+
+### Arguments ###
+
+- `frstyr`: Year of earliest representable two-line elements
+- `lines`: A pair of "lines" containing two-line elements
+
+### Output ###
+
+- `epoch`: The epoch of the elements in seconds past J2000
+- `elems`: The elements converted to SPICE units
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/getelm_c.html)
+"""
+function getelm(frstyr, lines)
+    array, _, lineln = chararray(lines)
+    epoch = Ref{SpiceDouble}()
+    elems = Array{SpiceDouble}(undef, 10)
+    ccall((:getelm_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, Ptr{SpiceChar}, Ref{SpiceDouble}, Ptr{SpiceDouble}),
+          frstyr, lineln, array, epoch, elems)
+    handleerror()
+    epoch[], elems
 end
 
 """

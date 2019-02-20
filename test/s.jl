@@ -1,4 +1,4 @@
-using LinearAlgebra: I, norm
+using LinearAlgebra: I, norm, cross, normalize
 
 @testset "S" begin
     @testset "saelgv" begin
@@ -536,6 +536,7 @@ using LinearAlgebra: I, norm
             spkcls(handle_test)
             # open the file to append to it
             handle_spkopa = spkopa(file)
+            @test handle_spkopa != -1
             et2 = str2et("2003 APR 27 00:00:00.000 TDB")
             handle, descr, ident = spksfs(5, et2)
             body, center, frame, otype, first, last, start, stop = spkuds(descr)
@@ -545,740 +546,585 @@ using LinearAlgebra: I, norm
             kclear()
         end
     end
-#= @testset "spkopn" begin =#
-#=     # Same as test_spkw02 =#
-#=     SPK2 = os.path.join(cwd, "test2.bsp") =#
-#=     if exists(SPK2): =#
-#=         os.remove(SPK2) # pragma: no cover =#
-#=     kclear() =#
-#=     handle = spkopn(SPK2, "Type 2 SPK internal file name.", 4) =#
-#=     init_size = os.path.getsize(SPK2) =#
-#=     discrete_epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0] =#
-#=     cheby_coeffs02 = [1.0101, 1.0102, 1.0103, 1.0201, 1.0202, 1.0203, 1.0301, 1.0302, =#
-#=                       1.0303, 2.0101, 2.0102, 2.0103, 2.0201, 2.0202, 2.0203, 2.0301, =#
-#=                       2.0302, 2.0303, 3.0101, 3.0102, 3.0103, 3.0201, 3.0202, 3.0203, =#
-#=                       3.0301, 3.0302, 3.0303, 4.0101, 4.0102, 4.0103, 4.0201, 4.0202, =#
-#=                       4.0203, 4.0301, 4.0302, 4.0303] =#
-#=     segid = "SPK type 2 test segment" =#
-#=     intlen = discrete_epochs[1] - discrete_epochs[0] =#
-#=     spkw02(handle, 3, 10, "J2000", discrete_epochs[0], =#
-#=                  discrete_epochs[4], segid, intlen, 4, 2, cheby_coeffs02, discrete_epochs[0]) =#
-#=     spkcls(handle) =#
-#=     end_size = os.path.getsize(SPK2) =#
-#=     kclear() =#
-#=     @test end_size != init_size =#
-#=     if exists(SPK2): =#
-#=         os.remove(SPK2) # pragma: no cover =#
-#= @testset "spkpds" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("2002 APR 27 00:00:00.000 TDB") =#
-#=     handle, descr, ident = spksfs(5, et, 41) =#
-#=     body, center, frame, otype, first, last, begin, end  = spkuds(descr) =#
-#=     outframe = frmnam(frame) =#
-#=     spkpds_output = spkpds(body, center, outframe, otype, first, last) =#
-#=     npt.@test_almost_equal(spkpds_output, descr) =#
-#=     kclear() =#
-#= @testset "spkpos" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("July 4, 2003 11:00 AM PST") =#
-#=     pos, lt = spkpos("Mars", et, "J2000", "LT+S", "Earth") =#
-#=     expected_lt = 269.6898813661505 =#
-#=     expected_pos = [73822235.31053550541400909424, -27127918.99847228080034255981, =#
-#=                     -18741306.30148987472057342529] =#
-#=     npt.@test_almost_equal(lt, expected_lt) =#
-#=     npt.@test_array_almost_equal(pos, expected_pos) =#
-#=     kclear() =#
-#= @testset "spkpos_vectorized" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et(["July 4, 2003 11:00 AM PST", "July 11, 2003 11:00 AM PST"]) =#
-#=     pos, lt = spkpos("Mars", et, "J2000", "LT+S", "Earth") =#
-#=     expected_lt = [269.68988136615047324085,  251.44204326148698669385] =#
-#=     expected_pos = [[73822235.31053550541400909424, -27127918.99847228080034255981, =#
-#=                      -18741306.30148987472057342529], [69682765.52989411354064941406, =#
-#=                      -23090281.18098583817481994629, -17127756.93968883529305458069]] =#
-#=     npt.@test_almost_equal(lt, expected_lt) =#
-#=     npt.@test_array_almost_equal(pos, expected_pos) =#
-#=     kclear() =#
-#= @testset "spkpvn" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("2002 APR 27 00:00:00.000 TDB") =#
-#=     handle, descr, ident = spksfs(5, et, 41) =#
-#=     refid, state, center = spkpvn(handle, descr, et) =#
-#=     expected_state = [-2.70063336478468656540e+08,   6.69404818553274393082e+08, =#
-#=                       2.93505043081457614899e+08,  -1.24191493217698472051e+01, =#
-#=                      -3.70147572019018955558e+00,  -1.28422514561611489370e+00] =#
-#=     npt.@test_array_almost_equal(state, expected_state) =#
-#=     kclear() =#
-#= @testset "spksfs" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     idcode = bodn2c("PLUTO BARYCENTER") =#
-#=     et = str2et("2001 FEB 18 UTC") =#
-#=     handle, descr, ident = spksfs(idcode, et, 41) =#
-#=     @test ident == "DE-405" =#
-#=     kclear() =#
-#= @testset "spkssb" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     targ1 = 499 =#
-#=     epoch = "July 4, 2003 11:00 AM PST" =#
-#=     frame = "J2000" =#
-#=     targ2 = 399 =#
-#=     et = str2et(epoch) =#
-#=     state1 = spkssb(targ1, et, frame) =#
-#=     state2 = spkssb(targ2, et, frame) =#
-#=     dist = vdist(state1[0:3], state2[0:3]) =#
-#=     npt.@test_approx_equal(dist, 80854820., significant=7) =#
-#=     kclear() =#
-#= @testset "spksub" begin =#
-#=     SPKSUB = os.path.join(cwd, "testspksub.bsp") =#
-#=     if exists(SPKSUB): =#
-#=         os.remove(SPKSUB) # pragma: no cover =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("2002 APR 27 00:00:00.000 TDB") =#
-#=     # load subset from kernels =#
-#=     handle, descr, ident = spksfs(5, et, 41) =#
-#=     body, center, frame, otype, first, last, begin, end = spkuds(descr) =#
-#=     # create empty spk kernel =#
-#=     handle_test = spkopn(SPKSUB, "Test Kernel for spksub unit test.", 4) =#
-#=     # created empty spk kernel, write to it =#
-#=     spksub(handle, descr, ident, first, last, handle_test) =#
-#=     # close kernel =#
-#=     spkcls(handle_test) =#
-#=     if exists(SPKSUB): =#
-#=         os.remove(SPKSUB) # pragma: no cover =#
-#=     kclear() =#
-#= @testset "spkuds" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("2002 APR 27 00:00:00.000 TDB") =#
-#=     handle, descr, ident = spksfs(5, et, 41) =#
-#=     body, center, frame, otype, first, last, begin, end  = spkuds(descr) =#
-#=     @test body == 5 =#
-#=     @test begin == 54073 =#
-#=     @test end == 57950 =#
-#=     @test otype == 2 =#
-#=     kclear() =#
-#= @testset "spkuef" begin =#
-#=     kclear() =#
-#=     handle = spklef(CoreKernels.spk) =#
-#=     @test handle != -1 =#
-#=     spkuef(handle) =#
-#=     kclear() =#
-#= @testset "spkw02" begin =#
-#=     SPK2 = os.path.join(cwd, "test2.bsp") =#
-#=     if exists(SPK2): =#
-#=         os.remove(SPK2) # pragma: no cover =#
-#=     kclear() =#
-#=     handle = spkopn(SPK2, "Type 2 SPK internal file name.", 4) =#
-#=     init_size = os.path.getsize(SPK2) =#
-#=     discrete_epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0] =#
-#=     cheby_coeffs02 = [1.0101, 1.0102, 1.0103, 1.0201, 1.0202, 1.0203, 1.0301, 1.0302, =#
-#=                       1.0303, 2.0101, 2.0102, 2.0103, 2.0201, 2.0202, 2.0203, 2.0301, =#
-#=                       2.0302, 2.0303, 3.0101, 3.0102, 3.0103, 3.0201, 3.0202, 3.0203, =#
-#=                       3.0301, 3.0302, 3.0303, 4.0101, 4.0102, 4.0103, 4.0201, 4.0202, =#
-#=                       4.0203, 4.0301, 4.0302, 4.0303] =#
-#=     segid = "SPK type 2 test segment" =#
-#=     intlen = discrete_epochs[1] - discrete_epochs[0] =#
-#=     spkw02(handle, 3, 10, "J2000", discrete_epochs[0], =#
-#=                  discrete_epochs[4], segid, intlen, 4, 2, cheby_coeffs02, discrete_epochs[0]) =#
-#=     spkcls(handle) =#
-#=     end_size = os.path.getsize(SPK2) =#
-#=     kclear() =#
-#=     @test end_size != init_size =#
-#=     if exists(SPK2): =#
-#=         os.remove(SPK2) # pragma: no cover =#
-#= @testset "spkw03" begin =#
-#=     SPK3 = os.path.join(cwd, "test3.bsp") =#
-#=     if exists(SPK3): =#
-#=         os.remove(SPK3) # pragma: no cover =#
-#=     kclear() =#
-#=     handle = spkopn(SPK3, "Type 3 SPK internal file name.", 4) =#
-#=     init_size = os.path.getsize(SPK3) =#
-#=     discrete_epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0] =#
-#=     cheby_coeffs03 = [1.0101, 1.0102, 1.0103, 1.0201, 1.0202, 1.0203, 1.0301, 1.0302, 1.0303, =#
-#=                       1.0401, 1.0402, 1.0403, 1.0501, 1.0502, 1.0503, 1.0601, 1.0602, 1.0603, =#
-#=                       2.0101, 2.0102, 2.0103, 2.0201, 2.0202, 2.0203, 2.0301, 2.0302, 2.0303, =#
-#=                       2.0401, 2.0402, 2.0403, 2.0501, 2.0502, 2.0503, 2.0601, 2.0602, 2.0603, =#
-#=                       3.0101, 3.0102, 3.0103, 3.0201, 3.0202, 3.0203, 3.0301, 3.0302, 3.0303, =#
-#=                       3.0401, 3.0402, 3.0403, 3.0501, 3.0502, 3.0503, 3.0601, 3.0602, 3.0603, =#
-#=                       4.0101, 4.0102, 4.0103, 4.0201, 4.0202, 4.0203, 4.0301, 4.0302, 4.0303, =#
-#=                       4.0401, 4.0402, 4.0403, 4.0501, 4.0502, 4.0503, 4.0601, 4.0602, 4.0603] =#
-#=     segid = "SPK type 3 test segment" =#
-#=     intlen = discrete_epochs[1] - discrete_epochs[0] =#
-#=     spkw03(handle, 3, 10, "J2000", discrete_epochs[0], =#
-#=                  discrete_epochs[4], segid, intlen, 4, 2, cheby_coeffs03, discrete_epochs[0]) =#
-#=     spkcls(handle) =#
-#=     end_size = os.path.getsize(SPK3) =#
-#=     kclear() =#
-#=     @test end_size != init_size =#
-#=     if exists(SPK3): =#
-#=         os.remove(SPK3) # pragma: no cover =#
-#= @testset "spkw05" begin =#
-#=     SPK5 = os.path.join(cwd, "test5.bsp") =#
-#=     if exists(SPK5): =#
-#=         os.remove(SPK5) # pragma: no cover =#
-#=     kclear() =#
-#=     handle = spkopn(SPK5, "Type 5 SPK internal file name.", 4) =#
-#=     init_size = os.path.getsize(SPK5) =#
-#=     discrete_epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0] =#
-#=     discrete_states = [ =#
-#=         [101.0, 201.0, 301.0, 401.0, 501.0, 601.0], =#
-#=         [102.0, 202.0, 302.0, 402.0, 502.0, 602.0], =#
-#=         [103.0, 203.0, 303.0, 403.0, 503.0, 603.0], =#
-#=         [104.0, 204.0, 304.0, 404.0, 504.0, 604.0], =#
-#=         [105.0, 205.0, 305.0, 405.0, 505.0, 605.0], =#
-#=         [106.0, 206.0, 306.0, 406.0, 506.0, 606.0], =#
-#=         [107.0, 207.0, 307.0, 407.0, 507.0, 607.0], =#
-#=         [108.0, 208.0, 308.0, 408.0, 508.0, 608.0], =#
-#=         [109.0, 209.0, 309.0, 409.0, 509.0, 609.0] =#
-#=     ] =#
-#=     segid = "SPK type 5 test segment" =#
-#=     spkw05(handle, 3, 10, "J2000", discrete_epochs[0], discrete_epochs[-1], segid, =#
-#=                  132712440023.310, 9, discrete_states, discrete_epochs) =#
-#=     spkcls(handle) =#
-#=     end_size = os.path.getsize(SPK5) =#
-#=     kclear() =#
-#=     @test end_size != init_size =#
-#=     if exists(SPK5): =#
-#=         os.remove(SPK5) # pragma: no cover =#
-#= @testset "spkw08" begin =#
-#=     SPK8 = os.path.join(cwd, "test8.bsp") =#
-#=     if exists(SPK8): =#
-#=         os.remove(SPK8) # pragma: no cover =#
-#=     kclear() =#
-#=     handle = spkopn(SPK8, "Type 8 SPK internal file name.", 4) =#
-#=     init_size = os.path.getsize(SPK8) =#
-#=     discrete_epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0] =#
-#=     discrete_states = [ =#
-#=         [101.0, 201.0, 301.0, 401.0, 501.0, 601.0], =#
-#=         [102.0, 202.0, 302.0, 402.0, 502.0, 602.0], =#
-#=         [103.0, 203.0, 303.0, 403.0, 503.0, 603.0], =#
-#=         [104.0, 204.0, 304.0, 404.0, 504.0, 604.0], =#
-#=         [105.0, 205.0, 305.0, 405.0, 505.0, 605.0], =#
-#=         [106.0, 206.0, 306.0, 406.0, 506.0, 606.0], =#
-#=         [107.0, 207.0, 307.0, 407.0, 507.0, 607.0], =#
-#=         [108.0, 208.0, 308.0, 408.0, 508.0, 608.0], =#
-#=         [109.0, 209.0, 309.0, 409.0, 509.0, 609.0] =#
-#=     ] =#
-#=     segid = "SPK type 8 test segment" =#
-#=     step = discrete_epochs[1] - discrete_epochs[0] =#
-#=     spkw08(handle, 3, 10, "J2000", discrete_epochs[0], discrete_epochs[-1], segid, =#
-#=                  3, 9, discrete_states, discrete_epochs[0], step) =#
-#=     spkcls(handle) =#
-#=     end_size = os.path.getsize(SPK8) =#
-#=     kclear() =#
-#=     @test end_size != init_size =#
-#=     if exists(SPK8): =#
-#=         os.remove(SPK8) # pragma: no cover =#
-#= @testset "spkw09" begin =#
-#=     SPK9 = os.path.join(cwd, "test9.bsp") =#
-#=     if exists(SPK9): =#
-#=         os.remove(SPK9) # pragma: no cover =#
-#=     kclear() =#
-#=     handle = spkopn(SPK9, "Type 9 SPK internal file name.", 4) =#
-#=     init_size = os.path.getsize(SPK9) =#
-#=     discrete_epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0] =#
-#=     discrete_states = [ =#
-#=         [101.0, 201.0, 301.0, 401.0, 501.0, 601.0], =#
-#=         [102.0, 202.0, 302.0, 402.0, 502.0, 602.0], =#
-#=         [103.0, 203.0, 303.0, 403.0, 503.0, 603.0], =#
-#=         [104.0, 204.0, 304.0, 404.0, 504.0, 604.0], =#
-#=         [105.0, 205.0, 305.0, 405.0, 505.0, 605.0], =#
-#=         [106.0, 206.0, 306.0, 406.0, 506.0, 606.0], =#
-#=         [107.0, 207.0, 307.0, 407.0, 507.0, 607.0], =#
-#=         [108.0, 208.0, 308.0, 408.0, 508.0, 608.0], =#
-#=         [109.0, 209.0, 309.0, 409.0, 509.0, 609.0] =#
-#=     ] =#
-#=     segid = "SPK type 9 test segment" =#
-#=     spkw09(handle, 3, 10, "J2000", discrete_epochs[0], discrete_epochs[-1], segid, =#
-#=                  3, 9, discrete_states, discrete_epochs) =#
-#=     spkcls(handle) =#
-#=     end_size = os.path.getsize(SPK9) =#
-#=     kclear() =#
-#=     @test end_size != init_size =#
-#=     if exists(SPK9): =#
-#=         os.remove(SPK9) # pragma: no cover =#
-#= @testset "spkw10" begin =#
-#=     SPK10 = os.path.join(cwd, "test10.bsp") =#
-#=     kclear() =#
-#=     tle = ["1 18123U 87 53  A 87324.61041692 -.00000023  00000-0 -75103-5 0 00675", =#
-#=            "2 18123  98.8296 152.0074 0014950 168.7820 191.3688 14.12912554 21686", =#
-#=            "1 18123U 87 53  A 87326.73487726  .00000045  00000-0  28709-4 0 00684", =#
-#=            "2 18123  98.8335 154.1103 0015643 163.5445 196.6235 14.12912902 21988", =#
-#=            "1 18123U 87 53  A 87331.40868801  .00000104  00000-0  60183-4 0 00690", =#
-#=            "2 18123  98.8311 158.7160 0015481 149.9848 210.2220 14.12914624 22644", =#
-#=            "1 18123U 87 53  A 87334.24129978  .00000086  00000-0  51111-4 0 00702", =#
-#=            "2 18123  98.8296 161.5054 0015372 142.4159 217.8089 14.12914879 23045", =#
-#=            "1 18123U 87 53  A 87336.93227900 -.00000107  00000-0 -52860-4 0 00713", =#
-#=            "2 18123  98.8317 164.1627 0014570 135.9191 224.2321 14.12910572 23425", =#
-#=            "1 18123U 87 53  A 87337.28635487  .00000173  00000-0  10226-3 0 00726", =#
-#=            "2 18123  98.8284 164.5113 0015289 133.5979 226.6438 14.12916140 23475", =#
-#=            "1 18123U 87 53  A 87339.05673569  .00000079  00000-0  47069-4 0 00738", =#
-#=            "2 18123  98.8288 166.2585 0015281 127.9985 232.2567 14.12916010 24908", =#
-#=            "1 18123U 87 53  A 87345.43010859  .00000022  00000-0  16481-4 0 00758", =#
-#=            "2 18123  98.8241 172.5226 0015362 109.1515 251.1323 14.12915487 24626", =#
-#=            "1 18123U 87 53  A 87349.04167543  .00000042  00000-0  27370-4 0 00764", =#
-#=            "2 18123  98.8301 176.1010 0015565 100.0881 260.2047 14.12916361 25138"] =#
-#=     epoch_x = [] =#
-#=     elems_x = [] =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     for i in range(0, 18, 2): =#
-#=         lines = [tle[i], tle[i + 1]] =#
-#=         epoch, elems = getelm(1950, 75, lines) =#
-#=         epoch_x.append(epoch) =#
-#=         elems_x.extend(elems) =#
-#=     first = epoch_x[0] - 0.5 * spd() =#
-#=     last = epoch_x[-1] + 0.5 * spd() =#
-#=     consts = [1.082616e-3, -2.538813e-6, -1.65597e-6, 7.43669161e-2, 120.0, 78.0, 6378.135, 1.0] =#
-#=     if exists(SPK10): =#
-#=         os.remove(SPK10) # pragma: no cover =#
-#=     handle = spkopn(SPK10, "Type 10 SPK internal file name.", 100) =#
-#=     init_size = os.path.getsize(SPK10) =#
-#=     spkw10(handle, -118123, 399, "J2000", first, last, "DMSP F8", consts, 9, elems_x, epoch_x) =#
-#=     spkcls(handle) =#
-#=     end_size = os.path.getsize(SPK10) =#
-#=     @test end_size != init_size =#
-#=     kclear() =#
-#=     if exists(SPK10): =#
-#=         os.remove(SPK10) # pragma: no cover =#
-#= @testset "spkw12" begin =#
-#=     SPK12 = os.path.join(cwd, "test12.bsp") =#
-#=     if exists(SPK12): =#
-#=         os.remove(SPK12) # pragma: no cover =#
-#=     kclear() =#
-#=     handle = spkopn(SPK12, "Type 12 SPK internal file name.", 4) =#
-#=     init_size = os.path.getsize(SPK12) =#
-#=     discrete_epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0] =#
-#=     discrete_states = [ =#
-#=         [101.0, 201.0, 301.0, 401.0, 501.0, 601.0], =#
-#=         [102.0, 202.0, 302.0, 402.0, 502.0, 602.0], =#
-#=         [103.0, 203.0, 303.0, 403.0, 503.0, 603.0], =#
-#=         [104.0, 204.0, 304.0, 404.0, 504.0, 604.0], =#
-#=         [105.0, 205.0, 305.0, 405.0, 505.0, 605.0], =#
-#=         [106.0, 206.0, 306.0, 406.0, 506.0, 606.0], =#
-#=         [107.0, 207.0, 307.0, 407.0, 507.0, 607.0], =#
-#=         [108.0, 208.0, 308.0, 408.0, 508.0, 608.0], =#
-#=         [109.0, 209.0, 309.0, 409.0, 509.0, 609.0] =#
-#=     ] =#
-#=     segid = "SPK type 12 test segment" =#
-#=     step = discrete_epochs[1] - discrete_epochs[0] =#
-#=     spkw12(handle, 3, 10, "J2000", discrete_epochs[0], discrete_epochs[-1], segid, =#
-#=                  3, 9, discrete_states, discrete_epochs[0], step) =#
-#=     spkcls(handle) =#
-#=     end_size = os.path.getsize(SPK12) =#
-#=     kclear() =#
-#=     @test end_size != init_size =#
-#=     if exists(SPK12): =#
-#=         os.remove(SPK12) # pragma: no cover =#
-#= @testset "spkw13" begin =#
-#=     SPK13 = os.path.join(cwd, "test13.bsp") =#
-#=     if exists(SPK13): =#
-#=         os.remove(SPK13) # pragma: no cover  =#
-#=     kclear() =#
-#=     handle = spkopn(SPK13, "Type 13 SPK internal file name.", 4) =#
-#=     init_size = os.path.getsize(SPK13) =#
-#=     discrete_epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0] =#
-#=     discrete_states = [ =#
-#=         [101.0, 201.0, 301.0, 401.0, 501.0, 601.0], =#
-#=         [102.0, 202.0, 302.0, 402.0, 502.0, 602.0], =#
-#=         [103.0, 203.0, 303.0, 403.0, 503.0, 603.0], =#
-#=         [104.0, 204.0, 304.0, 404.0, 504.0, 604.0], =#
-#=         [105.0, 205.0, 305.0, 405.0, 505.0, 605.0], =#
-#=         [106.0, 206.0, 306.0, 406.0, 506.0, 606.0], =#
-#=         [107.0, 207.0, 307.0, 407.0, 507.0, 607.0], =#
-#=         [108.0, 208.0, 308.0, 408.0, 508.0, 608.0], =#
-#=         [109.0, 209.0, 309.0, 409.0, 509.0, 609.0] =#
-#=     ] =#
-#=     segid = "SPK type 13 test segment" =#
-#=     spkw13(handle, 3, 10, "J2000", discrete_epochs[0], discrete_epochs[-1], segid, =#
-#=                  3, 9, discrete_states, discrete_epochs) =#
-#=     spkcls(handle) =#
-#=     end_size = os.path.getsize(SPK13) =#
-#=     kclear() =#
-#=     @test end_size != init_size =#
-#=     if exists(SPK13): =#
-#=         os.remove(SPK13) # pragma: no cover =#
-#= @testset "spkw15" begin =#
-#=     discrete_epochs = [100.0, 900.0] =#
-#=     kclear() =#
-#=     # =#
-#=     SPK15 = os.path.join(cwd, "test15.bsp") =#
-#=     if exists(SPK15): =#
-#=         os.remove(SPK15)  # pragma: no cover =#
-#=     # create the test kernel =#
-#=     handle = spkopn(SPK15, "Type 13 SPK internal file name.", 4) =#
-#=     init_size = os.path.getsize(SPK15) =#
-#=     # load kernels =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("Dec 25, 2007") =#
-#=     state, ltime = spkezr("Moon", et, "J2000", "NONE", "EARTH") =#
-#=     dim, mu = bodvrd("EARTH", "GM", 1) =#
-#=     elts = oscelt(state, et, mu[0]) =#
-#=     # From these collect the eccentricity and semi-latus =#
-#=     ecc = elts[1] =#
-#=     p   = elts[0] * (1.0 + ecc) =#
-#=     # Next get the trajectory pole vector and the periapsis vector. =#
-#=     state = state[0:3] =#
-#=     tp = ucrss(state, state+4) =#
-#=     pa = vhat(state) =#
-#=     # Enable both J2 corrections. =#
-#=     j2flg = 0.0 =#
-#=     # other constants, as I don"t need real values =#
-#=     pv = [1.0, 2.0, 3.0] =#
-#=     gm = 398600.436 =#
-#=     j2 = 1.0 =#
-#=     radius = 6000.0 =#
-#=     # now call spkw15 =#
-#=     spkw15(handle, 3, 10, "J2000", discrete_epochs[0], discrete_epochs[-1], "Test SPKW15", et, tp, pa, p, ecc, j2flg, pv, gm, j2, radius) =#
-#=     # close the kernel =#
-#=     spkcls(handle) =#
-#=     end_size = os.path.getsize(SPK15) =#
-#=     # cleanup =#
-#=     @test end_size != init_size =#
-#=     if exists(SPK15): =#
-#=         os.remove(SPK15)  # pragma: no cover =#
-#=     # =#
-#=     kclear() =#
-#= @testset "spkw17" begin =#
-#=     discrete_epochs = [100.0, 900.0] =#
-#=     kclear() =#
-#=     # =#
-#=     SPK17 = os.path.join(cwd, "test17.bsp") =#
-#=     if exists(SPK17): =#
-#=         os.remove(SPK17)  # pragma: no cover =#
-#=     # create the test kernel =#
-#=     handle = spkopn(SPK17, "Type 17 SPK internal file name.", 4) =#
-#=     init_size = os.path.getsize(SPK17) =#
-#=     # load kernels =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("Dec 25, 2007") =#
-#=     # make the eqel vector and the rapol and decpol floats =#
-#=     p = 10000.0 =#
-#=     gm = 398600.436 =#
-#=     ecc = 0.1 =#
-#=     a = p / (1.0 - ecc) =#
-#=     n = sqrt(gm / a) / a =#
-#=     argp   = 30. * rpd() =#
-#=     node   = 15. * rpd() =#
-#=     inc    = 10. * rpd() =#
-#=     m0     = 45. * rpd() =#
-#=     eqel   = [a, ecc * sin(argp + node), ecc * cos(argp + node), m0 + argp + node, =#
-#=               tan(inc / 2.0) * sin(node), tan(inc / 2.0) * cos(node), 0.0, n, 0.0] =#
-#=     rapol  = halfpi() * -1 =#
-#=     decpol = halfpi() =#
-#=     # now call spkw17 =#
-#=     spkw17(handle, 3, 10, "J2000", discrete_epochs[0], discrete_epochs[-1], "Test SPKW17", et, eqel, rapol, decpol) =#
-#=     # close the kernel =#
-#=     spkcls(handle) =#
-#=     end_size = os.path.getsize(SPK17) =#
-#=     # cleanup =#
-#=     @test end_size != init_size =#
-#=     if exists(SPK17): =#
-#=         os.remove(SPK17)  # pragma: no cover =#
-#=     # =#
-#=     kclear() =#
-#= @testset "spkw18" begin =#
-#=     kclear() =#
-#=     # =#
-#=     SPK18 = os.path.join(cwd, "test18.bsp") =#
-#=     if exists(SPK18): =#
-#=         os.remove(SPK18)  # pragma: no cover =#
-#=     # make a new kernel =#
-#=     handle = spkopn(SPK18, "Type 18 SPK internal file name.", 4) =#
-#=     init_size = os.path.getsize(SPK18) =#
-#=     # test data =#
-#=     body = 3 =#
-#=     center = 10 =#
-#=     ref =  "J2000" =#
-#=     epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0] =#
-#=     states = [ =#
-#=         [101., 201., 301., 401., 501., 601., 1., 1., 1., 1., 1., 1.], =#
-#=         [102., 202., 302., 402., 502., 602., 1., 1., 1., 1., 1., 1.], =#
-#=         [103., 203., 303., 403., 503., 603., 1., 1., 1., 1., 1., 1.], =#
-#=         [104., 204., 304., 404., 504., 604., 1., 1., 1., 1., 1., 1.], =#
-#=         [105., 205., 305., 405., 505., 605., 1., 1., 1., 1., 1., 1.], =#
-#=         [106., 206., 306., 406., 506., 606., 1., 1., 1., 1., 1., 1.], =#
-#=         [107., 207., 307., 407., 507., 607., 1., 1., 1., 1., 1., 1.], =#
-#=         [108., 208., 308., 408., 508., 608., 1., 1., 1., 1., 1., 1.], =#
-#=         [109., 209., 309., 409., 509., 609., 1., 1., 1., 1., 1., 1.], =#
-#=     ] =#
-#=     # test spkw18 with S18TP0 =#
-#=     spkw18(handle, stypes.SpiceSPK18Subtype.S18TP0, body, center, ref, epochs[0], epochs[-1], "SPK type 18 test segment", 3, states, epochs) =#
-#=     # close the kernel =#
-#=     spkcls(handle) =#
-#=     end_size = os.path.getsize(SPK18) =#
-#=     @test end_size != init_size =#
-#=     # test reading data =#
-#=     handle = spklef(SPK18) =#
-#=     state, lt = spkgeo(body, epochs[0], ref, center) =#
-#=     npt.@test_array_equal(state, [101., 201., 301., 1., 1., 1., ]) =#
-#=     state, lt = spkgeo(body, epochs[1], ref, center) =#
-#=     npt.@test_array_equal(state, [102., 202., 302., 1., 1., 1., ]) =#
-#=     spkcls(handle) =#
-#=     kclear() =#
-#=     # cleanup =#
-#=     if exists(SPK18): =#
-#=         os.remove(SPK18)  # pragma: no cover =#
-#= @testset "spkw20" begin =#
-#=     kclear() =#
-#=     # =#
-#=     SPK20 = os.path.join(cwd, "test20.bsp") =#
-#=     if exists(SPK20): =#
-#=         os.remove(SPK20)  # pragma: no cover =#
-#=     # create the test kernel =#
-#=     handle = spkopn(SPK20, "Type 20 SPK internal file name.", 4) =#
-#=     init_size = os.path.getsize(SPK20) =#
-#=     # now call spkw20, giving fake data from f_spk20.c from tspice =#
-#=     intlen = 5.0 =#
-#=     n = 100 =#
-#=     polydg = 1 =#
-#=     cdata = arange(1.0, 198000.0) # =#
-#=     dscale = 1.0 =#
-#=     tscale = 1.0 =#
-#=     initjd = 2451545.0 =#
-#=     initfr = 0.25 =#
-#=     first  = (initjd - j2000() + initfr) * spd() =#
-#=     last   = ((initjd - j2000()) + initfr + n*intlen) * spd() =#
-#=     spkw20(handle, 301, 3, "J2000", first, last, "Test SPKW20", intlen, n, polydg, cdata, dscale, tscale, initjd, initfr) =#
-#=     # close the kernel =#
-#=     spkcls(handle) =#
-#=     end_size = os.path.getsize(SPK20) =#
-#=     # cleanup =#
-#=     @test end_size != init_size =#
-#=     if exists(SPK20): =#
-#=         os.remove(SPK20)  # pragma: no cover =#
-#=     # =#
-#=     kclear() =#
-#= @testset "srfc2s" begin =#
-#=     kclear() =#
-#=     kernel = os.path.join(cwd, "srfc2s_ex1.tm") =#
-#=     if exists(kernel): =#
-#=         os.remove(kernel) # pragma: no cover =#
-#=     with open(kernel, "w") as kernelFile: =#
-#=         kernelFile.write("\\begindata\n") =#
-#=         kernelFile.write("NAIF_SURFACE_NAME += ( "MGS MOLA  64 pixel/deg",\n") =#
-#=         kernelFile.write("                       "MGS MOLA 128 pixel/deg",\n") =#
-#=         kernelFile.write("                       "PHOBOS GASKELL Q512"     )\n") =#
-#=         kernelFile.write("NAIF_SURFACE_CODE += (   1,   2,    1 )\n") =#
-#=         kernelFile.write("NAIF_SURFACE_BODY += ( 499, 499,  401 )\n") =#
-#=         kernelFile.write("\\begintext\n") =#
-#=         kernelFile.close() =#
-#=     furnsh(kernel) =#
-#=     @test srfc2s(1, 499)   == "MGS MOLA  64 pixel/deg" =#
-#=     @test srfc2s(1, 401) == "PHOBOS GASKELL Q512" =#
-#=     @test srfc2s(2, 499)    == "MGS MOLA 128 pixel/deg" =#
-#=     with pytest.raises(stypes.SpiceyError): =#
-#=         srfc2s(1, -1) =#
-#=     reset() =#
-#=     kclear() =#
-#=     if exists(kernel): =#
-#=         os.remove(kernel)  # pragma: no cover =#
-#= @testset "srfcss" begin =#
-#=     kclear() =#
-#=     kernel = os.path.join(cwd, "srfcss_ex1.tm") =#
-#=     if exists(kernel): =#
-#=         os.remove(kernel) # pragma: no cover =#
-#=     with open(kernel, "w") as kernelFile: =#
-#=         kernelFile.write("\\begindata\n") =#
-#=         kernelFile.write("NAIF_SURFACE_NAME += ( "MGS MOLA  64 pixel/deg",\n") =#
-#=         kernelFile.write("                       "MGS MOLA 128 pixel/deg",\n") =#
-#=         kernelFile.write("                       "PHOBOS GASKELL Q512"     )\n") =#
-#=         kernelFile.write("NAIF_SURFACE_CODE += (   1,   2,    1 )\n") =#
-#=         kernelFile.write("NAIF_SURFACE_BODY += ( 499, 499,  401 )\n") =#
-#=         kernelFile.write("\\begintext\n") =#
-#=         kernelFile.close() =#
-#=     furnsh(kernel) =#
-#=     @test srfcss(1, "MARS")   == "MGS MOLA  64 pixel/deg" =#
-#=     @test srfcss(1, "PHOBOS") == "PHOBOS GASKELL Q512" =#
-#=     @test srfcss(2, "499")    == "MGS MOLA 128 pixel/deg" =#
-#=     with pytest.raises(stypes.SpiceyError): =#
-#=         srfcss(1, "ZZZ") =#
-#=     reset() =#
-#=     kclear() =#
-#=     if exists(kernel): =#
-#=         os.remove(kernel)  # pragma: no cover =#
-#= @testset "srfnrm" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.pck) =#
-#=     furnsh(ExtraKernels.phobosDsk) =#
-#=     srfpts = latsrf("DSK/UNPRIORITIZED", "phobos", 0.0, "iau_phobos", =#
-#=                           [[0.0, 45.0], [60.0, 45.0]]) =#
-#=     normals = srfnrm("DSK/UNPRIORITIZED", "phobos", 0.0, "iau_phobos", =#
-#=                            srfpts) =#
-#=     srf_rad = array([recrad(x) for x in srfpts]) =#
-#=     nrm_rad = array([recrad(x) for x in normals]) =#
-#=     @test any(not_equal(srf_rad, nrm_rad)) =#
-#=     kclear() =#
-#= @testset "srfrec" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     x = srfrec(399, 100.0 * rpd(), 35.0 * rpd()) =#
-#=     expected = [-906.24919474, 5139.59458217, 3654.29989637] =#
-#=     npt.@test_array_almost_equal(x, expected) =#
-#=     kclear() =#
-#= @testset "srfs2c" begin =#
-#=     kclear() =#
-#=     kernel = os.path.join(cwd, "srfs2c_ex1.tm") =#
-#=     if exists(kernel): =#
-#=         os.remove(kernel) # pragma: no cover =#
-#=     with open(kernel, "w") as kernelFile: =#
-#=         kernelFile.write("\\begindata\n") =#
-#=         kernelFile.write("NAIF_SURFACE_NAME += ( "MGS MOLA  64 pixel/deg",\n") =#
-#=         kernelFile.write("                       "MGS MOLA 128 pixel/deg",\n") =#
-#=         kernelFile.write("                       "PHOBOS GASKELL Q512"     )\n") =#
-#=         kernelFile.write("NAIF_SURFACE_CODE += (   1,   2,    1 )\n") =#
-#=         kernelFile.write("NAIF_SURFACE_BODY += ( 499, 499,  401 )\n") =#
-#=         kernelFile.write("\\begintext\n") =#
-#=         kernelFile.close() =#
-#=     furnsh(kernel) =#
-#=     @test srfs2c("MGS MOLA  64 pixel/deg", "MARS") == 1 =#
-#=     @test srfs2c("PHOBOS GASKELL Q512", "PHOBOS")  == 1 =#
-#=     @test srfs2c("MGS MOLA 128 pixel/deg", "MARS") == 2 =#
-#=     @test srfs2c("MGS MOLA  64 pixel/deg", "499")  == 1 =#
-#=     @test srfs2c("1", "PHOBOS") == 1 =#
-#=     @test srfs2c("2", "499") == 2 =#
-#=     with pytest.raises(stypes.SpiceyError): =#
-#=         srfs2c("ZZZ", "MARS") =#
-#=     reset() =#
-#=     kclear() =#
-#=     if exists(kernel): =#
-#=         os.remove(kernel)  # pragma: no cover =#
-#= @testset "srfscc" begin =#
-#=     kclear() =#
-#=     kernel = os.path.join(cwd, "srfscc_ex1.tm") =#
-#=     if exists(kernel): =#
-#=         os.remove(kernel) # pragma: no cover =#
-#=     with open(kernel, "w") as kernelFile: =#
-#=         kernelFile.write("\\begindata\n") =#
-#=         kernelFile.write("NAIF_SURFACE_NAME += ( "MGS MOLA  64 pixel/deg",\n") =#
-#=         kernelFile.write("                       "MGS MOLA 128 pixel/deg",\n") =#
-#=         kernelFile.write("                       "PHOBOS GASKELL Q512"     )\n") =#
-#=         kernelFile.write("NAIF_SURFACE_CODE += (   1,   2,    1 )\n") =#
-#=         kernelFile.write("NAIF_SURFACE_BODY += ( 499, 499,  401 )\n") =#
-#=         kernelFile.write("\\begintext\n") =#
-#=         kernelFile.close() =#
-#=     furnsh(kernel) =#
-#=     @test srfscc("MGS MOLA  64 pixel/deg", 499) == 1 =#
-#=     @test srfscc("PHOBOS GASKELL Q512", 401)  == 1 =#
-#=     @test srfscc("MGS MOLA 128 pixel/deg", 499) == 2 =#
-#=     @test srfscc("1", 401) == 1 =#
-#=     @test srfscc("2", 499) == 2 =#
-#=     with pytest.raises(stypes.SpiceyError): =#
-#=         srfscc("ZZZ", 499) =#
-#=     reset() =#
-#=     kclear() =#
-#=     if exists(kernel): =#
-#=         os.remove(kernel)  # pragma: no cover =#
-#= @testset "srfxpt" begin =#
-#=     kclear() =#
-#=     # load kernels =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     furnsh(CassiniKernels.cassSclk) =#
-#=     furnsh(CassiniKernels.cassFk) =#
-#=     furnsh(CassiniKernels.cassPck) =#
-#=     furnsh(CassiniKernels.cassIk) =#
-#=     furnsh(CassiniKernels.cassSclk) =#
-#=     furnsh(CassiniKernels.satSpk) =#
-#=     furnsh(CassiniKernels.cassTourSpk) =#
-#=     furnsh(CassiniKernels.cassCk) =#
-#=     # start test =#
-#=     et = str2et("2013 FEB 25 11:50:00 UTC") =#
-#=     camid = bodn2c("CASSINI_ISS_NAC") =#
-#=     shape, frame, bsight, n, bounds = getfov(camid, 4) =#
-#=     # run srfxpt on boresight vector =#
-#=     spoint, dist, trgepc, obspos = srfxpt("Ellipsoid", "Enceladus", et, "LT+S", "CASSINI", frame, bsight) =#
-#=     npt.@test_almost_equal(dist, 683459.6415073496) =#
-#=     npt.@test_almost_equal(trgepc, 415065064.9055491) =#
-#=     expected_spoint = [-143.56046006834264971985,  202.9004595420923067195, =#
-#=                        -27.99454299292458969717] =#
-#=     expected_obspos = [329627.25001832831185311079,  557847.97086489037610590458, =#
-#=                        -217744.02422016291529871523] =#
-#=     npt.@test_array_almost_equal(spoint, expected_spoint) =#
-#=     npt.@test_array_almost_equal(obspos, expected_obspos) =#
-#=     # Iterable ET argument:  et-10, et, et+10 =#
-#=     ets = [et - 10.0, et, et + 10.0] =#
-#=     spoints, dists, trgepcs, obsposs = srfxpt("Ellipsoid", "Enceladus", ets, "LT+S", "CASSINI", frame, bsight) =#
-#=     @test 0. == vnorm(vsub(spoints[1], spoint)) =#
-#=     @test 0. == (dists[1] - dist) =#
-#=     @test 0. == (trgepcs[1] - trgepc) =#
-#=     @test 0. == vnorm(vsub(obsposs[1], obspos)) =#
-#=     # Cleanup =#
-#=     kclear() =#
-#= @testset "ssize" begin =#
-#=     cell = cell_double(10) =#
-#=     @test cell.size == 10 =#
-#=     ssize(5, cell) =#
-#=     @test cell.size == 5 =#
-#= @testset "stelab" begin =#
-#=     IDOBS = 399 =#
-#=     IDTARG = 301 =#
-#=     UTC = "July 4 2004" =#
-#=     FRAME = "J2000" =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et(UTC) =#
-#=     sobs = spkssb(IDOBS, et, FRAME) =#
-#=     starg, ltime = spkapp(IDTARG, et, FRAME, sobs, "LT") =#
-#=     expected_starg = [2.01738718005936592817e+05,  -2.60893145259797573090e+05, =#
-#=                       -1.47722589585214853287e+05,   9.24727104822839152121e-01, =#
-#=                        5.32379608845730878386e-01,   2.17669748758417824774e-01] =#
-#=     npt.@test_array_almost_equal(starg, expected_starg) =#
-#=     cortarg = stelab(starg[0:3], starg[3:6]) =#
-#=     expected_cortarg = [201739.80378842627396807075, -260892.46619604207808151841, -147722.30606629714020527899] =#
-#=     npt.@test_array_almost_equal(expected_cortarg, cortarg) =#
-#=     kclear() =#
-#= @testset "stpool" begin =#
-#=     kclear() =#
-#=     kernel = os.path.join(cwd, "stpool_t.ker") =#
-#=     if exists(kernel): =#
-#=         os.remove(kernel) # pragma: no cover =#
-#=     with open(kernel, "w") as kernelFile: =#
-#=         kernelFile.write("\\begindata\n") =#
-#=         kernelFile.write("SPK_FILES = ( "this_is_the_full_path_specification_*",\n") =#
-#=         kernelFile.write("              "of_a_file_with_a_long_name",\n") =#
-#=         kernelFile.write("              "this_is_the_full_path_specification_*",\n") =#
-#=         kernelFile.write("              "of_a_second_file_name" )\n") =#
-#=         kernelFile.close() =#
-#=     furnsh(kernel) =#
-#=     string, n = stpool("SPK_FILES", 0, "*") =#
-#=     @test n == 62 =#
-#=     @test string == "this_is_the_full_path_specification_of_a_file_with_a_long_name" =#
-#=     string, n = stpool("SPK_FILES", 1, "*") =#
-#=     @test n == 57 =#
-#=     @test string == "this_is_the_full_path_specification_of_a_second_file_name" =#
-#=     kclear() =#
-#=     if exists(kernel): =#
-#=         os.remove(kernel) # pragma: no cover =#
-#= @testset "str2et" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     date = "Thu Mar 20 12:53:29 PST 1997" =#
-#=     et = str2et(date) =#
-#=     npt.@test_almost_equal(et, -87836728.81438904) =#
-#=     kclear() =#
-#=      =#
-#= @testset "datetime2et" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     date = datetime(1997,3,20,12,53,29) =#
-#=     et = datetime2et(date) =#
-#=     npt.@test_almost_equal(et, -87865528.8143913) =#
-#=      =#
-#=     expecteds=[-87865528.8143913,-792086354.8170365,-790847954.8166842] =#
-#=     dates = [datetime(1997,3,20,12,53,29), =#
-#=              datetime(1974,11,25,20,0,0), =#
-#=              datetime(1974,12,10,4,0,0)] =#
-#=               =#
-#=     results = datetime2et(dates) =#
-#=     for expected, result in zip(expecteds, results): =#
-#=         npt.@test_almost_equal(result, expected) =#
-#=     kclear() =#
+    @testset "spkpds" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :spk))
+            et = str2et("2002 APR 27 00:00:00.000 TDB")
+            handle, descr, ident = spksfs(5, et)
+            body, center, frame, otype, first, last, start, stop  = spkuds(descr)
+            outframe = frmnam(frame)
+            spkpds_output = spkpds(body, center, outframe, otype, first, last)
+            @test spkpds_output ≈ descr
+        finally
+            kclear()
+        end
+    end
+    @testset "spkpos" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :spk))
+            et = str2et("July 4, 2003 11:00 AM PST")
+            pos, lt = spkpos("Mars", et, "J2000", "LT+S", "Earth")
+            expected_lt = 269.6898813661505
+            expected_pos = [73822235.31053550541400909424, -27127918.99847228080034255981,
+                            -18741306.30148987472057342529]
+            @test lt ≈ expected_lt
+            @test pos ≈ expected_pos
+        finally
+            kclear()
+        end
+    end
+    @testset "spkpvn" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :spk))
+            et = str2et("2002 APR 27 00:00:00.000 TDB")
+            handle, descr, ident = spksfs(5, et)
+            refid, state, center = spkpvn(handle, descr, et)
+            expected_state = [-2.70063336478468656540e+08, 6.69404818553274393082e+08,
+                              2.93505043081457614899e+08, -1.24191493217698472051e+01,
+                              -3.70147572019018955558e+00, -1.28422514561611489370e+00]
+            @test state ≈ expected_state
+            @test_throws ArgumentError spkpvn(handle, descr[1:4], et)
+        finally
+            kclear()
+        end
+    end
+    @testset "spksfs" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :spk))
+            idcode = bodn2c("PLUTO BARYCENTER")
+            et = str2et("2001 FEB 18 UTC")
+            handle, descr, ident = spksfs(idcode, et)
+            @test ident == "DE-405"
+        finally
+            kclear()
+        end
+    end
+    @testset "spkw02" begin
+        try
+            spk2 = tempname()
+            handle = spkopn(spk2, "Type 2 SPK internal file name.", 4)
+            init_size = filesize(spk2)
+            discrete_epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0]
+            cheby_coeffs02 = [[1.0101, 1.0102, 1.0103, 1.0201],
+                              [1.0202, 1.0203, 1.0301, 1.0302],
+                              [1.0303, 2.0101, 2.0102, 2.0103],
+                              [2.0201, 2.0202, 2.0203, 2.0301],
+                              [2.0302, 2.0303, 3.0101, 3.0102],
+                              [3.0103, 3.0201, 3.0202, 3.0203],
+                              [3.0301, 3.0302, 3.0303, 4.0101],
+                              [4.0102, 4.0103, 4.0201, 4.0202],
+                              [4.0203, 4.0301, 4.0302, 4.0303]]
+            segid = "SPK type 2 test segment"
+            intlen = discrete_epochs[2] - discrete_epochs[1]
+            spkw02(handle, 3, 10, "J2000", discrete_epochs[1],
+                   discrete_epochs[end], segid, intlen, cheby_coeffs02, discrete_epochs[1])
+            spkcls(handle)
+            end_size = filesize(spk2)
+            @test end_size != init_size
+        finally
+            kclear()
+        end
+    end
+    @testset "spkw03" begin
+        try
+            spk3 = tempname()
+            handle = spkopn(spk3, "Type 3 SPK internal file name.", 4)
+            init_size = filesize(spk3)
+            discrete_epochs = [100.0, 200.0, 300.0, 400.0]
+            cheby_coeffs03 = [[1.0101, 1.0102, 1.0103, 1.0201, 1.0202, 1.0203,
+                               1.0301, 1.0302, 1.0303, 1.0401, 1.0402, 1.0403,
+                               1.0501, 1.0502, 1.0503, 1.0601, 1.0602, 1.0603],
+                              [2.0101, 2.0102, 2.0103, 2.0201, 2.0202, 2.0203,
+                               2.0301, 2.0302, 2.0303, 2.0401, 2.0402, 2.0403,
+                               2.0501, 2.0502, 2.0503, 2.0601, 2.0602, 2.0603],
+                              [3.0101, 3.0102, 3.0103, 3.0201, 3.0202, 3.0203,
+                               3.0301, 3.0302, 3.0303, 3.0401, 3.0402, 3.0403,
+                               3.0501, 3.0502, 3.0503, 3.0601, 3.0602, 3.0603],
+                              [4.0101, 4.0102, 4.0103, 4.0201, 4.0202, 4.0203,
+                               4.0301, 4.0302, 4.0303, 4.0401, 4.0402, 4.0403,
+                               4.0501, 4.0502, 4.0503, 4.0601, 4.0602, 4.0603]]
+            segid = "SPK type 3 test segment"
+            intlen = discrete_epochs[2] - discrete_epochs[1]
+            spkw03(handle, 3, 10, "J2000", discrete_epochs[1],
+                   discrete_epochs[end], segid, intlen, cheby_coeffs03, discrete_epochs[1])
+            spkcls(handle)
+            end_size = filesize(spk3)
+            @test end_size != init_size
+        finally
+            kclear()
+        end
+    end
+    @testset "spkw05" begin
+        try
+            spk5 = tempname()
+            handle = spkopn(spk5, "Type 5 SPK internal file name.", 4)
+            init_size = filesize(spk5)
+            discrete_epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0]
+            discrete_states = [[101.0, 201.0, 301.0, 401.0, 501.0, 601.0],
+                               [102.0, 202.0, 302.0, 402.0, 502.0, 602.0],
+                               [103.0, 203.0, 303.0, 403.0, 503.0, 603.0],
+                               [104.0, 204.0, 304.0, 404.0, 504.0, 604.0],
+                               [105.0, 205.0, 305.0, 405.0, 505.0, 605.0],
+                               [106.0, 206.0, 306.0, 406.0, 506.0, 606.0],
+                               [107.0, 207.0, 307.0, 407.0, 507.0, 607.0],
+                               [108.0, 208.0, 308.0, 408.0, 508.0, 608.0],
+                               [109.0, 209.0, 309.0, 409.0, 509.0, 609.0]]
+            segid = "SPK type 5 test segment"
+            spkw05(handle, 3, 10, "J2000", discrete_epochs[1], discrete_epochs[end], segid,
+                   132712440023.310, discrete_states, discrete_epochs)
+            spkcls(handle)
+            end_size = filesize(spk5)
+            @test end_size != init_size
+        finally
+            kclear()
+        end
+    end
+    @testset "spkw08" begin
+        try
+            spk8 = tempname()
+            handle = spkopn(spk8, "Type 8 SPK internal file name.", 4)
+            init_size = filesize(spk8)
+            discrete_epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0]
+            discrete_states = [[101.0, 201.0, 301.0, 401.0, 501.0, 601.0],
+                               [102.0, 202.0, 302.0, 402.0, 502.0, 602.0],
+                               [103.0, 203.0, 303.0, 403.0, 503.0, 603.0],
+                               [104.0, 204.0, 304.0, 404.0, 504.0, 604.0],
+                               [105.0, 205.0, 305.0, 405.0, 505.0, 605.0],
+                               [106.0, 206.0, 306.0, 406.0, 506.0, 606.0],
+                               [107.0, 207.0, 307.0, 407.0, 507.0, 607.0],
+                               [108.0, 208.0, 308.0, 408.0, 508.0, 608.0],
+                               [109.0, 209.0, 309.0, 409.0, 509.0, 609.0]]
+            segid = "SPK type 8 test segment"
+            step = discrete_epochs[2] - discrete_epochs[1]
+            spkw08(handle, 3, 10, "J2000", discrete_epochs[2], discrete_epochs[end], segid,
+                   3, discrete_states, discrete_epochs[1], step)
+            spkcls(handle)
+            end_size = filesize(spk8)
+            @test end_size != init_size
+        finally
+            kclear()
+        end
+    end
+    @testset "spkw09" begin
+        try
+            spk9 = tempname()
+            handle = spkopn(spk9, "Type 9 SPK internal file name.", 4)
+            init_size = filesize(spk9)
+            discrete_epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0]
+            discrete_states = [[101.0, 201.0, 301.0, 401.0, 501.0, 601.0],
+                               [102.0, 202.0, 302.0, 402.0, 502.0, 602.0],
+                               [103.0, 203.0, 303.0, 403.0, 503.0, 603.0],
+                               [104.0, 204.0, 304.0, 404.0, 504.0, 604.0],
+                               [105.0, 205.0, 305.0, 405.0, 505.0, 605.0],
+                               [106.0, 206.0, 306.0, 406.0, 506.0, 606.0],
+                               [107.0, 207.0, 307.0, 407.0, 507.0, 607.0],
+                               [108.0, 208.0, 308.0, 408.0, 508.0, 608.0],
+                               [109.0, 209.0, 309.0, 409.0, 509.0, 609.0]]
+            segid = "SPK type 9 test segment"
+            step = discrete_epochs[2] - discrete_epochs[1]
+            spkw09(handle, 3, 10, "J2000", discrete_epochs[2], discrete_epochs[end], segid,
+                   3, discrete_states, discrete_epochs)
+            spkcls(handle)
+            end_size = filesize(spk9)
+            @test end_size != init_size
+        finally
+            kclear()
+        end
+    end
+    @testset "spkw10" begin
+        try
+            furnsh(path(CORE, :lsk))
+            spk10 = tempname()
+            tle = ["1 18123U 87 53  A 87324.61041692 -.00000023  00000-0 -75103-5 0 00675",
+                   "2 18123  98.8296 152.0074 0014950 168.7820 191.3688 14.12912554 21686",
+                   "1 18123U 87 53  A 87326.73487726  .00000045  00000-0  28709-4 0 00684",
+                   "2 18123  98.8335 154.1103 0015643 163.5445 196.6235 14.12912902 21988",
+                   "1 18123U 87 53  A 87331.40868801  .00000104  00000-0  60183-4 0 00690",
+                   "2 18123  98.8311 158.7160 0015481 149.9848 210.2220 14.12914624 22644",
+                   "1 18123U 87 53  A 87334.24129978  .00000086  00000-0  51111-4 0 00702",
+                   "2 18123  98.8296 161.5054 0015372 142.4159 217.8089 14.12914879 23045",
+                   "1 18123U 87 53  A 87336.93227900 -.00000107  00000-0 -52860-4 0 00713",
+                   "2 18123  98.8317 164.1627 0014570 135.9191 224.2321 14.12910572 23425",
+                   "1 18123U 87 53  A 87337.28635487  .00000173  00000-0  10226-3 0 00726",
+                   "2 18123  98.8284 164.5113 0015289 133.5979 226.6438 14.12916140 23475",
+                   "1 18123U 87 53  A 87339.05673569  .00000079  00000-0  47069-4 0 00738",
+                   "2 18123  98.8288 166.2585 0015281 127.9985 232.2567 14.12916010 24908",
+                   "1 18123U 87 53  A 87345.43010859  .00000022  00000-0  16481-4 0 00758",
+                   "2 18123  98.8241 172.5226 0015362 109.1515 251.1323 14.12915487 24626",
+                   "1 18123U 87 53  A 87349.04167543  .00000042  00000-0  27370-4 0 00764",
+                   "2 18123  98.8301 176.1010 0015565 100.0881 260.2047 14.12916361 25138"]
+            epochs = []
+            elems = []
+            for lines in zip(tle[1:2:end], tle[2:2:end])
+                epoch, ele = getelm(1950, lines)
+                push!(epochs, epoch)
+                push!(elems, ele)
+            end
+            first = epochs[1] - 0.5 * spd()
+            last = epochs[end] + 0.5 * spd()
+            consts = [1.082616e-3, -2.538813e-6, -1.65597e-6, 7.43669161e-2, 120.0, 78.0, 6378.135, 1.0]
+
+            handle = spkopn(spk10, "Type 10 SPK internal file name.", 100)
+            init_size = filesize(spk10)
+            spkw10(handle, -118123, 399, "J2000", first, last, "DMSP F8", consts, elems, epochs)
+            spkcls(handle)
+            end_size = filesize(spk10)
+            @test end_size != init_size
+        finally
+            kclear()
+        end
+    end
+    @testset "spkw12" begin
+        try
+            spk12 = tempname()
+            handle = spkopn(spk12, "Type 12 SPK internal file name.", 4)
+            init_size = filesize(spk12)
+            discrete_epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0]
+            discrete_states = [[101.0, 201.0, 301.0, 401.0, 501.0, 601.0],
+                               [102.0, 202.0, 302.0, 402.0, 502.0, 602.0],
+                               [103.0, 203.0, 303.0, 403.0, 503.0, 603.0],
+                               [104.0, 204.0, 304.0, 404.0, 504.0, 604.0],
+                               [105.0, 205.0, 305.0, 405.0, 505.0, 605.0],
+                               [106.0, 206.0, 306.0, 406.0, 506.0, 606.0],
+                               [107.0, 207.0, 307.0, 407.0, 507.0, 607.0],
+                               [108.0, 208.0, 308.0, 408.0, 508.0, 608.0],
+                               [109.0, 209.0, 309.0, 409.0, 509.0, 609.0]]
+            segid = "SPK type 12 test segment"
+            step = discrete_epochs[2] - discrete_epochs[1]
+            spkw12(handle, 3, 10, "J2000", discrete_epochs[2], discrete_epochs[end], segid,
+                   3, discrete_states, discrete_epochs[1], step)
+            spkcls(handle)
+            end_size = filesize(spk12)
+            @test end_size != init_size
+        finally
+            kclear()
+        end
+    end
+    @testset "spkw13" begin
+        try
+            spk13 = tempname()
+            handle = spkopn(spk13, "Type 13 SPK internal file name.", 4)
+            init_size = filesize(spk13)
+            discrete_epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0]
+            discrete_states = [[101.0, 201.0, 301.0, 401.0, 501.0, 601.0],
+                               [102.0, 202.0, 302.0, 402.0, 502.0, 602.0],
+                               [103.0, 203.0, 303.0, 403.0, 503.0, 603.0],
+                               [104.0, 204.0, 304.0, 404.0, 504.0, 604.0],
+                               [105.0, 205.0, 305.0, 405.0, 505.0, 605.0],
+                               [106.0, 206.0, 306.0, 406.0, 506.0, 606.0],
+                               [107.0, 207.0, 307.0, 407.0, 507.0, 607.0],
+                               [108.0, 208.0, 308.0, 408.0, 508.0, 608.0],
+                               [109.0, 209.0, 309.0, 409.0, 509.0, 609.0]]
+            segid = "SPK type 13 test segment"
+            step = discrete_epochs[2] - discrete_epochs[1]
+            spkw13(handle, 3, 10, "J2000", discrete_epochs[2], discrete_epochs[end], segid,
+                   3, discrete_states, discrete_epochs)
+            spkcls(handle)
+            end_size = filesize(spk13)
+            @test end_size != init_size
+        finally
+            kclear()
+        end
+    end
+    @testset "spkw15" begin
+        try
+            discrete_epochs = [100.0, 900.0]
+            spk15 = tempname()
+
+            handle = spkopn(spk15, "Type 15 SPK internal file name.", 4)
+            init_size = filesize(spk15)
+
+            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk), path(CORE, :gm_pck))
+            et = str2et("Dec 25, 2007")
+            state, ltime = spkezr("Moon", et, "J2000", "NONE", "EARTH")
+            mu = bodvrd("EARTH", "GM", 1)
+            elts = oscelt(state, et, mu[1])
+            ecc = elts[2]
+            p   = elts[1] * (1.0 + ecc)
+            state = state[1:3]
+            #= tp = ucrss(state, state+4) =#
+            tp = normalize(cross(state, state .+ 4.0))
+            pa = normalize(state)
+            j2flg = 0.0
+            pv = [1.0, 2.0, 3.0]
+            gm = 398600.436
+            j2 = 1.0
+            radius = 6000.0
+            spkw15(handle, 3, 10, "J2000", discrete_epochs[1], discrete_epochs[end], "Test SPKW15",
+                   et, tp, pa, p, ecc, j2flg, pv, gm, j2, radius)
+            spkcls(handle)
+
+            end_size = filesize(spk15)
+            @test end_size != init_size
+        finally
+            kclear()
+        end
+    end
+    @testset "spkw17" begin
+        try
+            discrete_epochs = [100.0, 900.0]
+
+            spk17 = tempname()
+            handle = spkopn(spk17, "Type 17 SPK internal file name.", 4)
+            init_size = filesize(spk17)
+
+            furnsh(path(CORE, :lsk))
+            et = str2et("Dec 25, 2007")
+            p = 10000.0
+            gm = 398600.436
+            ecc = 0.1
+            a = p / (1.0 - ecc)
+            n = sqrt(gm / a) / a
+            argp   = deg2rad(30.0)
+            node   = deg2rad(15.0)
+            inc    = deg2rad(10.0)
+            m0     = deg2rad(45.0)
+            eqel   = [a, ecc * sin(argp + node), ecc * cos(argp + node), m0 + argp + node,
+                      tan(inc / 2.0) * sin(node), tan(inc / 2.0) * cos(node), 0.0, n, 0.0]
+            rapol  = -π/2
+            decpol = π/2
+
+            spkw17(handle, 3, 10, "J2000", discrete_epochs[1], discrete_epochs[end], "Test SPKW17",
+                   et, eqel, rapol, decpol)
+
+            spkcls(handle)
+            end_size = filesize(spk17)
+            @test end_size != init_size
+        finally
+            kclear()
+        end
+    end
+    @testset "spkw18" begin
+        try
+            spk18 = tempname()
+            handle = spkopn(spk18, "Type 18 SPK internal file name.", 4)
+            init_size = filesize(spk18)
+
+            body = 3
+            center = 10
+            ref =  "J2000"
+            epochs = [100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0]
+            packts = [[101.0, 201.0, 301.0, 401.0, 501.0, 601.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                      [102.0, 202.0, 302.0, 402.0, 502.0, 602.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                      [103.0, 203.0, 303.0, 403.0, 503.0, 603.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                      [104.0, 204.0, 304.0, 404.0, 504.0, 604.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                      [105.0, 205.0, 305.0, 405.0, 505.0, 605.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                      [106.0, 206.0, 306.0, 406.0, 506.0, 606.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                      [107.0, 207.0, 307.0, 407.0, 507.0, 607.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                      [108.0, 208.0, 308.0, 408.0, 508.0, 608.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                      [109.0, 209.0, 309.0, 409.0, 509.0, 609.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]]
+
+            spkw18(handle, :S18TP0, body, center, ref, epochs[1], epochs[end],
+                   "SPK type 18 test segment", 3, packts, epochs)
+
+            spkcls(handle)
+            end_size = filesize(spk18)
+            @test end_size != init_size
+
+            handle = spklef(spk18)
+            state, _ = spkgeo(body, epochs[1], ref, center)
+            @test state ≈ [101., 201., 301., 1., 1., 1., ]
+            state, _ = spkgeo(body, epochs[2], ref, center)
+            @test state ≈ [102., 202., 302., 1., 1., 1., ]
+            spkcls(handle)
+        finally
+            kclear()
+        end
+    end
+    @testset "spkw20" begin
+        try
+            spk20 = tempname()
+            handle = spkopn(spk20, "Type 20 SPK internal file name.", 4)
+            init_size = filesize(spk20)
+
+            intlen = 5.0
+            cdata = [[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0],
+                     [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0],
+                     [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0],
+                     [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]]
+            dscale = 1.0
+            tscale = 1.0
+            initjd = 2451545.0
+            initfr = 0.25
+            first  = (initjd - j2000() + initfr) * spd()
+            last   = ((initjd - j2000()) + initfr + 4 * intlen) * spd()
+            spkw20(handle, 301, 3, "J2000", first, last, "Test SPKW20",
+                   intlen, cdata, dscale, tscale, initjd, initfr)
+            spkcls(handle)
+            end_size = filesize(spk20)
+            @test end_size != init_size
+        finally
+            kclear()
+        end
+    end
+    @testset "srfc2s" begin
+        try
+            kernel = tempname()
+            open(kernel, "w") do kernel_file
+                write(kernel_file, "\\begindata\n")
+                write(kernel_file, "NAIF_SURFACE_NAME += ( 'MGS MOLA  64 pixel/deg',\n")
+                write(kernel_file, "                       'MGS MOLA 128 pixel/deg',\n")
+                write(kernel_file, "                       'PHOBOS GASKELL Q512'     )\n")
+                write(kernel_file, "NAIF_SURFACE_CODE += (   1,   2,    1 )\n")
+                write(kernel_file, "NAIF_SURFACE_BODY += ( 499, 499,  401 )\n")
+                write(kernel_file, "\\begintext\n")
+            end
+            furnsh(kernel)
+            @test srfc2s(1, 499) == ("MGS MOLA  64 pixel/deg", true)
+            @test srfc2s(1, 401) == ("PHOBOS GASKELL Q512", true)
+            @test srfc2s(2, 499) == ("MGS MOLA 128 pixel/deg", true)
+            @test srfc2s(1, -1) == ("1", false)
+        finally
+            kclear()
+        end
+    end
+    @testset "srfcss" begin
+        try
+            kernel = tempname()
+            open(kernel, "w") do kernel_file
+                write(kernel_file, "\\begindata\n")
+                write(kernel_file, "NAIF_SURFACE_NAME += ( 'MGS MOLA  64 pixel/deg',\n")
+                write(kernel_file, "                       'MGS MOLA 128 pixel/deg',\n")
+                write(kernel_file, "                       'PHOBOS GASKELL Q512'     )\n")
+                write(kernel_file, "NAIF_SURFACE_CODE += (   1,   2,    1 )\n")
+                write(kernel_file, "NAIF_SURFACE_BODY += ( 499, 499,  401 )\n")
+                write(kernel_file, "\\begintext\n")
+            end
+            furnsh(kernel)
+            @test srfcss(1, "MARS") == ("MGS MOLA  64 pixel/deg", true)
+            @test srfcss(1, "PHOBOS") == ("PHOBOS GASKELL Q512", true)
+            @test srfcss(2, "499") == ("MGS MOLA 128 pixel/deg", true)
+            @test srfcss(1, "-1") == ("1", false)
+        finally
+            kclear()
+        end
+    end
+    @testset "srfnrm" begin
+        try
+            furnsh(path(CORE, :pck), path(EXTRA, :phobos_dsk))
+            srfpts = latsrf("DSK/UNPRIORITIZED", "PHOBOS", 0.0, "IAU_PHOBOS", [[0.0, 45.0], [60.0, 45.0]])
+            normals = srfnrm("DSK/UNPRIORITIZED", "PHOBOS", 0.0, "IAU_PHOBOS", srfpts)
+            @test norm(normals[1]) ≈ 1.0
+            @test norm(normals[2]) ≈ 1.0
+        finally
+            kclear()
+        end
+    end
+    @testset "srfrec" begin
+        try
+            furnsh(path(CORE, :pck))
+            x = srfrec(399, deg2rad(100.0), deg2rad(35.0))
+            expected = [-906.24919474, 5139.59458217, 3654.29989637]
+            @test x ≈ expected
+        finally
+            kclear()
+        end
+    end
+    @testset "srfs2c" begin
+        try
+            kernel = tempname()
+            open(kernel, "w") do kernel_file
+                write(kernel_file, "\\begindata\n")
+                write(kernel_file, "NAIF_SURFACE_NAME += ( 'MGS MOLA  64 pixel/deg',\n")
+                write(kernel_file, "                       'MGS MOLA 128 pixel/deg',\n")
+                write(kernel_file, "                       'PHOBOS GASKELL Q512'     )\n")
+                write(kernel_file, "NAIF_SURFACE_CODE += (   1,   2,    1 )\n")
+                write(kernel_file, "NAIF_SURFACE_BODY += ( 499, 499,  401 )\n")
+                write(kernel_file, "\\begintext\n")
+            end
+            furnsh(kernel)
+            @test srfs2c("MGS MOLA  64 PIXEL/DEG", "MARS") == 1
+            @test srfs2c("PHOBOS GASKELL Q512", "PHOBOS")  == 1
+            @test srfs2c("MGS MOLA 128 PIXEL/DEG", "MARS") == 2
+            @test srfs2c("MGS MOLA  64 PIXEL/DEG", "499")  == 1
+            @test srfs2c("1", "PHOBOS") == 1
+            @test srfs2c("2", "499") == 2
+            @test srfs2c("ZZZ", "MARS") === nothing
+        finally
+            kclear()
+        end
+    end
+    @testset "srfscc" begin
+        try
+            kernel = tempname()
+            open(kernel, "w") do kernel_file
+                write(kernel_file, "\\begindata\n")
+                write(kernel_file, "NAIF_SURFACE_NAME += ( 'MGS MOLA  64 pixel/deg',\n")
+                write(kernel_file, "                       'MGS MOLA 128 pixel/deg',\n")
+                write(kernel_file, "                       'PHOBOS GASKELL Q512'     )\n")
+                write(kernel_file, "NAIF_SURFACE_CODE += (   1,   2,    1 )\n")
+                write(kernel_file, "NAIF_SURFACE_BODY += ( 499, 499,  401 )\n")
+                write(kernel_file, "\\begintext\n")
+            end
+            furnsh(kernel)
+            @test srfscc("MGS MOLA  64 PIXEL/DEG", 499) == 1
+            @test srfscc("PHOBOS GASKELL Q512", 401)  == 1
+            @test srfscc("MGS MOLA 128 PIXEL/DEG", 499) == 2
+            @test srfscc("MGS MOLA  64 PIXEL/DEG", 499)  == 1
+            @test srfscc("1", 401) == 1
+            @test srfscc("2", 499) == 2
+            @test srfscc("ZZZ", 499) === nothing
+        finally
+            kclear()
+        end
+    end
+    @testset "ssize" begin
+        cell = SpiceDoubleCell(10)
+        @test size_c(cell) == 10
+        ssize!(cell, 5)
+        @test size_c(cell) == 5
+    end
+    @testset "stelab" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :spk))
+            idobs = 399
+            idtarg = 301
+            utc = "July 4 2004"
+            frame = "J2000"
+            et = str2et(utc)
+            sobs = spkssb(idobs, et, frame)
+            starg, _ = spkaps(idtarg, et, frame, "LT", sobs, zeros(6))
+            expected_starg = [2.01738718005936592817e+05,  -2.60893145259797573090e+05,
+                              -1.47722589585214853287e+05,   9.24727104822839152121e-01,
+                              5.32379608845730878386e-01,   2.17669748758417824774e-01]
+            @test starg ≈ expected_starg
+            cortarg = stelab(starg[1:3], starg[4:6])
+            expected_cortarg = [201739.80378842627396807075, -260892.46619604207808151841,
+                                -147722.30606629714020527899]
+            @test expected_cortarg ≈ cortarg
+        finally
+            kclear()
+        end
+    end
+    @testset "stpool" begin
+        try
+            kernel = tempname()
+            open(kernel, "w") do kernel_file
+                write(kernel_file, "\\begindata\n")
+                write(kernel_file, "SPK_FILES = ( 'this_is_the_full_path_specification_*',\n")
+                write(kernel_file, "              'of_a_file_with_a_long_name',\n")
+                write(kernel_file, "              'this_is_the_full_path_specification_*',\n")
+                write(kernel_file, "              'of_a_second_file_name' )\n")
+            end
+            furnsh(kernel)
+            string = stpool("SPK_FILES", 1, "*")
+            @test string == "this_is_the_full_path_specification_of_a_file_with_a_long_name"
+            string = stpool("SPK_FILES", 2, "*")
+            @test string == "this_is_the_full_path_specification_of_a_second_file_name"
+        finally
+            kclear()
+        end
+    end
+    @testset "str2et" begin
+        try
+            furnsh(path(CORE, :lsk))
+            date = "Thu Mar 20 12:53:29 PST 1997"
+            et = str2et(date)
+            @test et ≈ -87836728.81438904
+        finally
+            kclear()
+        end
+    end
     @testset "subpnt" begin
         try
             furnsh(path(CORE, :lsk),
@@ -1334,22 +1180,6 @@ using LinearAlgebra: I, norm
             kclear()
         end
     end
-#= @testset "subpt" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     et = str2et("JAN 1, 2006") =#
-#=     point1, alt1 = array(subpt("near point", "earth", et, "lt+s", "moon")) =#
-#=     point2, alt2 = array(subpt("intercept", "earth", et, "lt+s", "moon")) =#
-#=     dist = linalg.norm(subtract(point1, point2)) =#
-#=     sep = vsep(point1, point2) * dpr() =#
-#=     npt.@test_almost_equal(dist, 16.705476097706171) =#
-#=     npt.@test_almost_equal(sep, 0.15016657506598063) =#
-#=     # Iterable ET argument to subpt() =#
-#=     points, alts = subpt("near point", "earth", [et-20., et, et+20.], "lt+s", "moon") =#
-#=     @test 0. == vnorm(vsub(points[1], point1)) =#
-#=     @test 0. == (alts[1] - alt1) =#
-#=     # Cleanup =#
-#=     kclear() =#
     @testset "subslr" begin
         try
             furnsh(path(CORE, :lsk),
@@ -1378,8 +1208,8 @@ using LinearAlgebra: I, norm
                           -175.81072152220804,
                           23.420819946054046]]
             for (expected, method) in zip(expecteds, methods)
-                spoint, trgepc, srfvec = subslr(method, "Mars", et, "IAU_MARS", "Earth", abcorr="LT+S")
-                spglon, spglat, spgalt = recpgr("mars", spoint, re, f)
+                spoint, trgepc, srfvec = subslr(method, "MARS", et, "IAU_MARS", "LT+S", "Earth")
+                spglon, spglat, spgalt = recpgr("MARS", spoint, re, f)
 
                 @test spgalt ≈ expected[1] atol=sqrt(eps())
                 @test rad2deg(spglon) ≈ expected[2]
@@ -1387,8 +1217,8 @@ using LinearAlgebra: I, norm
                 spcrad, spclon, spclat = reclat(spoint)
                 @test rad2deg(spclon) ≈ expected[4]
                 @test rad2deg(spclat) ≈ expected[5]
-                sunpos, sunlt = spkpos("sun", trgepc, "iau_mars", "mars", abcorr="LT+S")
-                supgln, supglt, supgal = recpgr("mars", sunpos, re, f)
+                sunpos, sunlt = spkpos("SUN", trgepc, "IAU_MARS", "LT+S", "MARS")
+                supgln, supglt, supgal = recpgr("MARS", sunpos, re, f)
                 @test rad2deg(supgln) ≈ expected[6]
                 @test rad2deg(supglt) ≈ expected[7]
                 supcrd, supcln, supclt = reclat(sunpos)
@@ -1399,89 +1229,81 @@ using LinearAlgebra: I, norm
             kclear()
         end
     end
-#= @testset "subsol" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     point = subsol("near point", "earth", 0.0, "lt+s", "mars") =#
-#=     npt.@test_array_almost_equal(point, [5850.44947427, 509.68837118, -2480.24722673], decimal=4) =#
-#=     intercept = subsol("intercept", "earth", 0.0, "lt+s", "mars") =#
-#=     npt.@test_array_almost_equal(intercept, [5844.4362338, 509.16450054, -2494.39569089], decimal=4) =#
-#=     kclear() =#
-#= @testset "sumad" begin =#
-#=     @test sumad([1.0, 2.0, 3.0]) == 6.0 =#
-#= @testset "sumai" begin =#
-#=     @test sumai([1, 2, 3]) == 6 =#
-#= @testset "surfnm" begin =#
-#=     point = [0.0, 0.0, 3.0] =#
-#=     npt.@test_array_almost_equal(surfnm(1.0, 2.0, 3.0, point), [0.0, 0.0, 1.0]) =#
+    @testset "sumad" begin
+        array = [1.0, 2.0, 3.0]
+        @test sum(array) == SPICE._sumad(array)
+    end
+    @testset "sumai" begin
+        array = [1, 2, 3]
+        @test sum(array) == SPICE._sumai(array)
+    end
+    @testset "surfnm" begin
+        normal = surfnm(1.0, 1.0, 1.0, [1.0, 0.0, 0.0])
+        @test normal == [1.0, 0.0, 0.0]
+    end
     @testset "surfpt" begin
         position = [2.0, 0.0, 0.0]
         u = [-1.0, 0.0, 0.0]
         point = surfpt(position, u, 1.0, 2.0, 3.0)
         @test point ≈ [1.0, 0.0, 0.0]
     end
-
-
-#= @testset "surfpv" begin =#
-#=     stvrtx = [2.0, 0.0, 0.0, 0.0, 0.0, 3.0] =#
-#=     stdir = [-1.0, 0.0, 0.0, 0.0, 0.0, 4.0] =#
-#=     stx = surfpv(stvrtx, stdir, 1.0, 2.0, 3.0) =#
-#=     expected = [1.0, 0.0, 0.0, 0.0, 0.0, 7.0] =#
-#=     npt.@test_array_almost_equal(expected, stx) =#
-#= @testset "swpool" begin =#
-#=     kclear() =#
-#=     # add TEST_VAR_SWPOOL =#
-#=     pdpool("TEST_VAR_SWPOOL", [-666.0]) =#
-#=     # establish check for TEST_VAR_SWPOOL =#
-#=     swpool("TEST_SWPOOL", 1, 16, ["TEST_VAR_SWPOOL"]) =#
-#=     # update TEST_VAR_SWPOOL =#
-#=     pdpool("TEST_VAR_SWPOOL", [555.0]) =#
-#=     # check for updated variable =#
-#=     updated = cvpool("TEST_SWPOOL") =#
-#=     value = gdpool("TEST_VAR_SWPOOL", 0, 1) =#
-#=     @test len(value) == 1 =#
-#=     @test value[0] == 555.0 =#
-#=     clpool() =#
-#=     kclear() =#
-#=     @test updated is True =#
-#= @testset "sxform" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     lon = 118.25 * rpd() =#
-#=     lat = 34.05 * rpd() =#
-#=     alt = 0.0 =#
-#=     utc = "January 1, 1990" =#
-#=     et = str2et(utc) =#
-#=     len, abc = bodvrd("EARTH", "RADII", 3) =#
-#=     equatr = abc[0] =#
-#=     polar = abc[2] =#
-#=     f = (equatr - polar) / equatr =#
-#=     estate = georec(lon, lat, alt, equatr, f) =#
-#=     estate = append(estate, [0.0, 0.0, 0.0]) =#
-#=     xform = array(sxform("IAU_EARTH", "J2000", et)) =#
-#=     kclear() =#
-#=     jstate = dot(xform, estate) =#
-#=     expected = array([-4131.45969, -3308.36805, 3547.02462, 0.241249619, -0.301019201, 0.000234215666]) =#
-#=     npt.@test_array_almost_equal(jstate, expected, decimal=4) =#
-#= @testset "sxform_vectorized" begin =#
-#=     kclear() =#
-#=     furnsh(CoreKernels.testMetaKernel) =#
-#=     utc1 = "January 1, 1990" =#
-#=     utc2 = "January 1, 2010" =#
-#=     et1 = str2et(utc1) =#
-#=     et2 = str2et(utc2) =#
-#=     step = (et2 - et1) / 240.0 =#
-#=     et = arange(240) * step + et1 =#
-#=     xform = sxform("IAU_EARTH", "J2000", et) =#
-#=     @test len(xform) == 240 =#
-#=     kclear() =#
-#= @testset "szpool" begin =#
-#=     @test szpool("MAXVAR") == 26003 =#
-#=     @test szpool("MAXLEN") == 32 =#
-#=     @test szpool("MAXVAL") == 400000 =#
-#=     @test szpool("MXNOTE") == 130015 =#
-#=     @test szpool("MAXAGT") == 1000 =#
-#=     @test szpool("MAXCHR") == 80 =#
-#=     @test szpool("MAXLIN") == 15000 =#
+    @testset "surfpv" begin
+        stvrtx = [2.0, 0.0, 0.0, 0.0, 0.0, 3.0]
+        stdir = [-1.0, 0.0, 0.0, 0.0, 0.0, 4.0]
+        stx = surfpv(stvrtx, stdir, 1.0, 2.0, 3.0)
+        expected = [1.0, 0.0, 0.0, 0.0, 0.0, 7.0]
+        @test expected ≈ stx
+    end
+    @testset "swpool" begin
+        try
+            # add TEST_VAR_SWPOOL
+            pdpool("TEST_VAR_SWPOOL", [-666.0])
+            # establish check for TEST_VAR_SWPOOL
+            swpool("TEST_SWPOOL", ["TEST_VAR_SWPOOL"])
+            # update TEST_VAR_SWPOOL
+            pdpool("TEST_VAR_SWPOOL", [555.0])
+            # check for updated variable
+            updated = cvpool("TEST_SWPOOL")
+            value = gdpool("TEST_VAR_SWPOOL")
+            @test length(value) == 1
+            @test value[1] == 555.0
+            @test updated
+        finally
+            clpool()
+            kclear()
+        end
+    end
+    @testset "sxform" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck))
+            lon = deg2rad(118.25)
+            lat = deg2rad(34.05)
+            alt = 0.0
+            utc = "January 1, 1990"
+            et = str2et(utc)
+            abc = bodvrd("EARTH", "RADII", 3)
+            equatr = abc[1]
+            polar = abc[3]
+            f = (equatr - polar) / equatr
+            estate = georec(lon, lat, alt, equatr, f)
+            estate = push!(estate, 0.0, 0.0, 0.0)
+            xform = sxform("IAU_EARTH", "J2000", et)
+            jstate = xform * estate
+            expected = [-4131.45969, -3308.36805, 3547.02462, 0.241249619, -0.301019201, 0.000234215666]
+            @test jstate ≈ expected
+        finally
+            kclear()
+        end
+    end
+    @testset "szpool" begin
+        @test szpool("MAXVAR") == 26003
+        @test szpool("MAXLEN") == 32
+        @test szpool("MAXVAL") == 400000
+        @test szpool("MXNOTE") == 130015
+        @test szpool("MAXAGT") == 1000
+        @test szpool("MAXCHR") == 80
+        @test szpool("MAXLIN") == 15000
+        @test szpool("NORBERT") === nothing
+    end
 end
 

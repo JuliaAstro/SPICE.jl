@@ -44,20 +44,55 @@ export
     spkobj,
     spkopa,
     spkopn,
+    spkpds,
     spkpos,
+    spkpvn,
     spksfs,
     spkssb,
     spksub,
     spksub!,
     spkuds,
     spkuef,
+    spkw02,
+    spkw03,
+    spkw05,
+    spkw08,
+    spkw09,
+    spkw10,
+    spkw12,
     spkw13,
+    spkw15,
+    spkw17,
+    spkw18,
+    spkw20,
+    srfc2s,
+    srfcss,
+    srfnrm,
+    srfrec,
+    srfs2c,
+    srfscc,
+    srfxpt,
+    ssize,
+    ssize!,
+    stelab,
+    stpool,
     str2et,
     subpnt,
+    subpt,
+    subpt_pl02,
     subslr,
+    subsol,
+    subsol_pl02,
+    sumad,
+    sumai,
+    surfnm,
     surfpt,
+    surfpv,
     swpool,
-    sxform
+    sxform,
+    szpool
+
+const SPICE_SRF_SFNMLN = 37
 
 """
     saelgv(vec1, vec2)
@@ -203,7 +238,7 @@ end
 
 Convert ephemeris seconds past J2000 (ET) to integral encoded spacecraft clock ("ticks").
 For conversion to fractional ticks, (required for C-kernel production), see the routine
-[sce2c](@ref).
+[`sce2c`](@ref).
 
 ### Arguments ###
 
@@ -669,7 +704,7 @@ end
     spk14a(handle, ncsets, coeffs, epochs)
 
 Add data to a type 14 SPK segment associated with `handle`.
-See also [spk14b](@ref) and [spk14e](@ref).
+See also [`spk14b`](@ref) and [`spk14e`](@ref).
 
 ### Arguments ###
 
@@ -693,7 +728,7 @@ end
     spk14b(handle, segid, body, center, frame, first, last, chbdeg)
 
 Begin a type 14 SPK segment in the SPK file associated with `handle`.
-See also [spk14a](@ref) and [spk14e](@ref).
+See also [`spk14a`](@ref) and [`spk14e`](@ref).
 
 ### Arguments ###
 
@@ -721,7 +756,7 @@ end
     spk14e(handle)
 
 End the type 14 SPK segment currently being written to the SPK file associated with `handle`.
-See also [spk14a](@ref) and [spk14b](@ref).
+See also [`spk14a`](@ref) and [`spk14b`](@ref).
 
 ### Arguments ###
 
@@ -819,8 +854,8 @@ state (position and velocity) of a target body relative to the observer, optiona
 light time and stellar aberration. All input and output vectors are expressed relative to an
 inertial reference frame.
 
-Users normally should call the high-level API routines [spkezr](@ref) or [spkez](@ref) rather than
-this routine.
+Users normally should call the high-level API routines [`spkezr`](@ref) or [`spkez`](@ref) rather
+than this routine.
 
 ### Arguments ###
 
@@ -1379,6 +1414,105 @@ function spkopn(name, ifname="", ncomch=0)
 end
 
 """
+    spkpds(body, center, frame, typ, first, last)
+
+Perform routine error checks and if all checks pass, pack the descriptor for an SPK segment.
+
+### Arguments ###
+
+- `body`: The NAIF ID code for the body of the segment
+- `center`: The center of motion for body
+- `frame`: The frame for this segment
+- `type`: The type of SPK segment to create
+- `first`: The first epoch for which the segment is valid
+- `last`: The last  epoch for which the segment is valid
+
+### Output ###
+
+Returns an SPK segment descriptor.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkpds_c.html)
+"""
+function spkpds(body, center, frame, typ, first, last)
+    descr = Array{SpiceDouble}(undef, 5)
+    ccall((:spkpds_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, Cstring, SpiceInt, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
+          body, center, frame, typ, first, last, descr)
+    handleerror()
+    descr
+end
+
+"""
+    spkpos(targ, et, ref, abcorr, obs)
+
+Return the position of a target body relative to an observing body, optionally corrected for
+light time (planetary aberration) and stellar aberration.
+
+### Arguments ###
+
+- `targ`: Target body name
+- `et`: Observer epoch
+- `ref`: Reference frame of output position vector
+- `abcorr`: Aberration correction flag
+- `obs`: Observing body name
+
+### Output ###
+
+- `ptarg`: Position of target
+- `lt`: One way light time between observer and target
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkpos_c.html)
+"""
+function spkpos(targ, et, ref, abcorr, obs)
+    starg = Array{SpiceDouble}(undef, 3)
+    lt = Ref{SpiceDouble}()
+    ccall((:spkpos_c, libcspice), Cvoid,
+          (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          targ, et, ref, abcorr, obs, starg, lt)
+    handleerror()
+    starg, lt[]
+end
+
+"""
+    spkpvn(handle, descr, et)
+
+For a specified SPK segment and time, return the state (position and velocity) of the segment's
+target body relative to its center of motion.
+
+### Arguments ###
+
+- `handle`: File handle
+- `descr`: Segment descriptor
+- `et`: Evaluation epoch
+
+### Output ###
+
+- `ref`: Segment reference frame ID code
+- `state`: Output state vector
+- `center`: Center of state
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkpvn_c.html)
+"""
+function spkpvn(handle, descr, et)
+    length(descr) != 5 && throw(ArgumentError("`descr` must have five elements."))
+    ref = Ref{SpiceInt}()
+    state = Array{SpiceDouble}(undef, 6)
+    center = Ref{SpiceInt}()
+    ccall((:spkpvn_c, libcspice), Cvoid,
+          (SpiceInt, Ptr{SpiceDouble}, SpiceDouble,
+           Ref{SpiceInt}, Ptr{SpiceDouble}, Ref{SpiceInt}),
+          handle, descr, et, ref, state, center)
+    handleerror()
+    ref[], state, center[]
+end
+
+"""
     spksfs(body, et)
 
 Search through loaded SPK files to find the highest-priority segment applicable to the body and
@@ -1533,81 +1667,740 @@ function spkuef(handle)
     ccall((:spkuef_c, libcspice), Cvoid, (SpiceInt,), handle)
 end
 
-function str2et(string)
-    et = Ref{SpiceDouble}(0)
-    ccall((:str2et_c, libcspice), Cvoid, (Cstring, Ref{SpiceDouble}), string, et)
-    handleerror()
-    et[]
-end
-
 """
-Returns the state of a target body relative to an observing body.
+    spkw02(handle, body, center, frame, first, last, segid, intlen, cdata, btime)
 
-- [NAIF documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkpos_c.html)
-"""
-function spkpos(targ::AbstractString, et::Float64, ref::AbstractString, obs::AbstractString; abcorr::AbstractString="NONE")
-    starg = Array{SpiceDouble}(undef, 3)
-    lt = Ref{SpiceDouble}(0)
-    ccall((:spkpos_c, libcspice), Cvoid, (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}), targ, et, ref, abcorr, obs, starg, lt)
-    handleerror()
-    return starg, lt[]
-end
-spkpos(targ::Int, et::Float64, ref::AbstractString, obs::Int; abcorr::AbstractString="NONE") = spkpos(string(targ), et, ref, string(obs), abcorr=abcorr)
-spkpos(targ::AbstractString, et::Float64, ref::AbstractString, obs::Int; abcorr::AbstractString="NONE") = spkpos(targ, et, ref, string(obs), abcorr=abcorr)
-spkpos(targ::Int, et::Float64, ref::AbstractString, obs::AbstractString; abcorr::AbstractString="NONE") = spkpos(string(targ), et, ref, obs, abcorr=abcorr)
-
-function spkw13(handle, body, center, frame, first, last, segid, degree, states, epochs)
-    n = length(epochs)
-    ccall(
-        (:spkw13_c, libcspice), Cvoid,
-        (Cint, Cint, Cint, Cstring, SpiceDouble, SpiceDouble, Cstring, Cint, Cint, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
-        handle[], body, center, frame, first, last, segid, degree, n, states, epochs
-    )
-    handleerror()
-end
-
-
-
-
-
-"""
-    subslr(method, target, et, fixref, obsrvr, abcorr)
-
-Compute the rectangular coordinates of the sub-solar point on
-a target body at a specified epoch, optionally corrected for
-light time and stellar aberration.
+Write a type 2 segment to an SPK file.
 
 ### Arguments ###
 
-- `method`: Computation method.
-- `target`: Name of target body.
-- `et`: Epoch in ephemeris seconds past J2000 TDB.
-- `fixref`: Body-fixed, body-centered target body frame.
-- `obsrvr`: Name of observing body.
-- `abcorr`: Aberration correction.
-
-### Output ###
-
-- `spoint`: Sub-solar point on the target body.
-- `trgepc`: Sub-solar point epoch.
-- `srfvec`: Vector from observer to sub-solar point.
-
-Returns `cell` with its cardinality set to `card`.
+- `handle`: Handle of an SPK file open for writing
+- `body`: Body code for ephemeris object
+- `center`: Body code for the center of motion of the body
+- `frame`: The reference frame of the states
+- `first`: First valid time for which states can be computed
+- `last`: Last valid time for which states can be computed
+- `segid`: Segment identifier
+- `intlen`: Length of time covered by logical record
+- `cdata`: Array of Chebyshev coefficients
+- `btime`: Begin time of first logical record
 
 ### References ###
 
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/subslr_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkw02_c.html)
 """
-function subslr(method, target, et, fixref, obsrvr; abcorr="NONE")
-    spoint = Array{SpiceDouble}(undef, 3)
-    trgepc = Ref{SpiceDouble}()
-    srfvec = Array{SpiceDouble}(undef, 3)
-    ccall((:subslr_c, libcspice), Cvoid,
-          (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring,
-           Ptr{SpiceDouble}, Ref{SpiceDouble}, Ptr{SpiceDouble}),
-          method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec)
+function spkw02(handle, body, center, frame, first, last, segid, intlen, cdata, btime)
+    coeffs = array_to_cmatrix(cdata)
+    m, n = size(coeffs)
+    polydg = m - 1
+    ccall((:spkw02_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring, SpiceDouble,
+           SpiceInt, SpiceInt, Ptr{SpiceDouble}, SpiceDouble),
+          handle, body, center, frame, first, last, segid, intlen,
+          n, polydg, coeffs, btime)
     handleerror()
-    spoint, trgepc[], srfvec
+end
+
+"""
+    spkw03(handle, body, center, frame, first, last, segid, intlen, cdata, btime)
+
+Write a type 3 segment to an SPK file.
+
+### Arguments ###
+
+- `handle`: Handle of an SPK file open for writing
+- `body`: Body code for ephemeris object
+- `center`: Body code for the center of motion of the body
+- `frame`: The reference frame of the states
+- `first`: First valid time for which states can be computed
+- `last`: Last valid time for which states can be computed
+- `segid`: Segment identifier
+- `intlen`: Length of time covered by logical record
+- `cdata`: Array of Chebyshev coefficients
+- `btime`: Begin time of first logical record
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkw03_c.html)
+"""
+function spkw03(handle, body, center, frame, first, last, segid, intlen, cdata, btime)
+    coeffs = array_to_cmatrix(cdata)
+    m, n = size(coeffs)
+    polydg = m ÷ 6 - 1
+    ccall((:spkw03_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring, SpiceDouble,
+           SpiceInt, SpiceInt, Ptr{SpiceDouble}, SpiceDouble),
+          handle, body, center, frame, first, last, segid, intlen,
+          n, polydg, coeffs, btime)
+    handleerror()
+end
+
+"""
+    spkw05(handle, body, center, frame, first, last, segid, gm, states, epochs)
+
+Write an SPK segment of type 5 given a time-ordered set of discrete states and epochs,
+and the gravitational parameter of a central body.
+
+### Arguments ###
+
+- `handle`: Handle of an SPK file open for writing
+- `body`: Body code for ephemeris object
+- `center`: Body code for the center of motion of the body
+- `frame`: The reference frame of the states
+- `first`: First valid time for which states can be computed
+- `last`: Last valid time for which states can be computed
+- `segid`: Segment identifier
+- `gm`: Gravitational parameter of central body
+- `states`: States
+- `epochs`: Epochs
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkw05_c.html)
+"""
+function spkw05(handle, body, center, frame, first, last, segid, gm, states, epochs)
+    n = length(states)
+    n != length(epochs) && throw(ArgumentError("`states` and `epochs` must have the same length."))
+    s = array_to_cmatrix(states, n=6)
+    ccall((:spkw05_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
+           SpiceDouble, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          handle, body, center, frame, first, last, segid,
+          gm, n, s, epochs)
+    handleerror()
+end
+
+"""
+    spkw08(handle, body, center, frame, first, last, segid, degree, states, epoch1, step)
+
+Write a type 8 segment to an SPK file.
+
+### Arguments ###
+
+- `handle`: Handle of an SPK file open for writing
+- `body`: Body code for ephemeris object
+- `center`: Body code for the center of motion of the body
+- `frame`: The reference frame of the states
+- `first`: First valid time for which states can be computed
+- `last`: Last valid time for which states can be computed
+- `segid`: Segment identifier
+- `degree`: Degree of interpolating polynomials
+- `states`: States
+- `epoch1`: Epoch of first state in states array
+- `step`: Time step separating epochs of states
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkw08_c.html)
+"""
+function spkw08(handle, body, center, frame, first, last, segid, degree, states, epoch1, step)
+    n = length(states)
+    s = array_to_cmatrix(states, n=6)
+    ccall((:spkw08_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
+           SpiceInt, SpiceInt, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble),
+          handle, body, center, frame, first, last, segid,
+          degree, n, s, epoch1, step)
+    handleerror()
+end
+
+"""
+    spkw09(handle, body, center, frame, first, last, segid, degree, states, epochs)
+
+Write a type 9 segment to an SPK file.
+
+### Arguments ###
+
+- `handle`: Handle of an SPK file open for writing
+- `body`: Body code for ephemeris object
+- `center`: Body code for the center of motion of the body
+- `frame`: The reference frame of the states
+- `first`: First valid time for which states can be computed
+- `last`: Last valid time for which states can be computed
+- `segid`: Segment identifier
+- `degree`: Degree of interpolating polynomials
+- `states`: States
+- `epochs`: Epochs
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkw09_c.html)
+"""
+function spkw09(handle, body, center, frame, first, last, segid, degree, states, epochs)
+    n = length(states)
+    n != length(epochs) && throw(ArgumentError("`states` and `epochs` must have the same length."))
+    s = array_to_cmatrix(states, n=6)
+    ccall((:spkw09_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
+           SpiceInt, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          handle, body, center, frame, first, last, segid,
+          degree, n, s, epochs)
+    handleerror()
+end
+
+"""
+    spkw10(handle, body, center, frame, first, last, segid, consts, elems, epochs)
+
+Write a type 10 segment to an SPK file.
+
+### Arguments ###
+
+- `handle`: The handle of a DAF file open for writing
+- `body`: The NAIF ID code for the body of the segment
+- `center`: The center of motion for body
+- `frame`: The reference frame for this segment
+- `first`: The first epoch for which the segment is valid
+- `last`: The last  epoch for which the segment is valid
+- `segid`: The string to use for segment identifier
+- `consts`: The array of geophysical constants for the segmen
+- `elems`: The collection of "two-line" element sets
+- `epochs`: The epochs associated with the element sets
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkw10_c.html)
+"""
+function spkw10(handle, body, center, frame, first, last, segid, consts, elems, epochs)
+    n = length(elems)
+    n != length(epochs) && throw(ArgumentError("`elems` and `epochs` must have the same length."))
+    ccall((:spkw10_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
+           Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          handle, body, center, frame, first, last, segid,
+          consts, n, elems, epochs)
+    handleerror()
+end
+
+"""
+    spkw12(handle, body, center, frame, first, last, segid, degree, states, epoch1, step)
+
+Write a type 12 segment to an SPK file.
+
+### Arguments ###
+
+- `handle`: Handle of an SPK file open for writing
+- `body`: Body code for ephemeris object
+- `center`: Body code for the center of motion of the body
+- `frame`: The reference frame of the states
+- `first`: First valid time for which states can be computed
+- `last`: Last valid time for which states can be computed
+- `segid`: Segment identifier
+- `degree`: Degree of interpolating polynomials
+- `states`: States
+- `epoch1`: Epoch of first state in states array
+- `step`: Time step separating epochs of states
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkw12_c.html)
+"""
+function spkw12(handle, body, center, frame, first, last, segid, degree, states, epoch1, step)
+    n = length(states)
+    s = array_to_cmatrix(states, n=6)
+    ccall((:spkw12_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
+           SpiceInt, SpiceInt, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble),
+          handle, body, center, frame, first, last, segid,
+          degree, n, s, epoch1, step)
+    handleerror()
+end
+
+"""
+    spkw13(handle, body, center, frame, first, last, segid, degree, states, epochs)
+
+Write a type 13 segment to an SPK file.
+
+### Arguments ###
+
+- `handle`: Handle of an SPK file open for writing
+- `body`: Body code for ephemeris object
+- `center`: Body code for the center of motion of the body
+- `frame`: The reference frame of the states
+- `first`: First valid time for which states can be computed
+- `last`: Last valid time for which states can be computed
+- `segid`: Segment identifier
+- `degree`: Degree of interpolating polynomials
+- `states`: States
+- `epochs`: Epochs
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkw13_c.html)
+"""
+function spkw13(handle, body, center, frame, first, last, segid, degree, states, epochs)
+    n = length(states)
+    n != length(epochs) && throw(ArgumentError("`states` and `epochs` must have the same length."))
+    s = array_to_cmatrix(states, n=6)
+    ccall((:spkw13_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
+           SpiceInt, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          handle, body, center, frame, first, last, segid,
+          degree, n, s, epochs)
+    handleerror()
+end
+
+"""
+    spkw15(handle, body, center, frame, first, last, segid,
+           epoch, tp, pa, p, ecc, j2flg, pv, gm, j2, radius)
+
+Write a type 15 segment to an SPK file.
+
+### Arguments ###
+
+- `handle`: Handle of an SPK file open for writing
+- `body`: Body code for ephemeris object
+- `center`: Body code for the center of motion of the body
+- `frame`: The reference frame of the states
+- `first`: First valid time for which states can be computed
+- `last`: Last valid time for which states can be computed
+- `segid`: Segment identifier
+- `epoch`: Epoch of the periapse
+- `tp`: Trajectory pole vector
+- `pa`: Periapsis vector
+- `p`: Semi-latus rectum
+- `ecc`: Eccentricity
+- `j2flg`: J2 processing flag
+- `pv`: Central body pole vector
+- `gm`: Central body GM
+- `j2`: Central body J2
+- `radius`: Equatorial radius of central body
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkw15_c.html)
+"""
+function spkw15(handle, body, center, frame, first, last, segid, epoch, tp, pa, p, ecc, j2flg, pv,
+                gm, j2, radius)
+    length(tp) != 3 && throw(ArgumentError("`tp` must have three elements."))
+    length(pa) != 3 && throw(ArgumentError("`pa` must have three elements."))
+    length(pv) != 3 && throw(ArgumentError("`pv` must have three elements."))
+    ccall((:spkw15_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
+           SpiceDouble, Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble,
+           SpiceDouble, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble, SpiceDouble),
+          handle, body, center, frame, first, last, segid,
+          epoch, tp, pa, p, ecc, j2flg, pv, gm, j2, radius)
+    handleerror()
+end
+
+"""
+    spkw17(handle, body, center, frame, first, last, segid, epoch, eqel, rapol, decpol)
+
+Write a type 17 segment to an SPK file.
+
+### Arguments ###
+
+- `handle`: Handle of an SPK file open for writing
+- `body`: Body code for ephemeris object
+- `center`: Body code for the center of motion of the body
+- `frame`: The reference frame of the states
+- `first`: First valid time for which states can be computed
+- `last`: Last valid time for which states can be computed
+- `segid`: Segment identifier
+- `epoch`: Epoch of elements in seconds past J2000
+- `eqel`: Array of equinoctial elements
+- `rapol`: Right Ascension of the pole of the reference plane
+- `decpol`: Declination of the pole of the reference plane
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkw17_c.html)
+"""
+function spkw17(handle, body, center, frame, first, last, segid, epoch, eqel, rapol, decpol)
+    length(eqel) != 9 && throw(ArgumentError("`eqel` must have nine elments."))
+    ccall((:spkw17_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
+           SpiceDouble, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble),
+          handle, body, center, frame, first, last, segid,
+          epoch, eqel, rapol, decpol)
+    handleerror()
+end
+
+"""
+    spkw18(handle, subtyp, body, center, frame, first, last, segid, degree, packts, epochs)
+
+Write a type 18 segment to an SPK file.
+
+### Arguments ###
+
+- `handle`: Handle of an SPK file open for writing
+- `subtyp`: SPK type 18 subtype code, either `:S18TP0` or `:S18TP1`
+- `body`: NAIF code for an ephemeris object
+- `center`: NAIF code for center of motion of body
+- `frame`: Reference frame name
+- `first`: Start time of interval covered by segment
+- `last`: End time of interval covered by segment
+- `segid`: Segment identifier
+- `degree`: Degree of interpolating polynomials
+- `packts`: Time-ordered array of data packets representing geometric states of body
+    - For `:S18TP0`: `[x,  y,  z,  dx/dt,  dy/dt,  dz/dt, vx, vy, vz, dvx/dt, dvy/dt, dvz/dt]`
+    - For `:S18TP1`: `[x,  y,  z,  dx/dt,  dy/dt,  dz/dt]`
+- `epochs`: Array of epochs corresponding to states.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkw18_c.html)
+"""
+function spkw18(handle, subtyp, body, center, frame, first, last, segid, degree, packts, epochs)
+    subtyp = subtyp == :S18TP0 ? 0 : subtyp == :S18TP1 ? 1 : throw(ArgumentError("Unknown `subtype`."))
+    n = length(packts)
+    n != length(epochs) && throw(ArgumentError("`packts` and `epochs` must have the same length."))
+    m = subtyp == :S18TP0 ? 12 : subtyp == :S18TP1 ? 6 : 0
+    packts = array_to_cmatrix(packts, n=m)
+    ccall((:spkw18_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
+           SpiceInt, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          handle, subtyp, body, center, frame, first, last, segid, degree, n, packts, epochs)
+    handleerror()
+end
+
+"""
+    spkw20(handle, body, center, frame, first, last, segid, intlen, n, polydg, cdata, dscale,
+           tscale, initjd, initfr)
+
+Write a type 20 segment to an SPK file.
+
+### Arguments ###
+
+- `handle`: Handle of SPK file open for writing
+- `body`: NAIF code for ephemeris object
+- `center`: NAIF code for the center of motion of the body
+- `frame`: Reference frame name
+- `first`: Start time of interval covered by segment
+- `last`: End time of interval covered by segment
+- `segid`: Segment identifier
+- `intlen`: Length of time covered by logical record (days)
+- `cdata`: Array of Chebyshev coefficients and positions
+- `dscale`: Distance scale of data
+- `tscale`: Time scale of data
+- `initjd`: Integer part of begin time (TDB Julian date) of first record
+- `initfr`: Fractional part of begin time (TDB Julian date) of first record
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkw20_c.html)
+"""
+function spkw20(handle, body, center, frame, first, last, segid, intlen, cdata, dscale,
+                tscale, initjd, initfr)
+    n = length(cdata)
+    polydg = length(cdata[1]) ÷ 3 - 2
+    cdata = array_to_cmatrix(cdata)
+    ccall((:spkw20_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
+           SpiceDouble, SpiceInt, SpiceInt, Ptr{SpiceDouble},
+           SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble),
+          handle, body, center, frame, first, last, segid,
+          intlen, n, polydg, cdata,
+          dscale, tscale, initjd, initfr)
+    handleerror()
+end
+
+"""
+    srfc2s(code, bodyid)
+
+Translate a surface ID code, together with a body ID code, to the corresponding surface name.
+If no such name exists, return a string representation of the surface ID code.
+
+### Arguments ###
+
+- `code`: Integer surface ID code to translate to a string
+- `bodyid`: ID code of body associated with surface
+
+### Output ###
+
+- `srfstr`: String corresponding to surface ID code
+- `isname`: Logical flag indicating output is a surface name
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/srfc2s_c.html)
+"""
+function srfc2s(code, bodyid)
+    srfstr = Array{SpiceChar}(undef, SPICE_SRF_SFNMLN)
+    isname = Ref{SpiceBoolean}()
+    ccall((:srfc2s_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Ptr{SpiceChar}, Ref{SpiceBoolean}),
+          code, bodyid, SPICE_SRF_SFNMLN, srfstr, isname)
+    handleerror()
+    unsafe_string(pointer(srfstr)), Bool(isname[])
+end
+
+"""
+    srfcss(code, bodstr)
+
+Translate a surface ID code, together with a body string, to the corresponding surface name.
+If no such surface name exists, return a string representation of the surface ID code.
+
+### Arguments ###
+
+- `code`: Integer surface ID code to translate to a string
+- `bodstr`: Name or ID of body associated with surface
+
+### Output ###
+
+- `srfstr`: String corresponding to surface ID code
+- `isname`: Logical flag indicating output is a surface name
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/srfcss_c.html)
+"""
+function srfcss(code, bodstr)
+    srfstr = Array{SpiceChar}(undef, SPICE_SRF_SFNMLN)
+    isname = Ref{SpiceBoolean}()
+    ccall((:srfcss_c, libcspice), Cvoid,
+          (SpiceInt, Cstring, SpiceInt, Ptr{SpiceChar}, Ref{SpiceBoolean}),
+          code, bodstr, SPICE_SRF_SFNMLN, srfstr, isname)
+    handleerror()
+    unsafe_string(pointer(srfstr)), Bool(isname[])
+end
+
+"""
+    srfnrm(method, target, et, fixref, npts, srfpts)
+
+Map array of surface points on a specified target body to the corresponding unit length outward
+surface normal vectors.
+
+The surface of the target body may be represented by a triaxial ellipsoid or by topographic data
+provided by DSK files.
+
+### Arguments ###
+
+- `method`: Computation method
+- `target`: Name of target body
+- `et`: Epoch in TDB seconds past J2000 TDB
+- `fixref`: Body-fixed, body-centered target body frame
+- `srfpts`: Array of surface points
+
+### Output ###
+
+Returns an array of outward, unit length normal vectors.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/srfnrm_c.html)
+"""
+function srfnrm(method, target, et, fixref, srfpts)
+    npts = length(srfpts)
+    srfpts = array_to_cmatrix(srfpts, n=3)
+    normls = similar(srfpts)
+    ccall((:srfnrm_c, libcspice), Cvoid,
+          (Cstring, Cstring, SpiceDouble, Cstring, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          method, target, et, fixref, npts, srfpts, normls)
+    handleerror()
+    cmatrix_to_array(normls)
+end
+
+"""
+    srfrec(body, longitude, latitude)
+
+Convert planetocentric latitude and longitude of a surface point on a specified body to rectangular
+coordinates.
+
+### Arguments ###
+
+- `body`: NAIF integer code of an extended body.
+- `longitude`: Longitude of point in radians.
+- `latitude`: Latitude of point in radians.
+
+### Output ###
+
+Returns the rectangular coordinates of the point.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/srfrec_c.html)
+"""
+function srfrec(body, longitude, latitude)
+    rectan = Array{SpiceDouble}(undef, 3)
+    ccall((:srfrec_c, libcspice), Cvoid,
+          (SpiceInt, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
+          body, longitude, latitude, rectan)
+    handleerror()
+    rectan
+end
+
+"""
+    srfs2c(srfstr, bodstr)
+
+Translate a surface string, together with a body string, to the corresponding surface ID code.
+The input strings may contain names or integer ID codes.
+
+### Arguments ###
+
+- `srfstr`: Surface name or ID string
+- `bodstr`: Body name or ID string
+
+### Output ###
+
+Returns the surface ID code if it was found or `nothing` otherwise.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/srfs2c_c.html)
+"""
+function srfs2c(srfstr, bodstr)
+    code = Ref{SpiceInt}()
+    found = Ref{SpiceBoolean}()
+    ccall((:srfs2c_c, libcspice), Cvoid,
+          (Cstring, Cstring, Ref{SpiceInt}, Ref{SpiceBoolean}),
+          srfstr, bodstr, code, found)
+    handleerror()
+    Bool(found[]) || return nothing
+    code[]
+end
+
+"""
+    srfscc(srfstr, bodyid)
+
+Translate a surface string, together with a body ID code, to the corresponding surface ID code.
+The input surface string may contain a name or an integer ID code.
+
+### Arguments ###
+
+- `srfstr`: Surface name or ID string
+- `bodyid`: Body ID code.
+
+### Output ###
+
+Returns the surface ID code if it was found or `nothing` otherwise.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/srfscc_c.html)
+"""
+function srfscc(srfstr, bodyid)
+    code = Ref{SpiceInt}()
+    found = Ref{SpiceBoolean}()
+    ccall((:srfscc_c, libcspice), Cvoid,
+          (Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceBoolean}),
+          srfstr, bodyid, code, found)
+    handleerror()
+    Bool(found[]) || return nothing
+    code[]
+end
+
+@deprecate srfxpt sincpt
+
+"""
+    srfxpt
+
+!!! warning Deprecated
+    Use `sincpt` instead.
+"""
+srfxpt
+
+"""
+    ssize!(cell, size)
+
+Set the size (maximum cardinality) of a cell of any data type.
+
+### Arguments ###
+
+- `cell`: The cell
+- `size`: Size (maximum cardinality) of the cell
+
+### Output ###
+
+Returns the updated cell.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ssize_c.html)
+"""
+function ssize!(cell::SpiceCell{T}, size) where T
+    ccall((:ssize_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{T}}), size, cell.cell)
+    handleerror()
+    cell
+end
+
+@deprecate ssize ssize!
+
+"""
+    stelab(pobj, vobs)
+
+Correct the apparent position of an object for stellar aberration.
+
+### Arguments ###
+
+- `pobj`: Position of an object with respect to the observer
+- `vobs`: Velocity of the observer with respect to the Solar System barycenter
+
+### Output ###
+
+Returns the apparent position of the object with respect to the observer, corrected for stellar aberration.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/stelab_c.html)
+"""
+function stelab(pobj, vobs)
+    length(pobj) != 3 && throw(ArgumentError("`pobj` must have three elements."))
+    length(vobs) != 3 && throw(ArgumentError("`vobs` must have three elements."))
+    appobj = Array{SpiceDouble}(undef, 3)
+    ccall((:stelab_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          pobj, vobs, appobj)
+    handleerror()
+    appobj
+end
+
+"""
+    stpool(item, nth, contin, lenout=1024)
+
+Retrieve the nth string from the kernel pool variable, where the string may be continued across
+several components of the kernel pool variable.
+
+### Arguments ###
+
+- `item`: Name of the kernel pool variable
+- `nth`: Index of the full string to retrieve
+- `contin`: Character sequence used to indicate continuation
+- `lenout`: Available space in output string (default: 1024)
+
+### Output ###
+
+Returns the full string concatenated across continuations if the kernel variable was found or
+`nothing` otherwise.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/stpool_c.html)
+"""
+function stpool(item, nth, contin, lenout=1024)
+    string = Array{SpiceChar}(undef, lenout)
+    size = Ref{SpiceInt}()
+    found = Ref{SpiceBoolean}()
+    ccall((:stpool_c, libcspice), Cvoid,
+          (Cstring, SpiceInt, Cstring, SpiceInt, Ptr{SpiceChar}, Ref{SpiceInt}, Ref{SpiceBoolean}),
+          item, nth - 1, contin, lenout, string, size, found)
+    handleerror()
+    unsafe_string(pointer(string))
+end
+
+"""
+    str2et(str)
+
+Convert a string representing an epoch to a double precision value representing the number of TDB
+seconds past the J2000 epoch corresponding to the input epoch.
+
+### Arguments ###
+
+- `str`: A string representing an epoch
+
+### Output ###
+
+Returns the equivalent value in seconds past J2000, TDB.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/str2et_c.html)
+"""
+function str2et(str)
+    et = Ref{SpiceDouble}()
+    ccall((:str2et_c, libcspice), Cvoid, (Cstring, Ref{SpiceDouble}), str, et)
+    handleerror()
+    et[]
 end
 
 """
@@ -1648,6 +2441,145 @@ function subpnt(method, target, et, fixref, obsrvr; abcorr="NONE")
     spoint, trgepc[], srfvec
 end
 
+@deprecate subpt subpnt
+
+"""
+    subpt
+
+!!! warning Deprecated
+    Use `subpnt` instead.
+"""
+subpt
+
+@deprecate subpt_pl02 subpnt
+
+"""
+    subpt_pl02
+
+!!! warning Deprecated
+    Use `subpnt` instead.
+"""
+subpt_pl02
+
+"""
+    subslr(method, target, et, fixref, abcorr, obsrvr)
+
+Compute the rectangular coordinates of the sub-solar point on
+a target body at a specified epoch, optionally corrected for
+light time and stellar aberration.
+
+### Arguments ###
+
+- `method`: Computation method
+- `target`: Name of target body
+- `et`: Epoch in ephemeris seconds past J2000 TDB
+- `fixref`: Body-fixed, body-centered target body frame
+- `abcorr`: Aberration correction
+- `obsrvr`: Name of observing body
+
+### Output ###
+
+- `spoint`: Sub-solar point on the target body
+- `trgepc`: Sub-solar point epoch
+- `srfvec`: Vector from observer to sub-solar point
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/subslr_c.html)
+"""
+function subslr(method, target, et, fixref, abcorr, obsrvr)
+    spoint = Array{SpiceDouble}(undef, 3)
+    trgepc = Ref{SpiceDouble}()
+    srfvec = Array{SpiceDouble}(undef, 3)
+    ccall((:subslr_c, libcspice), Cvoid,
+          (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring,
+           Ptr{SpiceDouble}, Ref{SpiceDouble}, Ptr{SpiceDouble}),
+          method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec)
+    handleerror()
+    spoint, trgepc[], srfvec
+end
+
+@deprecate subsol subslr
+
+"""
+    subsol
+
+!!! warning Deprecated
+    Use `subslr` instead.
+"""
+subsol
+
+@deprecate subsol_pl02 subslr
+
+"""
+    subsol_pl02
+
+!!! warning Deprecated
+    Use `subslr` instead.
+"""
+subsol_pl02
+
+function _sumad(array)
+    n = length(array)
+    ccall((:sumad_c, libcspice), SpiceDouble, (Ptr{SpiceDouble}, SpiceInt), array, n)
+end
+
+@deprecate sumad sum
+
+"""
+    sumad(array)
+
+!!! warning Deprecated
+    Use `sum(array)` instead.
+"""
+sumad
+
+function _sumai(array)
+    n = length(array)
+    array = SpiceInt.(array)
+    ccall((:sumai_c, libcspice), SpiceInt, (Ptr{SpiceInt}, SpiceInt), array, n)
+end
+
+@deprecate sumai sum
+
+"""
+    sumai(array)
+
+!!! warning Deprecated
+    Use `sum(array)` instead.
+"""
+sumai
+
+"""
+    surfnm(a, b, c, point)
+
+Computes the outward-pointing, unit normal vector from a point on the surface of an ellipsoid.
+
+### Arguments ###
+
+- `a`: Length of the ellisoid semi-axis along the x-axis
+- `b`: Length of the ellisoid semi-axis along the y-axis
+- `c`: Length of the ellisoid semi-axis along the z-axis
+- `point`: Body-fixed coordinates of a point on the ellipsoid
+
+### Output ###
+
+Return the outward pointing unit normal to ellipsoid at point
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/surfnm_c.html)
+"""
+function surfnm(a, b, c, point)
+    length(point) != 3 && throw(ArgumentError("`point` must have three elements."))
+    normal = Array{SpiceDouble}(undef, 3)
+    ccall((:surfnm_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          a, b, c, point, normal)
+    handleerror()
+    normal
+end
+
 """
     surfpt(positn, u, a, b, c)
 
@@ -1685,6 +2617,42 @@ function surfpt(positn, u, a, b, c)
 end
 
 """
+    surfpv(stvrtx, stdir, a, b, c)
+
+Find the state (position and velocity) of the surface intercept defined by a specified ray,
+ray velocity, and ellipsoid.
+
+### Arguments ###
+
+- `stvrtx`: State of ray's vertex
+- `stdir`: State of ray's direction vector
+- `a`: Length of ellipsoid semi-axis along the x-axis
+- `b`: Length of ellipsoid semi-axis along the y-axis
+- `c`: Length of ellipsoid semi-axis along the z-axis
+
+### Output ###
+
+Return the state of surface intercept or `nothing` if none was found.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/surfpv_c.html)
+"""
+function surfpv(stvrtx, stdir, a, b, c)
+    length(stvrtx) != 6 && throw(ArgumentError("`stvrtx` must have six elements."))
+    length(stdir) != 6 && throw(ArgumentError("`stdir` must have six elements."))
+    stx = Array{SpiceDouble}(undef, 6)
+    found = Ref{SpiceBoolean}()
+    ccall((:surfpv_c, libcspice), Cvoid,
+          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble, SpiceDouble,
+           Ptr{SpiceDouble}, Ref{SpiceBoolean}),
+          stvrtx, stdir, a, b, c, stx, found)
+    handleerror()
+    Bool(found[]) || return nothing
+    stx
+end
+
+"""
     swpool(agent, names)
 
 Add a name to the list of agents to notify whenever a member of a list of kernel variables is updated.
@@ -1703,17 +2671,60 @@ function swpool(agent, names)
     ccall((:swpool_c, libcspice), Cvoid, (Cstring, SpiceInt, SpiceInt, Ptr{SpiceChar}),
           agent, m, n, names)
     handleerror()
-    nothing
 end
 
 """
+    sxform(from, to, et)
+
 Return the state transformation matrix from one frame to another at a specified epoch.
 
-https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sxform_c.html
+### Arguments ###
+
+- `from`: Name of the frame to transform from
+- `to`: Name of the frame to transform to
+- `et`: Epoch of the state transformation matrix
+
+### Output ###
+
+Returns the state transformation matrix.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/sxform_c.html)
 """
-function sxform(from::String, to::String, et::Float64)
+function sxform(from, to, et)
     rot = Array{SpiceDouble}(undef, 6, 6)
-    ccall((:sxform_c, libcspice), Cvoid, (Cstring, Cstring, SpiceDouble, Ptr{SpiceDouble}), from, to, et, rot)
+    ccall((:sxform_c, libcspice), Cvoid,
+          (Cstring, Cstring, SpiceDouble, Ptr{SpiceDouble}),
+          from, to, et, rot)
     handleerror()
-    return rot
+    permutedims(rot)
 end
+
+"""
+    szpool(name)
+
+Return the kernel pool size limitations.
+
+### Arguments ###
+
+- `name`: Name of the parameter to be returned
+
+### Output ###
+
+Returns the value of the parameter specified by `name` or `nothing` if none was found.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/szpool_c.html)
+"""
+function szpool(name)
+    n = Ref{SpiceInt}()
+    found = Ref{SpiceBoolean}()
+    ccall((:szpool_c, libcspice), Cvoid,
+          (Cstring, Ref{SpiceInt}, Ref{SpiceBoolean}),
+          name, n, found)
+    Bool(found[]) || return nothing
+    n[]
+end
+

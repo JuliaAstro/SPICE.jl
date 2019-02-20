@@ -173,13 +173,13 @@ Returns an array of surface points
 """
 function latsrf(method, target, et, fixref, lonlat)
     npts = length(lonlat)
-    lonlat = permutedims(hcat(collect.(lonlat)...))
-    srfpts = Matrix{SpiceDouble}(undef, npts, 3)
+    lonlat = array_to_cmatrix(lonlat, n=2)
+    srfpts = Matrix{SpiceDouble}(undef, 3, npts)
     ccall((:latsrf_c, libcspice), Cvoid,
           (Cstring, Cstring, SpiceDouble, Cstring, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
           method, target, et, fixref, npts, lonlat, srfpts)
     handleerror()
-    [srfpts[i, :] for i in 1:size(srfpts,1)]
+    cmatrix_to_array(srfpts)
 end
 
 _lcase(in) = _lcase(in,length(in)+1)

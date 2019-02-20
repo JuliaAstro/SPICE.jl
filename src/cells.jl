@@ -1,5 +1,5 @@
 import Base: getindex, push!, append!, show, length, size
-export SpiceIntCell, SpiceDoubleCell, SpiceCharCell, appnd, push!, append!, card, length, copy
+export SpiceIntCell, SpiceDoubleCell, SpiceCharCell, appnd, push!, append!, card, length, copy, size_c
 
 const CTRLSZ = 6
 
@@ -188,4 +188,11 @@ function Base.copy(cell::SpiceCharCell)
     ccall((:copy_c, libcspice), Cvoid, (Ref{Cell{SpiceChar}}, Ref{Cell{SpiceChar}}), cell.cell, copy.cell)
     copy
 end
+
+"""
+    size_c(cell::SpiceCell)
+
+Returns the maximum number of elements that `cell` can hold.
+"""
+size_c(cell) = cell.cell.size
 

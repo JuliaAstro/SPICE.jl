@@ -57,13 +57,17 @@
         end
     end
 
-    kclear()
-    furnsh(path(EXTRA, :phobos_dsk))
-    let srfpts = latsrf("DSK/UNPRIORITIZED", "phobos", 0.0, "iau_phobos", [0.0 45.0; 60.0 45.0])
-        radii = [recrad(pt)[1] for pt in srfpts]
-        @test radii[1] > 9.77
-        @test radii[2] > 9.51
-        kclear()
+    @testset "latsrf" begin
+        try
+            furnsh(path(EXTRA, :phobos_dsk))
+            srfpts = latsrf("DSK/UNPRIORITIZED", "phobos", 0.0, "iau_phobos", [[0.0, 45.0], [60.0, 45.0]])
+            exp = [[5.133275926562611, 0.0, 8.314752992062171],
+                   [-4.7599529519301935, -1.5233771961641391, 8.095284144837816]]
+            @test srfpts[1] ≈ exp[1]
+            @test srfpts[2] ≈ exp[2]
+        finally
+            kclear()
+        end
     end
 
     @test SPICE._lcase("THIS IS AN EXAMPLE") == "this is an example"

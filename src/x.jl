@@ -1,4 +1,5 @@
-export xf2eul,
+export
+    xf2eul,
     xf2rav,
     xfmsta,
     xpose6,
@@ -33,7 +34,7 @@ function xf2eul(xform, axisa, axisb, axisc)
     unique = Ref{SpiceBoolean}()
     ccall((:xf2eul_c, libcspice), Cvoid,
           (Ptr{SpiceDouble}, SpiceInt, SpiceInt, SpiceInt, Ptr{SpiceDouble}, Ref{SpiceBoolean}),
-          permutedims(xform), axisa, axisb, axisc, eulang, unique)
+          xform, axisa, axisb, axisc, eulang, unique)
     handleerror()
     eulang, Bool(unique[])
 end
