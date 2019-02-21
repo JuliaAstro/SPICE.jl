@@ -1863,6 +1863,7 @@ Write a type 10 segment to an SPK file.
 function spkw10(handle, body, center, frame, first, last, segid, consts, elems, epochs)
     n = length(elems)
     n != length(epochs) && throw(ArgumentError("`elems` and `epochs` must have the same length."))
+    elems = array_to_cmatrix(elems, n=10)
     ccall((:spkw10_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
            Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),

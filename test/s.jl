@@ -753,8 +753,8 @@ using LinearAlgebra: I, norm, cross, normalize
                    "2 18123  98.8241 172.5226 0015362 109.1515 251.1323 14.12915487 24626",
                    "1 18123U 87 53  A 87349.04167543  .00000042  00000-0  27370-4 0 00764",
                    "2 18123  98.8301 176.1010 0015565 100.0881 260.2047 14.12916361 25138"]
-            epochs = []
-            elems = []
+            epochs = Float64[]
+            elems = Array{Float64}[]
             for lines in zip(tle[1:2:end], tle[2:2:end])
                 epoch, ele = getelm(1950, lines)
                 push!(epochs, epoch)
