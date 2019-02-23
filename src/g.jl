@@ -37,7 +37,7 @@ function gcpool(name; start=1, room=100, lenout=128)
           name, start - 1, room, lenout, n, values, found)
     handleerror()
     if Bool(found[])
-        return [unsafe_string(pointer(values[:,i])) for i in 1:n[]]
+        return String[unsafe_string(pointer(values[:,i])) for i in 1:n[]]
     end
     nothing
 end

@@ -1,11 +1,294 @@
 export
+    dafac,
+    dafbbs,
+    dafbfs,
+    dafcls,
+    dafcs,
+    dafdc,
+    dafec,
+    daffna,
+    daffpa,
+    dafgda,
+    dafopr,
+    dafopw,
     dtpool
 
 """
+    dafac(handle, buffer)
+
+Add comments from a buffer of character strings to the comment area of a binary DAF file, appending
+them to any comments which are already present in the file's comment area.
+
+### Arguments ###
+
+- `handle`: Handle of a DAF opened with write access
+- `buffer`: Buffer of comments to put into the comment area
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafac_c.html)
+"""
+function dafac(handle, buffer)
+    buffer, n, lenvals = chararray(buffer)
+    ccall((:dafac_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Ptr{SpiceChar}),
+          handle, n, lenvals, buffer)
+    handleerror()
+end
+
+"""
+    dafbbs(handle)
+
+Begin a backward search for arrays in a DAF.
+
+### Arguments ###
+
+- `handle`: Handle of DAF to be searched
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafbbs_c.html)
+"""
+function dafbbs(handle)
+    ccall((:dafbbs_c, libcspice), Cvoid, (SpiceInt,), handle)
+    handleerror()
+end
+
+"""
+    dafbfs(handle)
+
+Begin a forward search for arrays in a DAF.
+
+### Arguments ###
+
+- `handle`: Handle of DAF to be searched
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafbfs_c.html)
+"""
+function dafbfs(handle)
+    ccall((:dafbfs_c, libcspice), Cvoid, (SpiceInt,), handle)
+    handleerror()
+end
+
+"""
+    dafcls(handle)
+
+Close the DAF associated with a given handle.
+
+### Arguments ###
+
+- `handle`: Handle of DAF to be closed
+
+### Output ###
+
+Returns the handle of the closed file.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafcls_c.html)
+"""
+function dafcls(handle)
+    ccall((:dafcls_c, libcspice), Cvoid, (SpiceInt,), handle)
+    handleerror()
+    handle
+end
+
+"""
+    dafcs(handle)
+
+Select a DAF that already has a search in progress as the one to continue searching.
+
+### Arguments ###
+
+- `handle`: Handle of DAF to continue searching
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafcs_c.html)
+"""
+function dafcs(handle)
+    ccall((:dafcs_c, libcspice), Cvoid, (SpiceInt,), handle)
+    handleerror()
+end
+
+"""
+    dafdc(handle)
+
+Delete the entire comment area of a specified DAF file.
+
+### Arguments ###
+
+- `handle`: The handle of a binary DAF opened for writing
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafdc_c.html)
+"""
+function dafdc(handle)
+    ccall((:dafdc_c, libcspice), Cvoid, (SpiceInt,), handle)
+    handleerror()
+end
+
+"""
+    dafec(handle; bufsiz=256, lenout=1024)
+
+Extract comments from the comment area of a binary DAF.
+
+### Arguments ###
+
+- `handle`: Handle of binary DAF opened with read access
+- `bufsiz`: Maximum size, in lines, of buffer (default: 256)
+- `lenout`: Length of strings in output buffer (default: 1024)
+
+### Output ###
+
+Returns a buffer where extracted comment lines are placed.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafec_c.html)
+"""
+function dafec(handle; bufsiz=256, lenout=1024)
+    n = Ref{SpiceInt}()
+    buffer = Array{SpiceChar}(undef, lenout, bufsiz)
+    done = Ref{SpiceBoolean}()
+    ccall((:dafec_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{SpiceChar}, Ref{SpiceBoolean}),
+          handle, bufsiz, lenout, n, buffer, done)
+    handleerror()
+    output = String[unsafe_string(pointer(buffer[:,i])) for i in 1:n[]]
+    while !Bool(done[])
+        buffer = Array{SpiceChar}(undef, lenout, bufsiz)
+        ccall((:dafec_c, libcspice), Cvoid,
+              (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{SpiceChar}, Ref{SpiceBoolean}),
+              handle, bufsiz, lenout, n, buffer, done)
+        handleerror()
+        append!(output, String[unsafe_string(pointer(buffer[:,i])) for i in 1:n[]])
+    end
+    output
+end
+
+"""
+    daffna()
+
+Find the next (forward) array in the current DAF.
+
+### Output ###
+
+Returns `true` if an array was found.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/daffna_c.html)
+"""
+function daffna()
+    found = Ref{SpiceBoolean}()
+    ccall((:daffna_c, libcspice), Cvoid, (Ref{SpiceBoolean},), found)
+    handleerror()
+    Bool(found[])
+end
+
+"""
+    daffpa()
+
+Find the previous (backward) array in the current DAF.
+
+### Output ###
+
+Returns `true` if an array was found.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/daffpa_c.html)
+"""
+function daffpa()
+    found = Ref{SpiceBoolean}()
+    ccall((:daffpa_c, libcspice), Cvoid, (Ref{SpiceBoolean},), found)
+    handleerror()
+    Bool(found[])
+end
+
+"""
+
+Read the double precision data bounded by two addresses within a DAF.
+
+### Arguments ###
+
+- `handle`: Handle of a DAF
+- `start, stop`: Initial, final address within file
+
+### Output ###
+
+Returns the data contained between `start` and `stop`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafgda_c.html)
+"""
+function dafgda(handle, start, stop)
+    data = Array{SpiceDouble}(undef, stop - start)
+    ccall((:dafgda_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Ptr{SpiceDouble}),
+          handle, start, stop, data)
+    handleerror()
+    data
+end
+
+"""
+    dafopr(fname)
+
+Open a DAF for subsequent read requests.
+
+### Arguments ###
+
+- `fname`: Name of DAF to be opened
+
+### Output ###
+
+Returns the handle assigned to DAF.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafopr_c.html)
+"""
+function dafopr(fname)
+    handle = Ref{SpiceInt}()
+    ccall((:dafopr_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}), fname, handle)
+    handleerror()
+    handle[]
+end
+
+"""
+    dafopw(fname)
+
+Open a DAF for subsequent write requests.
+
+### Arguments ###
+
+- `fname`: Name of DAF to be opened
+
+### Output ###
+
+Returns the handle assigned to DAF.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafopw_c.html)
+"""
+function dafopw(fname)
+    handle = Ref{SpiceInt}()
+    ccall((:dafopw_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}), fname, handle)
+    handleerror()
+    handle[]
+end
+
+"""
     dtpool(name)
-    
-Return the data about a kernel pool variable. 
- 
+
+Return the data about a kernel pool variable.
+
 ### Arguments ###
 
 - `name`: Name of the variable whose value is to be returned
@@ -30,6 +313,6 @@ function dtpool(name)
     vartype = Ref{Cchar}()
     ccall((:dtpool_c, libcspice), Cvoid, (Cstring, Ref{SpiceBoolean}, Ref{SpiceInt}, Ref{Cchar}),
           name, found, n, vartype)
-    handleerror() 
+    handleerror()
     n[], Symbol(Char(vartype[]))
 end

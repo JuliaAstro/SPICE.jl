@@ -383,7 +383,7 @@ function _reordc(iorder, array)
     ccall((:reordc_c, libcspice), Cvoid,
           (Ptr{SpiceInt}, SpiceInt, SpiceInt, Ptr{SpiceChar}),
           iorder, m, n, array)
-    [unsafe_string(pointer(array[:, i])) for i = 1:m]
+    String[unsafe_string(pointer(array[:, i])) for i = 1:m]
 end
 
 @deprecate reordc(iorder, array) array[iorder]
