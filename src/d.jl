@@ -9,6 +9,9 @@ export
     daffna,
     daffpa,
     dafgda,
+    dafgh,
+    dafgn,
+    dafgs,
     dafopr,
     dafopw,
     dtpool
@@ -211,6 +214,7 @@ function daffpa()
 end
 
 """
+    dafgda(handle, start, stop)
 
 Read the double precision data bounded by two addresses within a DAF.
 
@@ -235,6 +239,90 @@ function dafgda(handle, start, stop)
     handleerror()
     data
 end
+
+"""
+    dafgh()
+
+Return (get) the handle of the DAF currently being searched.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafgh_c.html)
+"""
+function dafgh()
+    handle = Ref{SpiceInt}()
+    ccall((:dafgh_c, libcspice), Cvoid, (Ref{SpiceInt},), handle)
+    handleerror()
+    handle[]
+end
+
+"""
+    dafgn(lenout=128)
+
+Return (get) the name for the current array in the current DAF.
+
+### Arguments ###
+
+- `lenout`: Length of array name string (default: 128)
+
+### Output ###
+
+Returns the name of the current array.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafgn_c.html)
+"""
+function dafgn(lenout=128)
+    name = Array{SpiceChar}(undef, lenout)
+    ccall((:dafgn_c, libcspice), Cvoid,
+          (SpiceInt, Ptr{SpiceChar}),
+          lenout, name)
+    handleerror()
+    name
+end
+
+"""
+    dafgs!(sum)
+
+Return (get) the summary for the current array in the current DAF and write it to `sum`.
+
+### Arguments ###
+
+- `sum`: An empty `Vector{Float64}` with the expected length
+
+### Output ###
+
+Returns the summary for the current array.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafgs_c.html)
+"""
+function dafgs!(array)
+    ccall((:dafgs_c, libcspice), Cvoid, (Ptr{SpiceDouble},), array)
+    handleerror()
+    array
+end
+
+"""
+    dafgs(lenout=128)
+
+Return (get) the summary for the current array in the current DAF.
+
+### Arguments ###
+
+- `lenout`: Length of output array (default: 128)
+
+### Output ###
+
+Returns the summary for the current array.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafgs_c.html)
+"""
+dafgs(lenout=128) = dafgs!(zeros(lenout))
 
 """
     dafopr(fname)

@@ -64,27 +64,31 @@
             kclear()
         end
     end
-    #= @testset "dafgh" begin =#
-    #=     kclear() =#
-    #=     handle = dafopr(CoreKernels.spk) =#
-    #=     dafbbs(handle) =#
-    #=     dafcs(handle) =#
-    #=     searchHandle = dafgh() =#
-    #=     @test searchHandle == handle =#
-    #=     dafcls(handle) =#
-    #=     kclear() =#
-    #= @testset "dafgn" begin =#
-    #=     kclear() =#
-    #=     handle = dafopr(CoreKernels.spk) =#
-    #=     dafbfs(handle) =#
-    #=     found = daffna() =#
-    #=     @test found =#
-    #=     out = dafgs(n=2) =#
-    #=     @test_array_almost_equal(out, [-9.46511378160646408796e+07,   3.15662463183953464031e+08]) =#
-    #=     outname = dafgn(100) =#
-    #=     @test outname == "DE-405" =#
-    #=     dafcls(handle) =#
-    #=     kclear() =#
+    @testset "dafgh" begin
+        try
+            handle = dafopr(path(CORE, :spk))
+            dafbbs(handle)
+            dafcs(handle)
+            search_handle = dafgh()
+            @test search_handle == handle
+        finally
+            kclear()
+        end
+    end
+    @testset "dafgn/dafgs" begin
+        try
+            handle = dafopr(path(CORE, :spk))
+            dafbfs(handle)
+            found = daffna()
+            @test found
+            out = dafgs(2)
+            @test out ≈ [-9.46511378160646408796e+07, 3.15662463183953464031e+08]
+            outname = dafgn(100)
+            @test outname == "DE-405"
+        finally
+            kclear()
+        end
+    end
     #= @testset "dafgs" begin =#
     #=     kclear() =#
     #=     handle = dafopr(CoreKernels.spk) =#
