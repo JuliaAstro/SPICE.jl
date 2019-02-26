@@ -143,7 +143,7 @@ Insert character data into the kernel pool.
 function pcpool(name, vals)
     cvals, n, lenvals = chararray(vals)
     ccall((:pcpool_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, SpiceInt, Ptr{UInt8}),
+          (Cstring, SpiceInt, SpiceInt, Ref{UInt8}),
           name, n, lenvals, cvals)
     handleerror()
 end
@@ -164,7 +164,7 @@ Insert double precision data into the kernel pool.
 """
 function pdpool(name, vals)
     n = length(vals)
-    ccall((:pdpool_c, libcspice), Cvoid, (Cstring, SpiceInt, Ptr{SpiceDouble}), name, n, vals)
+    ccall((:pdpool_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{SpiceDouble}), name, n, vals)
     handleerror()
 end
 
@@ -193,7 +193,7 @@ Returns the rectangular coordinates of the point.
 function pgrrec(body, lon, lat, alt, re, f)
     rectan = Array{SpiceDouble}(undef, 3)
     ccall((:pgrrec_c, libcspice), Cvoid,
-          (Cstring, SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
+          (Cstring, SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
           body, lon, lat, alt, re, f, rectan)
     handleerror()
     rectan
@@ -248,7 +248,7 @@ Insert integer data into the kernel pool.
 function pipool(name, ivals)
     n = length(ivals)
     ccall((:pipool_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, Ptr{SpiceInt}),
+          (Cstring, SpiceInt, Ref{SpiceInt}),
           name, n, SpiceInt.(ivals))
     handleerror()
 end
@@ -305,7 +305,7 @@ function pl2nvc(plane)
     normal = Array{SpiceDouble}(undef, 3)
     constant = Ref{SpiceDouble}()
     ccall((:pl2nvc_c, libcspice), Cvoid,
-          (Ref{Plane}, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{Plane}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           plane, normal, constant)
     normal, constant[]
 end
@@ -334,7 +334,7 @@ function pl2nvp(plane)
     normal = Array{SpiceDouble}(undef, 3)
     point = Array{SpiceDouble}(undef, 3)
     ccall((:pl2nvp_c, libcspice), Cvoid,
-          (Ref{Plane}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{Plane}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           plane, normal, point)
     normal, point
 end
@@ -362,7 +362,7 @@ function pl2psv(plane)
     span1 = Array{SpiceDouble}(undef, 3)
     span2 = Array{SpiceDouble}(undef, 3)
     ccall((:pl2psv_c, libcspice), Cvoid,
-          (Ref{Plane}, Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{Plane}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           plane, point, span1, span2)
     point, span1, span2
 end
@@ -391,7 +391,7 @@ function pltar(vrtces, plates)
     vrtces = array_to_cmatrix(vrtces)
     plates = array_to_cmatrix(plates)
     res = ccall((:pltar_c, libcspice), SpiceDouble,
-                (SpiceInt, Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceInt}),
+                (SpiceInt, Ref{SpiceDouble}, SpiceInt, Ref{SpiceInt}),
                 nv, vrtces, np, plates)
     handleerror()
     res
@@ -420,7 +420,7 @@ function pltexp(iverts, delta)
     iverts = array_to_cmatrix(iverts)
     overts = Array{SpiceDouble}(undef, 3, 3)
     ccall((:pltexp_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceDouble, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble}),
           iverts, delta, overts)
     cmatrix_to_array(overts)
 end
@@ -455,8 +455,8 @@ function pltnp(point, v1, v2, v3)
     pnear = Array{SpiceDouble}(undef, 3)
     dist = Ref{SpiceDouble}()
     ccall((:pltnp_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble},
-           Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble},
+           Ref{SpiceDouble}, Ref{SpiceDouble}),
           point, v1, v2, v3, pnear, dist)
     pnear, dist[]
 end
@@ -486,7 +486,7 @@ function pltnrm(v1, v2, v3)
 
     normal = Array{SpiceDouble}(undef, 3)
     ccall((:pltnrm_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           v1, v2, v3, normal)
     normal
 end
@@ -515,7 +515,7 @@ function pltvol(vrtces, plates)
     vrtces = array_to_cmatrix(vrtces, n=3)
     plates = array_to_cmatrix(plates, n=3)
     res = ccall((:pltvol_c, libcspice), SpiceDouble,
-                (SpiceInt, Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceInt}),
+                (SpiceInt, Ref{SpiceDouble}, SpiceInt, Ref{SpiceInt}),
                 nv, vrtces, np, plates)
     handleerror()
     res
@@ -544,7 +544,7 @@ function polyds(coeffs, nderiv, t)
     deg = length(coeffs) - 1
     p = Array{SpiceDouble}(undef, nderiv + 1)
     ccall((:polyds_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceInt, SpiceInt, SpiceDouble, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, SpiceInt, SpiceInt, SpiceDouble, Ref{SpiceDouble}),
           coeffs, deg, nderiv, t, p)
     p
 end
@@ -609,7 +609,7 @@ function prop2b(gm, pvinit, dt)
     length(pvinit) != 6 && throw(ArgumentError("Length of `pvinit` must be 6."))
     pvprop = Array{SpiceDouble}(undef, 6)
     ccall((:prop2b_c, libcspice), Cvoid,
-          (SpiceDouble, Ptr{SpiceDouble}, SpiceDouble, Ptr{SpiceDouble}),
+          (SpiceDouble, Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble}),
           gm, pvinit, dt, pvprop)
     handleerror()
     pvprop
@@ -670,7 +670,7 @@ function psv2pl(point, span1, span2)
     length(span2) != 3 && throw(ArgumentError("Length of `span2` needs to be 3."))
     plane = Plane()
     ccall((:psv2pl_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ref{Plane}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{Plane}),
           point, span1, span2, plane)
     handleerror()
     plane
@@ -699,7 +699,7 @@ Returns the rotation matrix.
 function pxform(from, to, et)
     rot = Array{SpiceDouble}(undef, 3, 3)
     ccall((:pxform_c, libcspice), Cvoid,
-          (Cstring, Cstring, SpiceDouble, Ptr{SpiceDouble}),
+          (Cstring, Cstring, SpiceDouble, Ref{SpiceDouble}),
           from, to, et, rot)
     handleerror()
     permutedims(rot)
@@ -729,7 +729,7 @@ Returns a position transformation matrix from frame `from` to frame `to`.
 function pxfrm2(from, to, etfrom, etto)
     rot = Array{SpiceDouble}(undef, 3, 3)
     ccall((:pxfrm2_c, libcspice), Cvoid,
-          (Cstring, Cstring, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
+          (Cstring, Cstring, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
           from, to, etfrom, etto, rot)
     handleerror()
     permutedims(rot)

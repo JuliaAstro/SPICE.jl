@@ -34,7 +34,7 @@ function fovray(inst, raydir, rframe, abcorr, observer, et)
     length(raydir) != 3 && throw(ArgumentError("Length of `raydir` must be 3."))
     visible = Ref{SpiceBoolean}()
     ccall((:fovray_c, libcspice), Cvoid,
-          (Cstring, Ptr{SpiceDouble}, Cstring, Cstring, Cstring, Ref{SpiceDouble}, Ref{SpiceBoolean}),
+          (Cstring, Ref{SpiceDouble}, Cstring, Cstring, Cstring, Ref{SpiceDouble}, Ref{SpiceBoolean}),
           inst, raydir, rframe, abcorr, observer, et, visible)
     handleerror()
     Bool(visible[])
@@ -99,7 +99,7 @@ function frame(x)
     y = Array{SpiceDouble}(undef, 3)
     z = Array{SpiceDouble}(undef, 3)
     ccall((:frame_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           x, y, z)
     x, y, z
 end
@@ -159,7 +159,7 @@ Returns the name associated with the reference frame.
 function frmnam(frcode)
     lenout = 33
     frname = Array{UInt8}(undef, lenout)
-    ccall((:frmnam_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ptr{UInt8}),
+    ccall((:frmnam_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{UInt8}),
           frcode, lenout, frname)
     chararray_to_string(frname)
 end

@@ -107,7 +107,7 @@ Return the rectangular coordinates vector of the point.
 """
 function latrec(radius, lon, lat)
     rectan = Array{SpiceDouble}(undef, 3)
-    ccall((:latrec_c, libcspice), Cvoid, (SpiceDouble, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
+    ccall((:latrec_c, libcspice), Cvoid, (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
           radius, lon, lat, rectan)
     rectan
 end
@@ -176,7 +176,7 @@ function latsrf(method, target, et, fixref, lonlat)
     lonlat = array_to_cmatrix(lonlat, n=2)
     srfpts = Matrix{SpiceDouble}(undef, 3, npts)
     ccall((:latsrf_c, libcspice), Cvoid,
-          (Cstring, Cstring, SpiceDouble, Cstring, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Cstring, Cstring, SpiceDouble, Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           method, target, et, fixref, npts, lonlat, srfpts)
     handleerror()
     cmatrix_to_array(srfpts)
@@ -186,7 +186,7 @@ _lcase(in) = _lcase(in,length(in)+1)
 
 function _lcase(in,lenout)
     out = Array{UInt8}(undef, lenout)
-    ccall((:lcase_c, libcspice), Cvoid, (Cstring, SpiceInt, Ptr{UInt8}), in, lenout, out)
+    ccall((:lcase_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{UInt8}), in, lenout, out)
     handleerror()
     chararray_to_string(out)
 end
@@ -255,8 +255,8 @@ function lgrind(xvals, yvals, x)
     p = Ref{SpiceDouble}()
     dp = Ref{SpiceDouble}()
     work = Matrix{SpiceDouble}(undef,2,n)
-    ccall((:lgrind_c, libcspice), Cvoid, (SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble},
-          Ptr{SpiceDouble}, SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}), n, xvals, yvals, work, x, p, dp)
+    ccall((:lgrind_c, libcspice), Cvoid, (SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble},
+          Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}), n, xvals, yvals, work, x, p, dp)
     handleerror()
     p[], dp[]
 end
@@ -309,8 +309,8 @@ function limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec,
     tangts = Matrix{SpiceDouble}(undef, 3, maxn)
     ccall((:limbpt_c, libcspice), Cvoid,
           (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Cstring,
-          Ptr{SpiceDouble}, SpiceDouble, SpiceInt, SpiceDouble, SpiceDouble,
-          SpiceInt, Ptr{SpiceInt}, Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          Ref{SpiceDouble}, SpiceDouble, SpiceInt, SpiceDouble, SpiceDouble,
+          SpiceInt, Ref{SpiceInt}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           method, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp,
           ncuts, schstp, soltol, maxn, npts, points, epochs, tangts)
     handleerror()
@@ -337,7 +337,7 @@ None
 """
 function lmpool(cvals)
     cvals, n, lenvals = chararray(cvals)
-    ccall((:lmpool_c, libcspice), Cvoid, (Ptr{UInt8}, SpiceInt, SpiceInt), cvals, lenvals, n)
+    ccall((:lmpool_c, libcspice), Cvoid, (Ref{UInt8}, SpiceInt, SpiceInt), cvals, lenvals, n)
     handleerror()
 end
 
@@ -364,7 +364,7 @@ function lparse(list, delim, nmax)
     lenout = length(list)+1
     n = Ref{SpiceInt}()
     items = Array{UInt8}(undef, lenout, nmax)
-    ccall((:lparse_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}),
+    ccall((:lparse_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{UInt8}),
           list, delim, nmax, lenout, n , items)
     handleerror()
     chararray_to_string(items, n[])
@@ -394,7 +394,7 @@ lparsm(list, delims, nmax) = lparsm(list, delims, nmax, length(list)+1)
 function lparsm(list, delims, nmax, lenout)
     n = Ref{SpiceInt}()
     items = Array{UInt8}(undef, lenout, nmax)
-    ccall((:lparsm_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}),
+    ccall((:lparsm_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{UInt8}),
           list, delims, nmax, lenout, n , items)
     handleerror()
     chararray_to_string(items, n[])
@@ -490,7 +490,7 @@ lstle
 function lstle(string::AbstractString, array)
     n = length(array)
     array, n, lenvals = chararray(array)
-    out = ccall((:lstlec_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ptr{UInt8}),
+    out = ccall((:lstlec_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ref{UInt8}),
                 string, n, lenvals, array)
     handleerror()
     out + 1
@@ -499,7 +499,7 @@ end
 function lstle(x::AbstractFloat, array)
     n = length(array)
     array = Vector{SpiceDouble}(array)
-    out = ccall((:lstled_c, libcspice), SpiceInt, (SpiceDouble, SpiceInt, Ptr{SpiceDouble}),
+    out = ccall((:lstled_c, libcspice), SpiceInt, (SpiceDouble, SpiceInt, Ref{SpiceDouble}),
                 x, n, array)
     out + 1
 end
@@ -507,7 +507,7 @@ end
 function lstle(x::Signed, array)
     n = length(array)
     array = Vector{SpiceInt}(array)
-    out = ccall((:lstlei_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, Ptr{SpiceInt}),
+    out = ccall((:lstlei_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, Ref{SpiceInt}),
                 x, n, array)
     out + 1
 end
@@ -547,7 +547,7 @@ lstlt
 function lstlt(string::AbstractString, array)
     n = length(array)
     array, n, lenvals = chararray(array)
-    out = ccall((:lstltc_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ptr{UInt8}),
+    out = ccall((:lstltc_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ref{UInt8}),
                 string, n, lenvals, array)
     handleerror()
     out+1
@@ -556,7 +556,7 @@ end
 function lstlt(x::AbstractFloat, array)
     n = length(array)
     array = Vector{SpiceDouble}(array)
-    out = ccall((:lstltd_c, libcspice), SpiceInt, (SpiceDouble, SpiceInt, Ptr{SpiceDouble}),
+    out = ccall((:lstltd_c, libcspice), SpiceInt, (SpiceDouble, SpiceInt, Ref{SpiceDouble}),
                 x, n, array)
     out + 1
 end
@@ -564,7 +564,7 @@ end
 function lstlt(x::Signed, array)
     n = length(array)
     array = Vector{SpiceInt}(array)
-    out = ccall((:lstlti_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, Ptr{SpiceInt}),
+    out = ccall((:lstlti_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, Ref{SpiceInt}),
                 x, n, array)
     out + 1
 end

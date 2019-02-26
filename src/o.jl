@@ -132,7 +132,7 @@ function _orderc(array)
     array, ndim, lenvals = chararray(array)
     iorder = Array{SpiceInt}(undef, ndim)
     ccall((:orderc_c, libcspice), Cvoid,
-          (SpiceInt, Ptr{SpiceChar}, SpiceInt, Ptr{SpiceInt}),
+          (SpiceInt, Ref{SpiceChar}, SpiceInt, Ref{SpiceInt}),
           lenvals, array, ndim, iorder)
     handleerror()
     Int.(iorder) .+ 1
@@ -152,7 +152,7 @@ function _orderd(array)
     ndim = length(array)
     iorder = Array{SpiceInt}(undef, ndim)
     ccall((:orderd_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceInt}),
+          (Ref{SpiceDouble}, SpiceInt, Ref{SpiceInt}),
           array, ndim, iorder)
     handleerror()
     Int.(iorder) .+ 1
@@ -173,7 +173,7 @@ function _orderi(array)
     ndim = length(array)
     iorder = Array{SpiceInt}(undef, ndim)
     ccall((:orderi_c, libcspice), Cvoid,
-          (Ptr{SpiceInt}, SpiceInt, Ptr{SpiceInt}),
+          (Ref{SpiceInt}, SpiceInt, Ref{SpiceInt}),
           array, ndim, iorder)
     handleerror()
     Int.(iorder) .+ 1
@@ -222,7 +222,7 @@ function oscelt(state, et, mu)
     length(state) != 6 && throw(ArgumentError("`state` must have six elements."))
     elts = Array{SpiceDouble}(undef, 8)
     ccall((:oscelt_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
           state, et, mu, elts)
     handleerror()
     elts
@@ -265,7 +265,7 @@ function oscltx(state, et, mu)
     length(state) != 6 && throw(ArgumentError("`state` must have six elements."))
     elts = Array{SpiceDouble}(undef, 11)
     ccall((:oscltx_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
           state, et, mu, elts)
     handleerror()
     elts

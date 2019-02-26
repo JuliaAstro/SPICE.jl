@@ -46,7 +46,7 @@ Returns the rectangular coordinates of the point.
 function radrec(range, ra, dec)
     rectan = Array{SpiceDouble}(undef, 3)
     ccall((:radrec_c, libcspice), Cvoid,
-          (SpiceDouble, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
           range, ra, dec, rectan)
     rectan
 end
@@ -73,7 +73,7 @@ Returns state transformation matrix associated with `rot` and `av`.
 function rav2xf(rot, av)
     xform = Array{SpiceDouble}(undef, 6, 6)
     ccall((:rav2xf_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           permutedims(rot), av, xform)
     permutedims(xform)
 end
@@ -102,7 +102,7 @@ function raxisa(matrix)
     axis = Array{SpiceDouble}(undef, 3)
     angle = Ref{SpiceDouble}()
     ccall((:raxisa_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           permutedims(matrix), axis, angle)
     handleerror()
     axis, angle[]
@@ -133,7 +133,7 @@ function reccyl(rectan)
     lon = Ref{SpiceDouble}()
     z = Ref{SpiceDouble}()
     ccall((:reccyl_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           rectan, r, lon, z)
     r[], lon[], z[]
 end
@@ -166,7 +166,7 @@ function recgeo(rectan, re, f)
     lat = Ref{SpiceDouble}()
     alt = Ref{SpiceDouble}()
     ccall((:recgeo_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceDouble, SpiceDouble,
+          (Ref{SpiceDouble}, SpiceDouble, SpiceDouble,
            Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           rectan, re, f, lon, lat, alt)
     handleerror()
@@ -200,7 +200,7 @@ function reclat(rectan)
     lat = Ref{SpiceDouble}()
     rad = Ref{SpiceDouble}()
     ccall((:reclat_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           collect(rectan), rad, lon, lat)
     rad[], lon[], lat[]
 end
@@ -233,7 +233,7 @@ function recpgr(body, rectan, re, f)
     lat = Ref{SpiceDouble}()
     alt = Ref{SpiceDouble}()
     ccall((:recpgr_c, libcspice), Cvoid,
-          (Cstring, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble,
+          (Cstring, Ref{SpiceDouble}, SpiceDouble, SpiceDouble,
            Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           body, rectan, re, f, lon, lat, alt)
     handleerror()
@@ -267,7 +267,7 @@ function recrad(rectan)
     ra = Ref{SpiceDouble}()
     dec = Ref{SpiceDouble}()
     ccall((:recrad_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           rectan, range, ra, dec)
     range[], ra[], dec[]
 end
@@ -297,7 +297,7 @@ function recsph(rectan)
     colat = Ref{SpiceDouble}()
     lon = Ref{SpiceDouble}()
     ccall((:recsph_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           rectan, r, colat, lon)
     r[], colat[], lon[]
 end
@@ -381,7 +381,7 @@ function _reordc(iorder, array)
     iorder = SpiceInt.(iorder .- 1)
     array, m, n = chararray(array)
     ccall((:reordc_c, libcspice), Cvoid,
-          (Ptr{SpiceInt}, SpiceInt, SpiceInt, Ptr{SpiceChar}),
+          (Ref{SpiceInt}, SpiceInt, SpiceInt, Ref{SpiceChar}),
           iorder, m, n, array)
     chararray_to_string(array, m)
 end
@@ -400,7 +400,7 @@ function _reordd(iorder, array)
     iorder = SpiceInt.(iorder .- 1)
     n = length(iorder)
     ccall((:reordd_c, libcspice), Cvoid,
-          (Ptr{SpiceInt}, SpiceInt, Ptr{SpiceDouble}),
+          (Ref{SpiceInt}, SpiceInt, Ref{SpiceDouble}),
           iorder, n, array)
     array
 end
@@ -420,7 +420,7 @@ function _reordi(iorder, array)
     array = SpiceInt.(array)
     n = length(iorder)
     ccall((:reordi_c, libcspice), Cvoid,
-          (Ptr{SpiceInt}, SpiceInt, Ptr{SpiceInt}),
+          (Ref{SpiceInt}, SpiceInt, Ref{SpiceInt}),
           iorder, n, array)
     Int.(array)
 end
@@ -440,7 +440,7 @@ function _reordl(iorder, array)
     array = SpiceBoolean.(array)
     n = length(iorder)
     ccall((:reordl_c, libcspice), Cvoid,
-          (Ptr{SpiceInt}, SpiceInt, Ptr{SpiceBoolean}),
+          (Ref{SpiceInt}, SpiceInt, Ref{SpiceBoolean}),
           iorder, n, array)
     Bool.(array)
 end
@@ -459,7 +459,7 @@ function _repmc(input, marker, value)
     lenout = length(input) - length(marker) + length(value) + 1
     out = Array{SpiceChar}(undef, lenout)
     ccall((:repmc_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, SpiceInt, Ptr{SpiceChar}),
+          (Cstring, Cstring, Cstring, SpiceInt, Ref{SpiceChar}),
           input, marker, value, lenout, out)
     handleerror()
     chararray_to_string(out)
@@ -547,7 +547,7 @@ Returns rotation matrix associated with `angle` and `iaxis`.
 """
 function rotate(angle, iaxis)
     r = Matrix{SpiceDouble}(undef, 3, 3)
-    ccall((:rotate_c, libcspice), Cvoid, (SpiceDouble, SpiceInt, Ptr{SpiceDouble}), angle, iaxis, r)
+    ccall((:rotate_c, libcspice), Cvoid, (SpiceDouble, SpiceInt, Ref{SpiceDouble}), angle, iaxis, r)
     permutedims(r)
 end
 
@@ -575,7 +575,7 @@ function rotmat(m1, angle, iaxis)
     size(m1) != (3, 3) && throw(ArgumentError("`m1` must be 3x3 matrix."))
     mout = Array{SpiceDouble}(undef, 3, 3)
     ccall((:rotmat_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceDouble, SpiceInt, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, SpiceDouble, SpiceInt, Ref{SpiceDouble}),
           permutedims(m1), angle, iaxis, mout)
     permutedims(mout)
 end
@@ -604,7 +604,7 @@ function rotvec(v1, angle, iaxis)
     length(v1) != 3 && throw(ArgumentError("`v1` must have three elements."))
     vout = Array{SpiceDouble}(undef, 3)
     ccall((:rotvec_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceDouble, SpiceInt, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, SpiceDouble, SpiceInt, Ref{SpiceDouble}),
           v1, angle, iaxis, vout)
     vout
 end
@@ -641,7 +641,7 @@ function rquad(a, b, c)
     root1 = Array{SpiceDouble}(undef, 2)
     root2 = Array{SpiceDouble}(undef, 2)
     ccall((:rquad_c, libcspice), Cvoid,
-          (SpiceDouble, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}),
           a, b, c, root1, root2)
     handleerror()
     root1, root2

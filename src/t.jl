@@ -56,7 +56,7 @@ function timdef(action, item, value="")
     val = fill(UInt8(0), lenout)
     val[1:length(value)] .= collect(value)
     ccall((:timdef_c, libcspice), Cvoid,
-          (Cstring, Cstring, SpiceInt, Ptr{UInt8}),
+          (Cstring, Cstring, SpiceInt, Ref{UInt8}),
           string(action), string(item), lenout, val)
     handleerror()
     chararray_to_string(val)
@@ -86,7 +86,7 @@ Returns a string representation of the input epoch.
 function timout(et, pictur, lenout=128)
     string = Array{UInt8}(undef, lenout)
     ccall((:timout_c, libcspice), Cvoid,
-          (Cdouble, Cstring, Cint, Ptr{UInt8}),
+          (Cdouble, Cstring, Cint, Ref{UInt8}),
           et, pictur, lenout, string)
     handleerror()
     chararray_to_string(string)
@@ -115,7 +115,7 @@ Returns transformation matrix from intertial position to prime meridian.
 function tipbod(ref, body, et)
     tipm = Array{SpiceDouble}(undef, 3, 3)
     ccall((:tipbod_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, SpiceDouble, Ptr{SpiceDouble}),
+          (Cstring, SpiceInt, SpiceDouble, Ref{SpiceDouble}),
           ref, body, et, tipm)
     handleerror()
     permutedims(tipm)
@@ -143,7 +143,7 @@ Returns transformation matrix from intertial state to prime meridian.
 """
 function tisbod(ref, body, et)
     tsipm = Array{SpiceDouble}(undef, 6, 6)
-    ccall((:tisbod_c, libcspice), Cvoid, (Cstring, SpiceInt, SpiceDouble, Ptr{SpiceDouble}),
+    ccall((:tisbod_c, libcspice), Cvoid, (Cstring, SpiceInt, SpiceDouble, Ref{SpiceDouble}),
         ref, body, et, tsipm)
     handleerror()
     permutedims(tsipm)
@@ -186,7 +186,7 @@ function tparse(string)
     sp2000 = Ref{SpiceDouble}()
     errmsg = Array{UInt8}(undef, lenout)
     ccall((:tparse_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, Ref{SpiceDouble}, Ptr{UInt8}),
+          (Cstring, SpiceInt, Ref{SpiceDouble}, Ref{UInt8}),
           string, lenout, sp2000, errmsg)
     msg = chararray_to_string(errmsg)
     if !isempty(msg)
@@ -220,7 +220,7 @@ function tpictr(sample, lenout=80)
     ok = Ref{SpiceBoolean}()
     errmsg = Array{UInt8}(undef, lenerr)
     ccall((:tpictr_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, SpiceInt, Ptr{UInt8}, Ref{SpiceBoolean}, Ptr{UInt8}),
+          (Cstring, SpiceInt, SpiceInt, Ref{UInt8}, Ref{SpiceBoolean}, Ref{UInt8}),
           sample, lenout, lenerr, pictur, ok, errmsg)
     if !Bool(ok[])
         throw(SpiceError(chararray_to_string(errmsg)))
@@ -229,7 +229,7 @@ function tpictr(sample, lenout=80)
 end
 
 function _trace(matrix)
-    ccall((:trace_c, libcspice), SpiceDouble, (Ptr{SpiceDouble},), matrix)
+    ccall((:trace_c, libcspice), SpiceDouble, (Ref{SpiceDouble},), matrix)
 end
 
 """
@@ -300,7 +300,7 @@ function twovec(axdef, indexa, plndef, indexp)
     length(plndef) != 3 && throw(ArgumentError("`plndef` must be an iterable with three elements."))
     mout = Array{SpiceDouble}(undef, 3, 3)
     ccall((:twovec_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}),
           axdef, indexa, plndef, indexp, mout)
     handleerror()
     permutedims(mout)

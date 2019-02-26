@@ -119,7 +119,7 @@ function bodc2n(code)
     len = 36
     name = Array{UInt8}(undef, len)
     found = Ref{SpiceBoolean}()
-    ccall((:bodc2n_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ptr{UInt8}, Ref{SpiceBoolean}),
+    ccall((:bodc2n_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{UInt8}, Ref{SpiceBoolean}),
           code, 36, name, found)
     found[] == 0 && throw(SpiceError("No body with code $code found."))
     chararray_to_string(name)
@@ -146,7 +146,7 @@ the string representation of the body ID value.
 function bodc2s(code)
     len = 36
     name = Array{UInt8}(undef, len)
-    ccall((:bodc2s_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ptr{UInt8}),
+    ccall((:bodc2s_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{UInt8}),
           code, 36, name)
     chararray_to_string(name)
 end
@@ -268,7 +268,7 @@ function bodvcd(bodyid, item)
     maxn = 100
     values = Array{SpiceDouble}(undef, maxn)
     dim = Ref{SpiceInt}()
-    ccall((:bodvcd_c, libcspice), Cvoid, (SpiceInt, Cstring, SpiceInt, Ref{SpiceInt}, Ptr{SpiceDouble}),
+    ccall((:bodvcd_c, libcspice), Cvoid, (SpiceInt, Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceDouble}),
           bodyid, item, maxn, dim, values)
     handleerror()
     values[1:dim[]]
@@ -296,7 +296,7 @@ Fetch from the kernel pool the double precision values of an item associated wit
 function bodvrd(bodynm, item, maxn=100)
     values = Array{SpiceDouble}(undef, maxn)
     dim = Ref{SpiceInt}()
-    ccall((:bodvrd_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, Ref{SpiceInt}, Ptr{SpiceDouble}),
+    ccall((:bodvrd_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceDouble}),
           bodynm, item, maxn, dim, values)
     handleerror()
     values[1:dim[]]
@@ -336,7 +336,7 @@ function _bschoc(value, array, order)
     arr, m, n = chararray(array)
     ord = Array{SpiceInt}(order .- 1)
     idx = ccall((:bschoc_c, libcspice), SpiceInt,
-        (Cstring, SpiceInt, SpiceInt, Ptr{SpiceChar}, Ptr{SpiceInt}),
+        (Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}, Ref{SpiceInt}),
         value, m, n, arr, ord)
     handleerror()
     return idx == -1 ? idx : idx + 1
@@ -357,7 +357,7 @@ function _bschoi(value, array, order)
     n = length(arr)
     ord = Array{SpiceInt}(order .- 1)
     idx = ccall((:bschoi_c, libcspice), SpiceInt,
-        (SpiceInt, SpiceInt, Ptr{SpiceInt}, Ptr{SpiceInt}),
+        (SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}),
         value, n, arr, ord)
     handleerror()
     return idx == -1 ? idx : idx + 1
@@ -376,7 +376,7 @@ bschoi
 function _bsrchc(value, array)
     arr, m, n = chararray(array)
     idx = ccall((:bsrchc_c, libcspice), SpiceInt,
-        (Cstring, SpiceInt, SpiceInt, Ptr{SpiceChar}),
+        (Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}),
         value, m, n, arr)
     handleerror()
     return idx == -1 ? idx : idx + 1
@@ -396,7 +396,7 @@ function _bsrchd(value, array)
     arr = Array{SpiceDouble}(array)
     n = length(arr)
     idx = ccall((:bsrchd_c, libcspice), SpiceInt,
-        (SpiceDouble, SpiceInt, Ptr{SpiceDouble}),
+        (SpiceDouble, SpiceInt, Ref{SpiceDouble}),
         value, n, arr)
     handleerror()
     return idx == -1 ? idx : idx + 1
@@ -416,7 +416,7 @@ function _bsrchi(value, array)
     arr = Array{SpiceInt}(array)
     n = length(arr)
     idx = ccall((:bsrchi_c, libcspice), SpiceInt,
-        (SpiceInt, SpiceInt, Ptr{SpiceInt}),
+        (SpiceInt, SpiceInt, Ref{SpiceInt}),
         value, n, arr)
     handleerror()
     return idx == -1 ? idx : idx + 1

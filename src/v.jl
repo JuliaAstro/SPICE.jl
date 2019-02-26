@@ -40,7 +40,7 @@ export vadd,
 function _vadd(v1, v2)
     vout = Array{SpiceDouble}(undef, 3)
     ccall((:vadd_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           v1, v2, vout)
     vout
 end
@@ -59,7 +59,7 @@ function _vaddg(v1, v2)
     ndim = length(v1)
     vout = Array{SpiceDouble}(undef, ndim)
     ccall((:vaddg_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}),
           v1, v2, ndim, vout)
     vout
 end
@@ -102,7 +102,7 @@ end
 function _vcrss(v1, v2)
     vout = Array{SpiceDouble}(undef, 3)
     ccall((:vcrss_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}), v1, v2, vout)
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}), v1, v2, vout)
     vout
 end
 
@@ -118,7 +118,7 @@ vcrss
 
 function _vdist(v1, v2)
     ccall((:vdist_c, libcspice), SpiceDouble,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}), v1, v2)
+          (Ref{SpiceDouble}, Ref{SpiceDouble}), v1, v2)
 end
 
 """
@@ -134,7 +134,7 @@ vdist
 function _vdistg(v1, v2)
     ndim = length(v1)
     ccall((:vdistg_c, libcspice), SpiceDouble,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt), v1, v2, ndim)
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt), v1, v2, ndim)
 end
 
 """
@@ -149,7 +149,7 @@ vdistg
 
 function _vdot(v1, v2)
     ccall((:vdot_c, libcspice), SpiceDouble,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}), v1, v2)
+          (Ref{SpiceDouble}, Ref{SpiceDouble}), v1, v2)
 end
 
 """
@@ -165,7 +165,7 @@ vdot
 function _vdotg(v1, v2)
     ndim = length(v1)
     ccall((:vdotg_c, libcspice), SpiceDouble,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt), v1, v2, ndim)
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt), v1, v2, ndim)
 end
 
 """
@@ -180,7 +180,7 @@ vdotg
 
 function _vequ(v1, v2)
     ccall((:vequ_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}), v1, v2)
+          (Ref{SpiceDouble}, Ref{SpiceDouble}), v1, v2)
 end
 
 """
@@ -196,7 +196,7 @@ vequ
 function _vequg(v1, v2)
     ndim = length(v1)
     ccall((:vequg_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceDouble}), v1, ndim, v2)
+          (Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}), v1, ndim, v2)
 end
 
 """
@@ -212,7 +212,7 @@ vequg
 function _vhat(v1)
     vout = Array{SpiceDouble}(undef, 3)
     ccall((:vhat_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}), v1, vout)
+          (Ref{SpiceDouble}, Ref{SpiceDouble}), v1, vout)
     vout
 end
 
@@ -230,7 +230,7 @@ function _vhatg(v1)
     ndim = length(v1)
     vout = Array{SpiceDouble}(undef, ndim)
     ccall((:vhatg_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceDouble}), v1, ndim, vout)
+          (Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}), v1, ndim, vout)
     vout
 end
 
@@ -247,8 +247,8 @@ vhatg
 function _vlcom3(a, v1, b, v2, c, v3)
     sum = Array{SpiceDouble}(undef, 3)
     ccall((:vlcom3_c, libcspice), Cvoid,
-          (SpiceDouble, Ptr{SpiceDouble}, SpiceDouble, Ptr{SpiceDouble},
-           SpiceDouble, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (SpiceDouble, Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble},
+           SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}),
           a, v1, b, v2, c, v3, sum)
     sum
 end
@@ -266,7 +266,7 @@ vlcom3
 function _vlcom(a, v1, b, v2)
     sum = Array{SpiceDouble}(undef, 3)
     ccall((:vlcom_c, libcspice), Cvoid,
-          (SpiceDouble, Ptr{SpiceDouble}, SpiceDouble, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (SpiceDouble, Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}),
           a, v1, b, v2, sum)
     sum
 end
@@ -285,7 +285,7 @@ function _vlcomg(a, v1, b, v2)
     n = length(v1)
     sum = Array{SpiceDouble}(undef, n)
     ccall((:vlcomg_c, libcspice), Cvoid,
-          (SpiceInt, SpiceDouble, Ptr{SpiceDouble}, SpiceDouble, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (SpiceInt, SpiceDouble, Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}),
           n, a, v1, b, v2, sum)
     sum
 end
@@ -304,7 +304,7 @@ function _vminug(vin)
     n = length(vin)
     vout = Array{SpiceDouble}(undef, n)
     ccall((:vminug_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}),
           vin, n, vout)
     vout
 end
@@ -322,7 +322,7 @@ vminug
 function _vminus(vin)
     vout = Array{SpiceDouble}(undef, 3)
     ccall((:vminus_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}), vin, vout)
+          (Ref{SpiceDouble}, Ref{SpiceDouble}), vin, vout)
     vout
 end
 
@@ -337,7 +337,7 @@ vminus
 @deprecate vminus(vin) -vin
 
 function _vnorm(v1)
-    ccall((:vnorm_c, libcspice), SpiceDouble, (Ptr{SpiceDouble},), v1)
+    ccall((:vnorm_c, libcspice), SpiceDouble, (Ref{SpiceDouble},), v1)
 end
 
 """
@@ -353,7 +353,7 @@ vnorm
 function _vnormg(v1)
     ndim = length(v1)
     ccall((:vnormg_c, libcspice), SpiceDouble,
-          (Ptr{SpiceDouble}, SpiceInt), v1, ndim)
+          (Ref{SpiceDouble}, SpiceInt), v1, ndim)
 end
 
 """
@@ -369,7 +369,7 @@ vnormg
 function _vpack(x, y, z)
     v = Array{SpiceDouble}(undef, 3)
     ccall((:vpack_c, libcspice), Cvoid,
-          (SpiceDouble, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
           x, y, z, v)
     v
 end
@@ -405,7 +405,7 @@ Returns the component `a` orthogonal to `b`.
 function vperp(a, b)
     p = Array{SpiceDouble}(undef, 3)
     ccall((:vperp_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           a, b, p)
     p
 end
@@ -431,7 +431,7 @@ Returns the vector resulting from the projection.
 function vprjp(vin, plane)
     vout = Array{SpiceDouble}(undef, 3)
     ccall((:vprjp_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ref{Plane}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{Plane}, Ref{SpiceDouble}),
           vin, plane, vout)
     handleerror()
     vout
@@ -461,7 +461,7 @@ function vprjpi(vin, projpl, invpl)
     vout = Array{SpiceDouble}(undef, 3)
     found = Ref{SpiceBoolean}()
     ccall((:vprjpi_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ref{Plane}, Ref{Plane}, Ptr{SpiceDouble}, Ref{SpiceBoolean}),
+          (Ref{SpiceDouble}, Ref{Plane}, Ref{Plane}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
           vin, projpl, invpl, vout, found)
     handleerror()
     Bool(found[]) ? vout : nothing
@@ -488,7 +488,7 @@ Returns the projection of `a` onto `b`.
 function vproj(a, b)
     p = Array{SpiceDouble}(undef, 3)
     ccall((:vproj_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}), a, b, p)
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}), a, b, p)
     p
 end
 
@@ -511,7 +511,7 @@ Returns the relative differences between `v1` and `v2`.
 """
 function vrel(v1, v2)
     ccall((:vrel_c, libcspice), SpiceDouble,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}), v1, v2)
+          (Ref{SpiceDouble}, Ref{SpiceDouble}), v1, v2)
 end
 
 """
@@ -534,7 +534,7 @@ Returns the relative differences between `v1` and `v2`.
 function vrelg(v1, v2)
     ndim = length(v1)
     ccall((:vrelg_c, libcspice), SpiceDouble,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt), v1, v2, ndim)
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt), v1, v2, ndim)
 end
 
 """
@@ -560,7 +560,7 @@ Result of rotating `v` about `axis` by `theta`.
 function vrotv(v, axis, theta)
     r = Array{SpiceDouble}(undef, 3)
     ccall((:vrotv_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceDouble, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble}),
           v, axis, theta, r)
     r
 end
@@ -568,7 +568,7 @@ end
 function _vscl(s, v1)
     vout = Array{SpiceDouble}(undef, 3)
     ccall((:vscl_c, libcspice), Cvoid,
-          (SpiceDouble, Ptr{SpiceDouble}, Ptr{SpiceDouble}), s, v1, vout)
+          (SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}), s, v1, vout)
     vout
 end
 
@@ -586,7 +586,7 @@ function _vsclg(s, v1)
     ndim = length(v1)
     vout = Array{SpiceDouble}(undef, ndim)
     ccall((:vsclg_c, libcspice), Cvoid,
-          (SpiceDouble, Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceDouble}),
+          (SpiceDouble, Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}),
           s, v1, ndim, vout)
     vout
 end
@@ -620,7 +620,7 @@ Returns the angle between `v1` and `v2` in radians.
 """
 function vsep(v1, v2)
     ccall((:vsep_c, libcspice), SpiceDouble,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}), v1, v2)
+          (Ref{SpiceDouble}, Ref{SpiceDouble}), v1, v2)
 end
 
 """
@@ -643,13 +643,13 @@ Returns the angle between `v1` and `v2` in radians.
 function vsepg(v1, v2)
     ndim = length(v1)
     ccall((:vsepg_c, libcspice), SpiceDouble,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt), v1, v2, ndim)
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt), v1, v2, ndim)
 end
 
 function _vsub(v1, v2)
     vout = Array{SpiceDouble}(undef, 3)
     ccall((:vsub_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           v1, v2, vout)
     vout
 end
@@ -668,7 +668,7 @@ function _vsubg(v1, v2)
     ndim = length(v1)
     vout = Array{SpiceDouble}(undef, ndim)
     ccall((:vsubg_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}),
           v1, v2, ndim, vout)
     vout
 end
@@ -685,7 +685,7 @@ vsubg
 
 function _vtmv(v1, matrix, v2)
     ccall((:vtmv_c, libcspice), SpiceDouble,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           v1, permutedims(matrix), v2)
 end
 
@@ -702,7 +702,7 @@ vtmv
 function _vtmvg(v1, matrix, v2)
     m, n = size(matrix)
     ccall((:vtmvg_c, libcspice), SpiceDouble,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt, SpiceInt),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt, SpiceInt),
           v1, permutedims(matrix), v2, n, m)
 end
 
@@ -721,7 +721,7 @@ function _vupack(v)
     y = Ref{SpiceDouble}()
     z = Ref{SpiceDouble}()
     ccall((:vupack_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           v, x, y, z)
     x[], y[], z[]
 end
@@ -737,7 +737,7 @@ vupack
 @deprecate vupack(v) (x, y, z) = v
 
 function _vzero(v1)
-    Bool(ccall((:vzero_c, libcspice), SpiceBoolean, (Ptr{SpiceDouble},), v1))
+    Bool(ccall((:vzero_c, libcspice), SpiceBoolean, (Ref{SpiceDouble},), v1))
 end
 
 """
@@ -753,7 +753,7 @@ vzero
 function _vzerog(v1)
     ndim = length(v1)
     Bool(ccall((:vzerog_c, libcspice), SpiceBoolean,
-               (Ptr{SpiceDouble}, SpiceInt), v1, ndim))
+               (Ref{SpiceDouble}, SpiceInt), v1, ndim))
 end
 
 """

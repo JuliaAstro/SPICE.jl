@@ -56,7 +56,7 @@ function kdata(which, kind, fillen=1024, srclen=256)
     found = Ref{SpiceBoolean}()
     ccall((:kdata_c, libcspice), Cvoid,
           (SpiceInt, Cstring, SpiceInt, SpiceInt, SpiceInt,
-           Ptr{SpiceChar}, Ptr{SpiceChar}, Ptr{SpiceChar}, Ref{SpiceInt}, Ref{SpiceBoolean}),
+           Ref{SpiceChar}, Ref{SpiceChar}, Ref{SpiceChar}, Ref{SpiceInt}, Ref{SpiceBoolean}),
           which - 1, kind, fillen, typlen, srclen, file, filtyp, source, handle, found)
     handleerror()
     Bool(found[]) || return nothing
@@ -91,7 +91,7 @@ function kinfo(file, srclen=256)
     found = Ref{SpiceBoolean}()
     ccall((:kinfo_c, libcspice), Cvoid,
           (Cstring, SpiceInt, SpiceInt,
-           Ptr{SpiceChar}, Ptr{SpiceChar}, Ref{SpiceInt}, Ref{SpiceBoolean}),
+           Ref{SpiceChar}, Ref{SpiceChar}, Ref{SpiceInt}, Ref{SpiceBoolean}),
           file, typlen, srclen, filtyp, source, handle, found)
     handleerror()
     Bool(found[]) || return nothing
@@ -172,8 +172,8 @@ function kxtrct(keywd, terms, string, substrlen=256)
     found = Ref{SpiceBoolean}()
     substr = Array{SpiceChar}(undef, substrlen)
     ccall((:kxtrct_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, Ptr{SpiceChar}, SpiceInt, SpiceInt, SpiceInt,
-           Ptr{SpiceChar}, Ref{SpiceBoolean}, Ptr{SpiceChar}),
+          (Cstring, SpiceInt, Ref{SpiceChar}, SpiceInt, SpiceInt, SpiceInt,
+           Ref{SpiceChar}, Ref{SpiceBoolean}, Ref{SpiceChar}),
           keywd, termlen, terms, nterms, stringlen, substrlen, str, found, substr)
     Bool(found[]) || return nothing
     chararray_to_string(str), chararray_to_string(substr)

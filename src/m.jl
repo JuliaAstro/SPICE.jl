@@ -46,7 +46,7 @@ function m2eul(r, axis3, axis2, axis1)
     angle2 = Ref{SpiceDouble}()
     angle1 = Ref{SpiceDouble}()
     ccall((:m2eul_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceInt, SpiceInt, SpiceInt,
+          (Ref{SpiceDouble}, SpiceInt, SpiceInt, SpiceInt,
            Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
            permutedims(r), axis3, axis2, axis1, angle3, angle2, angle1)
     handleerror()
@@ -139,7 +139,7 @@ maxi
 @deprecate maxi max
 
 function _mequ(a, b)
-    ccall((:mequ_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ptr{SpiceDouble}), a, b)
+    ccall((:mequ_c, libcspice), Cvoid, (Ref{SpiceDouble}, Ref{SpiceDouble}), a, b)
 end
 
 """
@@ -155,7 +155,7 @@ mequ
 function _mequg(a, b)
     m, n = size(a)
     ccall((:mequg_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceInt, SpiceInt, Ptr{SpiceDouble}), a, m, n, b)
+          (Ref{SpiceDouble}, SpiceInt, SpiceInt, Ref{SpiceDouble}), a, m, n, b)
 end
 
 """
@@ -201,7 +201,7 @@ mini
 function _mtxm(m1, m2)
     mout = Array{SpiceDouble}(undef, 3, 3)
     ccall((:mtxm_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           permutedims(m1), permutedims(m2), mout)
     permutedims(mout)
 end
@@ -222,7 +222,7 @@ function _mtxmg(m1, m2)
     @assert l1 == l2
     mout = Array{SpiceDouble}(undef, k, n)
     ccall((:mtxmg_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt, SpiceInt, SpiceInt, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt, SpiceInt, SpiceInt, Ref{SpiceDouble}),
           permutedims(m1), permutedims(m2), n, l1, k, mout)
     permutedims(mout)
 end
@@ -240,7 +240,7 @@ mtxmg
 function _mtxv(m1, v2)
     vout = Array{Float64}(undef, 3)
     ccall((:mtxv_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           permutedims(m1), v2, vout)
     handleerror()
     vout
@@ -262,7 +262,7 @@ function _mtxvg(m1, v2)
     @assert lm1 == lv
     vout = Array{Float64}(undef, lm2)
     ccall((:mtxvg_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt, SpiceInt, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt, SpiceInt, Ref{SpiceDouble}),
           permutedims(m1), v2, lm2, lm1, vout)
     handleerror()
     vout
@@ -281,7 +281,7 @@ mtxvg
 function _mxm(m1, m2)
     mout = Array{SpiceDouble}(undef, 3, 3)
     ccall((:mxm_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           permutedims(m1), permutedims(m2), mout)
     permutedims(mout)
 end
@@ -302,7 +302,7 @@ function _mxmg(m1, m2)
     @assert l1 == l2
     mout = Array{SpiceDouble}(undef, k, n)
     ccall((:mxmg_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt, SpiceInt, SpiceInt, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt, SpiceInt, SpiceInt, Ref{SpiceDouble}),
           permutedims(m1), permutedims(m2), n, l1, k, mout)
     permutedims(mout)
 end
@@ -320,7 +320,7 @@ mxmg
 function _mxmt(m1, m2)
     mout = Array{SpiceDouble}(undef, 3, 3)
     ccall((:mxmt_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           permutedims(m1), permutedims(m2), mout)
     permutedims(mout)
 end
@@ -341,7 +341,7 @@ function _mxmtg(m1, m2)
     @assert l1 == l2
     mout = Array{SpiceDouble}(undef, k, n)
     ccall((:mxmtg_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt, SpiceInt, SpiceInt, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt, SpiceInt, SpiceInt, Ref{SpiceDouble}),
           permutedims(m1), permutedims(m2), n, l1, k, mout)
     permutedims(mout)
 end
@@ -359,7 +359,7 @@ mxmtg
 function _mxv(m1, v2)
     vout = Array{Float64}(undef, 3)
     ccall((:mxv_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           permutedims(m1), v2, vout)
     handleerror()
     vout
@@ -381,7 +381,7 @@ function _mxvg(m1, v2)
     @assert lm2 == lv
     vout = Array{Float64}(undef, lm1)
     ccall((:mxvg_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceInt, SpiceInt, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt, SpiceInt, Ref{SpiceDouble}),
           permutedims(m1), v2, lm1, lm2, vout)
     handleerror()
     vout
@@ -417,7 +417,7 @@ A unit quaternion representing `r'
 function m2q(r)
     size(r) != (3, 3) && throw(ArgumentError("`r` must be a 3x3 rotation matrix."))
     q = Array{SpiceDouble}(undef, 4)
-    ccall((:m2q_c, libcspice), Cvoid, (Ptr{Float64}, Ptr{Float64}), permutedims(r), q)
+    ccall((:m2q_c, libcspice), Cvoid, (Ref{Float64}, Ref{Float64}), permutedims(r), q)
     handleerror()
     q
 end

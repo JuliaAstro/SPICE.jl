@@ -13,7 +13,7 @@ export ucase,
 function _ucase(in)
     n = length(in) + 1
     out = Array{UInt8}(undef, n)
-    ccall((:ucase_c, libcspice), Cvoid, (Cstring, SpiceInt, Ptr{UInt8}),
+    ccall((:ucase_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{UInt8}),
           in, n, out)
     chararray_to_string(out)
 end
@@ -31,7 +31,7 @@ ucase
 function _ucrss(v1, v2)
     vout = Array{SpiceDouble}(undef, 3)
     ccall((:ucrss_c ,libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           v1, v2, vout)
     vout
 end
@@ -68,15 +68,15 @@ Returns the approximate derivative of `udfunc` at `x`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/uddf_c.html)
 """
 function uddf(udfunc, x, dx)
-    function _udfunc(et::SpiceDouble, value::Ptr{SpiceDouble})
+    function _udfunc(et::SpiceDouble, value::Ref{SpiceDouble})
         value = unsafe_wrap(Array, value, 1)
         value[1] = udfunc(et)
         nothing
     end
-    func = @cfunction($_udfunc, Cvoid, (SpiceDouble, Ptr{SpiceDouble}))
+    func = @cfunction($_udfunc, Cvoid, (SpiceDouble, Ref{SpiceDouble}))
     deriv = Ref{SpiceDouble}()
     ccall((:uddf_c, libcspice), Cvoid,
-          (Ptr{Cvoid}, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
+          (Ref{Cvoid}, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
           func, x, dx, deriv)
     deriv[]
 end
@@ -173,7 +173,7 @@ function _unorm(v1)
     vout = Array{SpiceDouble}(undef, 3)
     vmag = Ref{SpiceDouble}()
     ccall((:unorm_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           v1, vout, vmag)
     vout, vmag[]
 end
@@ -193,7 +193,7 @@ function _unormg(v1)
     vout = Array{SpiceDouble}(undef, ndim)
     vmag = Ref{SpiceDouble}()
     ccall((:unormg_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           v1, ndim, vout, vmag)
     vout, vmag[]
 end

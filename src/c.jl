@@ -55,7 +55,7 @@ function ccifrm(frclss, clssid)
     center = Ref{SpiceInt}()
     found = Ref{SpiceBoolean}()
     ccall((:ccifrm_c, libcspice), Cvoid,
-          (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}, Ref{SpiceInt}, Ref{SpiceBoolean}),
+          (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{UInt8}, Ref{SpiceInt}, Ref{SpiceBoolean}),
           frclss, clssid, lenout, frcode, frname, center, found,
          )
     handleerror()
@@ -85,7 +85,7 @@ The CSPICE ellipse defined by the input vectors.
 function cgv2el(center, vec1, vec2)
     ellipse = Ellipse()
     ccall((:cgv2el_c, libcspice), Cvoid,
-        (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ref{Ellipse}),
+        (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{Ellipse}),
         center, vec1, vec2, ellipse)
     ellipse
 end
@@ -175,7 +175,7 @@ function ckgp(inst, sclkdp, tol, ref)
     found = Ref{SpiceBoolean}(0)
     ccall((:ckgp_c, libcspice), Cvoid,
         (SpiceInt, SpiceDouble, SpiceDouble, Cstring,
-        Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
+        Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
         inst, sclkdp, tol, ref, cmat, clkout, found)
     handleerror()
     # TODO: Revisit this API in Julia 1.0 and use `nothing`
@@ -212,7 +212,7 @@ function ckgpav(inst, sclkdp, tol, ref)
     found = Ref{SpiceBoolean}(0)
     ccall((:ckgpav_c, libcspice), Cvoid,
         (SpiceInt, SpiceDouble, SpiceDouble, Cstring,
-        Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
+        Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
         inst, sclkdp, tol, ref, cmat, av, clkout, found)
     handleerror()
     # TODO: Revisit this API in Julia 1.0 and use `nothing`
@@ -313,7 +313,7 @@ function cidfrm(cent)
     frcode = Ref{SpiceInt}()
     frname = Array{UInt8}(undef, lenout)
     found = Ref{SpiceBoolean}()
-    ccall((:cidfrm_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}, Ref{SpiceBoolean}),
+    ccall((:cidfrm_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{UInt8}, Ref{SpiceBoolean}),
           cent, lenout, frcode, frname, found)
     found[] == 0 && throw(SpiceError("No frame associated with body $cent found."))
     frcode[], chararray_to_string(frname)
@@ -408,7 +408,7 @@ function ckw01(handle, inst, ref, segid, sclkdp, quats, avvs=Matrix{SpiceDouble}
     avflag = length(avvs) > 0 ? 1 : 0
     ccall((:ckw01_c, libcspice), Cvoid,
           (SpiceInt, SpiceDouble, SpiceDouble, SpiceInt, Cstring, SpiceInt, Cstring, SpiceInt,
-           Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           handle, begtim, endtim, inst, ref, avflag, segid, nrec, sclkdp, quats, avvs)
     handleerror()
 end
@@ -459,7 +459,7 @@ function cmprss(delim, n, input)
     lenout = length(input)
     output = Array{UInt8}(undef, lenout)
     ccall((:cmprss_c, libcspice), Cvoid,
-          (Cchar, SpiceInt, Cstring, SpiceInt, Ptr{UInt8}),
+          (Cchar, SpiceInt, Cstring, SpiceInt, Ref{UInt8}),
           first(delim), n, input, lenout, output)
     handleerror()
     chararray_to_string(output)
@@ -487,7 +487,7 @@ function cnmfrm(cname, lenout=LENOUT)
     frcode = Ref{SpiceInt}()
     frname = Array{UInt8}(undef, lenout)
     found = Ref{SpiceBoolean}()
-    ccall((:cnmfrm_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}, Ref{SpiceBoolean}),
+    ccall((:cnmfrm_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{SpiceInt}, Ref{UInt8}, Ref{SpiceBoolean}),
           cname, lenout, frcode, frname, found)
     if Bool(found[])
         code = frcode[]
@@ -518,7 +518,7 @@ Returns the state of orbiting body at `et`.
 """
 function conics(elts, et)
     state = Array{Float64}(undef, 6)
-    ccall((:conics_c, libcspice), Cvoid, (Ptr{SpiceDouble}, SpiceDouble, Ptr{SpiceDouble}), elts, et, state)
+    ccall((:conics_c, libcspice), Cvoid, (Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble}), elts, et, state)
     handleerror()
     state
 end
@@ -680,7 +680,7 @@ Returns rectangular coordinates of the point of interest.
 """
 function cylrec(r, lon, z)
     rectan = Array{SpiceDouble}(undef, 3)
-    ccall((:cylrec_c, libcspice), Cvoid, (SpiceDouble, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
+    ccall((:cylrec_c, libcspice), Cvoid, (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
           r, lon, z, rectan)
     rectan
 end

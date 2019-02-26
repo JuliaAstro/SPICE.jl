@@ -41,7 +41,7 @@ function hrmint(xvals, yvals, x)
     f = Ref{SpiceDouble}()
     df = Ref{SpiceDouble}()
     ccall((:hrmint_c, libcspice), Cvoid,
-          (SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceDouble, Ptr{SpiceDouble},
+          (SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble},
            Ref{SpiceDouble}, Ref{SpiceDouble}),
           n, xvals, yvals, x, work, f, df)
     handleerror()
@@ -71,7 +71,7 @@ function hx2dp(str)
     error = Ref{SpiceBoolean}()
     errmsg = Array{UInt8}(undef, 46)
     ccall((:hx2dp_c, libcspice), Cvoid,
-        (Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceBoolean}, Ptr{UInt8}),
+        (Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceBoolean}, Ref{UInt8}),
         str, 46, dp, error, errmsg)
     if Bool(error[])
         throw(SpiceError(chararray_to_string(errmsg)))

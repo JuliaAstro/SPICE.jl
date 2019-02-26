@@ -33,7 +33,7 @@ function gcpool(name; start=1, room=100, lenout=128)
     values = Array{UInt8}(undef, lenout, room)
     found = Ref{SpiceInt}()
     ccall((:gcpool_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}, Ref{SpiceBoolean}),
+          (Cstring, SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{UInt8}, Ref{SpiceBoolean}),
           name, start - 1, room, lenout, n, values, found)
     handleerror()
     if Bool(found[])
@@ -66,7 +66,7 @@ function gdpool(name; start=1, room=100)
     values = Array{SpiceDouble}(undef, room)
     found = Ref{SpiceInt}()
     ccall((:gdpool_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{SpiceDouble}, Ref{SpiceBoolean}),
+          (Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
           name, start - 1, room, n, values, found)
     handleerror()
     Bool(found[]) ? values[1:n[]] : nothing
@@ -97,7 +97,7 @@ function georec(lon, lat, alt, re, f)
     rectan = Array{SpiceDouble}(undef, 3)
     ccall((:georec_c, libcspice), Cvoid,
           (SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble,
-           Ptr{SpiceDouble}),
+           Ref{SpiceDouble}),
           lon, lat, alt, re, f, rectan)
     handleerror()
     rectan
@@ -128,7 +128,7 @@ function getelm(frstyr, lines)
     epoch = Ref{SpiceDouble}()
     elems = Array{SpiceDouble}(undef, 10)
     ccall((:getelm_c, libcspice), Cvoid,
-          (SpiceInt, SpiceInt, Ptr{SpiceChar}, Ref{SpiceDouble}, Ptr{SpiceDouble}),
+          (SpiceInt, SpiceInt, Ref{SpiceChar}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           frstyr, lineln, array, epoch, elems)
     handleerror()
     epoch[], elems
@@ -168,7 +168,7 @@ function getfov(instid, room=10, shapelen=128, framelen=128)
     bounds = Array{SpiceDouble}(undef, 3, room)
     ccall((:getfov_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, SpiceInt,
-           Ptr{UInt8}, Ptr{UInt8}, Ptr{SpiceDouble}, Ref{SpiceInt}, Ptr{SpiceDouble}),
+           Ref{UInt8}, Ref{UInt8}, Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceDouble}),
           instid, room, shapelen, framelen, shape, frame, bsight, n, bounds)
     handleerror()
     arr_bounds = cmatrix_to_array(bounds)
@@ -244,7 +244,7 @@ function gipool(name; start=1, room=100)
     values = Array{SpiceInt}(undef, room)
     found = Ref{SpiceBoolean}()
     ccall((:gipool_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{SpiceInt}, Ref{SpiceBoolean}),
+          (Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceBoolean}),
           name, start - 1, room, n, values, found)
     handleerror()
     Bool(found[]) ? Int.(values[1:n[]]) : nothing

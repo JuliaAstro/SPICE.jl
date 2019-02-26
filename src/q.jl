@@ -25,7 +25,7 @@ q2m(q...) = q2m(collect(q))
 function q2m(q)
     length(q) != 4 && throw(ArgumentError("`q` needs to be an iterable with four elements."))    
     r = Matrix{SpiceDouble}(undef, 3, 3)
-    ccall((:q2m_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ptr{SpiceDouble}), collect(q), r)
+    ccall((:q2m_c, libcspice), Cvoid, (Ref{SpiceDouble}, Ref{SpiceDouble}), collect(q), r)
     permutedims(r)
 end
 
@@ -51,7 +51,7 @@ function qxq(q1, q2)
     length(q1) != 4 && throw(ArgumentError("`q1` needs to be an iterable with four elements.")) 
     length(q2) != 4 && throw(ArgumentError("`q2` needs to be an iterable with four elements."))   
     q = Array{SpiceDouble}(undef, 4)
-    ccall((:qxq_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}), collect(q1), collect(q2), q)
+    ccall((:qxq_c, libcspice), Cvoid, (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}), collect(q1), collect(q2), q)
     q
 end
 
@@ -78,6 +78,6 @@ function qdq2av(q,dq)
     length(q) != 4 && throw(ArgumentError("`q` needs to be an iterable with four elements.")) 
     length(dq) != 4 && throw(ArgumentError("`dq` needs to be an iterable with four elements."))   
     av = Array{SpiceDouble}(undef, 3)
-    ccall((:qdq2av_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}), collect(q), collect(dq), av)
+    ccall((:qdq2av_c, libcspice), Cvoid, (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}), collect(q), collect(dq), av)
     av
 end

@@ -118,7 +118,7 @@ function saelgv(vec1, vec2)
     smajor = Array{SpiceDouble}(undef, 3)
     sminor = Array{SpiceDouble}(undef, 3)
     ccall((:saelgv_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           vec1, vec2, smajor, sminor)
     smajor, sminor
 end
@@ -170,7 +170,7 @@ Returns the character representation of a clock count.
 function scdecd(sc, sclkdp, lenout=128)
     sclkch = Array{SpiceChar}(undef, lenout)
     ccall((:scdecd_c, libcspice), Cvoid,
-          (SpiceInt, SpiceDouble, SpiceInt, Ptr{SpiceChar}),
+          (SpiceInt, SpiceDouble, SpiceInt, Ref{SpiceChar}),
           sc, sclkdp, lenout, sclkch)
     handleerror()
     chararray_to_string(sclkch)
@@ -227,7 +227,7 @@ Returns an SCLK string.
 function sce2s(sc, et, lenout=128)
     sclkch = Array{SpiceChar}(undef, lenout)
     ccall((:sce2s_c, libcspice), Cvoid,
-          (SpiceInt, SpiceDouble, SpiceInt, Ptr{SpiceChar}),
+          (SpiceInt, SpiceDouble, SpiceInt, Ref{SpiceChar}),
           sc, et, lenout, sclkch)
     handleerror()
     chararray_to_string(sclkch)
@@ -311,7 +311,7 @@ Returns a character representation of a clock count.
 function scfmt(sc, ticks, lenout=128)
     clkstr = Array{SpiceChar}(undef, lenout)
     ccall((:scfmt_c, libcspice), Cvoid,
-          (SpiceInt, SpiceDouble, SpiceInt, Ptr{SpiceChar}),
+          (SpiceInt, SpiceDouble, SpiceInt, Ref{SpiceChar}),
           sc, ticks, lenout, clkstr)
     handleerror()
     chararray_to_string(clkstr)
@@ -341,7 +341,7 @@ function scpart(sc)
     pstart = Array{SpiceDouble}(undef, 9999)
     pstop = Array{SpiceDouble}(undef, 9999)
     ccall((:scpart_c, libcspice), Cvoid,
-          (SpiceInt, Ref{SpiceInt}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (SpiceInt, Ref{SpiceInt}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           sc, nparts, pstart, pstop)
     handleerror()
     pstart[1:nparts[]], pstop[1:nparts[]]
@@ -489,7 +489,7 @@ end
 function _shellc(array)
     carray, m, n = chararray(array)
     ccall((:shellc_c, libcspice), Cvoid,
-          (SpiceInt, SpiceInt, Ptr{SpiceChar}),
+          (SpiceInt, SpiceInt, Ref{SpiceChar}),
           m, n, carray)
     handleerror()
     array[:] .= chararray_to_string(carray, m)
@@ -508,7 +508,7 @@ shellc
 function _shelld(array)
     n = length(array)
     ccall((:shelld_c, libcspice), Cvoid,
-          (SpiceInt, Ptr{SpiceDouble}),
+          (SpiceInt, Ref{SpiceDouble}),
           n, array)
     handleerror()
     array
@@ -528,7 +528,7 @@ function _shelli(array)
     array = SpiceInt.(array)
     n = length(array)
     ccall((:shelli_c, libcspice), Cvoid,
-          (SpiceInt, Ptr{SpiceInt}),
+          (SpiceInt, Ref{SpiceInt}),
           n, array)
     handleerror()
     Int.(array)
@@ -586,8 +586,8 @@ function sincpt(method, target, et, fixref, abcorr, obsrvr, dref, dvec)
     found = Ref{SpiceBoolean}()
 
     ccall((:sincpt_c, libcspice), Cvoid,
-          (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Cstring, Ptr{SpiceDouble},
-           Ptr{SpiceDouble}, Ref{SpiceDouble}, Ptr{SpiceDouble}, Ref{SpiceInt}),
+          (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Cstring, Ref{SpiceDouble},
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceInt}),
           method, target, et, fixref, abcorr, obsrvr, dref, dvec, spoint, trgepc, srfvec, found)
 
     handleerror()
@@ -695,7 +695,7 @@ Returns the rectangular coordinates of the point.
 function sphrec(r, colat, lon)
     rectan = Array{SpiceDouble}(undef, 3)
     ccall((:sphrec_c, libcspice), Cvoid,
-          (SpiceDouble, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
           r, colat, lon, rectan)
     rectan
 end
@@ -719,7 +719,7 @@ See also [`spk14b`](@ref) and [`spk14e`](@ref).
 """
 function spk14a(handle, ncsets, coeffs, epochs)
     ccall((:spk14a_c, libcspice), Cvoid,
-          (SpiceInt, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (SpiceInt, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           handle, ncsets, coeffs, epochs)
     handleerror()
 end
@@ -805,7 +805,7 @@ function spkacs(targ, et, ref, abcorr, obs)
     dlt = Ref{SpiceDouble}()
     ccall((:spkacs_c, libcspice), Cvoid,
           (SpiceInt, SpiceDouble, Cstring, Cstring, SpiceInt,
-           Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           targ, et, ref, abcorr, obs, starg, lt, dlt)
     handleerror()
     starg, lt[], dlt[]
@@ -839,8 +839,8 @@ function spkapo(targ, et, ref, sobs, abcorr)
     ptarg = Array{SpiceDouble}(undef, 3)
     lt = Ref{SpiceDouble}()
     ccall((:spkapo_c, libcspice), Cvoid,
-          (SpiceInt, SpiceDouble, Cstring, Ptr{SpiceDouble}, Cstring,
-           Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (SpiceInt, SpiceDouble, Cstring, Ref{SpiceDouble}, Cstring,
+           Ref{SpiceDouble}, Ref{SpiceDouble}),
           targ, et, ref, sobs, abcorr, ptarg, lt)
     handleerror()
     ptarg, lt[]
@@ -883,8 +883,8 @@ function spkaps(targ, et, ref, abcorr, stobs, accobs)
     lt = Ref{SpiceDouble}()
     dlt = Ref{SpiceDouble}()
     ccall((:spkaps_c, libcspice), Cvoid,
-          (SpiceInt, SpiceDouble, Cstring, Cstring, Ptr{SpiceDouble}, Ptr{SpiceDouble},
-           Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          (SpiceInt, SpiceDouble, Cstring, Cstring, Ref{SpiceDouble}, Ref{SpiceDouble},
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           targ, et, ref, abcorr, stobs, accobs, starg, lt, dlt)
     handleerror()
     starg, lt[], dlt[]
@@ -981,8 +981,8 @@ function spkcpo(target, et, outref, refloc, abcorr, obspos, obsctr, obsref)
     state = Array{SpiceDouble}(undef, 6)
     lt = Ref{SpiceDouble}()
     ccall((:spkcpo_c, libcspice), Cvoid,
-          (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Cstring, Cstring,
-           Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ref{SpiceDouble}, Cstring, Cstring,
+           Ref{SpiceDouble}, Ref{SpiceDouble}),
           target, et, outref, refloc, abcorr, obspos, obsctr, obsref, state, lt)
     handleerror()
     state, lt[]
@@ -1019,8 +1019,8 @@ function spkcpt(trgpos, trgctr, trgref, et, outref, refloc, abcorr, obsrvr)
     state = Array{SpiceDouble}(undef, 6)
     lt = Ref{SpiceDouble}()
     ccall((:spkcpt_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Cstring,
-           Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{SpiceDouble}, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Cstring,
+           Ref{SpiceDouble}, Ref{SpiceDouble}),
           trgpos, trgctr, trgref, et, outref, refloc, abcorr, obsrvr, state, lt)
     handleerror()
     state, lt[]
@@ -1059,8 +1059,8 @@ function spkcvo(target, et, outref, refloc, abcorr, obssta, obsepc, obsctr, obsr
     state = Array{SpiceDouble}(undef, 6)
     lt = Ref{SpiceDouble}()
     ccall((:spkcvo_c, libcspice), Cvoid,
-          (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, SpiceDouble, Cstring,
-           Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ref{SpiceDouble}, SpiceDouble, Cstring,
+           Cstring, Ref{SpiceDouble}, Ref{SpiceDouble}),
           target, et, outref, refloc, abcorr, obssta, obsepc, obsctr, obsref, state, lt)
     handleerror()
     state, lt[]
@@ -1099,8 +1099,8 @@ function spkcvt(trgsta, trgepc, trgctr, trgref, et, outref, refloc, abcorr, obsr
     state = Array{SpiceDouble}(undef, 6)
     lt = Ref{SpiceDouble}()
     ccall((:spkcvt_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceDouble, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring,
-           Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{SpiceDouble}, SpiceDouble, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring,
+           Cstring, Ref{SpiceDouble}, Ref{SpiceDouble}),
           trgsta, trgepc, trgctr, trgref, et, outref, refloc, abcorr, obsrvr, state, lt)
     handleerror()
     state, lt[]
@@ -1133,7 +1133,7 @@ function spkez(targ, et, ref, abcorr, obs)
     starg = Array{SpiceDouble}(undef, 6)
     lt = Ref{SpiceDouble}()
     ccall((:spkez_c, libcspice), Cvoid,
-          (SpiceInt, SpiceDouble, Cstring, Cstring, SpiceInt, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (SpiceInt, SpiceDouble, Cstring, Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           targ, et, ref, abcorr, obs, starg, lt)
     handleerror()
     starg, lt[]
@@ -1166,7 +1166,7 @@ function spkezp(targ, et, ref, abcorr, obs)
     ptarg = Array{SpiceDouble}(undef, 3)
     lt = Ref{SpiceDouble}()
     ccall((:spkezp_c, libcspice), Cvoid,
-          (SpiceInt, SpiceDouble, Cstring, Cstring, SpiceInt, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (SpiceInt, SpiceDouble, Cstring, Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           targ, et, ref, abcorr, obs, ptarg, lt)
     handleerror()
     ptarg, lt[]
@@ -1199,7 +1199,7 @@ function spkezr(targ, et, ref, abcorr, obs)
     starg = Array{SpiceDouble}(undef, 6)
     lt = Ref{SpiceDouble}()
     ccall((:spkezr_c, libcspice), Cvoid,
-          (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ref{SpiceDouble}, Ref{SpiceDouble}),
           targ, et, ref, abcorr, obs, starg, lt)
     handleerror()
     starg, lt[]
@@ -1230,7 +1230,7 @@ function spkgeo(targ, et, ref, obs)
     state = Array{SpiceDouble}(undef, 6)
     lt = Ref{SpiceDouble}()
     ccall((:spkgeo_c, libcspice), Cvoid,
-          (SpiceInt, SpiceDouble, Cstring, SpiceInt, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (SpiceInt, SpiceDouble, Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           targ, et, ref, obs, state, lt)
     handleerror()
     state, lt[]
@@ -1261,7 +1261,7 @@ function spkgps(targ, et, ref, obs)
     pos = Array{SpiceDouble}(undef, 3)
     lt = Ref{SpiceDouble}()
     ccall((:spkgps_c, libcspice), Cvoid,
-          (SpiceInt, SpiceDouble, Cstring, SpiceInt, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (SpiceInt, SpiceDouble, Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           targ, et, ref, obs, pos, lt)
     handleerror()
     pos, lt[]
@@ -1322,8 +1322,8 @@ function spkltc(targ, et, ref, abcorr, stobs)
     lt = Ref{SpiceDouble}()
     dlt = Ref{SpiceDouble}()
     ccall((:spkltc_c, libcspice), Cvoid,
-          (SpiceInt, SpiceDouble, Cstring, Cstring, Ptr{SpiceDouble},
-           Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          (SpiceInt, SpiceDouble, Cstring, Cstring, Ref{SpiceDouble},
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           targ, et, ref, abcorr, stobs, starg, lt, dlt)
     handleerror()
     starg, lt[], dlt[]
@@ -1438,7 +1438,7 @@ Returns an SPK segment descriptor.
 function spkpds(body, center, frame, typ, first, last)
     descr = Array{SpiceDouble}(undef, 5)
     ccall((:spkpds_c, libcspice), Cvoid,
-          (SpiceInt, SpiceInt, Cstring, SpiceInt, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
+          (SpiceInt, SpiceInt, Cstring, SpiceInt, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
           body, center, frame, typ, first, last, descr)
     handleerror()
     descr
@@ -1471,7 +1471,7 @@ function spkpos(targ, et, ref, abcorr, obs)
     starg = Array{SpiceDouble}(undef, 3)
     lt = Ref{SpiceDouble}()
     ccall((:spkpos_c, libcspice), Cvoid,
-          (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ref{SpiceDouble}, Ref{SpiceDouble}),
           targ, et, ref, abcorr, obs, starg, lt)
     handleerror()
     starg, lt[]
@@ -1505,8 +1505,8 @@ function spkpvn(handle, descr, et)
     state = Array{SpiceDouble}(undef, 6)
     center = Ref{SpiceInt}()
     ccall((:spkpvn_c, libcspice), Cvoid,
-          (SpiceInt, Ptr{SpiceDouble}, SpiceDouble,
-           Ref{SpiceInt}, Ptr{SpiceDouble}, Ref{SpiceInt}),
+          (SpiceInt, Ref{SpiceDouble}, SpiceDouble,
+           Ref{SpiceInt}, Ref{SpiceDouble}, Ref{SpiceInt}),
           handle, descr, et, ref, state, center)
     handleerror()
     ref[], state, center[]
@@ -1544,7 +1544,7 @@ function spksfs(body, et)
     found = Ref{SpiceBoolean}()
     ccall((:spksfs_c, libcspice), Cvoid,
           (SpiceInt, SpiceDouble, SpiceInt,
-           Ref{SpiceInt}, Ptr{SpiceDouble}, Ptr{SpiceChar}, Ref{SpiceBoolean}),
+           Ref{SpiceInt}, Ref{SpiceDouble}, Ref{SpiceChar}, Ref{SpiceBoolean}),
           body, et, idlen, handle, descr, ident, found)
     handleerror()
     Bool(found[]) || return nothing
@@ -1573,7 +1573,7 @@ Returns the state of target.
 function spkssb(targ, et, ref)
     starg = Array{SpiceDouble}(undef, 6)
     ccall((:spkssb_c, libcspice), Cvoid,
-          (SpiceInt, SpiceDouble, Cstring, Ptr{SpiceDouble}),
+          (SpiceInt, SpiceDouble, Cstring, Ref{SpiceDouble}),
           targ, et, ref, starg)
     handleerror()
     starg
@@ -1600,7 +1600,7 @@ Extract a subset of the data in an SPK segment into a separate segment.
 function spksub!(newh, handle, descr, ident, start, stop)
     length(descr) != 5 && throw(ArgumentError("`descr` must have five elements."))
     ccall((:spksub_c, libcspice), Cvoid,
-          (SpiceInt, Ptr{SpiceDouble}, Cstring, SpiceDouble, SpiceDouble, SpiceInt),
+          (SpiceInt, Ref{SpiceDouble}, Cstring, SpiceDouble, SpiceDouble, SpiceInt),
           handle, descr, ident, start, stop, newh)
     handleerror()
 end
@@ -1643,7 +1643,7 @@ function spkuds(descr)
     start = Ref{SpiceInt}()
     stop = Ref{SpiceInt}()
     ccall((:spkuds_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceInt},
+          (Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceInt},
            Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceInt}),
           descr, body, center, frame, type, first, last, start, stop)
     handleerror()
@@ -1695,7 +1695,7 @@ function spkw02(handle, body, center, frame, first, last, segid, intlen, cdata, 
     polydg = m - 1
     ccall((:spkw02_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring, SpiceDouble,
-           SpiceInt, SpiceInt, Ptr{SpiceDouble}, SpiceDouble),
+           SpiceInt, SpiceInt, Ref{SpiceDouble}, SpiceDouble),
           handle, body, center, frame, first, last, segid, intlen,
           n, polydg, coeffs, btime)
     handleerror()
@@ -1729,7 +1729,7 @@ function spkw03(handle, body, center, frame, first, last, segid, intlen, cdata, 
     polydg = m ÷ 6 - 1
     ccall((:spkw03_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring, SpiceDouble,
-           SpiceInt, SpiceInt, Ptr{SpiceDouble}, SpiceDouble),
+           SpiceInt, SpiceInt, Ref{SpiceDouble}, SpiceDouble),
           handle, body, center, frame, first, last, segid, intlen,
           n, polydg, coeffs, btime)
     handleerror()
@@ -1764,7 +1764,7 @@ function spkw05(handle, body, center, frame, first, last, segid, gm, states, epo
     s = array_to_cmatrix(states, n=6)
     ccall((:spkw05_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
-           SpiceDouble, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+           SpiceDouble, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           handle, body, center, frame, first, last, segid,
           gm, n, s, epochs)
     handleerror()
@@ -1798,7 +1798,7 @@ function spkw08(handle, body, center, frame, first, last, segid, degree, states,
     s = array_to_cmatrix(states, n=6)
     ccall((:spkw08_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
-           SpiceInt, SpiceInt, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble),
+           SpiceInt, SpiceInt, Ref{SpiceDouble}, SpiceDouble, SpiceDouble),
           handle, body, center, frame, first, last, segid,
           degree, n, s, epoch1, step)
     handleerror()
@@ -1832,7 +1832,7 @@ function spkw09(handle, body, center, frame, first, last, segid, degree, states,
     s = array_to_cmatrix(states, n=6)
     ccall((:spkw09_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
-           SpiceInt, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+           SpiceInt, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           handle, body, center, frame, first, last, segid,
           degree, n, s, epochs)
     handleerror()
@@ -1866,7 +1866,7 @@ function spkw10(handle, body, center, frame, first, last, segid, consts, elems, 
     elems = array_to_cmatrix(elems, n=10)
     ccall((:spkw10_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
-           Ptr{SpiceDouble}, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+           Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           handle, body, center, frame, first, last, segid,
           consts, n, elems, epochs)
     handleerror()
@@ -1900,7 +1900,7 @@ function spkw12(handle, body, center, frame, first, last, segid, degree, states,
     s = array_to_cmatrix(states, n=6)
     ccall((:spkw12_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
-           SpiceInt, SpiceInt, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble),
+           SpiceInt, SpiceInt, Ref{SpiceDouble}, SpiceDouble, SpiceDouble),
           handle, body, center, frame, first, last, segid,
           degree, n, s, epoch1, step)
     handleerror()
@@ -1934,7 +1934,7 @@ function spkw13(handle, body, center, frame, first, last, segid, degree, states,
     s = array_to_cmatrix(states, n=6)
     ccall((:spkw13_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
-           SpiceInt, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+           SpiceInt, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           handle, body, center, frame, first, last, segid,
           degree, n, s, epochs)
     handleerror()
@@ -1977,8 +1977,8 @@ function spkw15(handle, body, center, frame, first, last, segid, epoch, tp, pa, 
     length(pv) != 3 && throw(ArgumentError("`pv` must have three elements."))
     ccall((:spkw15_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
-           SpiceDouble, Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble,
-           SpiceDouble, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble, SpiceDouble),
+           SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceDouble, SpiceDouble,
+           SpiceDouble, Ref{SpiceDouble}, SpiceDouble, SpiceDouble, SpiceDouble),
           handle, body, center, frame, first, last, segid,
           epoch, tp, pa, p, ecc, j2flg, pv, gm, j2, radius)
     handleerror()
@@ -2011,7 +2011,7 @@ function spkw17(handle, body, center, frame, first, last, segid, epoch, eqel, ra
     length(eqel) != 9 && throw(ArgumentError("`eqel` must have nine elments."))
     ccall((:spkw17_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
-           SpiceDouble, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble),
+           SpiceDouble, Ref{SpiceDouble}, SpiceDouble, SpiceDouble),
           handle, body, center, frame, first, last, segid,
           epoch, eqel, rapol, decpol)
     handleerror()
@@ -2050,7 +2050,7 @@ function spkw18(handle, subtyp, body, center, frame, first, last, segid, degree,
     packts = array_to_cmatrix(packts, n=m)
     ccall((:spkw18_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
-           SpiceInt, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+           SpiceInt, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           handle, subtyp, body, center, frame, first, last, segid, degree, n, packts, epochs)
     handleerror()
 end
@@ -2088,7 +2088,7 @@ function spkw20(handle, body, center, frame, first, last, segid, intlen, cdata, 
     cdata = array_to_cmatrix(cdata)
     ccall((:spkw20_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
-           SpiceDouble, SpiceInt, SpiceInt, Ptr{SpiceDouble},
+           SpiceDouble, SpiceInt, SpiceInt, Ref{SpiceDouble},
            SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble),
           handle, body, center, frame, first, last, segid,
           intlen, n, polydg, cdata,
@@ -2120,7 +2120,7 @@ function srfc2s(code, bodyid)
     srfstr = Array{SpiceChar}(undef, SPICE_SRF_SFNMLN)
     isname = Ref{SpiceBoolean}()
     ccall((:srfc2s_c, libcspice), Cvoid,
-          (SpiceInt, SpiceInt, SpiceInt, Ptr{SpiceChar}, Ref{SpiceBoolean}),
+          (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceChar}, Ref{SpiceBoolean}),
           code, bodyid, SPICE_SRF_SFNMLN, srfstr, isname)
     handleerror()
     chararray_to_string(srfstr), Bool(isname[])
@@ -2150,7 +2150,7 @@ function srfcss(code, bodstr)
     srfstr = Array{SpiceChar}(undef, SPICE_SRF_SFNMLN)
     isname = Ref{SpiceBoolean}()
     ccall((:srfcss_c, libcspice), Cvoid,
-          (SpiceInt, Cstring, SpiceInt, Ptr{SpiceChar}, Ref{SpiceBoolean}),
+          (SpiceInt, Cstring, SpiceInt, Ref{SpiceChar}, Ref{SpiceBoolean}),
           code, bodstr, SPICE_SRF_SFNMLN, srfstr, isname)
     handleerror()
     chararray_to_string(srfstr), Bool(isname[])
@@ -2186,7 +2186,7 @@ function srfnrm(method, target, et, fixref, srfpts)
     srfpts = array_to_cmatrix(srfpts, n=3)
     normls = similar(srfpts)
     ccall((:srfnrm_c, libcspice), Cvoid,
-          (Cstring, Cstring, SpiceDouble, Cstring, SpiceInt, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Cstring, Cstring, SpiceDouble, Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           method, target, et, fixref, npts, srfpts, normls)
     handleerror()
     cmatrix_to_array(normls)
@@ -2215,7 +2215,7 @@ Returns the rectangular coordinates of the point.
 function srfrec(body, longitude, latitude)
     rectan = Array{SpiceDouble}(undef, 3)
     ccall((:srfrec_c, libcspice), Cvoid,
-          (SpiceInt, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}),
+          (SpiceInt, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
           body, longitude, latitude, rectan)
     handleerror()
     rectan
@@ -2340,7 +2340,7 @@ function stelab(pobj, vobs)
     length(vobs) != 3 && throw(ArgumentError("`vobs` must have three elements."))
     appobj = Array{SpiceDouble}(undef, 3)
     ccall((:stelab_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           pobj, vobs, appobj)
     handleerror()
     appobj
@@ -2373,7 +2373,7 @@ function stpool(item, nth, contin, lenout=1024)
     size = Ref{SpiceInt}()
     found = Ref{SpiceBoolean}()
     ccall((:stpool_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, Cstring, SpiceInt, Ptr{SpiceChar}, Ref{SpiceInt}, Ref{SpiceBoolean}),
+          (Cstring, SpiceInt, Cstring, SpiceInt, Ref{SpiceChar}, Ref{SpiceInt}, Ref{SpiceBoolean}),
           item, nth - 1, contin, lenout, string, size, found)
     handleerror()
     chararray_to_string(string)
@@ -2436,7 +2436,7 @@ function subpnt(method, target, et, fixref, obsrvr; abcorr="NONE")
     srfvec = Array{SpiceDouble}(undef, 3)
     ccall((:subpnt_c, libcspice), Cvoid,
           (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring,
-           Ptr{SpiceDouble}, Ref{SpiceDouble}, Ptr{SpiceDouble}),
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec)
     handleerror()
     spoint, trgepc[], srfvec
@@ -2494,7 +2494,7 @@ function subslr(method, target, et, fixref, abcorr, obsrvr)
     srfvec = Array{SpiceDouble}(undef, 3)
     ccall((:subslr_c, libcspice), Cvoid,
           (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring,
-           Ptr{SpiceDouble}, Ref{SpiceDouble}, Ptr{SpiceDouble}),
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec)
     handleerror()
     spoint, trgepc[], srfvec
@@ -2522,7 +2522,7 @@ subsol_pl02
 
 function _sumad(array)
     n = length(array)
-    ccall((:sumad_c, libcspice), SpiceDouble, (Ptr{SpiceDouble}, SpiceInt), array, n)
+    ccall((:sumad_c, libcspice), SpiceDouble, (Ref{SpiceDouble}, SpiceInt), array, n)
 end
 
 @deprecate sumad sum
@@ -2538,7 +2538,7 @@ sumad
 function _sumai(array)
     n = length(array)
     array = SpiceInt.(array)
-    ccall((:sumai_c, libcspice), SpiceInt, (Ptr{SpiceInt}, SpiceInt), array, n)
+    ccall((:sumai_c, libcspice), SpiceInt, (Ref{SpiceInt}, SpiceInt), array, n)
 end
 
 @deprecate sumai sum
@@ -2575,7 +2575,7 @@ function surfnm(a, b, c, point)
     length(point) != 3 && throw(ArgumentError("`point` must have three elements."))
     normal = Array{SpiceDouble}(undef, 3)
     ccall((:surfnm_c, libcspice), Cvoid,
-          (SpiceDouble, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}),
           a, b, c, point, normal)
     handleerror()
     normal
@@ -2608,8 +2608,8 @@ function surfpt(positn, u, a, b, c)
     point = Array{SpiceDouble}(undef, 3)
     found = Ref{SpiceBoolean}()
     ccall((:surfpt_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble, SpiceDouble,
-           Ptr{SpiceDouble}, Ref{SpiceBoolean}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceDouble, SpiceDouble, SpiceDouble,
+           Ref{SpiceDouble}, Ref{SpiceBoolean}),
           positn, u, a, b, c, point, found)
     handleerror()
     !Bool(found[]) && return nothing
@@ -2645,8 +2645,8 @@ function surfpv(stvrtx, stdir, a, b, c)
     stx = Array{SpiceDouble}(undef, 6)
     found = Ref{SpiceBoolean}()
     ccall((:surfpv_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, SpiceDouble, SpiceDouble, SpiceDouble,
-           Ptr{SpiceDouble}, Ref{SpiceBoolean}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceDouble, SpiceDouble, SpiceDouble,
+           Ref{SpiceDouble}, Ref{SpiceBoolean}),
           stvrtx, stdir, a, b, c, stx, found)
     handleerror()
     Bool(found[]) || return nothing
@@ -2669,7 +2669,7 @@ Add a name to the list of agents to notify whenever a member of a list of kernel
 """
 function swpool(agent, names)
     names, m, n = chararray(names)
-    ccall((:swpool_c, libcspice), Cvoid, (Cstring, SpiceInt, SpiceInt, Ptr{SpiceChar}),
+    ccall((:swpool_c, libcspice), Cvoid, (Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}),
           agent, m, n, names)
     handleerror()
 end
@@ -2696,7 +2696,7 @@ Returns the state transformation matrix.
 function sxform(from, to, et)
     rot = Array{SpiceDouble}(undef, 6, 6)
     ccall((:sxform_c, libcspice), Cvoid,
-          (Cstring, Cstring, SpiceDouble, Ptr{SpiceDouble}),
+          (Cstring, Cstring, SpiceDouble, Ref{SpiceDouble}),
           from, to, et, rot)
     handleerror()
     permutedims(rot)

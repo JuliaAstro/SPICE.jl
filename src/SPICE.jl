@@ -27,7 +27,7 @@ function handleerror()
     if failed
         # Retrive error message
         msg = Array{UInt8}(undef, 1841)
-        ccall((:getmsg_c, libcspice), Cvoid, (Cstring, Cint, Ptr{UInt8}), "LONG", 1841, msg)
+        ccall((:getmsg_c, libcspice), Cvoid, (Cstring, Cint, Ref{UInt8}), "LONG", 1841, msg)
         message = String(msg[1:findfirst(iszero, msg) - 1])
         # Reset error status and throw Julia error
         ccall((:reset_c, libcspice), Cvoid, ())

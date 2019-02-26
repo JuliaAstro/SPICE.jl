@@ -29,7 +29,7 @@ export
 
 function _ident()
     matrix = Array{SpiceDouble}(undef, 3, 3)
-    ccall((:ident_c, libcspice), Cvoid, (Ptr{SpiceDouble},), matrix)
+    ccall((:ident_c, libcspice), Cvoid, (Ref{SpiceDouble},), matrix)
     matrix
 end
 
@@ -82,8 +82,8 @@ function illumf(method, target, ilusrc, et, fixref, abcorr, obsrvr, spoint)
     visibl = Ref{SpiceBoolean}()
     lit = Ref{SpiceBoolean}()
     ccall((:illumf_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble},
-           Ref{SpiceDouble}, Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble},
+          (Cstring, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ref{SpiceDouble},
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble},
            Ref{SpiceDouble}, Ref{SpiceBoolean}, Ref{SpiceBoolean}),
           method, target, ilusrc, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec, phase, incdnc,
           emissn, visibl, lit)
@@ -132,8 +132,8 @@ function illumg(method, target, ilusrc, et, fixref, obsrvr, spoint; abcorr="NONE
     incdnc = Ref{SpiceDouble}(0)
     emissn = Ref{SpiceDouble}(0)
     ccall((:illumg_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble},
-           Ref{SpiceDouble}, Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble},
+          (Cstring, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ref{SpiceDouble},
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble},
            Ref{SpiceDouble}),
           method, target, ilusrc, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec, phase,
           incdnc, emissn)
@@ -180,8 +180,8 @@ function ilumin(method, target, et, fixref, obsrvr, spoint; abcorr="NONE")
     incdnc = Ref{SpiceDouble}(0)
     emissn = Ref{SpiceDouble}(0)
     ccall((:ilumin_c, libcspice), Cvoid,
-          (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ptr{SpiceDouble},
-           Ref{SpiceDouble}, Ptr{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble},
+          (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ref{SpiceDouble},
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble},
            Ref{SpiceDouble}),
           method, target, et, fixref, abcorr, obsrvr, spoint, trgepc, srfvec, phase, incdnc, emissn)
     handleerror()
@@ -245,7 +245,7 @@ function inelpl(ellips, plane)
     xpt1 = Array{SpiceDouble}(undef, 3)
     xpt2 = Array{SpiceDouble}(undef, 3)
     ccall((:inelpl_c, libcspice), Cvoid,
-          (Ref{Ellipse}, Ref{Plane}, Ref{SpiceInt}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{Ellipse}, Ref{Plane}, Ref{SpiceInt}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           ellips, plane, nxpts, xpt1, xpt2)
     handleerror()
     nxpts[], xpt1, xpt2
@@ -276,7 +276,7 @@ function inrypl(vertex, dir, plane)
     nxpts = Ref{SpiceInt}()
     xpt = Array{SpiceDouble}(undef, 3)
     ccall((:inrypl_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ref{Plane}, Ref{SpiceInt}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{Plane}, Ref{SpiceInt}, Ref{SpiceDouble}),
           vertex, dir, plane, nxpts, xpt)
     handleerror()
     nxpts[], xpt
@@ -417,7 +417,7 @@ intmin
 function _invert(matrix)
     out = Array{SpiceDouble}(undef, 3, 3)
     ccall((:invert_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}),
           matrix, out)
     out
 end
@@ -435,7 +435,7 @@ invert
 function _invort(matrix)
     out = Array{SpiceDouble}(undef, 3, 3)
     ccall((:invort_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}),
           matrix, out)
     out
 end
@@ -454,7 +454,7 @@ function _isordv(vec)
     vec = SpiceInt.(copy(vec) .- 1)
     n = length(vec)
     res = ccall((:isordv_c, libcspice), SpiceBoolean,
-                (Ptr{SpiceInt}, SpiceInt),
+                (Ref{SpiceInt}, SpiceInt),
                 vec, n)
     Bool(res[])
 end
@@ -472,7 +472,7 @@ isordv
 function _isrchc(value, array)
     data, m, n = chararray(array)
     res = ccall((:isrchc_c, libcspice), SpiceInt,
-                (Cstring, SpiceInt, SpiceInt, Ptr{SpiceChar}),
+                (Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}),
                 value, m, n, data)
     handleerror()
     res[] + 1
@@ -491,7 +491,7 @@ isrchc
 function _isrchd(value, array)
     n = length(array)
     res = ccall((:isrchd_c, libcspice), SpiceBoolean,
-                (SpiceDouble, SpiceInt, Ptr{SpiceDouble}),
+                (SpiceDouble, SpiceInt, Ref{SpiceDouble}),
                 value, n, array)
     handleerror()
     res[] + 1
@@ -511,7 +511,7 @@ function _isrchi(value, array)
     array = SpiceInt.(copy(array))
     n = length(array)
     res = ccall((:isrchi_c, libcspice), SpiceBoolean,
-                (SpiceInt, SpiceInt, Ptr{SpiceInt}),
+                (SpiceInt, SpiceInt, Ref{SpiceInt}),
                 value, n, array)
     handleerror()
     res[] + 1
@@ -549,7 +549,7 @@ Returns `true` if `m` is a rotation matrix.
 function isrot(m, ntol, dtol)
     size(m) != (3, 3) && throw(ArgumentError("`m` must be a 3x3 matrix."))
     res = ccall((:isrot_c, libcspice), SpiceBoolean,
-                (Ptr{SpiceDouble}, SpiceDouble, SpiceDouble),
+                (Ref{SpiceDouble}, SpiceDouble, SpiceDouble),
                 m, ntol, dtol)
     handleerror()
     Bool(res[])

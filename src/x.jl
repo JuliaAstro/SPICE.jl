@@ -33,7 +33,7 @@ function xf2eul(xform, axisa, axisb, axisc)
     eulang = Array{SpiceDouble}(undef, 6)
     unique = Ref{SpiceBoolean}()
     ccall((:xf2eul_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceInt, SpiceInt, SpiceInt, Ptr{SpiceDouble}, Ref{SpiceBoolean}),
+          (Ref{SpiceDouble}, SpiceInt, SpiceInt, SpiceInt, Ref{SpiceDouble}, Ref{SpiceBoolean}),
           xform, axisa, axisb, axisc, eulang, unique)
     handleerror()
     eulang, Bool(unique[])
@@ -63,7 +63,7 @@ function xf2rav(xform)
     rot = Array{SpiceDouble}(undef, 3, 3)
     av = Array{SpiceDouble}(undef, 3)
     ccall((:xf2rav_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           permutedims(xform), rot, av)
     permutedims(rot), av
 end
@@ -92,7 +92,7 @@ function xfmsta(input_state, input_coord_sys, output_coord_sys, body)
     length(input_state) != 6 && throw(ArgumentError("Lenght of `input_state` must be 6."))
     output_state = Array{SpiceDouble}(undef, 6)
     ccall((:xfmsta_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Cstring, Cstring, Cstring, Ptr{SpiceDouble}),
+          (Ref{SpiceDouble}, Cstring, Cstring, Cstring, Ref{SpiceDouble}),
           input_state, input_coord_sys, output_coord_sys, body, output_state)
     handleerror()
     output_state
@@ -100,7 +100,7 @@ end
 
 function _xpose6(m)
     mout = Array{SpiceDouble}(undef, 6, 6)
-    ccall((:xpose6_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ptr{SpiceDouble}), m, mout)
+    ccall((:xpose6_c, libcspice), Cvoid, (Ref{SpiceDouble}, Ref{SpiceDouble}), m, mout)
     mout
 end
 
@@ -116,7 +116,7 @@ xpose6
 
 function _xpose(m)
     mout = Array{SpiceDouble}(undef, 3, 3)
-    ccall((:xpose_c, libcspice), Cvoid, (Ptr{SpiceDouble}, Ptr{SpiceDouble}), m, mout)
+    ccall((:xpose_c, libcspice), Cvoid, (Ref{SpiceDouble}, Ref{SpiceDouble}), m, mout)
     mout
 end
 
@@ -134,7 +134,7 @@ function _xposeg(matrix)
     m, n = size(matrix)
     mout = Array{SpiceDouble}(undef, n, m)
     ccall((:xposeg_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceInt, SpiceInt, Ptr{SpiceDouble}), matrix, n, m, mout)
+          (Ref{SpiceDouble}, SpiceInt, SpiceInt, Ref{SpiceDouble}), matrix, n, m, mout)
     mout
 end
 

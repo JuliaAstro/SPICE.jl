@@ -29,7 +29,7 @@ function edlimb(a, b, c, viewpt)
     length(viewpt) != 3 && throw(ArgumentError("Length of `viewpt` must be 3."))
     limb = Ellipse()
     ccall((:edlimb_c, libcspice), Cvoid,
-           (SpiceDouble, SpiceDouble, SpiceDouble, Ptr{SpiceDouble}, Ref{Ellipse}),
+           (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}, Ref{Ellipse}),
            a, b, c, viewpt, limb)
     handleerror()
     limb
@@ -64,7 +64,7 @@ function et2utc(et, format, prec)
     lenout = 32
     utcstr = Array{UInt8}(undef, lenout)
     ccall((:et2utc_c, libcspice), Cvoid,
-          (SpiceDouble, Cstring, SpiceInt, SpiceInt, Ptr{UInt8}),
+          (SpiceDouble, Cstring, SpiceInt, SpiceInt, Ref{UInt8}),
           et, string(format), prec, lenout, utcstr)
     handleerror()
     chararray_to_string(utcstr)
@@ -91,7 +91,7 @@ Returns a standard calendar representation of `et`.
 """
 function etcal(et, lenout=128)
     string = Array{UInt8}(undef, lenout)
-    ccall((:etcal_c, libcspice), Cvoid, (SpiceDouble, SpiceInt, Ptr{UInt8}),
+    ccall((:etcal_c, libcspice), Cvoid, (SpiceDouble, SpiceInt, Ref{UInt8}),
           et, lenout, string)
     chararray_to_string(string)
 end
@@ -117,7 +117,7 @@ A rotation matrix corresponding to the product of the 3 rotations.
 function eul2m(angle3, angle2, angle1, axis3, axis2, axis1)
     r = Matrix{SpiceDouble}(undef, 3, 3)
     ccall((:eul2m_c, libcspice), Cvoid,
-          (SpiceDouble, SpiceDouble, SpiceDouble, SpiceInt, SpiceInt, SpiceInt, Ptr{SpiceDouble}),
+          (SpiceDouble, SpiceDouble, SpiceDouble, SpiceInt, SpiceInt, SpiceInt, Ref{SpiceDouble}),
           angle3, angle2, angle1, axis3, axis2, axis1, r)
     handleerror()
     permutedims(r)
@@ -155,7 +155,7 @@ function edterm(trmtyp, source, target, et, fixref, obsrvr, npts; abcorr="NONE")
     obspos = Array{SpiceDouble}(undef, 3)
     trmpts = Array{SpiceDouble}(undef, 3, npts)
     ccall((:edterm_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, SpiceInt, Ref{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble}),
+          (Cstring, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           trmtyp, source, target, et, fixref, abcorr, obsrvr, npts, trgepc, obspos, trmpts)
     handleerror()
     trgepc[], obspos, trmpts

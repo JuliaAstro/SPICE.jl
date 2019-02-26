@@ -121,8 +121,8 @@ function nearpt(positn, a, b, c)
     npoint = Array{SpiceDouble}(undef, 3)
     alt = Ref{SpiceDouble}()
     ccall((:nearpt_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceDouble, SpiceDouble, SpiceDouble,
-           Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{SpiceDouble}, SpiceDouble, SpiceDouble, SpiceDouble,
+           Ref{SpiceDouble}, Ref{SpiceDouble}),
           collect(positn), a, b, c, npoint, alt)
     handleerror()
     npoint, alt[]
@@ -159,8 +159,8 @@ function npedln(a, b, c, linept, linedr)
     pnear = Array{SpiceDouble}(undef, 3)
     dist = Ref{SpiceDouble}()
     ccall((:npedln_c, libcspice), Cvoid,
-          (SpiceDouble, SpiceDouble, SpiceDouble, Ptr{SpiceDouble},
-           Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble},
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           a, b, c, collect(linept), collect(linedr), pnear, dist)
     handleerror()
     pnear, dist[]
@@ -194,7 +194,7 @@ function npelpt(point, ellips)
     pnear = Array{SpiceDouble}(undef, 3)
     dist = Ref{SpiceDouble}()
     ccall((:npelpt_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ref{Ellipse}, Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{Ellipse}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           collect(point), ellips, pnear, dist)
     handleerror()
     pnear, dist[]
@@ -230,8 +230,8 @@ function nplnpt(linept, linedr, point)
     pnear = Array{SpiceDouble}(undef, 3)
     dist = Ref{SpiceDouble}()
     ccall((:nplnpt_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ptr{SpiceDouble},
-           Ptr{SpiceDouble}, Ref{SpiceDouble}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble},
+           Ref{SpiceDouble}, Ref{SpiceDouble}),
           collect(linept), collect(linedr), collect(point), pnear, dist)
     handleerror()
     pnear, dist[]
@@ -259,7 +259,7 @@ function nvc2pl(norm, constant)
     length(norm) != 3 && throw(ArgumentError("`norm` must be an iterable with three elements."))
     plane = Ref{Plane}(Plane())
     ccall((:nvc2pl_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, SpiceDouble, Ref{Plane}), collect(norm), constant, plane)
+          (Ref{SpiceDouble}, SpiceDouble, Ref{Plane}), collect(norm), constant, plane)
     handleerror()
     plane[]
 end
@@ -287,7 +287,7 @@ function nvp2pl(norm, orig)
     length(orig) != 3 && throw(ArgumentError("`orig` must be an iterable with three elements."))
     plane = Ref{Plane}(Plane())
     ccall((:nvp2pl_c, libcspice), Cvoid,
-          (Ptr{SpiceDouble}, Ptr{SpiceDouble}, Ref{Plane}),
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{Plane}),
           collect(norm), collect(orig), plane)
     handleerror()
     plane[]
