@@ -561,11 +561,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.dafgs",
+    "location": "api/#SPICE.dafgs!-Tuple{Any}",
     "page": "API",
-    "title": "SPICE.dafgs",
-    "category": "function",
-    "text": "dafgs(lenout=128)\n\nReturn (get) the summary for the current array in the current DAF.\n\nArguments\n\nlenout: Length of output array (default: 128)\n\nOutput\n\nReturns the summary for the current array.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "title": "SPICE.dafgs!",
+    "category": "method",
+    "text": "dafgs!(sum)\n\nReturn (get) the summary for the current array in the current DAF and write it to sum.\n\nArguments\n\nsum: An empty Vector{Float64} with the expected length\n\nOutput\n\nReturns the summary for the current array.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafgsr-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.dafgsr",
+    "category": "method",
+    "text": "Read a portion of the contents of a summary record in a DAF file.\n\nArguments\n\nhandle: Handle of DAF\nrecno: Record number\nstart: First word to read from record\nstop: Last word to read from record\n\nOutput\n\nReturns the contents of the record or nothing if none was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -582,6 +590,22 @@ var documenterSearchIndex = {"docs": [
     "title": "SPICE.dafopw",
     "category": "method",
     "text": "dafopw(fname)\n\nOpen a DAF for subsequent write requests.\n\nArguments\n\nfname: Name of DAF to be opened\n\nOutput\n\nReturns the handle assigned to DAF.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafrfr",
+    "page": "API",
+    "title": "SPICE.dafrfr",
+    "category": "function",
+    "text": "dafrfr(handle, lenout=128)\n\nRead the contents of the file record of a DAF.\n\nArguments\n\nhandle: Handle of an open DAF file\nlenout: Available room in the output string `ifname\' (default: 128)\n\nOutput\n\nnd: Number of double precision components in summaries\nni: Number of integer components in summaries\nifname: Internal file name\nfward: Forward list pointer\nbward: Backward list pointer\nfree: Free address pointer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafus-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.dafus",
+    "category": "method",
+    "text": "dafus(sum, nd, ni)\n\nUnpack an array summary into its double precision and integer components.\n\nArguments\n\nsum: Array summary\nnd: Number of double precision components\nni: Number of integer components\n\nOutput\n\ndc: Double precision components\nic: Integer components\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
