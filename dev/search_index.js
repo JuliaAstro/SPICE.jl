@@ -465,11 +465,131 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.dafac-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.dafac",
+    "category": "method",
+    "text": "dafac(handle, buffer)\n\nAdd comments from a buffer of character strings to the comment area of a binary DAF file, appending them to any comments which are already present in the file\'s comment area.\n\nArguments\n\nhandle: Handle of a DAF opened with write access\nbuffer: Buffer of comments to put into the comment area\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafbbs-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dafbbs",
+    "category": "method",
+    "text": "dafbbs(handle)\n\nBegin a backward search for arrays in a DAF.\n\nArguments\n\nhandle: Handle of DAF to be searched\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafbfs-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dafbfs",
+    "category": "method",
+    "text": "dafbfs(handle)\n\nBegin a forward search for arrays in a DAF.\n\nArguments\n\nhandle: Handle of DAF to be searched\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafcls-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dafcls",
+    "category": "method",
+    "text": "dafcls(handle)\n\nClose the DAF associated with a given handle.\n\nArguments\n\nhandle: Handle of DAF to be closed\n\nOutput\n\nReturns the handle of the closed file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafcs-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dafcs",
+    "category": "method",
+    "text": "dafcs(handle)\n\nSelect a DAF that already has a search in progress as the one to continue searching.\n\nArguments\n\nhandle: Handle of DAF to continue searching\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafdc-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dafdc",
+    "category": "method",
+    "text": "dafdc(handle)\n\nDelete the entire comment area of a specified DAF file.\n\nArguments\n\nhandle: The handle of a binary DAF opened for writing\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafec-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dafec",
+    "category": "method",
+    "text": "dafec(handle; bufsiz=256, lenout=1024)\n\nExtract comments from the comment area of a binary DAF.\n\nArguments\n\nhandle: Handle of binary DAF opened with read access\nbufsiz: Maximum size, in lines, of buffer (default: 256)\nlenout: Length of strings in output buffer (default: 1024)\n\nOutput\n\nReturns a buffer where extracted comment lines are placed.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.daffna-Tuple{}",
+    "page": "API",
+    "title": "SPICE.daffna",
+    "category": "method",
+    "text": "daffna()\n\nFind the next (forward) array in the current DAF.\n\nOutput\n\nReturns true if an array was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.daffpa-Tuple{}",
+    "page": "API",
+    "title": "SPICE.daffpa",
+    "category": "method",
+    "text": "daffpa()\n\nFind the previous (backward) array in the current DAF.\n\nOutput\n\nReturns true if an array was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafgda-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.dafgda",
+    "category": "method",
+    "text": "dafgda(handle, start, stop)\n\nRead the double precision data bounded by two addresses within a DAF.\n\nArguments\n\nhandle: Handle of a DAF\nstart, stop: Initial, final address within file\n\nOutput\n\nReturns the data contained between start and stop.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafgh-Tuple{}",
+    "page": "API",
+    "title": "SPICE.dafgh",
+    "category": "method",
+    "text": "dafgh()\n\nReturn (get) the handle of the DAF currently being searched.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafgn",
+    "page": "API",
+    "title": "SPICE.dafgn",
+    "category": "function",
+    "text": "dafgn(lenout=128)\n\nReturn (get) the name for the current array in the current DAF.\n\nArguments\n\nlenout: Length of array name string (default: 128)\n\nOutput\n\nReturns the name of the current array.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafgs",
+    "page": "API",
+    "title": "SPICE.dafgs",
+    "category": "function",
+    "text": "dafgs(lenout=128)\n\nReturn (get) the summary for the current array in the current DAF.\n\nArguments\n\nlenout: Length of output array (default: 128)\n\nOutput\n\nReturns the summary for the current array.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafopr-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dafopr",
+    "category": "method",
+    "text": "dafopr(fname)\n\nOpen a DAF for subsequent read requests.\n\nArguments\n\nfname: Name of DAF to be opened\n\nOutput\n\nReturns the handle assigned to DAF.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dafopw-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dafopw",
+    "category": "method",
+    "text": "dafopw(fname)\n\nOpen a DAF for subsequent write requests.\n\nArguments\n\nfname: Name of DAF to be opened\n\nOutput\n\nReturns the handle assigned to DAF.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.dtpool-Tuple{Any}",
     "page": "API",
     "title": "SPICE.dtpool",
     "category": "method",
-    "text": "dtpool(name)\n\nReturn the data about a kernel pool variable. \n\nArguments\n\nname: Name of the variable whose value is to be returned\n\nOutput\n\nReturns the tuple (n ,vartype).\n\nn: Number of values returned for name\nvartype: Type of the variable\n:C if the data is character data\n:N if the data is numeric\n:X if there is no variable name in the pool\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "dtpool(name)\n\nReturn the data about a kernel pool variable.\n\nArguments\n\nname: Name of the variable whose value is to be returned\n\nOutput\n\nReturns the tuple (n ,vartype).\n\nn: Number of values returned for name\nvartype: Type of the variable\n:C if the data is character data\n:N if the data is numeric\n:X if there is no variable name in the pool\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -2581,7 +2701,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.tparse",
     "category": "method",
-    "text": "tparse(string)\n\nParse a time string and return seconds past the J2000 epoch on a formal calendar. \n\nArguments\n\nstring: Input time string in UTC\n\nOutput\n\nReturns UTC expressed in seconds since J2000.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "tparse(string)\n\nParse a time string and return seconds past the J2000 epoch on a formal calendar.\n\nArguments\n\nstring: Input time string in UTC\n\nOutput\n\nReturns UTC expressed in seconds since J2000.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
