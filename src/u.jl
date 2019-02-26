@@ -15,7 +15,7 @@ function _ucase(in)
     out = Array{UInt8}(undef, n)
     ccall((:ucase_c, libcspice), Cvoid, (Cstring, SpiceInt, Ptr{UInt8}),
           in, n, out)
-    unsafe_string(pointer(out))
+    chararray_to_string(out)
 end
 
 """

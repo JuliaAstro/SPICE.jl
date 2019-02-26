@@ -161,7 +161,7 @@ function frmnam(frcode)
     frname = Array{UInt8}(undef, lenout)
     ccall((:frmnam_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ptr{UInt8}),
           frcode, lenout, frname)
-    unsafe_string(pointer(frname))
+    chararray_to_string(frname)
 end
 
 @deprecate ftncls close

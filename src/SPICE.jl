@@ -28,7 +28,7 @@ function handleerror()
         # Retrive error message
         msg = Array{UInt8}(undef, 1841)
         ccall((:getmsg_c, libcspice), Cvoid, (Cstring, Cint, Ptr{UInt8}), "LONG", 1841, msg)
-        message = unsafe_string(pointer(msg))
+        message = String(msg[1:findfirst(iszero, msg) - 1])
         # Reset error status and throw Julia error
         ccall((:reset_c, libcspice), Cvoid, ())
         throw(SpiceError(message))
@@ -55,6 +55,23 @@ function chararray(strings)
         out[start:stop] = codeunits(s)
     end
     out, m, n
+end
+
+function chararray_to_string(array::Vector{UInt8})
+    String(array[1:findfirst(iszero, array) - 1])
+end
+
+function chararray_to_string(array::Matrix{UInt8}, nmax=-1)
+    strings = String[]
+    m, n = size(array)
+    n = nmax == -1 ? n : nmax
+    n == 0 && return strings
+    for i = 1:n
+        line = array[:, i]
+        idx = findfirst(iszero, line) - 1
+        push!(strings, String(line[1:idx]))
+    end
+    strings
 end
 
 function array_to_cmatrix(array; n=0)

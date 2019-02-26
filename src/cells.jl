@@ -94,7 +94,7 @@ end
 function getindex(cell::SpiceCharCell, ind::Int)
     check_ind(cell, ind)
     str = cell.data[:, CTRLSZ .+ ind]
-    String(str[1:findfirst(str .== 0)-1])
+    chararray_to_string(str)
 end
 
 """

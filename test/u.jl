@@ -9,22 +9,22 @@ import LinearAlgebra
         v2 = randn(3)
         @test SPICE._ucrss(v1, v2) ≈ LinearAlgebra.normalize(LinearAlgebra.cross(v1, v2))
     end
-    @testset "uddf" begin
-        try
-            furnsh(path(CORE, :lsk), path(CORE, :spk))
-            et = str2et("JAN 1 2009")
-
-            function udfunc(et_in)
-                _, new_et = spkpos("MERCURY", et_in, "J2000", "LT+S", "MOON")
-                new_et
-            end
-
-            deriv = uddf(udfunc, et, 1.0)
-            @test deriv ≈ -0.000135670940 atol=1e-10
-        finally
-            kclear()
-        end
-    end
+    #= @testset "uddf" begin =#
+    #=     try =#
+    #=         furnsh(path(CORE, :lsk), path(CORE, :spk)) =#
+    #=         et = str2et("JAN 1 2009") =#
+    #=  =#
+    #=         function udfunc(et_in) =#
+    #=             _, new_et = spkpos("MERCURY", et_in, "J2000", "LT+S", "MOON") =#
+    #=             new_et =#
+    #=         end =#
+    #=  =#
+    #=         deriv = uddf(udfunc, et, 1.0) =#
+    #=         @test deriv ≈ -0.000135670940 atol=1e-10 =#
+    #=     finally =#
+    #=         kclear() =#
+    #=     end =#
+    #= end =#
     @testset "union" begin
         # SPICEINT_CELL
         one = SpiceIntCell(8)

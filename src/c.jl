@@ -60,7 +60,7 @@ function ccifrm(frclss, clssid)
          )
     handleerror()
     found[] == 0 && throw(SpiceError("No frame with class $frclss and class ID $clssid found."))
-    frcode[], unsafe_string(pointer(frname)), center[]
+    frcode[], chararray_to_string(frname), center[]
 end
 
 """
@@ -316,7 +316,7 @@ function cidfrm(cent)
     ccall((:cidfrm_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}, Ref{SpiceBoolean}),
           cent, lenout, frcode, frname, found)
     found[] == 0 && throw(SpiceError("No frame associated with body $cent found."))
-    frcode[], unsafe_string(pointer(frname))
+    frcode[], chararray_to_string(frname)
 end
 
 """
@@ -462,7 +462,7 @@ function cmprss(delim, n, input)
           (Cchar, SpiceInt, Cstring, SpiceInt, Ptr{UInt8}),
           first(delim), n, input, lenout, output)
     handleerror()
-    unsafe_string(pointer(output))
+    chararray_to_string(output)
 end
 
 """
@@ -489,7 +489,12 @@ function cnmfrm(cname, lenout=LENOUT)
     found = Ref{SpiceBoolean}()
     ccall((:cnmfrm_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}, Ref{SpiceBoolean}),
           cname, lenout, frcode, frname, found)
-    found[] == 1 ? (frcode[], unsafe_string(pointer(frname))) : nothing
+    if Bool(found[])
+        code = frcode[]
+        name = chararray_to_string(frname)
+        return code, name
+    end
+    nothing
 end
 
 """

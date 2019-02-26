@@ -161,14 +161,14 @@ function dafec(handle; bufsiz=256, lenout=1024)
           (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{SpiceChar}, Ref{SpiceBoolean}),
           handle, bufsiz, lenout, n, buffer, done)
     handleerror()
-    output = String[unsafe_string(pointer(buffer[:,i])) for i in 1:n[]]
+    output = chararray_to_string(buffer, n[])
     while !Bool(done[])
         buffer = Array{SpiceChar}(undef, lenout, bufsiz)
         ccall((:dafec_c, libcspice), Cvoid,
               (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{SpiceChar}, Ref{SpiceBoolean}),
               handle, bufsiz, lenout, n, buffer, done)
         handleerror()
-        append!(output, String[unsafe_string(pointer(buffer[:,i])) for i in 1:n[]])
+        append!(output, chararray_to_string(buffer, n[]))
     end
     output
 end

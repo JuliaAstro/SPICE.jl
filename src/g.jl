@@ -37,7 +37,7 @@ function gcpool(name; start=1, room=100, lenout=128)
           name, start - 1, room, lenout, n, values, found)
     handleerror()
     if Bool(found[])
-        return String[unsafe_string(pointer(values[:,i])) for i in 1:n[]]
+        return chararray_to_string(values, n[])
     end
     nothing
 end
@@ -172,7 +172,9 @@ function getfov(instid, room=10, shapelen=128, framelen=128)
           instid, room, shapelen, framelen, shape, frame, bsight, n, bounds)
     handleerror()
     arr_bounds = cmatrix_to_array(bounds)
-    unsafe_string(pointer(shape)), unsafe_string(pointer(frame)), bsight, arr_bounds[1:n[]]
+    shp = chararray_to_string(shape)
+    frm = chararray_to_string(frame)
+    shp, frm, bsight, arr_bounds[1:n[]]
 end
 
 """

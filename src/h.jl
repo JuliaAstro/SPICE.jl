@@ -72,8 +72,9 @@ function hx2dp(str)
     errmsg = Array{UInt8}(undef, 46)
     ccall((:hx2dp_c, libcspice), Cvoid,
         (Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceBoolean}, Ptr{UInt8}),
-        str, 46, dp, error, errmsg
-    )
-    error[] == 1 && throw(SpiceError(unsafe_string(pointer(errmsg))))
+        str, 46, dp, error, errmsg)
+    if Bool(error[])
+        throw(SpiceError(chararray_to_string(errmsg)))
+    end
     dp[]
 end

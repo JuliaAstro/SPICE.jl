@@ -67,7 +67,7 @@ function et2utc(et, format, prec)
           (SpiceDouble, Cstring, SpiceInt, SpiceInt, Ptr{UInt8}),
           et, string(format), prec, lenout, utcstr)
     handleerror()
-    unsafe_string(pointer(utcstr))
+    chararray_to_string(utcstr)
 end
 
 """
@@ -93,7 +93,7 @@ function etcal(et, lenout=128)
     string = Array{UInt8}(undef, lenout)
     ccall((:etcal_c, libcspice), Cvoid, (SpiceDouble, SpiceInt, Ptr{UInt8}),
           et, lenout, string)
-    unsafe_string(pointer(string))
+    chararray_to_string(string)
 end
 
 """

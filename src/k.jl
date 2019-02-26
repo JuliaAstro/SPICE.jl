@@ -60,7 +60,7 @@ function kdata(which, kind, fillen=1024, srclen=256)
           which - 1, kind, fillen, typlen, srclen, file, filtyp, source, handle, found)
     handleerror()
     Bool(found[]) || return nothing
-    unsafe_string(pointer(file)), unsafe_string(pointer(filtyp)), unsafe_string(pointer(source)), handle[]
+    chararray_to_string(file), chararray_to_string(filtyp), chararray_to_string(source), handle[]
 end
 
 """
@@ -95,7 +95,7 @@ function kinfo(file, srclen=256)
           file, typlen, srclen, filtyp, source, handle, found)
     handleerror()
     Bool(found[]) || return nothing
-    unsafe_string(pointer(filtyp)), unsafe_string(pointer(source)), handle[]
+    chararray_to_string(filtyp), chararray_to_string(source), handle[]
 end
 
 """
@@ -176,6 +176,6 @@ function kxtrct(keywd, terms, string, substrlen=256)
            Ptr{SpiceChar}, Ref{SpiceBoolean}, Ptr{SpiceChar}),
           keywd, termlen, terms, nterms, stringlen, substrlen, str, found, substr)
     Bool(found[]) || return nothing
-    unsafe_string(pointer(str)), unsafe_string(pointer(substr))
+    chararray_to_string(str), chararray_to_string(substr)
 end
 

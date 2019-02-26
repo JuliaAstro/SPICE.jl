@@ -188,7 +188,7 @@ function _lcase(in,lenout)
     out = Array{UInt8}(undef, lenout)
     ccall((:lcase_c, libcspice), Cvoid, (Cstring, SpiceInt, Ptr{UInt8}), in, lenout, out)
     handleerror()
-    unsafe_string(pointer(out))
+    chararray_to_string(out)
 end
 """
     lcase(in)
@@ -367,11 +367,7 @@ function lparse(list, delim, nmax)
     ccall((:lparse_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}),
           list, delim, nmax, lenout, n , items)
     handleerror()
-    out = Array{String}(undef, n[])
-    for i in 1:n[]
-        out[i] = unsafe_string(pointer(items[:,i]))
-    end
-    out
+    chararray_to_string(items, n[])
 end
 
 """
@@ -401,11 +397,7 @@ function lparsm(list, delims, nmax, lenout)
     ccall((:lparsm_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ptr{UInt8}),
           list, delims, nmax, lenout, n , items)
     handleerror()
-    out = Array{String}(undef, n[])
-    for i in 1:n[]
-        out[i] = unsafe_string(pointer(items[:,i]))
-    end
-    out
+    chararray_to_string(items, n[])
 end
 
 """

@@ -59,7 +59,7 @@ function timdef(action, item, value="")
           (Cstring, Cstring, SpiceInt, Ptr{UInt8}),
           string(action), string(item), lenout, val)
     handleerror()
-    unsafe_string(pointer(val))
+    chararray_to_string(val)
 end
 
 """
@@ -68,7 +68,7 @@ end
 This routine converts an input epoch represented in TDB seconds past the TDB
 epoch of J2000 to a character string formatted to the specifications of a
 user's format picture.
- 
+
 ### Arguments ###
 
 - `et`: An epoch in seconds past the ephemeris epoch J2000
@@ -89,7 +89,7 @@ function timout(et, pictur, lenout=128)
           (Cdouble, Cstring, Cint, Ptr{UInt8}),
           et, pictur, lenout, string)
     handleerror()
-    unsafe_string(pointer(string))
+    chararray_to_string(string)
 end
 
 """
@@ -161,13 +161,13 @@ version string.
 """
 function tkvrsn(item=:TOOLKIT)
     out = ccall((:tkvrsn_c, libcspice), Cstring, (Cstring,), string(item))
-    unsafe_string(pointer(out))
+    GC.@preserve out unsafe_string(pointer(out))
 end
 
 """
     tparse(string)
 
-Parse a time string and return seconds past the J2000 epoch on a formal calendar. 
+Parse a time string and return seconds past the J2000 epoch on a formal calendar.
 
 ### Arguments ###
 
@@ -188,7 +188,7 @@ function tparse(string)
     ccall((:tparse_c, libcspice), Cvoid,
           (Cstring, SpiceInt, Ref{SpiceDouble}, Ptr{UInt8}),
           string, lenout, sp2000, errmsg)
-    msg = unsafe_string(pointer(errmsg))
+    msg = chararray_to_string(errmsg)
     if !isempty(msg)
         throw(SpiceError(msg))
     end
@@ -223,10 +223,9 @@ function tpictr(sample, lenout=80)
           (Cstring, SpiceInt, SpiceInt, Ptr{UInt8}, Ref{SpiceBoolean}, Ptr{UInt8}),
           sample, lenout, lenerr, pictur, ok, errmsg)
     if !Bool(ok[])
-        msg = unsafe_string(pointer(errmsg))
-        throw(SpiceError(msg))
+        throw(SpiceError(chararray_to_string(errmsg)))
     end
-    unsafe_string(pointer(pictur))
+    chararray_to_string(pictur)
 end
 
 function _trace(matrix)

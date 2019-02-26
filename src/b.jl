@@ -122,7 +122,7 @@ function bodc2n(code)
     ccall((:bodc2n_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ptr{UInt8}, Ref{SpiceBoolean}),
           code, 36, name, found)
     found[] == 0 && throw(SpiceError("No body with code $code found."))
-    unsafe_string(pointer(name))
+    chararray_to_string(name)
 end
 
 """
@@ -148,7 +148,7 @@ function bodc2s(code)
     name = Array{UInt8}(undef, len)
     ccall((:bodc2s_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ptr{UInt8}),
           code, 36, name)
-    unsafe_string(pointer(name))
+    chararray_to_string(name)
 end
 
 """

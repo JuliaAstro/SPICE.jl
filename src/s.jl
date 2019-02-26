@@ -173,7 +173,7 @@ function scdecd(sc, sclkdp, lenout=128)
           (SpiceInt, SpiceDouble, SpiceInt, Ptr{SpiceChar}),
           sc, sclkdp, lenout, sclkch)
     handleerror()
-    unsafe_string(pointer(sclkch))
+    chararray_to_string(sclkch)
 end
 
 """
@@ -230,7 +230,7 @@ function sce2s(sc, et, lenout=128)
           (SpiceInt, SpiceDouble, SpiceInt, Ptr{SpiceChar}),
           sc, et, lenout, sclkch)
     handleerror()
-    unsafe_string(pointer(sclkch))
+    chararray_to_string(sclkch)
 end
 
 """
@@ -314,7 +314,7 @@ function scfmt(sc, ticks, lenout=128)
           (SpiceInt, SpiceDouble, SpiceInt, Ptr{SpiceChar}),
           sc, ticks, lenout, clkstr)
     handleerror()
-    unsafe_string(pointer(clkstr))
+    chararray_to_string(clkstr)
 end
 
 """
@@ -492,7 +492,7 @@ function _shellc(array)
           (SpiceInt, SpiceInt, Ptr{SpiceChar}),
           m, n, carray)
     handleerror()
-    array[:] .= [unsafe_string(pointer(carray[:, i])) for i = 1:m]
+    array[:] .= chararray_to_string(carray, m)
 end
 
 """
@@ -1548,7 +1548,7 @@ function spksfs(body, et)
           body, et, idlen, handle, descr, ident, found)
     handleerror()
     Bool(found[]) || return nothing
-    handle[], descr, unsafe_string(pointer(ident))
+    handle[], descr, chararray_to_string(ident)
 end
 
 """
@@ -2123,7 +2123,7 @@ function srfc2s(code, bodyid)
           (SpiceInt, SpiceInt, SpiceInt, Ptr{SpiceChar}, Ref{SpiceBoolean}),
           code, bodyid, SPICE_SRF_SFNMLN, srfstr, isname)
     handleerror()
-    unsafe_string(pointer(srfstr)), Bool(isname[])
+    chararray_to_string(srfstr), Bool(isname[])
 end
 
 """
@@ -2153,7 +2153,7 @@ function srfcss(code, bodstr)
           (SpiceInt, Cstring, SpiceInt, Ptr{SpiceChar}, Ref{SpiceBoolean}),
           code, bodstr, SPICE_SRF_SFNMLN, srfstr, isname)
     handleerror()
-    unsafe_string(pointer(srfstr)), Bool(isname[])
+    chararray_to_string(srfstr), Bool(isname[])
 end
 
 """
@@ -2376,7 +2376,7 @@ function stpool(item, nth, contin, lenout=1024)
           (Cstring, SpiceInt, Cstring, SpiceInt, Ptr{SpiceChar}, Ref{SpiceInt}, Ref{SpiceBoolean}),
           item, nth - 1, contin, lenout, string, size, found)
     handleerror()
-    unsafe_string(pointer(string))
+    chararray_to_string(string)
 end
 
 """
