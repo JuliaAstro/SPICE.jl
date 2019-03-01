@@ -849,11 +849,131 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.dskb02-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.dskb02",
+    "category": "method",
+    "text": "dskb02(handle, dladsc)\n\nReturn bookkeeping data from a DSK type 2 segment.\n\nArguments\n\nhandle: DSK file handle\ndladsc: DLA descriptor\n\nOutput\n\nnv: Number of vertices in model\nnp: Number of plates in model\nnvxtot: Number of voxels in fine grid\nvtxbds: Vertex bounds\nvoxsiz: Fine voxel edge length\nvoxori: Fine voxel grid origin\nvgrext: Fine voxel grid exent\ncgscal: Coarse voxel grid scale\nvtxnpl: Size of vertex-plate correspondence list\nvoxnpt: Size of voxel-plate pointer list\nvoxnpl: Size of voxel-plate correspondence list\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskcls",
+    "page": "API",
+    "title": "SPICE.dskcls",
+    "category": "function",
+    "text": "dskcls(handle, optmiz=true)\n\nClose a DSK file.\n\nArguments\n\nhandle: Handle assigned to the opened DSK file\noptmiz: Flag indicating whether to segregate the DSK (default: true)\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskd02-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.dskd02",
+    "category": "method",
+    "text": "dskd02(handle, dladsc, item, start, room)\n\nFetch double precision data from a type 2 DSK segment.\n\nArguments\n\nhandle: DSK file handle\ndladsc: DLA descriptor\nitem: Keyword identifying item to fetch\nstart: Start index\nroom: Amount of room in output array\n\nOutput\n\nReturns an array containing the requested item.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskgd-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.dskgd",
+    "category": "method",
+    "text": "dskgd(handle, dladsc)\n\nReturn the DSK descriptor from a DSK segment identified by a DAS handle and DLA descriptor.\n\nArguments\n\nhandle: Handle of a DSK file\ndladsc: DLA segment descriptor\n\nOutput\n\nReturns the DSK segment descriptor.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskgtl-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dskgtl",
+    "category": "method",
+    "text": "dskgtl(keywrd)\n\nRetrieve the value of a specified DSK tolerance or margin parameter.\n\nArguments\n\nkeywrd: Code specifying parameter to retrieve\n\nOutput\n\nReturns the value of the parameter.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dski02-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.dski02",
+    "category": "method",
+    "text": "dski02(handle, dladsc, item, start, room)\n\nFetch integer data from a type 2 DSK segment.\n\nArguments\n\nhandle: DSK file handle\ndladsc: DLA descriptor\nitem: Keyword identifying item to fetch\nstart: Start index\nroom: Amount of room in output array\n\nOutput\n\nReturns an array containing the requested item.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskmi2-NTuple{9,Any}",
+    "page": "API",
+    "title": "SPICE.dskmi2",
+    "category": "method",
+    "text": "dskmi2(vrtces, plates, finscl, corscl, worksz, voxpsz, voxlsz, makvtl, spaisz)\n\nMake spatial index for a DSK type 2 segment.\n\nArguments\n\nvrtces: Vertices\nplates: Plates\nfinscl: Fine voxel scale\ncorscl: Coarse voxel scale\nworksz: Workspace size\nvoxpsz: Voxel-plate pointer array size\nvoxlsz: Voxel-plate list array size\nmakvtl: Vertex-plate list flag\nspxisz: Spatial index integer component size\n\nOutput\n\nspaixd: Double precision component of spatial index.\nspaixi: Integer component of spatial index.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskn02-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.dskn02",
+    "category": "method",
+    "text": "dskn02(handle, dladsc, plid)\n\nCompute the unit normal vector for a specified plate from a type 2 DSK segment.\n\nArguments\n\nhandle: DSK file handle\ndladsc: DLA descriptor\nplid: Plate ID\n\nOutput\n\nReturn the plate\'s unit normal vector.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskobj!-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.dskobj!",
+    "category": "method",
+    "text": "dskobj(dsk, size=100)\ndskobj!(set, dsk)\n\nFind the set of body ID codes of all objects for which topographic data are provided in a specified DSK file.\n\nArguments\n\ndsk: Name of DSK file\nset or len: Either a preallocated SpiceIntCell or the size of the output set.\n\nOutput\n\nReturns the set of ID codes of objects in the DSK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.dskopn-Tuple{Any,Any,Any}",
     "page": "API",
     "title": "SPICE.dskopn",
     "category": "method",
     "text": "dskopn(fname, ifname, ncomch)\n\nOpen a new DSK file for subsequent write operations.\n\nArguments\n\nfname: Name of a DSK file to be opened\nifname: Internal file name\nncomch: Number of comment characters to allocate\n\nOutput\n\nReturns the handle assigned to the opened DSK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskp02-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.dskp02",
+    "category": "method",
+    "text": "dskp02(handle, dladsc, start, room)\n\nFetch triangular plates from a type 2 DSK segment.\n\nArguments\n\nhandle: DSK file handle\ndladsc: DLA descriptor\nstart: Start index\nroom: Amount of room in output array\n\nOutput\n\nReturns an array of plates.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskrb2-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.dskrb2",
+    "category": "method",
+    "text": "dskrb2(vrtces, plates, corsys, corpar)\n\nDetermine range bounds for a set of triangular plates to be stored in a type 2 DSK segment.\n\nArguments\n\nvrtces: Vertices\nplates: Plates\ncorsys: DSK coordinate system code\ncorpar: DSK coordinate system parameters\n\nOutput\n\nmncor3: Lower bound on range of third coordinate\nmxcor3: Upper bound on range of third coordinate\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dsksrf!-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.dsksrf!",
+    "category": "method",
+    "text": "dsksrf(dsk, size=100)\ndsksrf!(set, dsk)\n\nFind the set of surface ID codes of all objects for which topographic data are provided in a specified DSK file.\n\nArguments\n\ndsk: Name of DSK file\nset or len: Either a preallocated SpiceIntCell or the size of the output set.\n\nOutput\n\nReturns the set of ID codes of surfaces in the DSK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskstl-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.dskstl",
+    "category": "method",
+    "text": "dskstl(keywrd)\n\nSet the value of a specified DSK tolerance or margin parameter.\n\nArguments\n\nkeywrd: Code specifying parameter to retrieve\ndpval: Value of parameter\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskv02-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.dskv02",
+    "category": "method",
+    "text": "dskv02(handle, dladsc, start, room)\n\nFetch vertices from a type 2 DSK segment.\n\nArguments\n\nhandle: DSK file handle\ndladsc: DLA descriptor\nstart: Start index\nroom: Amount of room in output array\n\nOutput\n\nReturns an array of vertices.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskw02-NTuple{19,Any}",
+    "page": "API",
+    "title": "SPICE.dskw02",
+    "category": "method",
+    "text": "dskw02(handle, center, surfid, dclass, frame, corsys, corpar, mncor1, mxcor1,\n       mncor2, mxcor2, mncor3, mxcor3, first, last, vrtces, plates, spaixd, spaixi)\n\nWrite a type 2 segment to a DSK file.\n\nArguments\n\nhandle: Handle assigned to the opened DSK file\ncenter: Central body ID code\nsurfid: Surface ID code\ndclass: Data class\nframe: Reference frame\ncorsys: Coordinate system code\ncorpar: Coordinate system parameters\nmncor1: Minimum value of first coordinate\nmxcor1: Maximum value of first coordinate\nmncor2: Minimum value of second coordinate\nmxcor2: Maximum value of second coordinate\nmncor3: Minimum value of third coordinate\nmxcor3: Maximum value of third coordinate\nfirst: Coverage start time\nlast: Coverage stop time\nnv: Number of vertices\nvrtces: Vertices\nnp: Number of plates\nplates: Plates\nspaixd: Double precision component of spatial index\nspaixi: Integer component of spatial index\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
