@@ -1,5 +1,6 @@
 export
     DLADescr,
+    DSKDescr,
     Ellipse,
     center,
     semi_major,
@@ -40,5 +41,23 @@ struct DLADescr
     dsize::SpiceInt
     cbase::SpiceInt
     csize::SpiceInt
+end
+
+struct DSKDescr
+    surfce::SpiceInt
+    center::SpiceInt
+    dclass::SpiceInt
+    dtype::SpiceInt
+    frmcde::SpiceInt
+    corsys::SpiceInt
+    corpar::NTuple{10, SpiceDouble}
+    co1min::SpiceDouble
+    co1max::SpiceDouble
+    co2min::SpiceDouble
+    co2max::SpiceDouble
+    co3min::SpiceDouble
+    co3max::SpiceDouble
+    start::SpiceDouble
+    stop::SpiceDouble
 end
 

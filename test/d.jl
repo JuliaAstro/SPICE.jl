@@ -405,203 +405,169 @@
                     0.0 -1.0 0.0]
         @test output ≈ expected
     end
-    #= @testset "dskgtl_dskstl" begin =#
-    #=     SPICE_DSK_KEYXFR = 1 =#
-    #=     @test dskgtl(SPICE_DSK_KEYXFR) == pytest.approx(1.0e-10) =#
-    #=     dskstl(SPICE_DSK_KEYXFR, 1.0e-8) =#
-    #=     @test dskgtl(SPICE_DSK_KEYXFR) == pytest.approx(1.0e-8) =#
-    #=     dskstl(SPICE_DSK_KEYXFR, 1.0e-10) =#
-    #=     @test dskgtl(SPICE_DSK_KEYXFR) == pytest.approx(1.0e-10) =#
-    #= @testset "dskobj_dsksrf" begin =#
-    #=     reset() =#
-    #=     kclear() =#
-    #=     bodyids = dskobj(ExtraKernels.phobosDsk) =#
-    #=     @test 401 in bodyids =#
-    #=     srfids = dsksrf(ExtraKernels.phobosDsk, 401) =#
-    #=     @test 401 in srfids =#
-    #=     kclear() =#
-    #=     reset() =#
-    #= @testset "dskopn_dskcls" begin =#
-    #=     kclear() =#
-    #=     dskpath = os.path.join(cwd, "TEST.dsk") =#
-    #=     if exists(dskpath): =#
-    #=         os.remove(dskpath) # pragma: no cover =#
-    #=     handle = dskopn(dskpath, "TEST.DSK/NAIF/NJB/20-OCT-2006/14:37:00", 0) =#
-    #=     @test handle is not None =#
-    #=     dskcls(handle) =#
-    #=     if exists(dskpath): =#
-    #=         os.remove(dskpath) # pragma: no cover =#
-    #=     kclear() =#
-    #= @testset "dskb02" begin =#
-    #=     kclear() =#
-    #=     # open the dsk file =#
-    #=     handle = dasopr(ExtraKernels.phobosDsk) =#
-    #=     # get the dladsc from the file =#
-    #=     dladsc = dlabfs(handle) =#
-    #=     # test dskb02 =#
-    #=     nv, nump, nvxtot, vtxbds, voxsiz, voxori, vgrext, cgscal, vtxnpl, voxnpt, voxnpl = dskb02(handle, dladsc) =#
-    #=     # test results =#
-    #=     @test nv == 422 =#
-    #=     @test nump == 840 =#
-    #=     @test nvxtot == 8232 =#
-    #=     @test cgscal == 7 =#
-    #=     @test vtxnpl == 0 =#
-    #=     @test voxnpt == 2744 =#
-    #=     @test voxnpl == 3257 =#
-    #=     @test voxsiz == pytest.approx(3.320691339664286) =#
-    #=     # cleanup =#
-    #=     dascls(handle) =#
-    #=     kclear() =#
-    #= @testset "dskd02" begin =#
-    #=     kclear() =#
-    #=     # open the dsk file =#
-    #=     handle = dasopr(ExtraKernels.phobosDsk) =#
-    #=     # get the dladsc from the file =#
-    #=     dladsc = dlabfs(handle) =#
-    #=     # Fetch the vertex =#
-    #=     values = dskd02(handle, dladsc, 19, 0, 3) =#
-    #=     @test len(values) > 0 =#
-    #=     @test_almost_equal(values, [5.12656957900699912362e-16,  -0.00000000000000000000e+00, =#
-    #=                                      -8.37260000000000026432e+00]) =#
-    #=     dascls(handle) =#
-    #=     kclear() =#
-    #= @testset "dskgd" begin =#
-    #=     kclear() =#
-    #=     # open the dsk file =#
-    #=     handle = dasopr(ExtraKernels.phobosDsk) =#
-    #=     # get the dladsc from the file =#
-    #=     dladsc = dlabfs(handle) =#
-    #=     # get dskdsc for target radius =#
-    #=     dskdsc = dskgd(handle, dladsc) =#
-    #=     # test results =#
-    #=     @test dskdsc.surfce == 401 =#
-    #=     @test dskdsc.center == 401 =#
-    #=     @test dskdsc.dclass == 1 =#
-    #=     @test dskdsc.dtype  == 2 =#
-    #=     @test dskdsc.frmcde == 10021 =#
-    #=     @test dskdsc.corsys == 1 =#
-    #=     @test_almost_equal(dskdsc.corpar, np.zeros(10)) =#
-    #=     @test dskdsc.co1min == pytest.approx(-3.141593) =#
-    #=     @test dskdsc.co1max == pytest.approx(3.141593) =#
-    #=     @test dskdsc.co2min == pytest.approx(-1.570796) =#
-    #=     @test dskdsc.co2max == pytest.approx(1.570796) =#
-    #=     @test dskdsc.co3min == pytest.approx(8.181895873588292) =#
-    #=     @test dskdsc.co3max == pytest.approx(13.89340000000111) =#
-    #=     @test dskdsc.start  == pytest.approx(-1577879958.816059) =#
-    #=     @test dskdsc.stop   == pytest.approx(1577880066.183913) =#
-    #=     # cleanup =#
-    #=     dascls(handle) =#
-    #=     kclear() =#
-    #= @testset "dski02" begin =#
-    #=     kclear() =#
-    #=     # open the dsk file =#
-    #=     handle = dasopr(ExtraKernels.phobosDsk) =#
-    #=     # get the dladsc from the file =#
-    #=     dladsc = dlabfs(handle) =#
-    #=     # Find the number of plates in the model =#
-    #=     # SPICE_DSK02_KWNP == 2 =#
-    #=     num_plates = dski02(handle, dladsc, 2, 0, 3) =#
-    #=     @test len(num_plates) > 0 =#
-    #=     dascls(handle) =#
-    #=     kclear() =#
-    #= @testset "dskn02" begin =#
-    #=     kclear() =#
-    #=     # open the dsk file =#
-    #=     handle = dasopr(ExtraKernels.phobosDsk) =#
-    #=     # get the dladsc from the file =#
-    #=     dladsc = dlabfs(handle) =#
-    #=     # get the normal vector for first plate =#
-    #=     normal = dskn02(handle, dladsc, 1) =#
-    #=     @test_almost_equal(normal, [0.20813166897151150203,  0.07187012861854354118, =#
-    #=                                      -0.97545676120650637309]) =#
-    #=     dascls(handle) =#
-    #=     kclear() =#
-    #= @testset "dskp02" begin =#
-    #=     kclear() =#
-    #=     # open the dsk file =#
-    #=     handle = dasopr(ExtraKernels.phobosDsk) =#
-    #=     # get the dladsc from the file =#
-    #=     dladsc = dlabfs(handle) =#
-    #=     # get the first plate =#
-    #=     plates = dskp02(handle, dladsc, 1, 2) =#
-    #=     @test_almost_equal(plates[0], [1, 9, 2]) =#
-    #=     @test_almost_equal(plates[1], [1, 2, 3]) =#
-    #=     dascls(handle) =#
-    #=     kclear() =#
-    #= @testset "dskv02" begin =#
-    #=     kclear() =#
-    #=     # open the dsk file =#
-    #=     handle = dasopr(ExtraKernels.phobosDsk) =#
-    #=     # get the dladsc from the file =#
-    #=     dladsc = dlabfs(handle) =#
-    #=     # read the vertices =#
-    #=     vrtces = dskv02(handle, dladsc, 1, 1) =#
-    #=     @test_almost_equal(vrtces[0], [5.12656957900699912362e-16,  -0.00000000000000000000e+00, =#
-    #=                                         -8.37260000000000026432e+00]) =#
-    #=     dascls(handle) =#
-    #=     kclear() =#
-    #= @testset "dskw02_dskrb2_dskmi2" begin =#
-    #=     kclear() =#
-    #=     dskpath = os.path.join(cwd, "TESTdskw02.dsk") =#
-    #=     if exists(dskpath): =#
-    #=         os.remove(dskpath)  # pragma: no cover =#
-    #=     # open the dsk file =#
-    #=     handle = dasopr(ExtraKernels.phobosDsk) =#
-    #=     # get the dladsc from the file =#
-    #=     dladsc = dlabfs(handle) =#
-    #=     # declare some variables =#
-    #=     finscl = 5.0 =#
-    #=     corscl = 4 =#
-    #=     center = 401 =#
-    #=     surfid = 1 =#
-    #=     dclass = 2 =#
-    #=     frame = "IAU_PHOBOS" =#
-    #=     first = -50 * jyear() =#
-    #=     last  =  50 * jyear() =#
-    #=     # stuff from spicedsk.h =#
-    #=     SPICE_DSK02_MAXVRT = 16000002 // 128 # divide to lower memory usage =#
-    #=     SPICE_DSK02_MAXPLT = 2 * (SPICE_DSK02_MAXVRT - 2) =#
-    #=     SPICE_DSK02_MAXVXP = SPICE_DSK02_MAXPLT // 2 =#
-    #=     SPICE_DSK02_MAXCEL = 60000000 // 128 # divide to lower memory usage =#
-    #=     SPICE_DSK02_MXNVLS = SPICE_DSK02_MAXCEL + (SPICE_DSK02_MAXVXP // 2) =#
-    #=     SPICE_DSK02_MAXCGR = 100000   // 128 # divide to lower memory usage =#
-    #=     SPICE_DSK02_IXIFIX = SPICE_DSK02_MAXCGR + 7 =#
-    #=     SPICE_DSK02_MAXNPV = 3 * (SPICE_DSK02_MAXPLT // 2) + 1 =#
-    #=     SPICE_DSK02_SPAISZ = SPICE_DSK02_IXIFIX + SPICE_DSK02_MAXVXP + SPICE_DSK02_MXNVLS + SPICE_DSK02_MAXVRT + SPICE_DSK02_MAXNPV =#
-    #=     worksz = SPICE_DSK02_MAXCEL =#
-    #=     voxpsz = SPICE_DSK02_MAXVXP =#
-    #=     voxlsz = SPICE_DSK02_MXNVLS =#
-    #=     spaisz = SPICE_DSK02_SPAISZ =#
-    #=     # get verts, number from dskb02 test =#
-    #=     vrtces = dskv02(handle, dladsc, 1, 422) =#
-    #=     # get plates, number from dskb02 test =#
-    #=     plates = dskp02(handle, dladsc, 1, 840) =#
-    #=     # close the input kernel =#
-    #=     dskcls(handle) =#
-    #=     kclear() =#
-    #=     # open new dsk file =#
-    #=     handle = dskopn(dskpath, "TESTdskw02.dsk/AA/29-SEP-2017", 0) =#
-    #=     # create spatial index =#
-    #=     spaixd, spaixi = dskmi2(vrtces, plates, finscl, corscl, worksz, voxpsz, voxlsz, False, spaisz) =#
-    #=     # do stuff =#
-    #=     corsys = 1 =#
-    #=     mncor1 = -pi() =#
-    #=     mxcor1 = pi() =#
-    #=     mncor2 = -pi() / 2 =#
-    #=     mxcor2 = pi() / 2 =#
-    #=     # Compute plate model radius bounds. =#
-    #=     corpar = np.zeros(10) =#
-    #=     mncor3, mxcor3 = dskrb2(vrtces, plates, corsys, corpar) =#
-    #=     # Write the segment to the file =#
-    #=     dskw02(handle, center, surfid, dclass, frame, corsys, corpar, =#
-    #=                  mncor1, mxcor1, mncor2, mxcor2, mncor3, mxcor3, first, =#
-    #=                  last, vrtces, plates, spaixd, spaixi) =#
-    #=     # Close the dsk file =#
-    #=     dskcls(handle, optmiz=True) =#
-    #=     # cleanup =#
-    #=     if exists(dskpath): =#
-    #=         os.remove(dskpath)  # pragma: no cover =#
-    #=     kclear() =#
+    @testset "dskgtl/dskstl" begin
+        SPICE_DSK_KEYXFR = 1
+        @test dskgtl(SPICE_DSK_KEYXFR) ≈ 1.0e-10
+        dskstl(SPICE_DSK_KEYXFR, 1.0e-8)
+        @test dskgtl(SPICE_DSK_KEYXFR) ≈ 1.0e-8
+        dskstl(SPICE_DSK_KEYXFR, 1.0e-10)
+        @test dskgtl(SPICE_DSK_KEYXFR) ≈ 1.0e-10
+    end
+    @testset "dskobj/dsksrf" begin
+        try
+            bodyids = dskobj(path(EXTRA, :phobos_dsk))
+            @test 401 in bodyids
+            srfids = dsksrf(path(EXTRA, :phobos_dsk), 401)
+            @test 401 in srfids
+        finally
+            kclear()
+        end
+    end
+    @testset "dskb02" begin
+        try
+            handle = dasopr(path(EXTRA, :phobos_dsk))
+            dladsc = dlabfs(handle)
+            res = dskb02(handle, dladsc)
+            nv, nump, nvxtot, vtxbds, voxsiz, voxori, vgrext, cgscal, vtxnpl, voxnpt, voxnpl = res
+            @test nv == 422
+            @test nump == 840
+            @test nvxtot == 8232
+            @test cgscal == 7
+            @test vtxnpl == 0
+            @test voxnpt == 2744
+            @test voxnpl == 3257
+            @test voxsiz ≈ 3.320691339664286
+        finally
+            kclear()
+        end
+    end
+    @testset "dskd02" begin
+        try
+            handle = dasopr(path(EXTRA, :phobos_dsk))
+            dladsc = dlabfs(handle)
+            values = dskd02(handle, dladsc, 19, 1, 3)
+            expected = [5.12656957900699912362e-16,  -0.0, -8.37260000000000026432e+00]
+            @test values ≈ expected
+        finally
+            kclear()
+        end
+    end
+    @testset "dskgd" begin
+        try
+            handle = dasopr(path(EXTRA, :phobos_dsk))
+            dladsc = dlabfs(handle)
+            dskdsc = dskgd(handle, dladsc)
+            @test dskdsc.surfce == 401
+            @test dskdsc.center == 401
+            @test dskdsc.dclass == 1
+            @test dskdsc.dtype  == 2
+            @test dskdsc.frmcde == 10021
+            @test dskdsc.corsys == 1
+            @test collect(dskdsc.corpar) ≈ zeros(10)
+            @test dskdsc.co1min ≈ -3.141593 rtol=1e-6
+            @test dskdsc.co1max ≈ 3.141593 rtol=1e-6
+            @test dskdsc.co2min ≈ -1.570796 rtol=1e-6
+            @test dskdsc.co2max ≈ 1.570796 rtol=1e-6
+            @test dskdsc.co3min ≈ 8.181895873588292 rtol=1e-6
+            @test dskdsc.co3max ≈ 13.89340000000111 rtol=1e-6
+            @test dskdsc.start  ≈ -1577879958.816059 rtol=1e-6
+            @test dskdsc.stop   ≈ 1577880066.183913 rtol=1e-6
+        finally
+            kclear()
+        end
+    end
+    @testset "dski02" begin
+        try
+            handle = dasopr(path(EXTRA, :phobos_dsk))
+            dladsc = dlabfs(handle)
+            plates = dski02(handle, dladsc, 2, 1, 3)
+            @test length(plates) > 0
+        finally
+            kclear()
+        end
+    end
+    @testset "dskn02" begin
+        try
+            handle = dasopr(path(EXTRA, :phobos_dsk))
+            dladsc = dlabfs(handle)
+            normal = dskn02(handle, dladsc, 1)
+            expected = [0.20813166897151150203,  0.07187012861854354118, -0.97545676120650637309]
+            @test normal ≈ expected
+        finally
+            kclear()
+        end
+    end
+    @testset "dskp02" begin
+        try
+            handle = dasopr(path(EXTRA, :phobos_dsk))
+            dladsc = dlabfs(handle)
+            plates = dskp02(handle, dladsc, 2, 2)
+            @test plates[1] == [1, 9, 2]
+            @test plates[2] == [1, 2, 3]
+        finally
+            kclear()
+        end
+    end
+    @testset "dskv02" begin
+        try
+            handle = dasopr(path(EXTRA, :phobos_dsk))
+            dladsc = dlabfs(handle)
+            vrtces = dskv02(handle, dladsc, 2, 1)
+            expected = [5.12656957900699912362e-16, -0.0, -8.37260000000000026432]
+            @test vrtces[1] ≈ expected
+        finally
+            kclear()
+        end
+    end
+    @testset "dskw02/dskrb2/dskmi2" begin
+        try
+            dskpath = tempname()
+            handle = dasopr(path(EXTRA, :phobos_dsk))
+            dladsc = dlabfs(handle)
+            finscl = 5.0
+            corscl = 4
+            center = 401
+            surfid = 1
+            dclass = 2
+            frame = "IAU_PHOBOS"
+            first = -50 * jyear()
+            last  =  50 * jyear()
+            SPICE_DSK02_MAXVRT = 16000002 ÷ 128
+            SPICE_DSK02_MAXPLT = 2 * (SPICE_DSK02_MAXVRT - 2)
+            SPICE_DSK02_MAXVXP = SPICE_DSK02_MAXPLT ÷ 2
+            SPICE_DSK02_MAXCEL = 60000000 ÷ 128
+            SPICE_DSK02_MXNVLS = SPICE_DSK02_MAXCEL + (SPICE_DSK02_MAXVXP ÷ 2)
+            SPICE_DSK02_MAXCGR = 100000 ÷ 128
+            SPICE_DSK02_IXIFIX = SPICE_DSK02_MAXCGR + 7
+            SPICE_DSK02_MAXNPV = 3 * (SPICE_DSK02_MAXPLT ÷ 2) + 1
+            SPICE_DSK02_SPAISZ = (SPICE_DSK02_IXIFIX + SPICE_DSK02_MAXVXP + SPICE_DSK02_MXNVLS
+                                  + SPICE_DSK02_MAXVRT + SPICE_DSK02_MAXNPV)
+            worksz = SPICE_DSK02_MAXCEL
+            voxpsz = SPICE_DSK02_MAXVXP
+            voxlsz = SPICE_DSK02_MXNVLS
+            spaisz = SPICE_DSK02_SPAISZ
+            vrtces = dskv02(handle, dladsc, 2, 422)
+            plates = dskp02(handle, dladsc, 2, 840)
+            dskcls(handle)
+            kclear()
+
+            handle = dskopn(dskpath, "TESTdskw02.dsk/AA/29-SEP-2017", 0)
+            spaixd, spaixi = dskmi2(vrtces, plates, finscl, corscl, worksz, voxpsz, voxlsz, false, spaisz)
+            corsys = 1
+            mncor1 = -π
+            mxcor1 = π
+            mncor2 = -π/2
+            mxcor2 = π/2
+            corpar = zeros(10)
+            mncor3, mxcor3 = dskrb2(vrtces, plates, corsys, corpar)
+            dskw02(handle, center, surfid, dclass, frame, corsys, corpar,
+                   mncor1, mxcor1, mncor2, mxcor2, mncor3, mxcor3, first,
+                   last, vrtces, plates, spaixd, spaixi)
+            dskcls(handle, true)
+        finally
+            kclear()
+        end
+    end
     #= @testset "dskx02" begin =#
     #=     kclear() =#
     #=     # open the dsk file =#

@@ -49,7 +49,24 @@ export
     drdlat,
     drdpgr,
     drdsph,
+    dskb02,
+    dskcls,
+    dskd02,
+    dskgd,
+    dskgtl,
+    dski02,
+    dskmi2,
+    dskn02,
+    dskobj,
+    dskobj!,
     dskopn,
+    dskp02,
+    dskrb2,
+    dsksrf,
+    dsksrf!,
+    dskstl,
+    dskv02,
+    dskw02,
     dtpool
 
 """
@@ -1290,6 +1307,294 @@ function drdsph(r, colat, lon)
 end
 
 """
+    dskb02(handle, dladsc)
+
+Return bookkeeping data from a DSK type 2 segment.
+
+### Arguments ###
+
+- `handle`: DSK file handle
+- `dladsc`: DLA descriptor
+
+### Output ###
+
+- `nv`: Number of vertices in model
+- `np`: Number of plates in model
+- `nvxtot`: Number of voxels in fine grid
+- `vtxbds`: Vertex bounds
+- `voxsiz`: Fine voxel edge length
+- `voxori`: Fine voxel grid origin
+- `vgrext`: Fine voxel grid exent
+- `cgscal`: Coarse voxel grid scale
+- `vtxnpl`: Size of vertex-plate correspondence list
+- `voxnpt`: Size of voxel-plate pointer list
+- `voxnpl`: Size of voxel-plate correspondence list
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskb02_c.html)
+"""
+function dskb02(handle, dladsc)
+    nv = Ref{SpiceInt}()
+    np = Ref{SpiceInt}()
+    nvxtot = Ref{SpiceInt}()
+    vtxbds = Array{SpiceDouble}(undef, 2, 3)
+    voxsiz = Ref{SpiceDouble}()
+    voxori = Array{SpiceDouble}(undef, 3)
+    vgrext = Array{SpiceDouble}(undef, 3)
+    cgscal = Ref{SpiceInt}()
+    vtxnpl = Ref{SpiceInt}()
+    voxnpt = Ref{SpiceInt}()
+    voxnpl = Ref{SpiceInt}()
+    ccall((:dskb02_c, libcspice), Cvoid,
+          (SpiceInt, Ref{DLADescr}, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceDouble},
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceInt},
+           Ref{SpiceInt}, Ref{SpiceInt}),
+          handle, dladsc, nv, np, nvxtot, vtxbds, voxsiz, voxori, vgrext, cgscal, vtxnpl,
+          voxnpt, voxnpl)
+    handleerror()
+    nv[], np[], nvxtot[], vtxbds, voxsiz[], voxori, vgrext, cgscal[], vtxnpl[], voxnpt[], voxnpl[]
+end
+
+"""
+    dskcls(handle, optmiz=true)
+
+Close a DSK file.
+
+### Arguments ###
+
+- `handle`: Handle assigned to the opened DSK file
+- `optmiz`: Flag indicating whether to segregate the DSK (default: `true`)
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskcls_c.html)
+"""
+function dskcls(handle, optmiz=true)
+    ccall((:dskcls_c, libcspice), Cvoid, (SpiceInt, SpiceBoolean), handle, optmiz)
+    handleerror()
+end
+
+"""
+    dskd02(handle, dladsc, item, start, room)
+
+Fetch double precision data from a type 2 DSK segment.
+
+### Arguments ###
+
+- `handle`: DSK file handle
+- `dladsc`: DLA descriptor
+- `item`: Keyword identifying item to fetch
+- `start`: Start index
+- `room`: Amount of room in output array
+
+### Output ###
+
+Returns an array containing the requested item.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskd02_c.html)
+"""
+function dskd02(handle, dladsc, item, start, room)
+    n = Ref{SpiceInt}()
+    values = Array{SpiceDouble}(undef, room)
+    ccall((:dskd02_c, libcspice), Cvoid,
+          (SpiceInt, Ref{DLADescr}, SpiceInt, SpiceInt, SpiceInt,
+           Ref{SpiceInt}, Ref{SpiceDouble}),
+          handle, dladsc, item, start - 1, room, n, values)
+    handleerror()
+    values[1:n[]]
+end
+
+"""
+    dskgd(handle, dladsc)
+
+Return the DSK descriptor from a DSK segment identified by a DAS handle and DLA descriptor.
+
+### Arguments ###
+
+- `handle`: Handle of a DSK file
+- `dladsc`: DLA segment descriptor
+
+### Output ###
+
+Returns the DSK segment descriptor.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskgd_c.html)
+"""
+function dskgd(handle, dladsc)
+    dskdsc = Ref{DSKDescr}()
+    ccall((:dskgd_c, libcspice), Cvoid,
+          (SpiceInt, Ref{DLADescr}, Ref{DSKDescr}),
+          handle, dladsc, dskdsc)
+    handleerror()
+    dskdsc[]
+end
+
+"""
+    dskgtl(keywrd)
+
+Retrieve the value of a specified DSK tolerance or margin parameter.
+
+### Arguments ###
+
+- `keywrd`: Code specifying parameter to retrieve
+
+### Output ###
+
+Returns the value of the parameter.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskgtl_c.html)
+"""
+function dskgtl(keywrd)
+    dpval = Ref{SpiceDouble}()
+    ccall((:dskgtl_c, libcspice), Cvoid,
+          (SpiceInt, Ref{SpiceDouble}),
+          keywrd, dpval)
+    handleerror()
+    dpval[]
+end
+
+"""
+    dski02(handle, dladsc, item, start, room)
+
+Fetch integer data from a type 2 DSK segment.
+
+### Arguments ###
+
+- `handle`: DSK file handle
+- `dladsc`: DLA descriptor
+- `item`: Keyword identifying item to fetch
+- `start`: Start index
+- `room`: Amount of room in output array
+
+### Output ###
+
+Returns an array containing the requested item.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dski02_c.html)
+"""
+function dski02(handle, dladsc, item, start, room)
+    n = Ref{SpiceInt}()
+    values = Array{SpiceInt}(undef, room)
+    ccall((:dski02_c, libcspice), Cvoid,
+          (SpiceInt, Ref{DLADescr}, SpiceInt, SpiceInt, SpiceInt,
+           Ref{SpiceInt}, Ref{SpiceInt}),
+          handle, dladsc, item, start - 1, room, n, values)
+    handleerror()
+    values[1:n[]]
+end
+
+"""
+    dskmi2(vrtces, plates, finscl, corscl, worksz, voxpsz, voxlsz, makvtl, spaisz)
+
+Make spatial index for a DSK type 2 segment.
+
+### Arguments ###
+
+- `vrtces`: Vertices
+- `plates`: Plates
+- `finscl`: Fine voxel scale
+- `corscl`: Coarse voxel scale
+- `worksz`: Workspace size
+- `voxpsz`: Voxel-plate pointer array size
+- `voxlsz`: Voxel-plate list array size
+- `makvtl`: Vertex-plate list flag
+- `spxisz`: Spatial index integer component size
+
+### Output ###
+
+- `spaixd`: Double precision component of spatial index.
+- `spaixi`: Integer component of spatial index.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskmi2_c.html)
+"""
+function dskmi2(vrtces, plates, finscl, corscl, worksz, voxpsz, voxlsz, makvtl, spxisz)
+    vrtces_ = array_to_cmatrix(vrtces, n=3)
+    plates_ = array_to_cmatrix(plates, n=3)
+    nv = length(vrtces)
+    np = length(plates)
+    work = Array{SpiceInt}(undef, worksz, 2)
+    spaixd = Array{SpiceDouble}(undef, 10)
+    spaixi = Array{SpiceInt}(undef, spxisz)
+    ccall((:dskmi2_c, libcspice), Cvoid,
+          (SpiceInt, Ref{SpiceDouble}, SpiceInt, Ref{SpiceInt}, SpiceDouble,
+           SpiceInt, SpiceInt, SpiceInt, SpiceInt, SpiceBoolean, SpiceInt,
+           Ref{SpiceInt}, Ref{SpiceDouble}, Ref{SpiceInt}),
+          nv, vrtces_, np, plates_, finscl, corscl, worksz, voxpsz, voxlsz, makvtl, spxisz,
+          work, spaixd, spaixi)
+    handleerror()
+    spaixd, spaixi
+end
+
+"""
+    dskn02(handle, dladsc, plid)
+
+Compute the unit normal vector for a specified plate from a type 2 DSK segment.
+
+### Arguments ###
+
+- `handle`: DSK file handle
+- `dladsc`: DLA descriptor
+- `plid`: Plate ID
+
+### Output ###
+
+Return the plate's unit normal vector.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskn02_c.html)
+"""
+function dskn02(handle, dladsc, plid)
+    normal = Array{SpiceDouble}(undef, 3)
+    ccall((:dskn02_c, libcspice), Cvoid,
+          (SpiceInt, Ref{DLADescr}, SpiceInt, Ref{SpiceDouble}),
+          handle, dladsc, plid, normal)
+    handleerror()
+    normal
+end
+
+"""
+    dskobj(dsk, size=100)
+    dskobj!(set, dsk)
+
+Find the set of body ID codes of all objects for which topographic data are provided in a specified
+DSK file.
+
+### Arguments ###
+
+- `dsk`: Name of DSK file
+- `set` or `len`: Either a preallocated `SpiceIntCell` or the `size` of the output set.
+
+### Output ###
+
+Returns the set of ID codes of objects in the DSK file.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskobj_c.html)
+"""
+function dskobj!(set, dsk)
+    ccall((:dskobj_c, libcspice), Cvoid,
+          (Cstring, Ref{Cell{SpiceInt}}),
+          dsk, set.cell)
+    handleerror()
+    set
+end
+
+dskobj(dsk, length=100) = dskobj!(SpiceIntCell(length), dsk)
+
+"""
     dskopn(fname, ifname, ncomch)
 
 Open a new DSK file for subsequent write operations.
@@ -1315,6 +1620,205 @@ function dskopn(fname, ifname, ncomch)
           fname, ifname, ncomch, handle)
     handleerror()
     handle[]
+end
+
+"""
+    dskp02(handle, dladsc, start, room)
+
+Fetch triangular plates from a type 2 DSK segment.
+
+### Arguments ###
+
+- `handle`: DSK file handle
+- `dladsc`: DLA descriptor
+- `start`: Start index
+- `room`: Amount of room in output array
+
+### Output ###
+
+Returns an array of plates.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskp02_c.html)
+"""
+function dskp02(handle, dladsc, start, room)
+    n = Ref{SpiceInt}()
+    plates = Array{SpiceInt}(undef, 3, room)
+    ccall((:dskp02_c, libcspice), Cvoid,
+          (SpiceInt, Ref{DLADescr}, SpiceInt, SpiceInt,
+           Ref{SpiceInt}, Ref{SpiceInt}),
+          handle, dladsc, start - 1, room, n, plates)
+    handleerror()
+    cmatrix_to_array(plates)
+end
+
+"""
+    dskrb2(vrtces, plates, corsys, corpar)
+
+Determine range bounds for a set of triangular plates to be stored in a type 2 DSK segment.
+
+### Arguments ###
+
+- `vrtces`: Vertices
+- `plates`: Plates
+- `corsys`: DSK coordinate system code
+- `corpar`: DSK coordinate system parameters
+
+### Output ###
+
+- `mncor3`: Lower bound on range of third coordinate
+- `mxcor3`: Upper bound on range of third coordinate
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskrb2_c.html)
+"""
+function dskrb2(vrtces, plates, corsys, corpar)
+    vrtces_ = array_to_cmatrix(vrtces, n=3)
+    plates_ = array_to_cmatrix(plates, n=3)
+    nv = length(vrtces)
+    np = length(plates)
+    mncor3 = Ref{SpiceDouble}()
+    mxcor3 = Ref{SpiceDouble}()
+    ccall((:dskrb2_c, libcspice), Cvoid,
+          (SpiceInt, Ref{SpiceDouble}, SpiceInt, Ref{SpiceInt}, SpiceInt, Ref{SpiceDouble},
+           Ref{SpiceDouble}, Ref{SpiceDouble}),
+          nv, vrtces_, np, plates_, corsys, corpar, mncor3, mxcor3)
+    handleerror()
+    mncor3[], mxcor3[]
+end
+
+"""
+    dsksrf(dsk, size=100)
+    dsksrf!(set, dsk)
+
+Find the set of surface ID codes of all objects for which topographic data are provided in a
+specified DSK file.
+
+### Arguments ###
+
+- `dsk`: Name of DSK file
+- `set` or `len`: Either a preallocated `SpiceIntCell` or the `size` of the output set.
+
+### Output ###
+
+Returns the set of ID codes of surfaces in the DSK file.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dsksrf_c.html)
+"""
+function dsksrf!(set, dsk, bodyid)
+    ccall((:dsksrf_c, libcspice), Cvoid,
+          (Cstring, SpiceInt, Ref{Cell{SpiceInt}}),
+          dsk, bodyid, set.cell)
+    handleerror()
+    set
+end
+
+dsksrf(dsk, bodyid, length=100) = dsksrf!(SpiceIntCell(length), dsk, bodyid)
+
+"""
+    dskstl(keywrd)
+
+Set the value of a specified DSK tolerance or margin parameter.
+
+### Arguments ###
+
+- `keywrd`: Code specifying parameter to retrieve
+- `dpval`: Value of parameter
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskstl_c.html)
+"""
+function dskstl(keywrd, dpval)
+    ccall((:dskstl_c, libcspice), Cvoid,
+          (SpiceInt, SpiceDouble),
+          keywrd, dpval)
+    handleerror()
+end
+
+"""
+    dskv02(handle, dladsc, start, room)
+
+Fetch vertices from a type 2 DSK segment.
+
+### Arguments ###
+
+- `handle`: DSK file handle
+- `dladsc`: DLA descriptor
+- `start`: Start index
+- `room`: Amount of room in output array
+
+### Output ###
+
+Returns an array of vertices.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskv02_c.html)
+"""
+function dskv02(handle, dladsc, start, room)
+    n = Ref{SpiceInt}()
+    vrtces = Array{SpiceDouble}(undef, 3, room)
+    ccall((:dskv02_c, libcspice), Cvoid,
+          (SpiceInt, Ref{DLADescr}, SpiceInt, SpiceInt,
+           Ref{SpiceInt}, Ref{SpiceDouble}),
+          handle, dladsc, start - 1, room, n, vrtces)
+    handleerror()
+    cmatrix_to_array(vrtces)
+end
+
+"""
+    dskw02(handle, center, surfid, dclass, frame, corsys, corpar, mncor1, mxcor1,
+           mncor2, mxcor2, mncor3, mxcor3, first, last, vrtces, plates, spaixd, spaixi)
+
+Write a type 2 segment to a DSK file.
+
+### Arguments ###
+
+- `handle`: Handle assigned to the opened DSK file
+- `center`: Central body ID code
+- `surfid`: Surface ID code
+- `dclass`: Data class
+- `frame `: Reference frame
+- `corsys`: Coordinate system code
+- `corpar`: Coordinate system parameters
+- `mncor1`: Minimum value of first coordinate
+- `mxcor1`: Maximum value of first coordinate
+- `mncor2`: Minimum value of second coordinate
+- `mxcor2`: Maximum value of second coordinate
+- `mncor3`: Minimum value of third coordinate
+- `mxcor3`: Maximum value of third coordinate
+- `first`: Coverage start time
+- `last`: Coverage stop time
+- `nv`: Number of vertices
+- `vrtces`: Vertices
+- `np`: Number of plates
+- `plates`: Plates
+- `spaixd`: Double precision component of spatial index
+- `spaixi`: Integer component of spatial index
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskw02_c.html)
+"""
+function dskw02(handle, center, surfid, dclass, frame, corsys, corpar, mncor1, mxcor1,
+                mncor2, mxcor2, mncor3, mxcor3, first, last, vrtces, plates, spaixd, spaixi)
+    vrtces_ = array_to_cmatrix(vrtces, n=3)
+    plates_ = array_to_cmatrix(plates, n=3)
+    nv = length(vrtces)
+    np = length(plates)
+    ccall((:dskw02_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceInt, Ref{SpiceDouble},
+           SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble,
+           SpiceDouble, SpiceDouble, SpiceInt, Ref{SpiceDouble}, SpiceInt, Ref{SpiceInt},
+           Ref{SpiceDouble}, Ref{SpiceInt}),
+          handle, center, surfid, dclass, frame, corsys, corpar, mncor1, mxcor1, mncor2,
+          mxcor2, mncor3, mxcor3, first, last, nv, vrtces_, np, plates_, spaixd, spaixi)
+    handleerror()
 end
 
 """
