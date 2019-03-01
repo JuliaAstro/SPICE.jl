@@ -57,6 +57,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#Base.diff-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,SpiceCell{T,T1,N} where N where T1}} where T",
+    "page": "API",
+    "title": "Base.diff",
+    "category": "method",
+    "text": "diff(a::T, b::T) where T <: SpiceCell\n\nCompute the difference of two sets of any data type to form a third set.\n\nArguments\n\na: First input set\nb: Second input set\n\nOutput\n\nReturns a cell containing the difference of a and b.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#Base.length-Tuple{SPICE.SpiceCell}",
     "page": "API",
     "title": "Base.length",
@@ -593,6 +601,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.dafps-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.dafps",
+    "category": "method",
+    "text": "dafps(dc, ic)\n\nPack (assemble) an array summary from its double precision and integer components.\n\nArguments\n\ndc: Double precision components\nic: Integer components\n\nOutput\n\nReturns the array summary.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.dafrfr",
     "page": "API",
     "title": "SPICE.dafrfr",
@@ -601,11 +617,243 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.dafrs-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dafrs",
+    "category": "method",
+    "text": "dafrs(sum)\n\nChange the summary for the current array in the current DAF.\n\nArguments\n\nsum: New summary for current array\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.dafus-Tuple{Any,Any,Any}",
     "page": "API",
     "title": "SPICE.dafus",
     "category": "method",
     "text": "dafus(sum, nd, ni)\n\nUnpack an array summary into its double precision and integer components.\n\nArguments\n\nsum: Array summary\nnd: Number of double precision components\nni: Number of integer components\n\nOutput\n\ndc: Double precision components\nic: Integer components\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dasac-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.dasac",
+    "category": "method",
+    "text": "dasac(handle, buffer)\n\nAdd comments from a buffer of character strings to the comment area of a binary DAS file, appending them to any comments which are already present in the file\'s comment area.\n\nArguments\n\nhandle: Handle of a DAS opened with write access\nbuffer: Buffer of comments to put into the comment area\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dascls-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dascls",
+    "category": "method",
+    "text": "dascls(handle)\n\nClose the DAS associated with a given handle.\n\nArguments\n\nhandle: Handle of DAS to be closed\n\nOutput\n\nReturns the handle of the closed file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dasdc-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dasdc",
+    "category": "method",
+    "text": "dasdc(handle)\n\nDelete the entire comment area of a specified DAS file.\n\nArguments\n\nhandle: The handle of a binary DAS opened for writing\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dasec-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dasec",
+    "category": "method",
+    "text": "dasec(handle; bufsiz=256, lenout=1024)\n\nExtract comments from the comment area of a binary DAS.\n\nArguments\n\nhandle: Handle of binary DAS opened with read access\nbufsiz: Maximum size, in lines, of buffer (default: 256)\nlenout: Length of strings in output buffer (default: 1024)\n\nOutput\n\nReturns a buffer where extracted comment lines are placed.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dashfn",
+    "page": "API",
+    "title": "SPICE.dashfn",
+    "category": "function",
+    "text": "dashfn(handle, namelen=256)\n\nReturn the name of the DAS file associated with a handle.\n\nArguments\n\nhandle: Handle of a DAS file\nnamlen: Length of output file name string (default: 256)\n\nOutput\n\nReturns the corresponding file name.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dasopr-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dasopr",
+    "category": "method",
+    "text": "dasopr(fname)\n\nOpen a DAS for subsequent read requests.\n\nArguments\n\nfname: Name of DAS to be opened\n\nOutput\n\nReturns the handle assigned to DAS.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dasopw-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dasopw",
+    "category": "method",
+    "text": "dasopw(fname)\n\nOpen a DAS for subsequent write requests.\n\nArguments\n\nfname: Name of DAS to be opened\n\nOutput\n\nReturns the handle assigned to DAS.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dasrfr",
+    "page": "API",
+    "title": "SPICE.dasrfr",
+    "category": "function",
+    "text": "dasrfr(handle, idwlen=128, ifnlen=256)\n\nRead the contents of the file record of a DAS.\n\nArguments\n\nhandle: DAS file handle\nidwlen: Length of ID word string (default: 128)\nifnlen: Length of internal file name string (default: 256)\n\nOutput\n\nidword: ID word\nifname: DAS internal file name\nnresvr: Number of reserved records in file\nnresvc: Number of characters in use in reserved records area\nncomr: Number of comment records in file\nncomc: Number of characters in use in comment area\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dcyldr-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.dcyldr",
+    "category": "method",
+    "text": "dcyldr(x, y, z)\n\nCompute the Jacobian of the transformation from rectangular to cylindrical coordinates.\n\nArguments\n\nx: X-coordinate of point\ny: Y-coordinate of point\nz: Z-coordinate of point\n\nOutput\n\nReturns the matrix of partial derivatives.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.deltet-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.deltet",
+    "category": "method",
+    "text": "deltet(epoch, eptype)\n\nReturn the value of ΔET (ET-UTC) for an input epoch.\n\nArguments\n\nepoch: Input epoch (seconds past J2000)\neptype: Type of input epoch (\"UTC\" or \"ET\")\n\nOutput\n\nReturns ΔET (ET-UTC) at input epoch.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dgeodr-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.dgeodr",
+    "category": "method",
+    "text": "dgeodr(x, y, z, re, f)\n\nCompute the Jacobian of the transformation from rectangular to geodetic coordinates.\n\nArguments\n\nx: X-coordinate of point\ny: Y-coordinate of point\nz: Z-coordinate of point\nre: Equatorial radius of the reference spheroid\nf: Flattening coefficient\n\nOutput\n\nReturns the matrix of partial derivatives.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.diags2-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.diags2",
+    "category": "method",
+    "text": "diags2(symmat)\n\nDiagonalize a symmetric 2x2 matrix.\n\nArguments\n\nsymmat: A symmetric 2x2 matrix\n\nOutput\n\ndiag: A diagonal matrix similar to symmat\nrotate: A rotation used as the similarity transformation\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dlabbs-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dlabbs",
+    "category": "method",
+    "text": "dlabbs(handle)\n\nBegin a backward segment search in a DLA file.\n\nArguments\n\nhandle: Handle of open DLA file\n\nOutput\n\nReturns the descriptor of the last segment in the DLA file or nothing if none was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dlabfs-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dlabfs",
+    "category": "method",
+    "text": "dlabfs(handle)\n\nBegin a forward segment search in a DLA file.\n\nArguments\n\nhandle: Handle of open DLA file\n\nOutput\n\nReturns the descriptor of the first segment in the DLA file or nothing if none was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dlafns-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.dlafns",
+    "category": "method",
+    "text": "dlafns(handle, descr)\n\nFind the segment following a specified segment in a DLA file.\n\nArguments\n\nhandle: Handle of open DLA file\ndescr: Descriptor of a DLA segment\n\nOutput\n\nReturns the descriptor of the next segment in the DLA file or nothing if none was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dlafps-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.dlafps",
+    "category": "method",
+    "text": "dlafps(handle, descr)\n\nFind the segment preceding a specified segment in a DLA file.\n\nArguments\n\nhandle: Handle of open DLA file\ndescr: Descriptor of a DLA segment\n\nOutput\n\nReturns the descriptor of the previous segment in the DLA file or nothing if none was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dlatdr-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.dlatdr",
+    "category": "method",
+    "text": "dlatdr(x, y, z)\n\nCompute the Jacobian of the transformation from rectangular to latitudinal coordinates.\n\nArguments\n\nx: X-coordinate of point\ny: Y-coordinate of point\nz: Z-coordinate of point\n\nOutput\n\nReturns the matrix of partial derivatives.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dp2hx",
+    "page": "API",
+    "title": "SPICE.dp2hx",
+    "category": "function",
+    "text": "dp2hx(number, lenout=128)\n\nConvert a double precision number to an equivalent character string using base 16 \"scientific notation.\"\n\nArguments\n\nnumber: Number to be converted\nlenout: Available space for output string\n\nOutput\n\nReturns the equivalent character string, left justified.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dpgrdr-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.dpgrdr",
+    "category": "method",
+    "text": "dpgrdr(x, y, z, re, f)\n\nCompute the Jacobian of the transformation from rectangular to planetographic coordinates.\n\nArguments\n\nbody: Body with which coordinate system is associated\nx: X-coordinate of point\ny: Y-coordinate of point\nz: Z-coordinate of point\nre: Equatorial radius of the reference spheroid\nf: Flattening coefficient\n\nOutput\n\nReturns the matrix of partial derivatives.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dpmax",
+    "page": "API",
+    "title": "SPICE.dpmax",
+    "category": "function",
+    "text": "dpmax()\n\n!!! warning Deprecated     Use prevfloat(typemax(Float64)) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dpmin",
+    "page": "API",
+    "title": "SPICE.dpmin",
+    "category": "function",
+    "text": "dpmin()\n\n!!! warning Deprecated     Use nextfloat(typemin(Float64)) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dpr",
+    "page": "API",
+    "title": "SPICE.dpr",
+    "category": "function",
+    "text": "dpr()\n\n!!! warning Deprecated     Use rad2deg(1.0) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.drdcyl-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.drdcyl",
+    "category": "method",
+    "text": "drdcyl(r, lon, z)\n\nCompute the Jacobian of the transformation from cylindrical to rectangular coordinates.\n\nArguments\n\nr: Distance of a point from the origin\nlon: Angle of the point from the xz plane in radians\nz: Height of the point above the xy plane\n\nOutput\n\nReturns the matrix of partial derivatives.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.drdgeo-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.drdgeo",
+    "category": "method",
+    "text": "drdgeo(lon, lat, alt, re, f)\n\nCompute the Jacobian of the transformation from geodetic to rectangular coordinates.\n\nArguments\n\nlon: Geodetic longitude of point (radians)\nlat: Geodetic latitude of point (radians)\nalt: Altitude of point above the reference spheroid\nre: Equatorial radius of the reference spheroid\nf: Flattening coefficient\n\nOutput\n\nReturns the matrix of partial derivatives.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.drdlat-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.drdlat",
+    "category": "method",
+    "text": "drdlat(radius, lon, lat)\n\nCompute the Jacobian of the transformation from latitudinal to rectangular coordinates.\n\nArguments\n\nradius: Distance of a point from the origin\nlon: Angle of the point from the XZ plane in radians\nlat: Angle of the point from the XY plane in radians\n\nOutput\n\nReturns the matrix of partial derivatives.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.drdpgr-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.drdpgr",
+    "category": "method",
+    "text": "drdpgr(body, lon, lat, alt, re, f)\n\nCompute the Jacobian matrix of the transformation from planetographic to rectangular coordinates.\n\nArguments\n\nbody: Name of body with which coordinates are associated\nlon: Planetographic longitude of a point (radians)\nlat: Planetographic latitude of a point (radians)\nalt: Altitude of a point above reference spheroid\nre: Equatorial radius of the reference spheroid\nf: Flattening coefficient\n\nOutput\n\nReturns the matrix of partial derivatives.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.drdsph-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.drdsph",
+    "category": "method",
+    "text": "drdsph(r, colat, lon)\n\nCompute the Jacobian of the transformation from latitudinal to rectangular coordinates.\n\nArguments\n\nr: Distance of a point from the origin\ncolat: Angle of the point from the positive z-axis\nlon: Angle of the point from the xy plane\n\nOutput\n\nReturns the matrix of partial derivatives.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskopn-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.dskopn",
+    "category": "method",
+    "text": "dskopn(fname, ifname, ncomch)\n\nOpen a new DSK file for subsequent write operations.\n\nArguments\n\nfname: Name of a DSK file to be opened\nifname: Internal file name\nncomch: Number of comment characters to allocate\n\nOutput\n\nReturns the handle assigned to the opened DSK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
