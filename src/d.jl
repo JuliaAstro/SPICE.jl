@@ -11,13 +11,45 @@ export
     dafgda,
     dafgh,
     dafgn,
-    dafgs,
     dafgs!,
+    dafgs,
     dafgsr,
-    dafrfr,
     dafopr,
     dafopw,
+    dafps,
+    dafrda,
+    dafrfr,
+    dafrs,
     dafus,
+    dasac,
+    dascls,
+    dasdc,
+    dasec,
+    dashfn,
+    dasopr,
+    dasopw,
+    dasrfr,
+    dcyldr,
+    deltet,
+    dgeodr,
+    diags2,
+    diff,
+    dlabbs,
+    dlabfs,
+    dlafns,
+    dlafps,
+    dlatdr,
+    dp2hx,
+    dpgrdr,
+    dpmax,
+    dpmin,
+    dpr,
+    drdcyl,
+    drdgeo,
+    drdlat,
+    drdpgr,
+    drdsph,
+    dskopn,
     dtpool
 
 """
@@ -342,44 +374,6 @@ function dafgsr(handle, recno, start, stop)
 end
 
 """
-    dafrfr(handle, lenout=128)
-
-Read the contents of the file record of a DAF.
-
-### Arguments ###
-
-- `handle`: Handle of an open DAF file
-- `lenout`: Available room in the output string `ifname' (default: 128)
-
-### Output ###
-
-- `nd`: Number of double precision components in summaries
-- `ni`: Number of integer components in summaries
-- `ifname`: Internal file name
-- `fward`: Forward list pointer
-- `bward`: Backward list pointer
-- `free`: Free address pointer
-
-### References ###
-
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafrfr_c.html)
-"""
-function dafrfr(handle, lenout=128)
-    nd = Ref{SpiceInt}()
-    ni = Ref{SpiceInt}()
-    ifname = Array{SpiceChar}(undef, lenout)
-    fward = Ref{SpiceInt}()
-    bward = Ref{SpiceInt}()
-    free = Ref{SpiceInt}()
-    ccall((:dafrfr_c, libcspice), Cvoid,
-          (SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceChar},
-           Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceInt}),
-          handle, lenout, nd, ni, ifname, fward, bward, free)
-    handleerror()
-    nd[], ni[], chararray_to_string(ifname), fward[], bward[], free[]
-end
-
-"""
     dafopr(fname)
 
 Open a DAF for subsequent read requests.
@@ -428,6 +422,94 @@ function dafopw(fname)
 end
 
 """
+    dafps(dc, ic)
+
+Pack (assemble) an array summary from its double precision and integer components.
+
+### Arguments ###
+
+- `dc`: Double precision components
+- `ic`: Integer components
+
+### Output ###
+
+Returns the array summary.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafps_c.html)
+"""
+function dafps(dc, ic)
+    nd = length(dc)
+    ni = length(ic)
+    len = nd + (ni - 1) ÷ 2 + 1
+    ic_c = SpiceInt.(ic)
+    sum = Array{SpiceDouble}(undef, len)
+    ccall((:dafps_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceDouble}),
+          nd, ni, dc, ic_c, sum)
+    sum
+end
+
+@deprecate dafrda dafgda
+
+"""
+    dafrfr(handle, lenout=128)
+
+Read the contents of the file record of a DAF.
+
+### Arguments ###
+
+- `handle`: Handle of an open DAF file
+- `lenout`: Available room in the output string `ifname' (default: 128)
+
+### Output ###
+
+- `nd`: Number of double precision components in summaries
+- `ni`: Number of integer components in summaries
+- `ifname`: Internal file name
+- `fward`: Forward list pointer
+- `bward`: Backward list pointer
+- `free`: Free address pointer
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafrfr_c.html)
+"""
+function dafrfr(handle, lenout=128)
+    nd = Ref{SpiceInt}()
+    ni = Ref{SpiceInt}()
+    ifname = Array{SpiceChar}(undef, lenout)
+    fward = Ref{SpiceInt}()
+    bward = Ref{SpiceInt}()
+    free = Ref{SpiceInt}()
+    ccall((:dafrfr_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceChar},
+           Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceInt}),
+          handle, lenout, nd, ni, ifname, fward, bward, free)
+    handleerror()
+    nd[], ni[], chararray_to_string(ifname), fward[], bward[], free[]
+end
+
+"""
+    dafrs(sum)
+
+Change the summary for the current array in the current DAF.
+
+### Arguments ###
+
+- `sum`: New summary for current array
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafrs_c.html)
+"""
+function dafrs(sum)
+    ccall((:dafrs_c, libcspice), Cvoid, (Ref{SpiceDouble},), sum)
+    handleerror()
+end
+
+"""
     dafus(sum, nd, ni)
 
 Unpack an array summary into its double precision and integer components.
@@ -454,6 +536,785 @@ function dafus(sum, nd, ni)
          (Ref{SpiceDouble}, SpiceInt, SpiceInt, Ref{SpiceDouble}, Ref{SpiceInt}),
          sum, nd, ni, dc, ic)
     dc, ic
+end
+
+"""
+    dasac(handle, buffer)
+
+Add comments from a buffer of character strings to the comment area of a binary DAS file, appending
+them to any comments which are already present in the file's comment area.
+
+### Arguments ###
+
+- `handle`: Handle of a DAS opened with write access
+- `buffer`: Buffer of comments to put into the comment area
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dasac_c.html)
+"""
+function dasac(handle, buffer)
+    buffer, n, lenvals = chararray(buffer)
+    ccall((:dasac_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceChar}),
+          handle, n, lenvals, buffer)
+    handleerror()
+end
+
+"""
+    dascls(handle)
+
+Close the DAS associated with a given handle.
+
+### Arguments ###
+
+- `handle`: Handle of DAS to be closed
+
+### Output ###
+
+Returns the handle of the closed file.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dascls_c.html)
+"""
+function dascls(handle)
+    ccall((:dascls_c, libcspice), Cvoid, (SpiceInt,), handle)
+    handleerror()
+    handle
+end
+
+"""
+    dasdc(handle)
+
+Delete the entire comment area of a specified DAS file.
+
+### Arguments ###
+
+- `handle`: The handle of a binary DAS opened for writing
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dasdc_c.html)
+"""
+function dasdc(handle)
+    ccall((:dasdc_c, libcspice), Cvoid, (SpiceInt,), handle)
+    handleerror()
+end
+
+"""
+    dasec(handle; bufsiz=256, lenout=1024)
+
+Extract comments from the comment area of a binary DAS.
+
+### Arguments ###
+
+- `handle`: Handle of binary DAS opened with read access
+- `bufsiz`: Maximum size, in lines, of buffer (default: 256)
+- `lenout`: Length of strings in output buffer (default: 1024)
+
+### Output ###
+
+Returns a buffer where extracted comment lines are placed.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dasec_c.html)
+"""
+function dasec(handle; bufsiz=256, lenout=1024)
+    n = Ref{SpiceInt}()
+    buffer = Array{SpiceChar}(undef, lenout, bufsiz)
+    done = Ref{SpiceBoolean}()
+    ccall((:dasec_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{SpiceChar}, Ref{SpiceBoolean}),
+          handle, bufsiz, lenout, n, buffer, done)
+    handleerror()
+    output = chararray_to_string(buffer, n[])
+    while !Bool(done[])
+        buffer = Array{SpiceChar}(undef, lenout, bufsiz)
+        ccall((:dasec_c, libcspice), Cvoid,
+              (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{SpiceChar}, Ref{SpiceBoolean}),
+              handle, bufsiz, lenout, n, buffer, done)
+        handleerror()
+        append!(output, chararray_to_string(buffer, n[]))
+    end
+    output
+end
+
+"""
+    dashfn(handle, namelen=256)
+
+Return the name of the DAS file associated with a handle.
+
+### Arguments ###
+
+- `handle`: Handle of a DAS file
+- `namlen`: Length of output file name string (default: 256)
+
+### Output ###
+
+Returns the corresponding file name.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/XXX_c.html)
+"""
+function dashfn(handle, namelen=256)
+    name = Array{SpiceChar}(undef, namelen)
+    ccall((:dashfn_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, Ref{SpiceChar}),
+          handle, namelen, name)
+    handleerror()
+    chararray_to_string(name)
+end
+
+"""
+    dasopr(fname)
+
+Open a DAS for subsequent read requests.
+
+### Arguments ###
+
+- `fname`: Name of DAS to be opened
+
+### Output ###
+
+Returns the handle assigned to DAS.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dasopr_c.html)
+"""
+function dasopr(fname)
+    handle = Ref{SpiceInt}()
+    ccall((:dasopr_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}), fname, handle)
+    handleerror()
+    handle[]
+end
+
+"""
+    dasopw(fname)
+
+Open a DAS for subsequent write requests.
+
+### Arguments ###
+
+- `fname`: Name of DAS to be opened
+
+### Output ###
+
+Returns the handle assigned to DAS.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dasopw_c.html)
+"""
+function dasopw(fname)
+    handle = Ref{SpiceInt}()
+    ccall((:dasopw_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}), fname, handle)
+    handleerror()
+    handle[]
+end
+
+"""
+    dasrfr(handle, idwlen=128, ifnlen=256)
+
+Read the contents of the file record of a DAS.
+
+### Arguments ###
+
+- `handle`: DAS file handle
+- `idwlen`: Length of ID word string (default: 128)
+- `ifnlen`: Length of internal file name string (default: 256)
+
+### Output ###
+
+- `idword`: ID word
+- `ifname`: DAS internal file name
+- `nresvr`: Number of reserved records in file
+- `nresvc`: Number of characters in use in reserved records area
+- `ncomr`: Number of comment records in file
+- `ncomc`: Number of characters in use in comment area
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dasrfr_c.html)
+"""
+function dasrfr(handle, idwlen=128, ifnlen=256)
+    idword = Array{SpiceChar}(undef, idwlen)
+    ifname = Array{SpiceChar}(undef, ifnlen)
+    nresvr = Ref{SpiceInt}()
+    nresvc = Ref{SpiceInt}()
+    ncomr = Ref{SpiceInt}()
+    ncomc = Ref{SpiceInt}()
+    ccall((:dasrfr_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt,
+           Ref{SpiceChar}, Ref{SpiceChar}, Ref{SpiceInt}, Ref{SpiceInt},
+           Ref{SpiceInt}, Ref{SpiceInt}),
+          handle, idwlen, ifnlen, idword, ifname, nresvr, nresvc, ncomr, ncomc)
+    handleerror()
+    chararray_to_string(idword), chararray_to_string(ifname), nresvr[], nresvc[], ncomr[], ncomc[]
+end
+
+"""
+    dcyldr(x, y, z)
+
+Compute the Jacobian of the transformation from rectangular to cylindrical coordinates.
+
+### Arguments ###
+
+- `x`: X-coordinate of point
+- `y`: Y-coordinate of point
+- `z`: Z-coordinate of point
+
+### Output ###
+
+Returns the matrix of partial derivatives.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dcyldr_c.html)
+"""
+function dcyldr(x, y, z)
+    jacobi = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:dcyldr_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
+          x, y, z, jacobi)
+    handleerror()
+    permutedims(jacobi)
+end
+
+"""
+    deltet(epoch, eptype)
+
+Return the value of ΔET (ET-UTC) for an input epoch.
+
+### Arguments ###
+
+- `epoch`: Input epoch (seconds past J2000)
+- `eptype`: Type of input epoch ("UTC" or "ET")
+
+### Output ###
+
+Returns ΔET (ET-UTC) at input epoch.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/deltet_c.html)
+"""
+function deltet(epoch, eptype)
+    delta = Ref{SpiceDouble}()
+    ccall((:deltet_c, libcspice), Cvoid,
+          (SpiceDouble, Cstring, Ref{SpiceDouble}),
+          epoch, eptype, delta)
+    handleerror()
+    delta[]
+end
+
+"""
+    dgeodr(x, y, z, re, f)
+
+Compute the Jacobian of the transformation from rectangular to geodetic coordinates.
+
+### Arguments ###
+
+- `x`: X-coordinate of point
+- `y`: Y-coordinate of point
+- `z`: Z-coordinate of point
+- `re`: Equatorial radius of the reference spheroid
+- `f`: Flattening coefficient
+
+### Output ###
+
+Returns the matrix of partial derivatives.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dgeodr_c.html)
+"""
+function dgeodr(x, y, z, re, f)
+    jacobi = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:dgeodr_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
+          x, y, z, re, f, jacobi)
+    handleerror()
+    permutedims(jacobi)
+end
+
+"""
+    diags2(symmat)
+
+Diagonalize a symmetric 2x2 matrix.
+
+### Arguments ###
+
+- `symmat`: A symmetric 2x2 matrix
+
+### Output ###
+
+- `diag`: A diagonal matrix similar to `symmat`
+- `rotate`: A rotation used as the similarity transformation
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/diags2_c.html)
+"""
+function diags2(symmat)
+    size(symmat) != (2, 2) && throw(ArgumentError("`symmat` must be a 2x2 matrix."))
+    diag = Array{SpiceDouble}(undef, 2, 2)
+    rotate = Array{SpiceDouble}(undef, 2, 2)
+    ccall((:diags2_c, libcspice), Cvoid,
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          symmat, diag, rotate)
+    permutedims(diag), permutedims(rotate)
+end
+
+"""
+    diff(a::T, b::T) where T <: SpiceCell
+
+Compute the difference of two sets of any data type to form a third set.
+
+### Arguments ###
+
+- `a`: First input set
+- `b`: Second input set
+
+### Output ###
+
+Returns a cell containing the difference of `a` and `b`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/diff_c.html)
+"""
+function Base.diff(a::SpiceCell{T}, b::SpiceCell{T}) where T
+    size = max(a.cell.size, b.cell.size)
+    if T <: SpiceChar
+        length = max(a.cell.length, b.cell.length)
+        out = SpiceCell{T}(size, length)
+    else
+        out = SpiceCell{T}(size)
+    end
+    ccall((:diff_c, libcspice), Cvoid, (Ref{Cell{T}}, Ref{Cell{T}}, Ref{Cell{T}}),
+          a.cell, b.cell, out.cell)
+    handleerror()
+    out
+end
+
+"""
+    dlabbs(handle)
+
+Begin a backward segment search in a DLA file.
+
+### Arguments ###
+
+- `handle`: Handle of open DLA file
+
+### Output ###
+
+Returns the descriptor of the last segment in the DLA file or `nothing` if none was found.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dlabbs_c.html)
+"""
+function dlabbs(handle)
+    descr = Ref{DLADescr}()
+    found = Ref{SpiceBoolean}()
+    ccall((:dlabbs_c, libcspice), Cvoid,
+          (SpiceInt, Ref{DLADescr}, Ref{SpiceBoolean}),
+          handle, descr, found)
+    handleerror()
+    Bool(found[]) || return nothing
+    descr[]
+end
+
+"""
+    dlabfs(handle)
+
+Begin a forward segment search in a DLA file.
+
+### Arguments ###
+
+- `handle`: Handle of open DLA file
+
+### Output ###
+
+Returns the descriptor of the first segment in the DLA file or `nothing` if none was found.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dlabfs_c.html)
+"""
+function dlabfs(handle)
+    descr = Ref{DLADescr}()
+    found = Ref{SpiceBoolean}()
+    ccall((:dlabfs_c, libcspice), Cvoid,
+          (SpiceInt, Ref{DLADescr}, Ref{SpiceBoolean}),
+          handle, descr, found)
+    handleerror()
+    Bool(found[]) || return nothing
+    descr[]
+end
+
+"""
+    dlafns(handle, descr)
+
+Find the segment following a specified segment in a DLA file.
+
+### Arguments ###
+
+- `handle`: Handle of open DLA file
+- `descr`: Descriptor of a DLA segment
+
+### Output ###
+
+Returns the descriptor of the next segment in the DLA file or `nothing` if none was found.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dlafns_c.html)
+"""
+function dlafns(handle, descr)
+    nxtdsc = Ref{DLADescr}()
+    found = Ref{SpiceBoolean}()
+    ccall((:dlafns_c, libcspice), Cvoid,
+          (SpiceInt, Ref{DLADescr}, Ref{DLADescr}, Ref{SpiceBoolean}),
+          handle, descr, nxtdsc, found)
+    handleerror()
+    Bool(found[]) || return nothing
+    nxtdsc[]
+end
+
+"""
+    dlafps(handle, descr)
+
+Find the segment preceding a specified segment in a DLA file.
+
+### Arguments ###
+
+- `handle`: Handle of open DLA file
+- `descr`: Descriptor of a DLA segment
+
+### Output ###
+
+Returns the descriptor of the previous segment in the DLA file or `nothing` if none was found.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dlafps_c.html)
+"""
+function dlafps(handle, descr)
+    nxtdsc = Ref{DLADescr}()
+    found = Ref{SpiceBoolean}()
+    ccall((:dlafps_c, libcspice), Cvoid,
+          (SpiceInt, Ref{DLADescr}, Ref{DLADescr}, Ref{SpiceBoolean}),
+          handle, descr, nxtdsc, found)
+    handleerror()
+    Bool(found[]) || return nothing
+    nxtdsc[]
+end
+
+"""
+    dlatdr(x, y, z)
+
+Compute the Jacobian of the transformation from rectangular to latitudinal coordinates.
+
+### Arguments ###
+
+- `x`: X-coordinate of point
+- `y`: Y-coordinate of point
+- `z`: Z-coordinate of point
+
+### Output ###
+
+Returns the matrix of partial derivatives.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dlatdr_c.html)
+"""
+function dlatdr(x, y, z)
+    jacobi = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:dlatdr_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
+          x, y, z, jacobi)
+    handleerror()
+    permutedims(jacobi)
+end
+
+"""
+    dp2hx(number, lenout=128)
+
+Convert a double precision number to an equivalent character string using base 16 "scientific notation."
+
+### Arguments ###
+
+- `number`: Number to be converted
+- `lenout`: Available space for output string
+
+### Output ###
+
+Returns the equivalent character string, left justified.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dp2hx_c.html)
+"""
+function dp2hx(number, lenout=128)
+    string = Array{SpiceChar}(undef, lenout)
+    n = Ref{SpiceInt}()
+    ccall((:dp2hx_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceInt, Ref{SpiceChar}, Ref{SpiceInt}),
+          number, lenout, string, n)
+    chararray_to_string(string)
+end
+
+"""
+    dpgrdr(x, y, z, re, f)
+
+Compute the Jacobian of the transformation from rectangular to planetographic coordinates.
+
+### Arguments ###
+
+- `body`: Body with which coordinate system is associated
+- `x`: X-coordinate of point
+- `y`: Y-coordinate of point
+- `z`: Z-coordinate of point
+- `re`: Equatorial radius of the reference spheroid
+- `f`: Flattening coefficient
+
+### Output ###
+
+Returns the matrix of partial derivatives.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dpgrdr_c.html)
+"""
+function dpgrdr(body, x, y, z, re, f)
+    jacobi = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:dpgrdr_c, libcspice), Cvoid,
+          (Cstring, SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
+          body, x, y, z, re, f, jacobi)
+    handleerror()
+    permutedims(jacobi)
+end
+
+function _dpmax()
+    ccall((:dpmax_c, libcspice), SpiceDouble, ())
+end
+
+@deprecate dpmax() prevfloat(typemax(Float64))
+
+"""
+    dpmax()
+
+!!! warning Deprecated
+    Use `prevfloat(typemax(Float64))` instead.
+"""
+dpmax
+
+function _dpmin()
+    ccall((:dpmin_c, libcspice), SpiceDouble, ())
+end
+
+@deprecate dpmin() nextfloat(typemin(Float64))
+
+"""
+    dpmin()
+
+!!! warning Deprecated
+    Use `nextfloat(typemin(Float64))` instead.
+"""
+dpmin
+
+function _dpr()
+    ccall((:dpr_c, libcspice), SpiceDouble, ())
+end
+
+@deprecate dpr() rad2deg(1.0)
+
+"""
+    dpr()
+
+!!! warning Deprecated
+    Use `rad2deg(1.0)` instead.
+"""
+dpr
+
+"""
+    drdcyl(r, lon, z)
+
+Compute the Jacobian of the transformation from cylindrical to rectangular coordinates.
+
+### Arguments ###
+
+- `r`: Distance of a point from the origin
+- `lon`: Angle of the point from the xz plane in radians
+- `z`: Height of the point above the xy plane
+
+### Output ###
+
+Returns the matrix of partial derivatives.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/drdcyl_c.html)
+"""
+function drdcyl(r, lon, z)
+    jacobi = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:drdcyl_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
+          r, lon, z, jacobi)
+    handleerror()
+    permutedims(jacobi)
+end
+
+"""
+    drdgeo(lon, lat, alt, re, f)
+
+Compute the Jacobian of the transformation from geodetic to rectangular coordinates.
+
+### Arguments ###
+
+- `lon`: Geodetic longitude of point (radians)
+- `lat`: Geodetic latitude of point (radians)
+- `alt`: Altitude of point above the reference spheroid
+- `re`: Equatorial radius of the reference spheroid
+- `f`: Flattening coefficient
+
+### Output ###
+
+Returns the matrix of partial derivatives.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/drdgeo_c.html)
+"""
+function drdgeo(lon, lat, alt, re, f)
+    jacobi = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:drdgeo_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
+          lon, lat, alt, re, f, jacobi)
+    handleerror()
+    permutedims(jacobi)
+end
+
+"""
+    drdlat(radius, lon, lat)
+
+Compute the Jacobian of the transformation from latitudinal to rectangular coordinates.
+
+### Arguments ###
+
+- `radius`: Distance of a point from the origin
+- `lon`: Angle of the point from the XZ plane in radians
+- `lat`: Angle of the point from the XY plane in radians
+
+### Output ###
+
+Returns the matrix of partial derivatives.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/drdlat_c.html)
+"""
+function drdlat(radius, lon, lat)
+    jacobi = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:drdlat_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
+          radius, lon, lat, jacobi)
+    handleerror()
+    permutedims(jacobi)
+end
+
+"""
+    drdpgr(body, lon, lat, alt, re, f)
+
+Compute the Jacobian matrix of the transformation from planetographic to rectangular coordinates.
+
+### Arguments ###
+
+- `body`: Name of body with which coordinates are associated
+- `lon`: Planetographic longitude of a point (radians)
+- `lat`: Planetographic latitude of a point (radians)
+- `alt`: Altitude of a point above reference spheroid
+- `re`: Equatorial radius of the reference spheroid
+- `f`: Flattening coefficient
+
+### Output ###
+
+Returns the matrix of partial derivatives.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/drdpgr_c.html)
+"""
+function drdpgr(body, lon, lat, alt, re, f)
+    jacobi = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:drdpgr_c, libcspice), Cvoid,
+          (Cstring, SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble,
+           Ref{SpiceDouble}),
+          body, lon, lat, alt, re, f, jacobi)
+    handleerror()
+    permutedims(jacobi)
+end
+
+"""
+    drdsph(r, colat, lon)
+
+Compute the Jacobian of the transformation from latitudinal to rectangular coordinates.
+
+### Arguments ###
+
+- `r`: Distance of a point from the origin
+- `colat`: Angle of the point from the positive z-axis
+- `lon`: Angle of the point from the xy plane
+
+### Output ###
+
+Returns the matrix of partial derivatives.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/drdsph_c.html)
+"""
+function drdsph(r, colat, lon)
+    jacobi = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:drdsph_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
+          r, colat, lon, jacobi)
+    handleerror()
+    permutedims(jacobi)
+end
+
+"""
+    dskopn(fname, ifname, ncomch)
+
+Open a new DSK file for subsequent write operations.
+
+### Arguments ###
+
+- `fname`: Name of a DSK file to be opened
+- `ifname`: Internal file name
+- `ncomch`: Number of comment characters to allocate
+
+### Output ###
+
+Returns the handle assigned to the opened DSK file.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskopn_c.html)
+"""
+function dskopn(fname, ifname, ncomch)
+    handle = Ref{SpiceInt}()
+    ccall((:dskopn_c, libcspice), Cvoid,
+          (Cstring, Cstring, SpiceInt, Ref{SpiceInt}),
+          fname, ifname, ncomch, handle)
+    handleerror()
+    handle[]
 end
 
 """
@@ -488,3 +1349,4 @@ function dtpool(name)
     handleerror()
     n[], Symbol(Char(vartype[]))
 end
+

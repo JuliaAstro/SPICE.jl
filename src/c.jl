@@ -402,14 +402,16 @@ Add a type 1 segment to a C-kernel.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckw01_c.html)
 """
-function ckw01(handle, inst, ref, segid, sclkdp, quats, avvs=Matrix{SpiceDouble}(0,0);
+function ckw01(handle, inst, ref, segid, sclkdp, quats, avvs=[[0.0]];
                begtim=sclkdp[1], endtim=sclkdp[end])
+    quats_c = array_to_cmatrix(quats)
+    avvs_c = array_to_cmatrix(avvs)
     nrec = length(sclkdp)
     avflag = length(avvs) > 0 ? 1 : 0
     ccall((:ckw01_c, libcspice), Cvoid,
           (SpiceInt, SpiceDouble, SpiceDouble, SpiceInt, Cstring, SpiceInt, Cstring, SpiceInt,
            Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
-          handle, begtim, endtim, inst, ref, avflag, segid, nrec, sclkdp, quats, avvs)
+          handle, begtim, endtim, inst, ref, avflag, segid, nrec, sclkdp, quats_c, avvs_c)
     handleerror()
 end
 

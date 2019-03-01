@@ -124,409 +124,287 @@
             kclear()
         end
     end
-    #= @testset "dafopr" begin =#
-    #=     kclear() =#
-    #=     handle = dafopr(CoreKernels.spk) =#
-    #=     dafbfs(handle) =#
-    #=     found = daffna() =#
-    #=     @test found =#
-    #=     dafcls(handle) =#
-    #=     kclear() =#
-    #= @testset "dafopw" begin =#
-    #=     kclear() =#
-    #=     handle = dafopw(CoreKernels.spk) =#
-    #=     dafbfs(handle) =#
-    #=     found = daffna() =#
-    #=     @test found =#
-    #=     dafcls(handle) =#
-    #=     kclear() =#
-    #= @testset "dafps_dafrs" begin =#
-    #=     kclear() =#
-    #=     dafpath = os.path.join(cwd, "ckopenkernel_dafps.bc") =#
-    #=     if exists(dafpath): =#
-    #=         os.remove(dafpath) # pragma: no cover =#
-    #=     IFNAME = "Test CK type 1 segment created by cspice_ckw01" =#
-    #=     handle = ckopn(dafpath, IFNAME, 10) =#
-    #=     ckw01(handle, 1.0, 10.0, -77701, "J2000", True, "Test type 1 CK segment", =#
-    #=                 2 - 1, [1.1, 4.1], [[1.0, 1.0, 1.0, 1.0], [2.0, 2.0, 2.0, 2.0]], =#
-    #=                 [[0.0, 0.0, 1.0], [0.0, 0.0, 2.0]]) =#
-    #=     ckcls(handle) =#
-    #=     kclear() =#
-    #=     # reload =#
-    #=     handle = dafopw(dafpath) =#
-    #=     @test handle is not None =#
-    #=     # begin forward search =#
-    #=     dafbfs(handle) =#
-    #=     found = daffna() =#
-    #=     @test found =#
-    #=     out = dafgs(n=124) =#
-    #=     dc, ic = dafus(out, 2, 6) =#
-    #=     # change the id code and repack =#
-    #=     ic[0] = -1999 =#
-    #=     ic[1] = -2999 =#
-    #=     summ = dafps(2, 6, dc, ic) =#
-    #=     dafrs(summ) =#
-    #=     # finished. =#
-    #=     dafcls(handle) =#
-    #=     kclear() =#
-    #=     # reload the kernel and verify the ic"s got updated =#
-    #=     handle = dafopr(dafpath) =#
-    #=     @test handle is not None =#
-    #=     # begin forward search =#
-    #=     dafbfs(handle) =#
-    #=     found = daffna() =#
-    #=     @test found =#
-    #=     out = dafgs(n=124) =#
-    #=     dc, ic = dafus(out, 2, 6) =#
-    #=     @test ic[0] == -1999 =#
-    #=     @test ic[1] == -2999 =#
-    #=     # cleanup =#
-    #=     dafcls(handle) =#
-    #=     kclear() =#
-    #=     if exists(dafpath): =#
-    #=         os.remove(dafpath) # pragma: no cover =#
-    #= @testset "dafrda" begin =#
-    #=     reset() =#
-    #=     kclear() =#
-    #=     # Open DAF =#
-    #=     # N.B. The SPK used must use the LTL-IEEE double byte-ordering and format =#
-    #=     # This should be de405s.bsp from the test kernel set =#
-    #=     handle = dafopr(CoreKernels.spk) =#
-    #=     # get ND, NI (N.B. for SPKs, ND=2 and NI=6), =#
-    #=     # and first, last and free record numbers =#
-    #=     nd, ni, ifname, fward, bward, free = dafrfr(handle) =#
-    #=     @test nd == 2 and ni == 6 =#
-    #=     # Calculate Single Summary size =#
-    #=     ss = nd + ((ni+1) >> 1)  =#
-    #=     iRecno = fward =#
-    #=     # Get first three words at summary record (DAF record iRecno) =#
-    #=     # * drec(1) NEXT forward pointer to next summary record =#
-    #=     # * drec(2) PREV backward pointer (not used here) =#
-    #=     # * drec(3) NSUM Number of single summaries in this DAF record =#
-    #=     fward, bward, nSS = drec = map(int, dafgsr(handle, iRecno, 1, 3)) =#
-    #=     # There is only one summary record in de405s.bsp =#
-    #=     @test iRecno == 7 and fward is 0 and bward is 0 and nSS == 15 =#
-    #=     # Set index to first word of first summary =#
-    #=     firstWord = 4 =#
-    #=     # Set DAF word before first segments first word (641 for de405s.bsp) =#
-    #=     lastIEndWord = 1024 =#
-    #=     # Loop over single summaries =#
-    #=     for iSS in range(int(nSS)): =#
-    #=         # Get packed summary =#
-    #=         drec = dafgsr(handle, iRecno, firstWord, firstWord+ss-1) =#
-    #=         # Unpack summary =#
-    #=         dc, ic = dafus(drec, nd, ni) =#
-    #=         iBody, iCenter, iFrame, iSPKtype, iStartWord, iEndWord = ic =#
-    #=         # SPK de405s.bsp ephemerides run from [1997 JAN 01 00:01:02.183 (TDB)] to [2010 JAN 02 00:01:03.183 (TDB)] =#
-    #=         @test_array_almost_equal(dc, [-9.46511378160646408796e+07,   3.15662463183953464031e+08]) =#
-    #=         # Solar System body barycenters (IDs 1-10) centers are the Solar System Barycenter (ID=0) =#
-    #=         # All other bodies" centers (e.g. 301; Moon) are their systems barycenter (e.g. 3 Earth-Moon Barycenter) =#
-    #=         @test (iBody // 100) == iCenter =#
-    #=         # All de405s.bsp ephemeris segments are in the J2000 frame (ID 1), =#
-    #=         # are Type 2 SPK segments, and start immediately after the last =#
-    #=         # word (lastIEndWord) for the previous segment =#
-    #=         @test iFrame == 1 and iSPKtype == 2 and (lastIEndWord+1) == iStartWord =#
-    #=         # Get the four-word directory at the end of the segment =#
-    #=         segmentInit, segmentIntlen, segmentRsize, segmentN = segmentLast4 = dafrda(handle, ic[5]-3, ic[5]) =#
-    #=         # Check segment word count (1+END-BEGIN) against directory word content =#
-    #=         # Type 2 SPK segment word count: =#
-    #=         # - A count of [segmentN] Chebyshev polynomial records @ RSIZE words per Cheby. poly. record =#
-    #=         # - A four-word directory at the end of the segment =#
-    #=         # So ((RSIZE * N) + 4) == (1 + END - BEGIN) =#
-    #=         # - cf. https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/spk.html#Type%202:%20Chebyshev%20%28position%20only%29 =#
-    #=         @test (3 + (segmentRsize * segmentN)) == (ic[5] - ic[4]) =#
-    #=         # Setup for next segment:  advance BEGIN word of next single summary =#
-    #=         firstWord += ss =#
-    #=         lastIEndWord = iEndWord =#
-    #=     # Cleanup =#
-    #=     dafcls(handle) =#
-    #=     reset() =#
-    #=     kclear() =#
-    #= @testset "dafrfr" begin =#
-    #=     kclear() =#
-    #=     handle = dafopr(CoreKernels.spk) =#
-    #=     nd, ni, ifname, fward, bward, free = dafrfr(handle) =#
-    #=     dafcls(handle) =#
-    #=     @test nd == 2 =#
-    #=     @test ni == 6 =#
-    #=     @test ifname == "" =#
-    #=     @test fward == 7 =#
-    #=     @test bward == 7 =#
-    #=     kclear() =#
-    #= @testset "dafus" begin =#
-    #=     kclear() =#
-    #=     handle = dafopr(CoreKernels.spk) =#
-    #=     dafbfs(handle) =#
-    #=     found = daffna() =#
-    #=     @test found =#
-    #=     out = dafgs(n=124) =#
-    #=     dc, ic = dafus(out, 2, 6) =#
-    #=     dafcls(handle) =#
-    #=     @test_array_almost_equal(dc, [-9.46511378160646408796e+07,   3.15662463183953464031e+08]) =#
-    #=     @test_array_almost_equal(ic, [1, 0, 1, 2, 1025, 27164]) =#
-    #=     kclear() =#
-    #= @testset "dasac_dasopr_dasec_dasdc" begin =#
-    #=     kclear() =#
-    #=     daspath = os.path.join(cwd, "ex_dasac.das") =#
-    #=     if exists(daspath): =#
-    #=         os.remove(daspath) # pragma: no cover =#
-    #=     handle = dasonw(daspath, "TEST", "ex_dasac", 140) =#
-    #=     @test handle is not None =#
-    #=     # write some comments =#
-    #=     dasac(handle, ["spice", "naif", "python"]) =#
-    #=     dascls(handle) =#
-    #=     kclear() =#
-    #=     reset() =#
-    #=     # we wrote to the test kernel, now load it in read mode =#
-    #=     handle = dasopr(daspath) =#
-    #=     @test handle is not None =#
-    #=     # check that dashfn points to the correct path =#
-    #=     @test dashfn(handle) == daspath =#
-    #=     # extract out the comment, say we only want 3 things out =#
-    #=     n, comments, done = dasec(handle, bufsiz=3) =#
-    #=     @test n == 3 =#
-    #=     @test set(comments) == {"spice", "naif", "python"} & set(comments) =#
-    #=     # close the das file =#
-    #=     dascls(handle) =#
-    #=     ############################################### =#
-    #=     # now test dasrfr =#
-    #=     handle = dasopr(daspath) =#
-    #=     @test handle is not None =#
-    #=     idword, ifname, nresvr, nresvc, ncomr, ncomc = dasrfr(handle) =#
-    #=     @test idword is not None =#
-    #=     @test idword == "DAS/TEST" =#
-    #=     @test ifname == "ex_dasac" =#
-    #=     @test nresvr == 0 =#
-    #=     @test nresvc == 0 =#
-    #=     @test ncomr  == 140 =#
-    #=     @test ncomc  == 18 =#
-    #=     # close the das file =#
-    #=     dascls(handle) =#
-    #=     ############################################### =#
-    #=     # now reload the kernel and delete the commnets =#
-    #=     handle = dasopw(daspath) =#
-    #=     @test handle is not None =#
-    #=     # delete the comments =#
-    #=     dasdc(handle) =#
-    #=     # close the das file =#
-    #=     dascls(handle) =#
-    #=     # open again for reading =#
-    #=     handle = dasopr(daspath) =#
-    #=     @test handle is not None =#
-    #=     # extract out the comments, hopefully nothing =#
-    #=     n, comments, done = dasec(handle) =#
-    #=     @test n == 0 =#
-    #=     # close it again =#
-    #=     dascls(handle) =#
-    #=     # done, so clean up =#
-    #=     if exists(daspath): =#
-    #=         os.remove(daspath) # pragma: no cover =#
-    #=     kclear() =#
-    #= @testset "dasopw_dascls_dasopr" begin =#
-    #=     kclear() =#
-    #=     daspath = os.path.join(cwd, "ex_das.das") =#
-    #=     if exists(daspath): =#
-    #=         os.remove(daspath) # pragma: no cover =#
-    #=     handle = dasonw(daspath, "TEST", daspath, 0) =#
-    #=     @test handle is not None =#
-    #=     dascls(handle) =#
-    #=     handle = dasopw(daspath) =#
-    #=     @test handle is not None =#
-    #=     dascls(handle) =#
-    #=     handle = dasopr(daspath) =#
-    #=     dascls(handle) =#
-    #=     @test handle is not None =#
-    #=     if exists(daspath): =#
-    #=         os.remove(daspath) # pragma: no cover =#
-    #=     kclear() =#
-    #= @testset "dcyldr" begin =#
-    #=     output = dcyldr(1.0, 0.0, 0.0) =#
-    #=     expected = [[1.0, 0.0, 0.0], =#
-    #=                 [0.0, 1.0, 0.0], =#
-    #=                 [0.0, 0.0, 1.0]] =#
-    #=     @test_array_almost_equal(output, expected) =#
-    #= @testset "deltet" begin =#
-    #=     kclear() =#
-    #=     furnsh(CoreKernels.testMetaKernel) =#
-    #=     UTC_1997 = "Jan 1 1997" =#
-    #=     UTC_2004 = "Jan 1 2004" =#
-    #=     et_1997 = str2et(UTC_1997) =#
-    #=     et_2004 = str2et(UTC_2004) =#
-    #=     delt_1997 = deltet(et_1997, "ET") =#
-    #=     delt_2004 = deltet(et_2004, "ET") =#
-    #=     @test_almost_equal(delt_1997, 62.1839353, decimal=6) =#
-    #=     @test_almost_equal(delt_2004, 64.1839116, decimal=6) =#
-    #=     kclear() =#
-    #= @testset "det" begin =#
-    #=     m1 = np.array([[5.0, -2.0, 1.0], [0.0, 3.0, -1.0], [2.0, 0.0, 7.0]]) =#
-    #=     expected = 103 =#
-    #=     @test det(m1) == expected =#
-    #= @testset "dgeodr" begin =#
-    #=     kclear() =#
-    #=     furnsh(CoreKernels.testMetaKernel) =#
-    #=     size, radii = bodvrd("EARTH", "RADII", 3) =#
-    #=     flat = (radii[0] - radii[2]) / radii[0] =#
-    #=     lon = 118.0 * rpd() =#
-    #=     lat = 32.0 * rpd() =#
-    #=     alt = 0.0 =#
-    #=     kclear() =#
-    #=     rec = latrec(lon, lat, alt) =#
-    #=     output = dgeodr(rec[0], rec[1], rec[2], radii[0], flat) =#
-    #=     expected = [[-0.25730624850202866, 0.41177607401581356, 0.0], =#
-    #=                 [-0.019818463887750683, -0.012383950685377182, 0.0011247386599188864], =#
-    #=                 [0.040768073853231314, 0.02547471988726025, 0.9988438330394612]] =#
-    #=     @test_array_almost_equal(output, expected) =#
-    #= @testset "diags2" begin =#
-    #=     mat = [[1.0, 4.0], [4.0, -5.0]] =#
-    #=     diag, rot = diags2(mat) =#
-    #=     expectedDiag = [[3.0, 0.0], [0.0, -7.0]] =#
-    #=     expectedRot = [[0.89442719, -0.44721360], [0.44721360, 0.89442719]] =#
-    #=     @test_array_almost_equal(diag, expectedDiag) =#
-    #=     @test_array_almost_equal(rot, expectedRot) =#
-    #= @testset "diff" begin =#
-    #=     # SPICEINT_CELL =#
-    #=     testCellOne = cell_int(8) =#
-    #=     testCellTwo = cell_int(8) =#
-    #=     insrti(1, testCellOne) =#
-    #=     insrti(2, testCellOne) =#
-    #=     insrti(3, testCellOne) =#
-    #=     insrti(2, testCellTwo) =#
-    #=     insrti(3, testCellTwo) =#
-    #=     insrti(4, testCellTwo) =#
-    #=     outCell = diff(testCellOne, testCellTwo) =#
-    #=     @test [x for x in outCell] == [1] =#
-    #=     outCell = diff(testCellTwo, testCellOne) =#
-    #=     @test [x for x in outCell] == [4] =#
-    #=     # SPICECHAR_CELL =#
-    #=     testCellOne = cell_char(8, 8) =#
-    #=     testCellTwo = cell_char(8, 8) =#
-    #=     insrtc("1", testCellOne) =#
-    #=     insrtc("2", testCellOne) =#
-    #=     insrtc("3", testCellOne) =#
-    #=     insrtc("2", testCellTwo) =#
-    #=     insrtc("3", testCellTwo) =#
-    #=     insrtc("4", testCellTwo) =#
-    #=     outCell = diff(testCellOne, testCellTwo) =#
-    #=     @test [x for x in outCell] == ["1"] =#
-    #=     outCell = diff(testCellTwo, testCellOne) =#
-    #=     @test [x for x in outCell] == ["4"] =#
-    #=     # SPICEDOUBLE_CELL =#
-    #=     testCellOne = cell_double(8) =#
-    #=     testCellTwo = cell_double(8) =#
-    #=     insrtd(1.0, testCellOne) =#
-    #=     insrtd(2.0, testCellOne) =#
-    #=     insrtd(3.0, testCellOne) =#
-    #=     insrtd(2.0, testCellTwo) =#
-    #=     insrtd(3.0, testCellTwo) =#
-    #=     insrtd(4.0, testCellTwo) =#
-    #=     outCell = diff(testCellOne, testCellTwo) =#
-    #=     @test [x for x in outCell] == [1.0] =#
-    #=     outCell = diff(testCellTwo, testCellOne) =#
-    #=     @test [x for x in outCell] == [4.0] =#
-    #=     # SPICEBOOLEAN_CELL; dtype=4 =#
-    #=     testCellOne = cell_bool(9) =#
-    #=     testCellTwo = cell_bool(9) =#
-    #=     with pytest.raises(NotImplementedError): =#
-    #=         diff(testCellOne, testCellTwo) =#
-    #= @testset "dlabfs" begin =#
-    #=     kclear() =#
-    #=     handle = dasopr(ExtraKernels.phobosDsk) =#
-    #=     current = dlabfs(handle) =#
-    #=     @test current is not None =#
-    #=     @test current.dsize == 1300 =#
-    #=     with pytest.raises(stypes.SpiceyError): =#
-    #=         next = dlafns(handle, current) =#
-    #=     dascls(handle) =#
-    #=     kclear() =#
-    #= @testset "dlabbs" begin =#
-    #=     kclear() =#
-    #=     handle = dasopr(ExtraKernels.phobosDsk) =#
-    #=     current = dlabbs(handle) =#
-    #=     @test current is not None =#
-    #=     @test current.dsize == 1300 =#
-    #=     with pytest.raises(stypes.SpiceyError): =#
-    #=         prev = dlafps(handle, current) =#
-    #=     dascls(handle) =#
-    #=     kclear() =#
-    #= @testset "dlatdr" begin =#
-    #=     output = dlatdr(1.0, 0.0, 0.0) =#
-    #=     expected = [[1.0, 0.0, 0.0], =#
-    #=                 [0.0, 1.0, 0.0], =#
-    #=                 [0.0, 0.0, 1.0]] =#
-    #=     @test_array_almost_equal(output, expected) =#
-    #= @testset "dp2hx" begin =#
-    #=     @test dp2hx(2.0e-9) == "89705F4136B4A8^-7" =#
-    #=     @test dp2hx(1.0) == "1^1" =#
-    #=     @test dp2hx(-1.0) == "-1^1" =#
-    #=     @test dp2hx(1024.0) == "4^3" =#
-    #=     @test dp2hx(-1024.0) == "-4^3" =#
-    #=     @test dp2hx(521707.0) == "7F5EB^5" =#
-    #=     @test dp2hx(27.0) == "1B^2" =#
-    #=     @test dp2hx(0.0) == "0^0" =#
-    #= @testset "dpgrdr" begin =#
-    #=     kclear() =#
-    #=     furnsh(CoreKernels.testMetaKernel) =#
-    #=     n, radii = bodvrd("MARS", "RADII", 3) =#
-    #=     re = radii[0] =#
-    #=     rp = radii[2] =#
-    #=     f = (re - rp) / re =#
-    #=     output = dpgrdr("Mars", 90.0 * rpd(), 45 * rpd(), 300, re, f) =#
-    #=     expected = [[0.25464790894703276, -0.5092958178940655, -0.0], =#
-    #=                 [-0.002629849831988239, -0.0013149249159941194, 1.5182979166821334e-05], =#
-    #=                 [0.004618598844358383, 0.0023092994221791917, 0.9999866677515724]] =#
-    #=     @test_array_almost_equal(output, expected) =#
-    #=     kclear() =#
-    #= @testset "dpmax" begin =#
-    #=     @test dpmax() >= 1.0e37 =#
-    #= @testset "dpmin" begin =#
-    #=     @test dpmin() <= -1.0e37 =#
-    #= @testset "dpr" begin =#
-    #=     @test dpr() == 180.0 / np.arccos(-1.0) =#
-    #= @testset "drdcyl" begin =#
-    #=     output = drdcyl(1.0, np.deg2rad(180.0), 1.0) =#
-    #=     expected = [[-1.0, 0.0, 0.0], =#
-    #=                 [0.0, -1.0, 0.0], =#
-    #=                 [0.0, 0.0, 1.0]] =#
-    #=     @test_array_almost_equal(output, expected) =#
-    #= @testset "drdgeo" begin =#
-    #=     kclear() =#
-    #=     furnsh(CoreKernels.testMetaKernel) =#
-    #=     size, radii = bodvrd("EARTH", "RADII", 3) =#
-    #=     flat = (radii[0] - radii[2]) / radii[0] =#
-    #=     lon = 118.0 * rpd() =#
-    #=     lat = 32.0 * rpd() =#
-    #=     alt = 0.0 =#
-    #=     kclear() =#
-    #=     output = drdgeo(lon, lat, alt, radii[0], flat) =#
-    #=     expected = [[-4780.329375996193, 1580.5982261675397, -0.3981344650201568], =#
-    #=                 [-2541.7462156656084, -2972.6729150327574, 0.7487820251299121], =#
-    #=                 [0.0, 5387.9427815962445, 0.5299192642332049]] =#
-    #=     @test_array_almost_equal(output, expected) =#
-    #= @testset "drdlat" begin =#
-    #=     output = drdlat(1.0, 90.0 * rpd(), 0.0) =#
-    #=     expected = [[0.0, -1.0, -0.0], =#
-    #=                 [1.0, 0.0, -0.0], =#
-    #=                 [0.0, 0.0, 1.0]] =#
-    #=     @test_array_almost_equal(output, expected) =#
-    #= @testset "drdpgr" begin =#
-    #=     kclear() =#
-    #=     furnsh(CoreKernels.testMetaKernel) =#
-    #=     n, radii = bodvrd("MARS", "RADII", 3) =#
-    #=     re = radii[0] =#
-    #=     rp = radii[2] =#
-    #=     f = (re - rp) / re =#
-    #=     output = drdpgr("Mars", 90.0 * rpd(), 45 * rpd(), 300, re, f) =#
-    #=     expected = [[-2620.6789148181783, 0.0, 0.0], =#
-    #=                 [0.0, 2606.460468253308, -0.7071067811865476], =#
-    #=                 [-0.0, 2606.460468253308, 0.7071067811865475]] =#
-    #=     @test_array_almost_equal(output, expected) =#
-    #=     kclear() =#
-    #= @testset "drdsph" begin =#
-    #=     output = drdsph(1.0, np.pi / 2, np.pi) =#
-    #=     expected = [[-1.0, 0.0, 0.0], =#
-    #=                 [0.0, 0.0, -1.0], =#
-    #=                 [0.0, -1.0, 0.0]] =#
-    #=     @test_array_almost_equal(output, expected) =#
+    @testset "dafps/dafrs" begin
+        try
+            dafpath = tempname()
+            ifname = "Test CK type 1 segment created by cspice_ckw01"
+            handle = ckopn(dafpath, ifname, 10)
+            ckw01(handle, -77701, "J2000", "Test type 1 CK segment",
+                  [1.1, 4.1], [[1.0, 1.0, 1.0, 1.0], [2.0, 2.0, 2.0, 2.0]],
+                  [[0.0, 0.0, 1.0], [0.0, 0.0, 2.0]])
+            ckcls(handle)
+            kclear()
+
+            handle = dafopw(dafpath)
+            dafbfs(handle)
+            found = daffna()
+            @test found
+            out = zeros(124)
+            dafgs!(out)
+            dc, ic = dafus(out, 2, 6)
+            ic[1] = -1999
+            ic[2] = -2999
+            summ = dafps(dc, ic)
+            dafrs(summ)
+            dafcls(handle)
+            kclear()
+
+            handle = dafopr(dafpath)
+            dafbfs(handle)
+            found = daffna()
+            @test found
+            out = zeros(124)
+            dafgs!(out)
+            dc, ic = dafus(out, 2, 6)
+            @test ic[1] == -1999
+            @test ic[2] == -2999
+        finally
+            kclear()
+        end
+    end
+    @testset "dasac/dascl/dasopr/dasopw/dasec/dasdc" begin
+        try
+            daspath = tempname()
+            handle = dskopn(daspath, "ex_dasac", 140)
+            dasac(handle, ["spice", "naif", "julia"])
+            dascls(handle)
+            kclear()
+
+            handle = dasopr(daspath)
+            @test dashfn(handle) == daspath
+            comments = dasec(handle, bufsiz=3)
+            @test length(comments) == 3
+            @test comments  == ["spice", "naif", "julia"]
+            dascls(handle)
+
+            handle = dasopr(daspath)
+            idword, ifname, nresvr, nresvc, ncomr, ncomc = dasrfr(handle)
+            @test idword == "DAS/DSK"
+            @test ifname == "ex_dasac"
+            @test nresvr == 0
+            @test nresvc == 0
+            @test ncomr  == 1
+            @test ncomc  == 17
+            dascls(handle)
+
+            handle = dasopw(daspath)
+            dasdc(handle)
+            dascls(handle)
+            handle = dasopr(daspath)
+            comments = dasec(handle)
+            @test comments == []
+            dascls(handle)
+        finally
+            kclear()
+        end
+    end
+    @testset "dcyldr" begin
+        output = dcyldr(1.0, 0.0, 0.0)
+        expected = [1.0 0.0 0.0;
+                    0.0 1.0 0.0;
+                    0.0 0.0 1.0]
+        @test output ≈ expected
+        @test_throws SpiceError dcyldr(0.0, 0.0, 1.0)
+    end
+    @testset "deltet" begin
+        try
+            furnsh(path(CORE, :lsk))
+            UTC_1997 = "Jan 1 1997"
+            UTC_2004 = "Jan 1 2004"
+            et_1997 = str2et(UTC_1997)
+            et_2004 = str2et(UTC_2004)
+            delt_1997 = deltet(et_1997, "ET")
+            delt_2004 = deltet(et_2004, "ET")
+            @test delt_1997 ≈ 62.1839353
+            @test delt_2004 ≈ 64.1839116
+        finally
+            kclear()
+        end
+    end
+    @testset "dgeodr" begin
+        try
+            furnsh(path(CORE, :pck))
+            radii = bodvrd("EARTH", "RADII", 3)
+            flat = (radii[1] - radii[3]) / radii[1]
+            lon = deg2rad(118.0)
+            lat = deg2rad(32.0)
+            alt = 0.0
+            rec = latrec(lon, lat, alt)
+            output = dgeodr(rec[1], rec[2], rec[3], radii[1], flat)
+            expected = [-0.25730624850202866 0.41177607401581356 0.0;
+                        -0.019818463887750683 -0.012383950685377182 0.0011247386599188864;
+                        0.040768073853231314 0.02547471988726025 0.9988438330394612]
+            @test output ≈ expected
+        finally
+            kclear()
+        end
+    end
+    @testset "diags2" begin
+        mat = [1.0 4.0; 4.0 -5.0]
+        diag, rot = diags2(mat)
+        expected_diag = [3.0 0.0; 0.0 -7.0]
+        expected_rot = [0.89442719 -0.44721360; 0.44721360 0.89442719]
+        @test diag ≈ expected_diag
+        @test rot ≈ expected_rot
+    end
+    @testset "diff" begin
+        cell1 = SpiceIntCell(8)
+        cell2 = SpiceIntCell(8)
+        insrti!(cell1, 1)
+        insrti!(cell1, 2)
+        insrti!(cell1, 3)
+        insrti!(cell2, 2)
+        insrti!(cell2, 3)
+        insrti!(cell2, 4)
+        out = diff(cell1, cell2)
+        @test out == [1]
+        out = diff(cell2, cell1)
+        @test out == [4]
+
+        cell1 = SpiceCharCell(8, 8)
+        cell2 = SpiceCharCell(8, 8)
+        insrtc!(cell1, "1")
+        insrtc!(cell1, "2")
+        insrtc!(cell1, "3")
+        insrtc!(cell2, "2")
+        insrtc!(cell2, "3")
+        insrtc!(cell2, "4")
+        out = diff(cell1, cell2)
+        @test out == ["1"]
+        out = diff(cell2, cell1)
+        @test out == ["4"]
+
+        cell1 = SpiceDoubleCell(8)
+        cell2 = SpiceDoubleCell(8)
+        insrtd!(cell1, 1.0)
+        insrtd!(cell1, 2.0)
+        insrtd!(cell1, 3.0)
+        insrtd!(cell2, 2.0)
+        insrtd!(cell2, 3.0)
+        insrtd!(cell2, 4.0)
+        out = diff(cell1, cell2)
+        @test out == [1.0]
+        out = diff(cell2, cell1)
+        @test out == [4.0]
+    end
+    @testset "dlabfs" begin
+        try
+            handle = dasopr(path(EXTRA, :phobos_dsk))
+            current = dlabfs(handle)
+            @test current.dsize == 1300
+            @test dlafns(handle, current) === nothing
+            dascls(handle)
+        finally
+            kclear()
+        end
+    end
+    @testset "dlabbs" begin
+        try
+            handle = dasopr(path(EXTRA, :phobos_dsk))
+            current = dlabbs(handle)
+            @test current.dsize == 1300
+            @test dlafps(handle, current) === nothing
+            dascls(handle)
+        finally
+            kclear()
+        end
+    end
+    @testset "dlatdr" begin
+        output = dlatdr(1.0, 0.0, 0.0)
+        expected = [1.0 0.0 0.0;
+                    0.0 1.0 0.0;
+                    0.0 0.0 1.0]
+        @test output ≈ expected
+    end
+    @testset "dp2hx" begin
+        @test dp2hx(2.0e-9) == "89705F4136B4A8^-7"
+        @test dp2hx(1.0) == "1^1"
+        @test dp2hx(-1.0) == "-1^1"
+        @test dp2hx(1024.0) == "4^3"
+        @test dp2hx(-1024.0) == "-4^3"
+        @test dp2hx(521707.0) == "7F5EB^5"
+        @test dp2hx(27.0) == "1B^2"
+        @test dp2hx(0.0) == "0^0"
+    end
+    @testset "dpgrdr" begin
+        try
+            furnsh(path(CORE, :pck))
+            radii = bodvrd("MARS", "RADII", 3)
+            re = radii[1]
+            rp = radii[3]
+            f = (re - rp) / re
+            output = dpgrdr("Mars", deg2rad(90.0), deg2rad(45.0), 300, re, f)
+            expected = [0.25464790894703276 -0.5092958178940655 -0.0;
+                        -0.002629849831988239 -0.0013149249159941194 1.5182979166821334e-05;
+                        0.004618598844358383 0.0023092994221791917 0.9999866677515724]
+            @test output ≈ expected
+        finally
+            kclear()
+        end
+    end
+    @testset "dpmax" begin
+        @test SPICE._dpmax() == prevfloat(typemax(Float64))
+    end
+    @testset "dpmin" begin
+        @test SPICE._dpmin() == nextfloat(typemin(Float64))
+    end
+    @testset "dpr" begin
+        @test SPICE._dpr() == rad2deg(1.0)
+    end
+    @testset "drdcyl" begin
+        output = drdcyl(1.0, deg2rad(180.0), 1.0)
+        expected = [-1.0 0.0 0.0;
+                    0.0 -1.0 0.0;
+                    0.0 0.0 1.0]
+        @test output ≈ expected
+    end
+    @testset "drdgeo" begin
+        try
+            furnsh(path(CORE, :pck))
+            radii = bodvrd("EARTH", "RADII", 3)
+            flat = (radii[1] - radii[3]) / radii[1]
+            lon = deg2rad(118.0)
+            lat = deg2rad(32.0)
+            alt = 0.0
+            output = drdgeo(lon, lat, alt, radii[1], flat)
+            expected = [-4780.329375996193 1580.5982261675397 -0.3981344650201568;
+                        -2541.7462156656084 -2972.6729150327574 0.7487820251299121;
+                        0.0 5387.9427815962445 0.5299192642332049]
+            @test output ≈ expected
+        finally
+            kclear()
+        end
+    end
+    @testset "drdlat" begin
+        output = drdlat(1.0, deg2rad(90.0), 0.0)
+        expected = [0.0 -1.0 -0.0;
+                    1.0 0.0 -0.0;
+                    0.0 0.0 1.0]
+        @test output ≈ expected
+    end
+    @testset "drdpgr" begin
+        try
+            furnsh(path(CORE, :pck))
+            radii = bodvrd("MARS", "RADII", 3)
+            re = radii[1]
+            rp = radii[3]
+            f = (re - rp) / re
+            output = drdpgr("MARS", deg2rad(90.0), deg2rad(45), 300, re, f)
+            expected = [-2620.6789148181783 0.0 0.0;
+                        0.0 2606.460468253308 -0.7071067811865476;
+                        -0.0 2606.460468253308 0.7071067811865475]
+            @test output ≈ expected
+        finally
+            kclear()
+        end
+    end
+    @testset "drdsph" begin
+        output = drdsph(1.0, π/2, π)
+        expected = [-1.0 0.0 0.0;
+                    0.0 0.0 -1.0;
+                    0.0 -1.0 0.0]
+        @test output ≈ expected
+    end
     #= @testset "dskgtl_dskstl" begin =#
     #=     SPICE_DSK_KEYXFR = 1 =#
     #=     @test dskgtl(SPICE_DSK_KEYXFR) == pytest.approx(1.0e-10) =#
@@ -861,7 +739,7 @@
     #=     expected = [[-1.0, 0.0, 0.0], =#
     #=                 [0.0, 0.0, -1.0], =#
     #=                 [0.0, -1.0, 0.0]] =#
-    #=     @test_array_almost_equal(output, expected) =#
+    #=     @test output ≈ expected =#
     @testset "dtpool" begin
         try
             lmpoolNames = ["DELTET/DELTA_T_A", "DELTET/K", "DELTET/EB",
@@ -915,7 +793,7 @@
     #=     z_new = ducrss(state, z_j2000) =#
     #=     z_expected = [-0.9798625180326394, -0.1996715076226282, 0.0008572038510904833, =#
     #=                   4.453114222872359e-08, -2.1853106962531453e-07, -3.6140021238340607e-11] =#
-    #=     @test_array_almost_equal(z_new, z_expected) =#
+    #=     @test z_new ≈ z_expected =#
     #=     kclear() =#
     #= @testset "dvcrss" begin =#
     #=     kclear() =#
@@ -942,7 +820,7 @@
     #=     kclear() =#
     #=     expected = [0.1834466376334262, -0.9019196633282948, -0.39100927360200305, =#
     #=                 2.0244976750658316e-07, 3.4660106111045445e-08, 1.5033141925267006e-08] =#
-    #=     @test_array_almost_equal(expected, x_new) =#
+    #=     @test expected ≈ x_new =#
     #= @testset "dvnorm" begin =#
     #=     mag = np.array([-4.0, 4, 12]) =#
     #=     x = np.array([1.0, np.sqrt(2.0), np.sqrt(3.0)]) =#

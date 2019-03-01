@@ -1,4 +1,5 @@
 export
+    DLADescr,
     Ellipse,
     center,
     semi_major,
@@ -29,4 +30,15 @@ mutable struct Plane
 end
 
 Plane() = Plane((0.0, 0.0, 0.0), 0.0)
+
+struct DLADescr
+    bwdptr::SpiceInt
+    fwdptr::SpiceInt
+    ibase::SpiceInt
+    isize::SpiceInt
+    dbase::SpiceInt
+    dsize::SpiceInt
+    cbase::SpiceInt
+    csize::SpiceInt
+end
 
