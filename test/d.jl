@@ -568,144 +568,81 @@
             kclear()
         end
     end
-    #= @testset "dskx02" begin =#
-    #=     kclear() =#
-    #=     # open the dsk file =#
-    #=     handle = dasopr(ExtraKernels.phobosDsk) =#
-    #=     # get the dladsc from the file =#
-    #=     dladsc = dlabfs(handle) =#
-    #=     # get dskdsc for target radius =#
-    #=     dskdsc = dskgd(handle, dladsc) =#
-    #=     r = 2.0 * dskdsc.co3max =#
-    #=     # Produce a ray vertex =#
-    #=     vertex = latrec(r, 0.0, 0.0) =#
-    #=     raydir = vminus(vertex) =#
-    #=     plid, xpt, found = dskx02(handle, dladsc, vertex, raydir) =#
-    #=     # test results =#
-    #=     @test found =#
-    #=     @test plid == 421 =#
-    #=     @test_almost_equal(xpt, [12.36679999999999957083, 0.0, 0.0]) =#
-    #=     # cleanup =#
-    #=     dascls(handle) =#
-    #=     kclear() =#
-    #= @testset "dskxsi" begin =#
-    #=     kclear() =#
-    #=     # load kernels =#
-    #=     furnsh(ExtraKernels.phobosDsk) =#
-    #=     # get handle =#
-    #=     dsk1, filtyp, source, handle = kdata(0, "DSK", 256, 5, 256) =#
-    #=     # get the dladsc from the file =#
-    #=     dladsc = dlabfs(handle) =#
-    #=     # get dskdsc for target radius =#
-    #=     dskdsc = dskgd(handle, dladsc) =#
-    #=     target = bodc2n(dskdsc.center) =#
-    #=     fixref = frmnam(dskdsc.frmcde) =#
-    #=     r = 1.0e10 =#
-    #=     vertex = latrec(r, 0.0, 0.0) =#
-    #=     raydir = vminus(vertex) =#
-    #=     srflst = [dskdsc.surfce] =#
-    #=     # call dskxsi =#
-    #=     xpt, handle, dladsc2, dskdsc2, dc, ic  = dskxsi(False, target, srflst, 0.0, fixref, vertex, raydir) =#
-    #=     # check output =#
-    #=     @test handle is not None =#
-    #=     @test ic[0] == 420 =#
-    #=     @test dc[0] == pytest.approx(0.0) =#
-    #=     @test_almost_equal(xpt, [12.36679999999999957083, 0.0, 0.0]) =#
-    #=     kclear() =#
-    #= @testset "dskxv" begin =#
-    #=     kclear() =#
-    #=     # load kernels =#
-    #=     furnsh(ExtraKernels.phobosDsk) =#
-    #=     # get handle =#
-    #=     dsk1, filtyp, source, handle = kdata(0, "DSK", 256, 5, 256) =#
-    #=     # get the dladsc from the file =#
-    #=     dladsc = dlabfs(handle) =#
-    #=     # get dskdsc for target radius =#
-    #=     dskdsc = dskgd(handle, dladsc) =#
-    #=     target = bodc2n(dskdsc.center) =#
-    #=     fixref = frmnam(dskdsc.frmcde) =#
-    #=     r = 1.0e10 =#
-    #=     vertex = latrec(r, 0.0, 0.0) =#
-    #=     raydir = vminus(vertex) =#
-    #=     srflst = [dskdsc.surfce] =#
-    #=     # call dskxsi =#
-    #=     xpt, foundarray = dskxv(False, target, srflst, 0.0, fixref, [vertex], [raydir]) =#
-    #=     # check output =#
-    #=     @test len(xpt) == 1 =#
-    #=     @test len(foundarray) == 1 =#
-    #=     @test foundarray[0] =#
-    #=     @test_almost_equal(xpt[0], [12.36679999999999957083, 0.0, 0.0]) =#
-    #=     kclear() =#
-    #= @testset "dskxv_2" begin =#
-    #=     kclear() =#
-    #=     # load kernels =#
-    #=     furnsh(ExtraKernels.phobosDsk) =#
-    #=     # get handle =#
-    #=     dsk1, filtyp, source, handle = kdata(0, "DSK", 256, 5, 256) =#
-    #=     # get the dladsc from the file =#
-    #=     dladsc = dlabfs(handle) =#
-    #=     # get dskdsc for target radius =#
-    #=     dskdsc = dskgd(handle, dladsc) =#
-    #=     target = bodc2n(dskdsc.center) =#
-    #=     fixref = frmnam(dskdsc.frmcde) =#
-    #=     r = 1.0e10 =#
-    #=     polmrg = 0.5 =#
-    #=     latstp = 1.0 =#
-    #=     lonstp = 2.0 =#
-    #=     nhits = 0 =#
-    #=     nderr = 0 =#
-    #=     lon = -180.0 =#
-    #=     lat = 90.0 =#
-    #=     nlstep = 0 =#
-    #=     nrays = 0 =#
-    #=     verticies = [] =#
-    #=     raydirs = [] =#
-    #=     while lon < 180.0: =#
-    #=         while nlstep <= 180: =#
-    #=             if lon == 180.0: =#
-    #=                 lat = 90.0 - nlstep*latstp =#
-    #=             else: =#
-    #=                 if nlstep == 0: =#
-    #=                     lat = 90.0 - polmrg =#
-    #=                 elif nlstep == 180: =#
-    #=                     lat = -90.0 + polmrg =#
-    #=                 else: =#
-    #=                     lat = 90.0 - nlstep*latstp =#
-    #=                 vertex = latrec(r, np.radians(lon), np.radians(lat)) =#
-    #=                 raydir = vminus(vertex) =#
-    #=                 verticies.append(vertex) =#
-    #=                 raydirs.append(raydir) =#
-    #=                 nrays += 1 =#
-    #=                 nlstep += 1 =#
-    #=         lon += lonstp =#
-    #=         lat = 90.0 =#
-    #=         nlstep = 0 =#
-    #=     srflst = [dskdsc.surfce] =#
-    #=     # call dskxsi =#
-    #=     xpt, foundarray = dskxv(False, target, srflst, 0.0, fixref, verticies, raydirs) =#
-    #=     # check output =#
-    #=     @test len(xpt) == 32580 =#
-    #=     @test len(foundarray) == 32580 =#
-    #=     @test foundarray.all() =#
-    #=     kclear() =#
-    #= @testset "dskz02" begin =#
-    #=     kclear() =#
-    #=     # open the dsk file =#
-    #=     handle = dasopr(ExtraKernels.phobosDsk) =#
-    #=     # get the dladsc from the file =#
-    #=     dladsc = dlabfs(handle) =#
-    #=     # get vertex and plate counts =#
-    #=     nv, nplates = dskz02(handle, dladsc) =#
-    #=     @test nv > 0 =#
-    #=     @test nplates > 0 =#
-    #=     dascls(handle) =#
-    #=     kclear() =#
-    #= @testset "dsphdr" begin =#
-    #=     output = dsphdr(-1.0, 0.0, 0.0) =#
-    #=     expected = [[-1.0, 0.0, 0.0], =#
-    #=                 [0.0, 0.0, -1.0], =#
-    #=                 [0.0, -1.0, 0.0]] =#
-    #=     @test output ≈ expected =#
+    @testset "dskx02" begin
+        try
+            handle = dasopr(path(EXTRA, :phobos_dsk))
+            dladsc = dlabfs(handle)
+            dskdsc = dskgd(handle, dladsc)
+            r = 2.0 * dskdsc.co3max
+            vertex = latrec(r, 0.0, 0.0)
+            raydir = -vertex
+            plid, xpt = dskx02(handle, dladsc, vertex, raydir)
+            @test plid == 421
+            @test xpt ≈ [12.36679999999999957083, 0.0, 0.0]
+        finally
+            kclear()
+        end
+    end
+    @testset "dskxsi" begin
+        try
+            furnsh(path(EXTRA, :phobos_dsk))
+            dsk1, filtyp, source, handle = kdata(1, "DSK")
+            dladsc = dlabfs(handle)
+            dskdsc = dskgd(handle, dladsc)
+            target = bodc2n(dskdsc.center)
+            fixref = frmnam(dskdsc.frmcde)
+            r = 1.0e10
+            vertex = latrec(r, 0.0, 0.0)
+            raydir = -vertex
+            srflst = [dskdsc.surfce]
+            xpt, handle, dladsc2, dskdsc2, dc, ic  = dskxsi(false, target, srflst, 0.0,
+                                                            fixref, vertex, raydir)
+            @test ic[1] == 420
+            @test dc[1] == 0.0
+            @test xpt ≈ [12.36679999999999957083, 0.0, 0.0]
+        finally
+            kclear()
+        end
+    end
+    @testset "dskxv" begin
+        try
+            furnsh(path(EXTRA, :phobos_dsk))
+            dsk1, filtyp, source, handle = kdata(1, "DSK")
+            dladsc = dlabfs(handle)
+            dskdsc = dskgd(handle, dladsc)
+            target = bodc2n(dskdsc.center)
+            fixref = frmnam(dskdsc.frmcde)
+            r = 1.0e10
+            vertex = latrec(r, 0.0, 0.0)
+            raydir = -vertex
+            srflst = [dskdsc.surfce]
+            xpt, foundarray = dskxv(false, target, srflst, 0.0, fixref, [vertex], [raydir])
+            @test length(xpt) == 1
+            @test length(foundarray) == 1
+            @test foundarray[1]
+            @test xpt[1] ≈ [12.36679999999999957083, 0.0, 0.0]
+        finally
+            kclear()
+        end
+    end
+    @testset "dskz02" begin
+        try
+            handle = dasopr(path(EXTRA, :phobos_dsk))
+            dladsc = dlabfs(handle)
+            nv, nplates = dskz02(handle, dladsc)
+            @test nv > 0
+            @test nplates > 0
+        finally
+            kclear()
+        end
+    end
+    @testset "dsphdr" begin
+        output = dsphdr(-1.0, 0.0, 0.0)
+        expected = [-1.0 0.0 0.0;
+                    0.0 0.0 -1.0;
+                    0.0 -1.0 0.0]
+        @test output ≈ expected
+    end
     @testset "dtpool" begin
         try
             lmpoolNames = ["DELTET/DELTA_T_A", "DELTET/K", "DELTET/EB",
@@ -748,69 +685,86 @@
             kclear()
         end
     end
-    #= @testset "ducrss" begin =#
-    #=     kclear() =#
-    #=     furnsh(CoreKernels.testMetaKernel) =#
-    #=     z_earth = [0.0, 0.0, 1.0, 0.0, 0.0, 0.0] =#
-    #=     et = str2et("Jan 1, 2009") =#
-    #=     trans = sxform("IAU_EARTH", "J2000", et) =#
-    #=     z_j2000 = np.dot(np.array(trans), np.array(z_earth)) =#
-    #=     state, ltime = spkezr("Sun", et, "J2000", "LT+S", "Earth") =#
-    #=     z_new = ducrss(state, z_j2000) =#
-    #=     z_expected = [-0.9798625180326394, -0.1996715076226282, 0.0008572038510904833, =#
-    #=                   4.453114222872359e-08, -2.1853106962531453e-07, -3.6140021238340607e-11] =#
-    #=     @test z_new ≈ z_expected =#
-    #=     kclear() =#
-    #= @testset "dvcrss" begin =#
-    #=     kclear() =#
-    #=     furnsh(CoreKernels.testMetaKernel) =#
-    #=     z_earth = [0.0, 0.0, 1.0, 0.0, 0.0, 0.0] =#
-    #=     et = str2et("Jan 1, 2009") =#
-    #=     trans = sxform("IAU_EARTH", "J2000", et) =#
-    #=     z_j2000 = np.dot(np.array(trans), np.array(z_earth)) =#
-    #=     state, ltime = spkezr("Sun", et, "J2000", "LT+S", "Earth") =#
-    #=     z = dvcrss(state, z_j2000) =#
-    #=     kclear() =#
-    #=     expected = [-1.32672690582546606660e+08,  -2.70353812480484284461e+07, =#
-    #=                 1.16064793997540167766e+05,   5.12510726479525757782e+00, =#
-    #=                 -2.97732415336074147660e+01,  -4.10216496370272454969e-03] =#
-    #=     @test_almost_equal(z, expected) =#
-    #= @testset "dvdot" begin =#
-    #=     @test dvdot([1.0, 0.0, 1.0, 0.0, 1.0, 0.0], [0.0, 1.0, 0.0, 1.0, 0.0, 1.0]) == 3.0 =#
-    #= @testset "dvhat" begin =#
-    #=     kclear() =#
-    #=     furnsh(CoreKernels.testMetaKernel) =#
-    #=     et = str2et("Jan 1, 2009") =#
-    #=     state, ltime = spkezr("Sun", et, "J2000", "LT+S", "Earth") =#
-    #=     x_new = dvhat(state) =#
-    #=     kclear() =#
-    #=     expected = [0.1834466376334262, -0.9019196633282948, -0.39100927360200305, =#
-    #=                 2.0244976750658316e-07, 3.4660106111045445e-08, 1.5033141925267006e-08] =#
-    #=     @test expected ≈ x_new =#
-    #= @testset "dvnorm" begin =#
-    #=     mag = np.array([-4.0, 4, 12]) =#
-    #=     x = np.array([1.0, np.sqrt(2.0), np.sqrt(3.0)]) =#
-    #=     s1 = np.array([x * 10.0 ** mag[0], x]).flatten() =#
-    #=     s2 = np.array([x * 10.0 ** mag[1], -x]).flatten() =#
-    #=     s3 = np.array([[0.0, 0.0, 0.0], x * 10 ** mag[2]]).flatten() =#
-    #=     @test_approx_equal(dvnorm(s1), 2.4494897) =#
-    #=     @test_approx_equal(dvnorm(s2), -2.4494897) =#
-    #=     @test_approx_equal(dvnorm(s3), 0.0) =#
-    #= @testset "dvpool" begin =#
-    #=     kclear() =#
-    #=     pdpool("DTEST_VAL", [3.1415, 186.0, 282.397]) =#
-    #=     @test expool("DTEST_VAL") =#
-    #=     dvpool("DTEST_VAL") =#
-    #=     @test not expool("DTEST_VAL") =#
-    #=     clpool() =#
-    #=     kclear() =#
-    #= @testset "dvsep" begin =#
-    #=     kclear() =#
-    #=     furnsh(CoreKernels.testMetaKernel) =#
-    #=     et = str2et("JAN 1 2009") =#
-    #=     state_e, eltime = spkezr("EARTH", et, "J2000", "NONE", "SUN") =#
-    #=     state_m, mltime = spkezr("MOON", et, "J2000", "NONE", "SUN") =#
-    #=     dsept = dvsep(state_e, state_m) =#
-    #=     @test_approx_equal(dsept, 3.8121194e-09) =#
-    #=     kclear() =#
+    @testset "ducrss" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
+            z_earth = [0.0, 0.0, 1.0, 0.0, 0.0, 0.0]
+            et = str2et("Jan 1, 2009")
+            trans = sxform("IAU_EARTH", "J2000", et)
+            z_j2000 = trans * z_earth
+            state, ltime = spkezr("SUN", et, "J2000", "LT+S", "EARTH")
+            z_new = ducrss(state, z_j2000)
+            z_expected = [-0.9798625180326394, -0.1996715076226282, 0.0008572038510904833,
+                          4.453114222872359e-08, -2.1853106962531453e-07, -3.6140021238340607e-11]
+            @test z_new ≈ z_expected
+        finally
+            kclear()
+        end
+    end
+    @testset "dvcrss" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
+            z_earth = [0.0, 0.0, 1.0, 0.0, 0.0, 0.0]
+            et = str2et("Jan 1, 2009")
+            trans = sxform("IAU_EARTH", "J2000", et)
+            z_j2000 = trans * z_earth
+            state, ltime = spkezr("SUN", et, "J2000", "LT+S", "EARTH")
+            z = dvcrss(state, z_j2000)
+            expected = [-1.32672690582546606660e+08,  -2.70353812480484284461e+07,
+                        1.16064793997540167766e+05,   5.12510726479525757782e+00,
+                        -2.97732415336074147660e+01,  -4.10216496370272454969e-03]
+            @test z ≈ expected
+        finally
+            kclear()
+        end
+    end
+    @testset "dvdot" begin
+        @test dvdot([1.0, 0.0, 1.0, 0.0, 1.0, 0.0], [0.0, 1.0, 0.0, 1.0, 0.0, 1.0]) == 3.0
+    end
+    @testset "dvhat" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
+            et = str2et("Jan 1, 2009")
+            state, ltime = spkezr("Sun", et, "J2000", "LT+S", "Earth")
+            x_new = dvhat(state)
+            expected = [0.1834466376334262, -0.9019196633282948, -0.39100927360200305,
+                        2.0244976750658316e-07, 3.4660106111045445e-08, 1.5033141925267006e-08]
+            @test expected ≈ x_new
+        finally
+            kclear()
+        end
+    end
+    @testset "dvnorm" begin
+        mag = [-4.0, 4, 12]
+        x = [1.0, sqrt(2.0), sqrt(3.0)]
+        s1 = [x .* 10.0^mag[1]; x]
+        s2 = [x .* 10.0^mag[2]; -x]
+        s3 = [zeros(3); x .* 10.0^mag[3]]
+        @test dvnorm(s1) ≈ 2.4494897 rtol=1e-6
+        @test dvnorm(s2) ≈ -2.4494897 rtol=1e-6
+        @test dvnorm(s3) ≈ 0.0
+    end
+    @testset "dvpool" begin
+        try
+            pdpool("DTEST_VAL", [3.1415, 186.0, 282.397])
+            @test expool("DTEST_VAL")
+            dvpool("DTEST_VAL")
+            @test !expool("DTEST_VAL")
+        finally
+            clpool()
+            kclear()
+        end
+    end
+    @testset "dvsep" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
+            et = str2et("JAN 1 2009")
+            state_e, eltime = spkezr("EARTH", et, "J2000", "NONE", "SUN")
+            state_m, mltime = spkezr("MOON", et, "J2000", "NONE", "SUN")
+            dsept = dvsep(state_e, state_m)
+            @test dsept ≈ 3.8121194e-09 rtol=1e-6
+        finally
+            kclear()
+        end
+    end
 end

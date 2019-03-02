@@ -103,8 +103,6 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekaced" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekaced.ek") =#
@@ -119,8 +117,6 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekmany" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekmany.ek") =#
@@ -259,8 +255,6 @@
 #=         @test not failed() =#
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
-#=  =#
-#=  =#
 #=     @testset "ekaclc" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekaclc.ek") =#
@@ -276,8 +270,6 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekacld" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekacld.ek") =#
@@ -293,8 +285,6 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekacli" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekacli.ek") =#
@@ -310,13 +300,9 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekacli_stress" begin =#
 #=         for i in range(10): =#
 #=             test_ekacli() =#
-#=  =#
-#=  =#
 #=     @testset "ekappr" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekappr.ek") =#
@@ -331,8 +317,6 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekbseg" begin =#
 #=         ekpath = os.path.join(cwd, "example_ekbseg.ek") =#
 #=         kclear() =#
@@ -351,13 +335,9 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekbseg_stress" begin =#
 #=         for i in range(10): =#
 #=             test_ekbseg() =#
-#=  =#
-#=  =#
 #=     @testset "ekccnt" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekccnt.ek") =#
@@ -377,8 +357,6 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekcii" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekcii.ek") =#
@@ -406,8 +384,6 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekcls" begin =#
 #=         kclear()  # same as ekopn test =#
 #=         ekpath = os.path.join(cwd, "example_ekcls.ek") =#
@@ -419,8 +395,6 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         kclear() =#
-#=  =#
-#=  =#
 #=     @testset "ekdelr" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekdelr.ek") =#
@@ -437,13 +411,9 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekdelr_stress" begin =#
 #=         for i in range(10): =#
 #=             test_ekdelr() =#
-#=  =#
-#=  =#
 #=     @testset "ekffld" begin =#
 #=         # same as test_ekacli =#
 #=         kclear() =#
@@ -460,13 +430,9 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekffld_stress" begin =#
 #=         for i in range(10): =#
 #=             test_ekffld() =#
-#=  =#
-#=  =#
 #=     @testset "ekfind" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekfind.ek") =#
@@ -487,13 +453,9 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekfind_stess" begin =#
 #=         for i in range(10): =#
 #=             test_ekfind() =#
-#=  =#
-#=  =#
 #=     @testset "ekgc" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekgc.ek") =#
@@ -519,8 +481,6 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekgd" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekgd.ek") =#
@@ -546,8 +506,6 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekgi" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekgi.ek") =#
@@ -573,8 +531,6 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekifld" begin =#
 #=         # Same as test_ekacli =#
 #=         kclear() =#
@@ -591,8 +547,6 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "eklef" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_eklef.ek") =#
@@ -609,8 +563,6 @@
 #=         ekuef(handle) =#
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
-#=  =#
-#=  =#
 #=     @testset "eknseg" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_eknseg.ek") =#
@@ -629,12 +581,8 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekntab" begin =#
 #=         @test ekntab() == 0 =#
-#=  =#
-#=  =#
 #=     @testset "ekopn" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ek.ek") =#
@@ -646,8 +594,6 @@
 #=         @test exists(ekpath) =#
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
-#=  =#
-#=  =#
 #=     @testset "ekopr" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekopr.ek") =#
@@ -662,16 +608,12 @@
 #=         kclear() =#
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
-#=  =#
-#=  =#
 #=     @testset "ekops" begin =#
 #=         kclear() =#
 #=         handle = ekops() =#
 #=         @test handle is not None =#
 #=         ekcls(handle) =#
 #=         kclear() =#
-#=  =#
-#=  =#
 #=     @testset "ekopw" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekopw.ek") =#
@@ -686,8 +628,6 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         kclear() =#
-#=  =#
-#=  =#
 #=     @testset "ekssum" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekssum.ek") =#
@@ -712,8 +652,6 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ektnam" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ektnam.ek") =#
@@ -733,20 +671,12 @@
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
 #=         @test not exists(ekpath) =#
-#=  =#
-#=  =#
 #=     @testset "ekucec" begin =#
 #=         @test 1 =#
-#=  =#
-#=  =#
 #=     @testset "ekuced" begin =#
 #=         @test 1 =#
-#=  =#
-#=  =#
 #=     @testset "ekucei" begin =#
 #=         @test 1 =#
-#=  =#
-#=  =#
 #=     @testset "ekuef" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_ekuef.ek") =#
@@ -763,8 +693,6 @@
 #=         kclear() =#
 #=         if exists(ekpath): =#
 #=             os.remove(ekpath) # pragma: no cover =#
-#=  =#
-#=  =#
 #=     @testset "el2cgv" begin =#
 #=         vec1 = [1.0, 1.0, 1.0] =#
 #=         vec2 = [1.0, -1.0, 1.0] =#
@@ -778,8 +706,6 @@
 #=         npt.@test_array_almost_equal(outCenter, expectedCenter) =#
 #=         npt.@test_array_almost_equal(outSmajor, expectedSmajor) =#
 #=         npt.@test_array_almost_equal(outSminor, expectedSminor) =#
-#=  =#
-#=  =#
 #=     @testset "elemc" begin =#
 #=         testCellOne = cell_char(10, 10) =#
 #=         insrtc("one", testCellOne) =#
@@ -790,8 +716,6 @@
 #=         @test elemc("three", testCellOne) =#
 #=         @test not elemc("not", testCellOne) =#
 #=         @test not elemc("there", testCellOne) =#
-#=  =#
-#=  =#
 #=     @testset "elemd" begin =#
 #=         testCellOne = cell_double(8) =#
 #=         insrtd(1.0, testCellOne) =#
@@ -802,8 +726,6 @@
 #=         @test elemd(3.0, testCellOne) =#
 #=         @test not elemd(4.0, testCellOne) =#
 #=         @test not elemd(-1.0, testCellOne) =#
-#=  =#
-#=  =#
 #=     @testset "elemi" begin =#
 #=         testCellOne = cell_int(8) =#
 #=         insrti(1, testCellOne) =#
@@ -814,8 +736,6 @@
 #=         @test elemi(3, testCellOne) =#
 #=         @test not elemi(4, testCellOne) =#
 #=         @test not elemi(-1, testCellOne) =#
-#=  =#
-#=  =#
 #=     @testset "eqncpv" begin =#
 #=         p = 10000.0 =#
 #=         gm = 398600.436 =#
@@ -833,19 +753,13 @@
 #=         expected = [-10732.167433285387, 3902.505790600528, 1154.4516152766892, =#
 #=                     -2.540766899262123, -5.15226920298345, -0.7615758062877463] =#
 #=         npt.@test_array_almost_equal(expected, state, decimal=5) =#
-#=  =#
-#=  =#
 #=     @testset "eqstr" begin =#
 #=         @test eqstr("A short string    ", "ashortstring") =#
 #=         @test eqstr("Embedded        blanks", "Em be dd ed bl an ks") =#
 #=         @test eqstr("One word left out", "WORD LEFT OUT") is False =#
-#=  =#
-#=  =#
 #=     @testset "erract" begin =#
 #=         @test erract("GET", 10, "") == "RETURN" =#
 #=         @test erract("GET", 10) == "RETURN" =#
-#=  =#
-#=  =#
 #=     @testset "errch" begin =#
 #=         setmsg("test errch value: #") =#
 #=         errch("#", "some error") =#
@@ -853,12 +767,8 @@
 #=         message = getmsg("LONG", 2000) =#
 #=         @test message == "test errch value: some error" =#
 #=         reset() =#
-#=  =#
-#=  =#
 #=     @testset "errdev" begin =#
 #=         @test errdev("GET", 10, "Screen") == "NULL" =#
-#=  =#
-#=  =#
 #=     @testset "errdp" begin =#
 #=         setmsg("test errdp value: #") =#
 #=         errdp("#", 42.1) =#
@@ -866,8 +776,6 @@
 #=         message = getmsg("LONG", 2000) =#
 #=         @test message == "test errdp value: 4.2100000000000E+01" =#
 #=         reset() =#
-#=  =#
-#=  =#
 #=     @testset "errint" begin =#
 #=         setmsg("test errint value: #") =#
 #=         errint("#", 42) =#
@@ -875,12 +783,8 @@
 #=         message = getmsg("LONG", 2000) =#
 #=         @test message == "test errint value: 42" =#
 #=         reset() =#
-#=  =#
-#=  =#
 #=     @testset "errprt" begin =#
 #=         @test errprt("GET", 40, "ALL") == "NULL" =#
-#=  =#
-#=  =#
 #=     @testset "esrchc" begin =#
 #=         array = ["This", "is", "a", "test"] =#
 #=         @test esrchc("This", array) == 0 =#
@@ -888,8 +792,6 @@
 #=         @test esrchc("a", array) == 2 =#
 #=         @test esrchc("test", array) == 3 =#
 #=         @test esrchc("fail", array) == -1 =#
-#=  =#
-#=  =#
 #=     @testset "et2lst" begin =#
 #=         kclear() =#
 #=         furnsh(CoreKernels.testMetaKernel) =#
@@ -901,8 +803,6 @@
 #=         @test time == "11:19:22" =#
 #=         @test ampm == '11:19:22 A.M.' =#
 #=         kclear() =#
-#=  =#
-#=  =#
     @testset "et2utc" begin
         try
             furnsh(path(CORE, :lsk))
@@ -939,24 +839,17 @@
 #=         out = eul2xf(eul, 3, 1, 3) =#
 #=         npt.@test_array_almost_equal(out, expected) =#
 #=         kclear() =#
-#=  =#
-#=  =#
 #=     @testset "exists" begin =#
 #=         @test exists(CoreKernels.testMetaKernel) =#
-#=  =#
-#=  =#
-#=     @testset "expool" begin =#
-#=         kclear() =#
-#=         textbuf = ['DELTET/K = 1.657D-3', 'DELTET/EB = 1.671D-2'] =#
-#=         lmpool(textbuf) =#
-#=         @test expool('DELTET/K') =#
-#=         @test expool('DELTET/EB') =#
-#=         kclear() =#
-#=  =#
-#=  =#
-#=     @testset "expoolstress" begin =#
-#=         # this is to show that the bug in lmpool is fixed (lenvals needs +=1) =#
-#=         for i in range(500): =#
-#=         test_expool() =#
+    @testset "expool" begin
+        try
+            textbuf = ["DELTET/K = 1.657D-3", "DELTET/EB = 1.671D-2"]
+            lmpool(textbuf)
+            @test expool("DELTET/K")
+            @test expool("DELTET/EB")
+        finally
+            kclear()
+        end
+    end
 end
 

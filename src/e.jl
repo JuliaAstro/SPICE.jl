@@ -3,7 +3,8 @@ export
     et2utc,
     etcal,
     eul2m,
-    edterm
+    edterm,
+    expool
 
 """
     edlimb(a, b, c, viewpt)
@@ -155,8 +156,36 @@ function edterm(trmtyp, source, target, et, fixref, obsrvr, npts; abcorr="NONE")
     obspos = Array{SpiceDouble}(undef, 3)
     trmpts = Array{SpiceDouble}(undef, 3, npts)
     ccall((:edterm_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          (Cstring, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, SpiceInt,
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           trmtyp, source, target, et, fixref, abcorr, obsrvr, npts, trgepc, obspos, trmpts)
     handleerror()
     trgepc[], obspos, trmpts
 end
+
+"""
+    expool(name)
+
+Confirm the existence of a kernel variable in the kernel pool.
+
+### Arguments ###
+
+- `name`: Name of the variable whose value is to be returned
+
+### Output ###
+
+Returns `true` when the variable is in the pool.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/expool_c.html)
+"""
+function expool(name)
+    found = Ref{SpiceBoolean}()
+    ccall((:expool_c, libcspice), Cvoid,
+          (Cstring, Ref{SpiceBoolean}),
+          name, found)
+    handleerror()
+    Bool(found[])
+end
+

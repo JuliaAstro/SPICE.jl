@@ -67,7 +67,19 @@ export
     dskstl,
     dskv02,
     dskw02,
-    dtpool
+    dskx02,
+    dskxsi,
+    dskxv,
+    dskz02,
+    dsphdr,
+    dtpool,
+    ducrss,
+    dvcrss,
+    dvdot,
+    dvhat,
+    dvnorm,
+    dvpool,
+    dvsep
 
 """
     dafac(handle, buffer)
@@ -1822,6 +1834,199 @@ function dskw02(handle, center, surfid, dclass, frame, corsys, corpar, mncor1, m
 end
 
 """
+    dskx02(handle, dladsc, vertex, raydir)
+
+Determine the plate ID and body-fixed coordinates of the intersection of a specified ray with the
+surface defined by a type 2 DSK plate model.
+
+### Arguments ###
+
+- `handle`: Handle of DSK kernel containing plate model
+- `dladsc`: DLA descriptor of plate model segment
+- `vertex`: Ray's vertex in the  body fixed frame
+- `raydir`: Ray direction in the body fixed frame
+
+### Output ###
+
+Returns `nothing` if no intercept exists or
+
+- `plid`: ID code of the plate intersected by the ray
+- `xpt`: Intercept
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskx02_c.html)
+"""
+function dskx02(handle, dladsc, vertex, raydir)
+    length(vertex) != 3 && throw(ArgumentError("`vertex` must have three elements."))
+    length(raydir) != 3 && throw(ArgumentError("`raydir` must have three elements."))
+    plid = Ref{SpiceInt}()
+    xpt = Array{SpiceDouble}(undef, 3)
+    found = Ref{SpiceBoolean}()
+    ccall((:dskx02_c, libcspice), Cvoid,
+          (SpiceInt, Ref{DLADescr}, Ref{SpiceDouble}, Ref{SpiceDouble},
+           Ref{SpiceInt}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
+          handle, dladsc, vertex, raydir, plid, xpt, found)
+    handleerror()
+    Bool(found[]) || return nothing
+    plid[], xpt
+end
+
+"""
+    dskxsi(pri, target, nsurf, srflst, et, fixref, vertex, raydir, maxd=1, maxi=1)
+
+Compute a ray-surface intercept using data provided by multiple loaded DSK segments.
+Return information about the source of the data defining the surface on which the intercept
+was found: DSK handle, DLA and DSK descriptors, and DSK data type-dependent parameters.
+
+### Arguments ###
+
+- `pri`: Data prioritization flag
+- `target`: Target body name
+- `srflst`: Surface ID list
+- `et`: Epoch, expressed as seconds past J2000 TDB
+- `fixref`: Name of target body-fixed reference frame
+- `vertex`: Vertex of ray
+- `raydir`: Direction vector of ray
+- `maxd`: Size of DC array (default: 1)
+- `maxi`: Size of IC array (default: 1)
+
+### Output ###
+
+Returns `nothing` if no intercept exists or
+
+- `xpt`: Intercept point
+- `handle`: Handle of segment contributing surface data
+- `dladsc`: DLA descriptor of segment
+- `dskdsc`: DSK descriptor of segment
+- `dc`: Double precision component of source info
+- `ic`: Integer component of source info
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskxsi_c.html)
+"""
+function dskxsi(pri, target, srflst, et, fixref, vertex, raydir, maxd=1, maxi=1)
+    length(vertex) != 3 && throw(ArgumentError("`vertex` must have three elements."))
+    length(raydir) != 3 && throw(ArgumentError("`raydir` must have three elements."))
+    nsurf = length(srflst)
+    xpt = Array{SpiceDouble}(undef, 3)
+    handle = Ref{SpiceInt}()
+    dladsc = Ref{DLADescr}()
+    dskdsc = Ref{DSKDescr}()
+    dc = zeros(maxd)
+    ic = Array{SpiceInt}(undef, maxi)
+    found = Ref{SpiceBoolean}()
+    ccall((:dskxsi_c, libcspice), Cvoid,
+          (SpiceBoolean, Cstring, SpiceInt, Ref{SpiceInt}, SpiceDouble, Cstring, Ref{SpiceDouble},
+           Ref{SpiceDouble}, SpiceInt, SpiceInt, Ref{SpiceDouble}, Ref{SpiceInt},
+           Ref{DLADescr}, Ref{DSKDescr}, Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceBoolean}),
+          pri, target, nsurf, srflst, et, fixref, vertex, raydir, maxd, maxi,
+          xpt, handle, dladsc, dskdsc, dc, ic, found)
+    handleerror()
+    Bool(found[]) || return nothing
+    xpt, handle[], dladsc[], dskdsc[], dc, ic
+end
+
+"""
+    dskxv(pri, target, srflst, et, fixref, nrays, vtxarr, dirarr)
+
+Compute ray-surface intercepts for a set of rays, using data provided by multiple loaded DSK
+segments.
+
+### Arguments ###
+
+- `pri`: Data prioritization flag
+- `target`: Target body name
+- `srflst`: Surface ID list
+- `et`: Epoch, expressed as seconds past J2000 TDB
+- `fixref`: Name of target body-fixed reference frame
+- `nrays `: Number of rays
+- `vtxarr`: Array of vertices of rays
+- `dirarr`: Array of direction vectors of rays
+
+### Output ###
+
+- `xptarr`: Intercept point array
+- `fndarr`: Found flag array
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskxv_c.html)
+"""
+function dskxv(pri, target, srflst, et, fixref, vtxarr, dirarr)
+    nrays = length(vtxarr)
+    nsurf = length(srflst)
+    length(dirarr) != nrays && throw(ArgumentError("`vtxarr` and `dirarr` must have the same length."))
+    vtxarr_ = array_to_cmatrix(vtxarr, n=3)
+    dirarr_ = array_to_cmatrix(dirarr, n=3)
+    xptarr = Array{SpiceDouble}(undef, 3, nrays)
+    fndarr = Array{SpiceBoolean}(undef, nrays)
+    ccall((:dskxv_c, libcspice), Cvoid,
+          (SpiceBoolean, Cstring, SpiceInt, Ref{SpiceInt}, SpiceDouble, Cstring, SpiceInt,
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
+          pri, target, nsurf, srflst, et, fixref, nrays, vtxarr_, dirarr_, xptarr, fndarr)
+    handleerror()
+    cmatrix_to_array(xptarr), Bool.(fndarr)
+end
+
+"""
+    dskz02(handle, dladsc)
+
+Return plate model size parameters - plate count and vertex count - for a type 2 DSK segment.
+
+### Arguments ###
+
+- `handle`: DSK file handle
+- `dladsc`: DLA descriptor
+
+### Output ###
+
+- `nv`: Number of vertices
+- `np`: Number of plates
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskz02_c.html)
+"""
+function dskz02(handle, dladsc)
+    nv = Ref{SpiceInt}()
+    np = Ref{SpiceInt}()
+    ccall((:dskz02_c, libcspice), Cvoid,
+          (SpiceInt, Ref{DLADescr}, Ref{SpiceInt}, Ref{SpiceInt}),
+          handle, dladsc, nv, np)
+    handleerror()
+    nv[], np[]
+end
+
+"""
+    dsphdr(x, y, z)
+
+Compute the Jacobian of the transformation from rectangular to spherical coordinates.
+
+### Arguments ###
+
+- `x`: X-coordinate of point
+- `y`: Y-coordinate of point
+- `z`: Z-coordinate of point
+
+### Output ###
+
+Returns the matrix of partial derivatives.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dsphdr_c.html)
+"""
+function dsphdr(x, y, z)
+    jacobi = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:dsphdr_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
+          x, y, z, jacobi)
+    jacobi
+end
+
+"""
     dtpool(name)
 
 Return the data about a kernel pool variable.
@@ -1852,5 +2057,178 @@ function dtpool(name)
           name, found, n, vartype)
     handleerror()
     n[], Symbol(Char(vartype[]))
+end
+
+"""
+    ducrss(s1, s2)
+
+Compute the unit vector parallel to the cross product of two 3-dimensional vectors and the
+derivative of this unit vector.
+
+### Arguments ###
+
+- `s1`: Left hand state for cross product and derivative
+- `s2`: Right hand state for cross product and derivative
+
+### Output ###
+
+Returns the unit vector and derivative of the cross product.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ducrss_c.html)
+"""
+function ducrss(s1, s2)
+    length(s1) != 6 && throw(ArgumentError("`s1` must have six elements."))
+    length(s2) != 6 && throw(ArgumentError("`s2` must have six elements."))
+    sout = Array{SpiceDouble}(undef, 6)
+    ccall((:ducrss_c, libcspice), Cvoid,
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          s1, s2, sout)
+    sout
+end
+
+"""
+    dvcrss(s1, s2)
+
+Compute the cross product of two 3-dimensional vectors and the derivative of this cross product.
+
+### Arguments ###
+
+- `s1`: Left hand state for cross product and derivative
+- `s2`: Right hand state for cross product and derivative
+
+### Output ###
+
+Returns the cross product and its derivative.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dvcrss_c.html)
+"""
+function dvcrss(s1, s2)
+    length(s1) != 6 && throw(ArgumentError("`s1` must have six elements."))
+    length(s2) != 6 && throw(ArgumentError("`s2` must have six elements."))
+    sout = Array{SpiceDouble}(undef, 6)
+    ccall((:dvcrss_c, libcspice), Cvoid,
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          s1, s2, sout)
+    sout
+end
+
+"""
+    dvdot(s1, s2)
+
+Compute the derivative of the dot product of two double precision position vectors.
+
+### Arguments ###
+
+- `s1`: First state vector in the dot product
+- `s2`: Second state vector in the dot product
+
+### Output ###
+
+Returns the derivative of the dot product `s1 ⋅ s2`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dvdot_c.html)
+"""
+function dvdot(s1, s2)
+    length(s1) != 6 && throw(ArgumentError("`s1` must have six elements."))
+    length(s2) != 6 && throw(ArgumentError("`s2` must have six elements."))
+    ccall((:dvdot_c, libcspice), SpiceDouble, (Ref{SpiceDouble}, Ref{SpiceDouble}), s1, s2)
+end
+
+"""
+    dvhat(s1)
+
+Find the unit vector corresponding to a state vector and the derivative of the unit vector.
+
+### Arguments ###
+
+- `s1`: State to be normalized
+
+### Output ###
+
+Returns the unit vector `s1 / |s1|`, and its time derivative.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dvhat_c.html)
+"""
+function dvhat(s1)
+    length(s1) != 6 && throw(ArgumentError("`s1` must have six elements."))
+    sout = Array{SpiceDouble}(undef, 6)
+    ccall((:dvhat_c, libcspice), Cvoid,
+          (Ref{SpiceDouble}, Ref{SpiceDouble}),
+          s1, sout)
+    sout
+end
+
+"""
+    dvnorm(state)
+
+Function to calculate the derivative of the norm of a 3-vector.
+
+### Arguments ###
+
+- `state`: A 6-vector composed of three coordinates and their derivatives.
+
+### Output ###
+
+Returns the derivative of the norm of `state`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dvnorm_c.html)
+"""
+function dvnorm(state)
+    length(state) != 6 && throw(ArgumentError("`state` must have six elements."))
+    ccall((:dvnorm_c, libcspice), SpiceDouble, (Ref{SpiceDouble},), state)
+end
+
+"""
+    dvpool(name)
+
+Delete a variable from the kernel pool.
+
+### Arguments ###
+
+- `name`: Name of the kernel variable to be deleted
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dvpool_c.html)
+"""
+function dvpool(name)
+    ccall((:dvpool_c, libcspice), Cvoid, (Cstring,), name)
+    handleerror()
+end
+
+"""
+    dvsep(s1, s2)
+
+Calculate the time derivative of the separation angle between two input states, `s1` and `s2`.
+
+### Arguments ###
+
+- `s1`: State vector of the first body
+- `s2`: State vector of the second  body
+
+### Output ###
+
+Returns the value of the time derivative of the angular separation between `s1` and `s2`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dvsep_c.html)
+"""
+function dvsep(s1, s2)
+    length(s1) != 6 && throw(ArgumentError("`s1` must have six elements."))
+    length(s2) != 6 && throw(ArgumentError("`s2` must have six elements."))
+    res = ccall((:dvsep_c, libcspice), SpiceDouble, (Ref{SpiceDouble}, Ref{SpiceDouble}), s1, s2)
+    handleerror()
+    res
 end
 
