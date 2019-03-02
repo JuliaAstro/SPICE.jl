@@ -977,11 +977,107 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.dskx02-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.dskx02",
+    "category": "method",
+    "text": "dskx02(handle, dladsc, vertex, raydir)\n\nDetermine the plate ID and body-fixed coordinates of the intersection of a specified ray with the surface defined by a type 2 DSK plate model.\n\nArguments\n\nhandle: Handle of DSK kernel containing plate model\ndladsc: DLA descriptor of plate model segment\nvertex: Ray\'s vertex in the  body fixed frame\nraydir: Ray direction in the body fixed frame\n\nOutput\n\nReturns nothing if no intercept exists or\n\nplid: ID code of the plate intersected by the ray\nxpt: Intercept\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskxsi",
+    "page": "API",
+    "title": "SPICE.dskxsi",
+    "category": "function",
+    "text": "dskxsi(pri, target, nsurf, srflst, et, fixref, vertex, raydir, maxd=1, maxi=1)\n\nCompute a ray-surface intercept using data provided by multiple loaded DSK segments. Return information about the source of the data defining the surface on which the intercept was found: DSK handle, DLA and DSK descriptors, and DSK data type-dependent parameters.\n\nArguments\n\npri: Data prioritization flag\ntarget: Target body name\nsrflst: Surface ID list\net: Epoch, expressed as seconds past J2000 TDB\nfixref: Name of target body-fixed reference frame\nvertex: Vertex of ray\nraydir: Direction vector of ray\nmaxd: Size of DC array (default: 1)\nmaxi: Size of IC array (default: 1)\n\nOutput\n\nReturns nothing if no intercept exists or\n\nxpt: Intercept point\nhandle: Handle of segment contributing surface data\ndladsc: DLA descriptor of segment\ndskdsc: DSK descriptor of segment\ndc: Double precision component of source info\nic: Integer component of source info\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskxv-NTuple{7,Any}",
+    "page": "API",
+    "title": "SPICE.dskxv",
+    "category": "method",
+    "text": "dskxv(pri, target, srflst, et, fixref, nrays, vtxarr, dirarr)\n\nCompute ray-surface intercepts for a set of rays, using data provided by multiple loaded DSK segments.\n\nArguments\n\npri: Data prioritization flag\ntarget: Target body name\nsrflst: Surface ID list\net: Epoch, expressed as seconds past J2000 TDB\nfixref: Name of target body-fixed reference frame\nnrays: Number of rays\nvtxarr: Array of vertices of rays\ndirarr: Array of direction vectors of rays\n\nOutput\n\nxptarr: Intercept point array\nfndarr: Found flag array\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dskz02-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.dskz02",
+    "category": "method",
+    "text": "dskz02(handle, dladsc)\n\nReturn plate model size parameters - plate count and vertex count - for a type 2 DSK segment.\n\nArguments\n\nhandle: DSK file handle\ndladsc: DLA descriptor\n\nOutput\n\nnv: Number of vertices\nnp: Number of plates\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dsphdr-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.dsphdr",
+    "category": "method",
+    "text": "dsphdr(x, y, z)\n\nCompute the Jacobian of the transformation from rectangular to spherical coordinates.\n\nArguments\n\nx: X-coordinate of point\ny: Y-coordinate of point\nz: Z-coordinate of point\n\nOutput\n\nReturns the matrix of partial derivatives.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.dtpool-Tuple{Any}",
     "page": "API",
     "title": "SPICE.dtpool",
     "category": "method",
     "text": "dtpool(name)\n\nReturn the data about a kernel pool variable.\n\nArguments\n\nname: Name of the variable whose value is to be returned\n\nOutput\n\nReturns the tuple (n ,vartype).\n\nn: Number of values returned for name\nvartype: Type of the variable\n:C if the data is character data\n:N if the data is numeric\n:X if there is no variable name in the pool\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ducrss-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.ducrss",
+    "category": "method",
+    "text": "ducrss(s1, s2)\n\nCompute the unit vector parallel to the cross product of two 3-dimensional vectors and the derivative of this unit vector.\n\nArguments\n\ns1: Left hand state for cross product and derivative\ns2: Right hand state for cross product and derivative\n\nOutput\n\nReturns the unit vector and derivative of the cross product.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dvcrss-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.dvcrss",
+    "category": "method",
+    "text": "dvcrss(s1, s2)\n\nCompute the cross product of two 3-dimensional vectors and the derivative of this cross product.\n\nArguments\n\ns1: Left hand state for cross product and derivative\ns2: Right hand state for cross product and derivative\n\nOutput\n\nReturns the cross product and its derivative.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dvdot-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.dvdot",
+    "category": "method",
+    "text": "dvdot(s1, s2)\n\nCompute the derivative of the dot product of two double precision position vectors.\n\nArguments\n\ns1: First state vector in the dot product\ns2: Second state vector in the dot product\n\nOutput\n\nReturns the derivative of the dot product s1 ⋅ s2.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dvhat-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dvhat",
+    "category": "method",
+    "text": "dvhat(s1)\n\nFind the unit vector corresponding to a state vector and the derivative of the unit vector.\n\nArguments\n\ns1: State to be normalized\n\nOutput\n\nReturns the unit vector s1 / |s1|, and its time derivative.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dvnorm-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dvnorm",
+    "category": "method",
+    "text": "dvnorm(state)\n\nFunction to calculate the derivative of the norm of a 3-vector.\n\nArguments\n\nstate: A 6-vector composed of three coordinates and their derivatives.\n\nOutput\n\nReturns the derivative of the norm of state.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dvpool-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.dvpool",
+    "category": "method",
+    "text": "dvpool(name)\n\nDelete a variable from the kernel pool.\n\nArguments\n\nname: Name of the kernel variable to be deleted\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.dvsep-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.dvsep",
+    "category": "method",
+    "text": "dvsep(s1, s2)\n\nCalculate the time derivative of the separation angle between two input states, s1 and s2.\n\nArguments\n\ns1: State vector of the first body\ns2: State vector of the second  body\n\nOutput\n\nReturns the value of the time derivative of the angular separation between s1 and s2.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1022,6 +1118,14 @@ var documenterSearchIndex = {"docs": [
     "title": "SPICE.eul2m",
     "category": "method",
     "text": "eul2m(angle3, angle2, angle1, axis3, axis2, axis1)\n\nConstruct a rotation matrix from a set of Euler angles.\n\nArguments\n\nangle3, angle2, angle1: Rotation angles about third, second, and first rotation axes (radians)\naxis3, axis2, axis1: Axis numbers of third, second, and first rotation axes\n\nOutput\n\nA rotation matrix corresponding to the product of the 3 rotations.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.expool-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.expool",
+    "category": "method",
+    "text": "expool(name)\n\nConfirm the existence of a kernel variable in the kernel pool.\n\nArguments\n\nname: Name of the variable whose value is to be returned\n\nOutput\n\nReturns true when the variable is in the pool.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
