@@ -72,7 +72,7 @@ function badkpv(caller, name, comp, size, divby, typ)
                 (Cstring, Cstring, Cstring, SpiceInt, SpiceInt, SpiceChar),
                 caller, name, comp, size, divby, first(typ))
     handleerror()
-    res == 1
+    Bool(res)
 end
 
 """
@@ -94,7 +94,8 @@ Return a SPICE set containing the frame IDs of all built-in frames of a specifie
 """
 function bltfrm(frmcls)
     idset = SpiceIntCell(256)
-    ccall((:bltfrm_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{SpiceInt}}), frmcls, Ref(idset.cell))
+    ccall((:bltfrm_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{SpiceInt}}), frmcls, idset.cell)
+    handleerror()
     idset
 end
 
@@ -109,7 +110,7 @@ Translate the SPICE integer code of a body into a common name for that body.
 
 ### Output ###
 
-- `name`: A common name for the body identified by code
+A common name for the body identified by code or `nothing` if none was found.
 
 ### References ###
 
@@ -119,9 +120,9 @@ function bodc2n(code)
     len = 36
     name = Array{UInt8}(undef, len)
     found = Ref{SpiceBoolean}()
-    ccall((:bodc2n_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{UInt8}, Ref{SpiceBoolean}),
-          code, 36, name, found)
-    found[] == 0 && throw(SpiceError("No body with code $code found."))
+    ccall((:bodc2n_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{SpiceChar}, Ref{SpiceBoolean}),
+          code, len, name, found)
+    Bool(found[]) || return nothing
     chararray_to_string(name)
 end
 
@@ -137,7 +138,7 @@ the string representation of the body ID value.
 
 ### Output ###
 
-- `name`: String corresponding to `code`
+Returns a string corresponding to `code`
 
 ### References ###
 
@@ -146,8 +147,8 @@ the string representation of the body ID value.
 function bodc2s(code)
     len = 36
     name = Array{UInt8}(undef, len)
-    ccall((:bodc2s_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{UInt8}),
-          code, 36, name)
+    ccall((:bodc2s_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{SpiceChar}),
+          code, len, name)
     chararray_to_string(name)
 end
 
@@ -168,6 +169,7 @@ Define a body name/ID code pair for later translation via [`bodn2c`](@ref) or [`
 function boddef(name, code)
     length(name) > 35 && throw(SpiceError("The maximum allowed length for a name is 35 characters."))
     ccall((:boddef_c, libcspice), Cvoid, (Cstring, SpiceInt), name, code)
+    handleerror()
 end
 
 """
@@ -182,15 +184,14 @@ Determine whether values exist for some item for any body in the kernel pool.
 
 ### Output ###
 
-- `found`: `true` if the item is in the kernel pool and `false` if it is not.
+Returns `true` if the item is in the kernel pool and `false` if it is not.
 
 ### References ###
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/bodfnd_c.html)
 """
 function bodfnd(body, item)
-    res = ccall((:bodfnd_c, libcspice), SpiceBoolean, (SpiceInt, Cstring), body, item)
-    res == 1
+    Bool(ccall((:bodfnd_c, libcspice), SpiceBoolean, (SpiceInt, Cstring), body, item))
 end
 
 """
@@ -204,7 +205,7 @@ Translate the name of a body or object to the corresponding SPICE integer ID cod
 
 ### Output ###
 
-- `code`: SPICE integer ID code for the named body
+Return the SPICE integer ID code for the named body or `nothing` if none was found.
 
 ### References ###
 
@@ -215,7 +216,7 @@ function bodn2c(name)
     found = Ref{SpiceBoolean}()
     ccall((:bodn2c_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}, Ref{SpiceBoolean}),
           name, code, found)
-    found[] == 0 && throw(SpiceError("No body with name '$name' found."))
+    Bool(found[]) || return nothing
     Int(code[])
 end
 
@@ -230,7 +231,7 @@ Translate a string containing a body name or ID code to an integer code.
 
 ### Output ###
 
-- `code`: Integer ID code corresponding to `name`
+Retunrs the integer ID code corresponding to `name` or `nothing` if none as found.
 
 ### References ###
 
@@ -241,7 +242,7 @@ function bods2c(name)
     found = Ref{SpiceBoolean}()
     ccall((:bods2c_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}, Ref{SpiceBoolean}),
           name, code, found)
-    found[] == 0 && throw(SpiceError("Neither a body with name '$name' found nor is it an integer."))
+    Bool(found[]) || return nothing
     Int(code[])
 end
 
@@ -255,17 +256,17 @@ is specified by an integer ID code.
 
 - `bodyid`: Body ID code
 - `item`: Item for which values are desired. ("RADII", "NUT_PREC_ANGLES", etc.)
+- `maxn`: Maximum number of values that may be returned (default: 100)
 
 ### Output ###
 
-- `values`: Values
+Returns the requested values.
 
 ### References ###
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/bodvcd_c.html)
 """
-function bodvcd(bodyid, item)
-    maxn = 100
+function bodvcd(bodyid, item, maxn=100)
     values = Array{SpiceDouble}(undef, maxn)
     dim = Ref{SpiceInt}()
     ccall((:bodvcd_c, libcspice), Cvoid, (SpiceInt, Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceDouble}),
@@ -283,7 +284,7 @@ Fetch from the kernel pool the double precision values of an item associated wit
 
 - `bodynm`: Body name
 - `item`: Item for which values are desired. ("RADII", "NUT_PREC_ANGLES", etc.)
-- `maxn`: Maximum number of values that may be returned.
+- `maxn`: Maximum number of values that may be returned (default: 100)
 
 ### Output ###
 

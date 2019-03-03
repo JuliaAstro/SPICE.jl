@@ -1843,7 +1843,7 @@ surface defined by a type 2 DSK plate model.
 
 - `handle`: Handle of DSK kernel containing plate model
 - `dladsc`: DLA descriptor of plate model segment
-- `vertex`: Ray's vertex in the  body fixed frame
+- `vertex`: Ray vertex in the body fixed frame
 - `raydir`: Ray direction in the body fixed frame
 
 ### Output ###
