@@ -141,7 +141,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bodc2n",
     "category": "method",
-    "text": "bodc2n(code)\n\nTranslate the SPICE integer code of a body into a common name for that body.\n\nArguments\n\ncode: Integer ID code to be translated into a name\n\nOutput\n\nname: A common name for the body identified by code\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "bodc2n(code)\n\nTranslate the SPICE integer code of a body into a common name for that body.\n\nArguments\n\ncode: Integer ID code to be translated into a name\n\nOutput\n\nA common name for the body identified by code or nothing if none was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -149,7 +149,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bodc2s",
     "category": "method",
-    "text": "bodc2s(code)\n\nTranslate a body ID code to either the corresponding name or if no name to ID code mapping exists, the string representation of the body ID value.\n\nArguments\n\ncode: Integer ID code to translate to a string\n\nOutput\n\nname: String corresponding to code\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "bodc2s(code)\n\nTranslate a body ID code to either the corresponding name or if no name to ID code mapping exists, the string representation of the body ID value.\n\nArguments\n\ncode: Integer ID code to translate to a string\n\nOutput\n\nReturns a string corresponding to code\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -165,7 +165,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bodfnd",
     "category": "method",
-    "text": "bodfnd(body, item)\n\nDetermine whether values exist for some item for any body in the kernel pool.\n\nArguments\n\nbody: ID code of body\nitem: Item to find (\"RADII\", \"NUTAMPRA\", etc.)\n\nOutput\n\nfound: true if the item is in the kernel pool and false if it is not.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "bodfnd(body, item)\n\nDetermine whether values exist for some item for any body in the kernel pool.\n\nArguments\n\nbody: ID code of body\nitem: Item to find (\"RADII\", \"NUTAMPRA\", etc.)\n\nOutput\n\nReturns true if the item is in the kernel pool and false if it is not.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -173,7 +173,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bodn2c",
     "category": "method",
-    "text": "bodn2c(name)\n\nTranslate the name of a body or object to the corresponding SPICE integer ID code.\n\nArguments\n\nname: Body name to be translated into a SPICE ID code\n\nOutput\n\ncode: SPICE integer ID code for the named body\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "bodn2c(name)\n\nTranslate the name of a body or object to the corresponding SPICE integer ID code.\n\nArguments\n\nname: Body name to be translated into a SPICE ID code\n\nOutput\n\nReturn the SPICE integer ID code for the named body or nothing if none was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -181,15 +181,15 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bods2c",
     "category": "method",
-    "text": "bods2c(name)\n\nTranslate a string containing a body name or ID code to an integer code.\n\nArguments\n\nname: String to be translated to an ID code\n\nOutput\n\ncode: Integer ID code corresponding to name\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "bods2c(name)\n\nTranslate a string containing a body name or ID code to an integer code.\n\nArguments\n\nname: String to be translated to an ID code\n\nOutput\n\nRetunrs the integer ID code corresponding to name or nothing if none as found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
-    "location": "api/#SPICE.bodvcd-Tuple{Any,Any}",
+    "location": "api/#SPICE.bodvcd",
     "page": "API",
     "title": "SPICE.bodvcd",
-    "category": "method",
-    "text": "bodvcd(bodyid, item)\n\nFetch from the kernel pool the double precision values of an item associated with a body, where the body is specified by an integer ID code.\n\nArguments\n\nbodyid: Body ID code\nitem: Item for which values are desired. (\"RADII\", \"NUTPRECANGLES\", etc.)\n\nOutput\n\nvalues: Values\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "category": "function",
+    "text": "bodvcd(bodyid, item)\n\nFetch from the kernel pool the double precision values of an item associated with a body, where the body is specified by an integer ID code.\n\nArguments\n\nbodyid: Body ID code\nitem: Item for which values are desired. (\"RADII\", \"NUTPRECANGLES\", etc.)\nmaxn: Maximum number of values that may be returned (default: 100)\n\nOutput\n\nReturns the requested values.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -197,7 +197,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bodvrd",
     "category": "function",
-    "text": "bodvrd(bodynm, item)\n\nFetch from the kernel pool the double precision values of an item associated with a body.\n\nArguments\n\nbodynm: Body name\nitem: Item for which values are desired. (\"RADII\", \"NUTPRECANGLES\", etc.)\nmaxn: Maximum number of values that may be returned.\n\nOutput\n\nvalues: Values\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "bodvrd(bodynm, item)\n\nFetch from the kernel pool the double precision values of an item associated with a body.\n\nArguments\n\nbodynm: Body name\nitem: Item for which values are desired. (\"RADII\", \"NUTPRECANGLES\", etc.)\nmaxn: Maximum number of values that may be returned (default: 100)\n\nOutput\n\nvalues: Values\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -981,7 +981,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.dskx02",
     "category": "method",
-    "text": "dskx02(handle, dladsc, vertex, raydir)\n\nDetermine the plate ID and body-fixed coordinates of the intersection of a specified ray with the surface defined by a type 2 DSK plate model.\n\nArguments\n\nhandle: Handle of DSK kernel containing plate model\ndladsc: DLA descriptor of plate model segment\nvertex: Ray\'s vertex in the  body fixed frame\nraydir: Ray direction in the body fixed frame\n\nOutput\n\nReturns nothing if no intercept exists or\n\nplid: ID code of the plate intersected by the ray\nxpt: Intercept\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "dskx02(handle, dladsc, vertex, raydir)\n\nDetermine the plate ID and body-fixed coordinates of the intersection of a specified ray with the surface defined by a type 2 DSK plate model.\n\nArguments\n\nhandle: Handle of DSK kernel containing plate model\ndladsc: DLA descriptor of plate model segment\nvertex: Ray vertex in the body fixed frame\nraydir: Ray direction in the body fixed frame\n\nOutput\n\nReturns nothing if no intercept exists or\n\nplid: ID code of the plate intersected by the ray\nxpt: Intercept\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
