@@ -269,7 +269,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.ccifrm",
     "category": "method",
-    "text": "ccifrm(frclss, clssid)\n\nReturn the frame name, frame ID, and center associated with a given frame class and class ID.\n\nArguments\n\nfrclss: Class of frame\nclssid: Class ID of frame\n\nOutput\n\nReturn the tuple (frcode, frname, center).\n\nfrcode: ID code of the frame\nfrname: Name of the frame\ncenter: ID code of the center of the frame\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "ccifrm(frclss, clssid)\n\nReturn the frame name, frame ID, and center associated with a given frame class and class ID.\n\nArguments\n\nfrclss: Class of frame\nclssid: Class ID of frame\n\nOutput\n\nReturns nothing if no frame was found or\n\nfrcode: ID code of the frame\nfrname: Name of the frame\ncenter: ID code of the center of the frame\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -277,7 +277,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.cgv2el",
     "category": "method",
-    "text": "cgv2el(center, vec1, vec2)\n\nForm a CSPICE ellipse from a center vector and two generating vectors.\n\nArguments\n\ncenter: Center vector\nvec1: Generating vector\nvec2: Generating vector\n\nOutput\n\nThe CSPICE ellipse defined by the input vectors.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "cgv2el(center, vec1, vec2)\n\nForm an ellipse from a center vector and two generating vectors.\n\nArguments\n\ncenter: Center vector\nvec1: Generating vector\nvec2: Generating vector\n\nOutput\n\nReturns the ellipse defined by the input vectors.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
