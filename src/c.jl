@@ -3,13 +3,13 @@ export
     cgv2el,
     cidfrm,
     ckcls,
-    ckcov,
     ckcov!,
-    ckobj,
-    ckobj!,
+    ckcov,
     ckgp,
     ckgpav,
     cklpf,
+    ckobj!,
+    ckobj,
     ckopn,
     ckupf,
     ckw01,
@@ -38,7 +38,7 @@ Return the frame name, frame ID, and center associated with a given frame class 
 
 ### Output ###
 
-Return the tuple `(frcode, frname, center)`.
+Returns `nothing` if no frame was found or
 
 - `frcode`: ID code of the frame
 - `frname`: Name of the frame
@@ -51,22 +51,22 @@ Return the tuple `(frcode, frname, center)`.
 function ccifrm(frclss, clssid)
     lenout = 33
     frcode = Ref{SpiceInt}()
-    frname = Array{UInt8}(undef, lenout)
+    frname = Array{SpiceChar}(undef, lenout)
     center = Ref{SpiceInt}()
     found = Ref{SpiceBoolean}()
     ccall((:ccifrm_c, libcspice), Cvoid,
-          (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{UInt8}, Ref{SpiceInt}, Ref{SpiceBoolean}),
-          frclss, clssid, lenout, frcode, frname, center, found,
-         )
+          (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{SpiceChar},
+           Ref{SpiceInt}, Ref{SpiceBoolean}),
+          frclss, clssid, lenout, frcode, frname, center, found)
     handleerror()
-    found[] == 0 && throw(SpiceError("No frame with class $frclss and class ID $clssid found."))
-    frcode[], chararray_to_string(frname), center[]
+    Bool(found[]) || return nothing
+    Int(frcode[]), chararray_to_string(frname), Int(center[])
 end
 
 """
     cgv2el(center, vec1, vec2)
 
-Form a CSPICE ellipse from a center vector and two generating vectors.
+Form an ellipse from a center vector and two generating vectors.
 
 ### Arguments ###
 
@@ -76,18 +76,21 @@ Form a CSPICE ellipse from a center vector and two generating vectors.
 
 ### Output ###
 
-The CSPICE ellipse defined by the input vectors.
+Returns the ellipse defined by the input vectors.
 
 ### References ###
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cgv2el_c.html)
 """
 function cgv2el(center, vec1, vec2)
-    ellipse = Ellipse()
+    length(center) != 3 && throw(ArgumentError("`center` must have three elements."))
+    length(vec1) != 3 && throw(ArgumentError("`vec1` must have three elements."))
+    length(vec2) != 3 && throw(ArgumentError("`vec2` must have three elements."))
+    ellipse = Ref{Ellipse}()
     ccall((:cgv2el_c, libcspice), Cvoid,
         (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{Ellipse}),
         center, vec1, vec2, ellipse)
-    ellipse
+    ellipse[]
 end
 
 """

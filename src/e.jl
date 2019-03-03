@@ -28,12 +28,12 @@ Returns the limb of the ellipsoid as seen from the viewing point.
 """
 function edlimb(a, b, c, viewpt)
     length(viewpt) != 3 && throw(ArgumentError("Length of `viewpt` must be 3."))
-    limb = Ellipse()
+    limb = Ref{Ellipse}()
     ccall((:edlimb_c, libcspice), Cvoid,
            (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}, Ref{Ellipse}),
            a, b, c, viewpt, limb)
     handleerror()
-    limb
+    limb[]
 end
 
 """

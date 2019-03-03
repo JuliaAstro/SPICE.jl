@@ -1,22 +1,24 @@
 using Random: randstring
 
 @testset "C" begin
-    @test ccifrm(2, 3000) == (13000, "ITRF93", 399)
-    @test_throws SpiceError ccifrm(9999, 3000)
-
-    @test cidfrm(399) == (10013, "IAU_EARTH")
-    @test_throws SpiceError cidfrm(999999)
-
-    @test clight() == 299792.458
-
-    let vec1 = [1.0, 1.0, 1.0],
-        vec2 = [1.0, -1.0, 1.0],
+    @testset "ccifrm" begin
+        @test ccifrm(2, 3000) == (13000, "ITRF93", 399)
+        @test ccifrm(9999, 3000) === nothing
+    end
+    @testset "cgv2el" begin
+        vec1 = [1.0, 1.0, 1.0]
+        vec2 = [1.0, -1.0, 1.0]
         cent = [-1.0, 1.0, -1.0]
         ellipse = cgv2el(cent, vec1, vec2)
         @test center(ellipse) ≈ [-1.0, 1.0, -1.0]
         @test semi_major(ellipse) ≈ [sqrt(2.0), 0.0, sqrt(2.0)]
         @test semi_minor(ellipse) ≈ [0.0, sqrt(2.0), 0.0]
     end
+
+    @test cidfrm(399) == (10013, "IAU_EARTH")
+    @test_throws SpiceError cidfrm(999999)
+
+    @test clight() == 299792.458
 
     try
         sclk = path(CASSINI, :sclk)

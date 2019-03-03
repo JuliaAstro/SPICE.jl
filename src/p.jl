@@ -272,13 +272,12 @@ Returns the ellipse resulting from the projection.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/pjelpl_c.html)
 """
 function pjelpl(elin, plane)
-    elin, plane
-    elout = Ellipse()
+    elout = Ref{Ellipse}()
     ccall((:pjelpl_c, libcspice), Cvoid,
           (Ref{Ellipse}, Ref{Plane}, Ref{Ellipse}),
           elin, plane, elout)
     handleerror()
-    elout
+    elout[]
 end
 
 """
@@ -668,12 +667,12 @@ function psv2pl(point, span1, span2)
     length(point) != 3 && throw(ArgumentError("Length of `point` needs to be 3."))
     length(span1) != 3 && throw(ArgumentError("Length of `span1` needs to be 3."))
     length(span2) != 3 && throw(ArgumentError("Length of `span2` needs to be 3."))
-    plane = Plane()
+    plane = Ref{Plane}()
     ccall((:psv2pl_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{Plane}),
           point, span1, span2, plane)
     handleerror()
-    plane
+    plane[]
 end
 
 """

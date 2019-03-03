@@ -211,14 +211,14 @@ Returns `nothing` if no ellipse could be found.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/inedpl_c.html)
 """
 function inedpl(a, b, c, plane)
-    ellipse = Ellipse()
+    ellipse = Ref{Ellipse}()
     found = Ref{SpiceBoolean}()
     ccall((:inedpl_c, libcspice), Cvoid,
           (SpiceDouble, SpiceDouble, SpiceDouble, Ref{Plane}, Ref{Ellipse}, Ref{SpiceBoolean}),
           a, b, c, plane, ellipse, found)
     handleerror()
     !Bool(found[]) && return nothing
-    ellipse
+    ellipse[]
 end
 
 """

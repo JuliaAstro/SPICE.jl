@@ -257,7 +257,7 @@ Returns a struct representing the plane.
 """
 function nvc2pl(norm, constant)
     length(norm) != 3 && throw(ArgumentError("`norm` must be an iterable with three elements."))
-    plane = Ref{Plane}(Plane())
+    plane = Ref{Plane}()
     ccall((:nvc2pl_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, SpiceDouble, Ref{Plane}), collect(norm), constant, plane)
     handleerror()
@@ -285,7 +285,7 @@ Returns a struct representing the plane.
 function nvp2pl(norm, orig)
     length(norm) != 3 && throw(ArgumentError("`norm` must be an iterable with three elements."))
     length(orig) != 3 && throw(ArgumentError("`orig` must be an iterable with three elements."))
-    plane = Ref{Plane}(Plane())
+    plane = Ref{Plane}()
     ccall((:nvp2pl_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{Plane}),
           collect(norm), collect(orig), plane)
