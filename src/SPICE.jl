@@ -36,13 +36,37 @@ function handleerror()
     nothing
 end
 
+macro checkdims(m::Int, n::Int, arr::Symbol)
+    name = string(arr)
+    quote
+        m1, n1 = size($(esc(arr)))
+        if (m1, n1) != ($m, $n)
+            throw(ArgumentError("`$($name)` must be a $($m)x$($n) matrix but is $($m1)x$($n1)."))
+        end
+        nothing
+    end
+end
+
+macro checkdims(len, arr::Symbol...)
+    ex = :()
+    for a in arr
+        name = string(a)
+        expr = quote
+            n = length($(esc(a)))
+            if n != $(esc(len))
+                throw(ArgumentError("`$($name)` must have $($(esc(len))) elements but has $n."))
+            end
+        end
+        push!(ex.args, expr)
+    end
+    :($ex; nothing)
+end
+
 # CSPICE data types
 const SpiceBoolean = Cint
 const SpiceChar = UInt8
 const SpiceDouble = Cdouble
 const SpiceInt = Cint
-
-const LENOUT = 256
 
 function chararray(strings)
     m = length(strings)

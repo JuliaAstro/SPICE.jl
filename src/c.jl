@@ -1,6 +1,7 @@
 export
     ccifrm,
     cgv2el,
+    chbder,
     cidfrm,
     ckcls,
     ckcov!,
@@ -13,6 +14,9 @@ export
     ckopn,
     ckupf,
     ckw01,
+    ckw02,
+    ckw03,
+    ckw05,
     clight,
     clpool,
     cmprss,
@@ -83,14 +87,95 @@ Returns the ellipse defined by the input vectors.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cgv2el_c.html)
 """
 function cgv2el(center, vec1, vec2)
-    length(center) != 3 && throw(ArgumentError("`center` must have three elements."))
-    length(vec1) != 3 && throw(ArgumentError("`vec1` must have three elements."))
-    length(vec2) != 3 && throw(ArgumentError("`vec2` must have three elements."))
+    @checkdims 3 center vec1 vec2
     ellipse = Ref{Ellipse}()
     ccall((:cgv2el_c, libcspice), Cvoid,
         (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{Ellipse}),
         center, vec1, vec2, ellipse)
     ellipse[]
+end
+
+"""
+    chbder(cp, x2s, x, nderiv)
+
+Given the coefficients for the Chebyshev expansion of a polynomial, this returns the value of the
+polynomial and its first `nderiv` derivatives evaluated at the input `x`.
+
+### Arguments ###
+
+- `cp`: Chebyshev polynomial coefficients
+- `x2s`: Transformation parameters of polynomial
+- `x`: Value for which the polynomial is to be evaluated
+- `nderiv`: The number of derivatives to compute
+
+### Output ###
+
+Returns the derivatives of the polynomial.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/chbder_c.html)
+"""
+function chbder(cp, x2s, x, nderiv)
+    @checkdims 2 x2s
+    degp = length(cp) - 1
+    partdp = Array{SpiceDouble}(undef, 3 * (nderiv + 1))
+    dpdxs = Array{SpiceDouble}(undef, nderiv + 1)
+    ccall((:chbder_c, libcspice), Cvoid,
+          (Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}, SpiceDouble, SpiceInt,
+           Ref{SpiceDouble}, Ref{SpiceDouble}),
+          cp, degp, x2s, x, nderiv, partdp, dpdxs)
+    dpdxs
+end
+
+"""
+    cidfrm(cent)
+
+Retrieve frame ID code and name to associate with a frame center.
+
+### Arguments ###
+
+- `cent`: ID code for an object for which there is a preferred reference frame
+
+### Output ###
+
+Returns `nothing` if no frame was found or
+
+- `frcode`: The ID code of the frame associated with `cent`
+- `frname`: The name of the frame with ID `frcode`
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cidfrm_c.html)
+"""
+function cidfrm(cent)
+    lenout = 33
+    frcode = Ref{SpiceInt}()
+    frname = Array{SpiceChar}(undef, lenout)
+    found = Ref{SpiceBoolean}()
+    ccall((:cidfrm_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{SpiceChar}, Ref{SpiceBoolean}),
+          cent, lenout, frcode, frname, found)
+    Bool(found[]) || return nothing
+    Int(frcode[]), chararray_to_string(frname)
+end
+
+"""
+    ckcls(handle)
+
+Close an open CK file.
+
+### Arguments ###
+
+- `handle`: Handle of the CK file to be closed
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckcls_c.html)
+"""
+function ckcls(handle)
+    ccall((:ckcls_c, libcspice), Cvoid, (SpiceInt,), handle)
+    handleerror()
 end
 
 """
@@ -143,9 +228,9 @@ Find the coverage window for a specified object in a specified CK file.
 """
 function ckcov!(ck, idcode, needav, level, tol, timsys, cover)
     ccall((:ckcov_c, libcspice), Cvoid,
-        (Cstring, SpiceInt, SpiceBoolean, Cstring, SpiceDouble, Cstring,
-            Ref{Cell{SpiceDouble}}),
-        ck, idcode, needav, level, tol, timsys, cover.cell)
+          (Cstring, SpiceInt, SpiceBoolean, Cstring, SpiceDouble, Cstring,
+           Ref{Cell{SpiceDouble}}),
+          ck, idcode, needav, level, tol, timsys, cover.cell)
     handleerror()
     cover
 end
@@ -164,25 +249,26 @@ Get pointing (attitude) for a specified spacecraft clock time.
 
 ### Outputs ###
 
+Returns `nothing` if the requested pointing is not available or
+
 - `cmat`: C-matrix pointing data
 - `clkout`: Output encoded spacecraft clock time
-- `found`: `true` when requested pointing is available
 
 ### References ###
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckgp_c.html)
 """
 function ckgp(inst, sclkdp, tol, ref)
-    cmat = Matrix{SpiceDouble}(undef, 3, 3)
-    clkout = Ref{SpiceDouble}(0.0)
-    found = Ref{SpiceBoolean}(0)
+    cmat = Array{SpiceDouble}(undef, 3, 3)
+    clkout = Ref{SpiceDouble}()
+    found = Ref{SpiceBoolean}()
     ccall((:ckgp_c, libcspice), Cvoid,
-        (SpiceInt, SpiceDouble, SpiceDouble, Cstring,
-        Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
-        inst, sclkdp, tol, ref, cmat, clkout, found)
+          (SpiceInt, SpiceDouble, SpiceDouble, Cstring,
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
+          inst, sclkdp, tol, ref, cmat, clkout, found)
     handleerror()
-    # TODO: Revisit this API in Julia 1.0 and use `nothing`
-    cmat', clkout[], found[] == 1
+    Bool(found[]) || return nothing
+    permutedims(cmat), clkout[]
 end
 
 """
@@ -199,27 +285,28 @@ Get pointing (attitude) and angular velocity for a specified spacecraft clock ti
 
 ### Outputs ###
 
+Returns `nothing` if the requested pointing is not available or
+
 - `cmat`: C-matrix pointing data
 - `av`: Angular velocity vector
 - `clkout`: Output encoded spacecraft clock time
-- `found`: `true` when requested pointing is available
 
 ### References ###
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckgpav_c.html)
 """
 function ckgpav(inst, sclkdp, tol, ref)
-    cmat = Matrix{SpiceDouble}(undef, 3, 3)
-    av = Vector{SpiceDouble}(undef, 3)
-    clkout = Ref{SpiceDouble}(0.0)
-    found = Ref{SpiceBoolean}(0)
+    cmat = Array{SpiceDouble}(undef, 3, 3)
+    av = Array{SpiceDouble}(undef, 3)
+    clkout = Ref{SpiceDouble}()
+    found = Ref{SpiceBoolean}()
     ccall((:ckgpav_c, libcspice), Cvoid,
         (SpiceInt, SpiceDouble, SpiceDouble, Cstring,
         Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
         inst, sclkdp, tol, ref, cmat, av, clkout, found)
     handleerror()
-    # TODO: Revisit this API in Julia 1.0 and use `nothing`
-    cmat', av, clkout[], found[] == 1
+    Bool(found[]) || return nothing
+    permutedims(cmat), av, clkout[]
 end
 
 """
@@ -285,41 +372,11 @@ Find the set of ID codes of all objects in a specified CK file.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckobj_c.html)
 """
 function ckobj!(ck, ids)
-    ccall((:ckobj_c, libcspice), Cvoid, (Cstring, Ref{Cell{SpiceInt}}),
-        ck, ids.cell)
+    ccall((:ckobj_c, libcspice), Cvoid,
+          (Cstring, Ref{Cell{SpiceInt}}),
+          ck, ids.cell)
     handleerror()
     ids
-end
-
-"""
-    cidfrm(cent)
-
-Retrieve frame ID code and name to associate with a frame center.
-
-### Arguments ###
-
-- `cent`: ID code for an object for which there is a preferred reference frame
-
-### Output ###
-
-Returns the tuple `(frcode, frname)`
-
-- `frcode`: The ID code of the frame associated with `cent`
-- `frname`: The name of the frame with ID `frcode`
-
-### References ###
-
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cidfrm_c.html)
-"""
-function cidfrm(cent)
-    lenout = 33
-    frcode = Ref{SpiceInt}()
-    frname = Array{UInt8}(undef, lenout)
-    found = Ref{SpiceBoolean}()
-    ccall((:cidfrm_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{UInt8}, Ref{SpiceBoolean}),
-          cent, lenout, frcode, frname, found)
-    found[] == 0 && throw(SpiceError("No frame associated with body $cent found."))
-    frcode[], chararray_to_string(frname)
 end
 
 """
@@ -330,8 +387,8 @@ Open a new CK file, returning the handle of the opened file.
 ### Arguments ###
 
 - `fname`: The name of the CK file to be opened
-- `ifname="CK_file"`: The internal filename for the CK, default is "CK_file"
-- `ncomch=0`: The number of characters to reserve for comments, default is zero
+- `ifname`: The internal filename for the CK (default: "CK_file")
+- `ncomch`: The number of characters to reserve for comments (default: 0)
 
 ### Output ###
 
@@ -343,28 +400,11 @@ Open a new CK file, returning the handle of the opened file.
 """
 function ckopn(fname, ifname="CK_file", ncomch=0)
     handle = Ref{SpiceInt}()
-    ccall((:ckopn_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, Ref{SpiceInt}),
+    ccall((:ckopn_c, libcspice), Cvoid,
+          (Cstring, Cstring, SpiceInt, Ref{SpiceInt}),
           fname, ifname, ncomch, handle)
     handleerror()
     handle[]
-end
-
-"""
-    ckcls(handle)
-
-Close an open CK file.
-
-### Arguments ###
-
-- `handle`: Handle of the CK file to be closed
-
-### References ###
-
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckcls_c.html)
-"""
-function ckcls(handle)
-    ccall((:ckcls_c, libcspice), Cvoid, (SpiceInt,), handle)
-    handleerror()
 end
 
 """
@@ -377,6 +417,7 @@ Unload a CK pointing file so that it will no longer be searched by the readers.
 - `handle`: Handle of CK file to be unloaded
 
 ### References ###
+
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckupf_c.html)
 """
 function ckupf(handle)
@@ -384,44 +425,178 @@ function ckupf(handle)
 end
 
 """
-    ckw01(handle, inst, ref, segid, sclkdp, quats, avvs=Matrix{SpiceDouble}(0,0);
-        begtim=sclkdp[1], endtim=sclkdp[end])
+    ckw01(handle, begtim, endtim, inst, ref, segid, sclkdp, quats, avvs=[zeros(3)])
 
 Add a type 1 segment to a C-kernel.
 
 ### Arguments ###
 
 - `handle`: Handle of an open CK file
+- `begtim`: The beginning encoded SCLK of the segment
+- `endtim`: The ending encoded SCLK of the segment
 - `inst`: The NAIF instrument ID code
 - `ref`: The reference frame of the segment
 - `segid`: Segment identifier
 - `sclkdp`: Encoded SCLK times
 - `quats`: Quaternions representing instrument pointing
 - `avvs`: Angular velocity vectors (optional)
-- `begtim`: The beginning encoded SCLK of the segment (optional)
-- `endtim`: The ending encoded SCLK of the segment (optional)
 
 ### References ###
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckw01_c.html)
 """
-function ckw01(handle, inst, ref, segid, sclkdp, quats, avvs=[[0.0]];
-               begtim=sclkdp[1], endtim=sclkdp[end])
-    quats_c = array_to_cmatrix(quats)
-    avvs_c = array_to_cmatrix(avvs)
+function ckw01(handle, begtim, endtim, inst, ref, segid, sclkdp, quats, avvs=[zeros(3)])
+    quats_ = array_to_cmatrix(quats, n=4)
+    avvs_ = array_to_cmatrix(avvs, n=3)
     nrec = length(sclkdp)
-    avflag = length(avvs) > 0 ? 1 : 0
+    avflag = length(avvs) == length(quats)
     ccall((:ckw01_c, libcspice), Cvoid,
           (SpiceInt, SpiceDouble, SpiceDouble, SpiceInt, Cstring, SpiceInt, Cstring, SpiceInt,
            Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
-          handle, begtim, endtim, inst, ref, avflag, segid, nrec, sclkdp, quats_c, avvs_c)
+          handle, begtim, endtim, inst, ref, avflag, segid, nrec, sclkdp, quats_, avvs_)
     handleerror()
 end
+
+"""
+    ckw02(handle, begtim, endtim, inst, ref, segid, start, stop, quats, avvs, rates)
+
+Write a type 2 segment to a C-kernel.
+
+### Arguments ###
+
+- `handle`: Handle of an open CK file
+- `begtim`: The beginning encoded SCLK of the segment
+- `endtim`: The ending encoded SCLK of the segment
+- `inst`: The NAIF instrument ID code
+- `ref`: The reference frame of the segment
+- `segid`: Segment identifier
+- `start`: Encoded SCLK interval start times
+- `stop`: Encoded SCLK interval stop times
+- `quats`: Quaternions representing instrument pointing
+- `avvs`: Angular velocity vectors
+- `rates`: Number of seconds per tick for each interval
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckw02_c.html)
+"""
+function ckw02(handle, begtim, endtim, inst, ref, segid, start, stop, quats, avvs, rates)
+    nrec = length(quats)
+    @checkdims nrec start stop avvs rates
+    quats_ = array_to_cmatrix(quats, n=4)
+    avvs_ = array_to_cmatrix(avvs, n=3)
+    ccall((:ckw02_c, libcspice), Cvoid,
+          (SpiceInt, SpiceDouble, SpiceDouble, SpiceInt, Cstring, Cstring, SpiceInt, Ref{SpiceDouble},
+           Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          handle, begtim, endtim, inst, ref, segid, nrec - 1, start, stop, quats_, avvs_, rates)
+    handleerror()
+end
+
+"""
+    ckw03(handle, begtim, endtim, inst, ref, segid, sclkdp, quats, starts, avvs=[zeros(3)])
+
+Add a type 3 segment to a C-kernel.
+
+### Arguments ###
+
+- `handle`: Handle of an open CK file
+- `begtim`: The beginning encoded SCLK of the segment
+- `endtim`: The ending encoded SCLK of the segment
+- `inst`: The NAIF instrument ID code
+- `ref`: The reference frame of the segment
+- `segid`: Segment identifier
+- `sclkdp`: Encoded SCLK times
+- `quats`: Quaternions representing instrument pointing
+- `starts`: Encoded SCLK interval start times
+- `avvs`: Angular velocity vectors (optional)
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckw03_c.html)
+"""
+function ckw03(handle, begtim, endtim, inst, ref, segid, sclkdp, quats, starts, avvs=[zeros(3)])
+    nrec = length(quats)
+    avflag = length(avvs) == nrec
+    nints = length(starts)
+    quats_ = array_to_cmatrix(quats, n=4)
+    avvs_ = array_to_cmatrix(avvs, n=3)
+    @checkdims nrec sclkdp
+    ccall((:ckw03_c, libcspice), Cvoid,
+          (SpiceInt, SpiceDouble, SpiceDouble, SpiceInt, Cstring, SpiceBoolean, Cstring,
+           SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt,
+           Ref{SpiceDouble}),
+          handle, begtim, endtim, inst, ref, avflag, segid, nrec - 1,
+          sclkdp, quats_, avvs_, nints, starts)
+    handleerror()
+end
+
+"""
+    ckw05(handle, subtyp, degree, begtim, endtim, inst, ref, avflag, segid, sclkdp, packts,
+          rate, nints, starts)
+
+Write a type 5 segment to a CK file.
+
+### Arguments ###
+
+- `handle`: Handle of an open CK file
+- `subtyp`: CK type 5 subtype code
+- `degree`: Degree of interpolating polynomials
+- `begtim`: The beginning encoded SCLK of the segment
+- `endtim`: The ending encoded SCLK of the segment
+- `inst`: The NAIF instrument ID code
+- `ref`: The reference frame of the segment
+- `avflag`: True if the segment will contain angular velocity
+- `segid`: Segment identifier
+- `sclkdp`: Encoded SCLK times
+- `packts`: Array of packets
+- `rate`: Nominal SCLK rate in seconds per tick
+- `nints`: Number of intervals
+- `starts`: Encoded SCLK interval start times
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckw05_c.html)
+"""
+function ckw05(handle, subtyp, degree, begtim, endtim, inst, ref, avflag, segid, sclkdp, packts,
+               rate, nints, starts)
+    n = length(packts)
+    @checkdims n sclkdp
+    if subtyp == 0
+        packts_ = array_to_cmatrix(packts, n=8)
+    elseif subtyp == 1
+        packts_ = array_to_cmatrix(packts, n=4)
+    elseif subtyp == 2
+        packts_ = array_to_cmatrix(packts, n=14)
+    elseif subtyp == 3
+        packts_ = array_to_cmatrix(packts, n=7)
+    end
+    ccall((:ckw05_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, SpiceDouble, SpiceDouble, SpiceInt, Cstring, SpiceBoolean,
+           Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble},
+           SpiceDouble, SpiceInt, Ref{SpiceDouble}),
+          handle, subtyp, degree, begtim, endtim, inst, ref, avflag, segid, n, sclkdp, packts_, rate,
+          nints, starts)
+    handleerror()
+end
+
+@deprecate cleard empty!
+
+"""
+    cleard(array)
+
+!!! warning Deprecates
+    Use `empty!(array)` instead.
+"""
+cleard
 
 """
     clight()
 
 Returns the speed of light in vacuo (km/sec).
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/clight_c.html)
 """
 function clight()
     ccall((:clight_c, libcspice), Cdouble, ())
@@ -462,9 +637,9 @@ Returns the compressed string.
 """
 function cmprss(delim, n, input)
     lenout = length(input)
-    output = Array{UInt8}(undef, lenout)
+    output = Array{SpiceChar}(undef, lenout)
     ccall((:cmprss_c, libcspice), Cvoid,
-          (Cchar, SpiceInt, Cstring, SpiceInt, Ref{UInt8}),
+          (Cchar, SpiceInt, Cstring, SpiceInt, Ref{SpiceChar}),
           first(delim), n, input, lenout, output)
     handleerror()
     chararray_to_string(output)
@@ -476,6 +651,7 @@ end
 Retrieve frame ID code and name to associate with an object.
 
 ### Arguments ###
+
 - `cname`: Name of the object to find a frame for
 
 ### Output ###
@@ -486,20 +662,16 @@ frame is found.
 ### References ###
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cnmfrm_c.html)
-
 """
-function cnmfrm(cname, lenout=LENOUT)
+function cnmfrm(cname, lenout=256)
     frcode = Ref{SpiceInt}()
     frname = Array{UInt8}(undef, lenout)
     found = Ref{SpiceBoolean}()
-    ccall((:cnmfrm_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{SpiceInt}, Ref{UInt8}, Ref{SpiceBoolean}),
+    ccall((:cnmfrm_c, libcspice), Cvoid,
+          (Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceChar}, Ref{SpiceBoolean}),
           cname, lenout, frcode, frname, found)
-    if Bool(found[])
-        code = frcode[]
-        name = chararray_to_string(frname)
-        return code, name
-    end
-    nothing
+    Bool(found[]) || return nothing
+    frcode[], chararray_to_string(frname)
 end
 
 """
@@ -522,6 +694,7 @@ Returns the state of orbiting body at `et`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/conics_c.html)
 """
 function conics(elts, et)
+    @checkdims 8 elts
     state = Array{Float64}(undef, 6)
     ccall((:conics_c, libcspice), Cvoid, (Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble}), elts, et, state)
     handleerror()
@@ -579,7 +752,9 @@ Returns the index of the first character of `str` that is one of the characters 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cpos_c.html)
 """
 function cpos(str, chars, start)
-    idx = ccall((:cpos_c, libcspice), SpiceInt, (Cstring, Cstring, SpiceInt), str, chars, start - 1)
+    idx = Int(ccall((:cpos_c, libcspice), SpiceInt,
+                    (Cstring, Cstring, SpiceInt),
+                    str, chars, start - 1))
     handleerror()
     idx != -1 ? idx + 1 : idx
 end
@@ -606,7 +781,9 @@ Returns the index of the last character of `str` that is one of the characters i
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/cposr_c.html)
 """
 function cposr(str, chars, start)
-    idx = ccall((:cposr_c, libcspice), SpiceInt, (Cstring, Cstring, SpiceInt), str, chars, start - 1)
+    idx = Int(ccall((:cposr_c, libcspice), SpiceInt,
+                    (Cstring, Cstring, SpiceInt),
+                    str, chars, start - 1))
     handleerror()
     idx != -1 ? idx + 1 : idx
 end
@@ -623,7 +800,7 @@ notification list have been updated.
 
 ### Output ###
 
-`true` if variables for `agent` have been updated.
+Returns `true` if variables for `agent` have been updated.
 
 ### References ###
 
@@ -632,7 +809,7 @@ notification list have been updated.
 function cvpool(agent)
     update = Ref{SpiceBoolean}()
     ccall((:cvpool_c, libcspice), Cvoid, (Cstring, Ref{SpiceBoolean}), agent, update)
-    update[] == 1
+    Bool(update[])
 end
 
 """
@@ -648,7 +825,9 @@ Convert from cylindrical to latitudinal coordinates.
 
 ### Output ###
 
-Returns a tuple of radius, longitude (radians), and latitude (radians).
+- `radius`: Radius
+- `lon`: Longitude (radians)
+- `lat`: Latitude (radians)
 
 ### References ###
 
@@ -703,8 +882,9 @@ Convert from cylindrical to spherical coordinates.
 
 ### Output ###
 
-Returns a tuple of distance of the point from the origin, polar angle (co-latitude in radians),
-and azimuthal angle (longitude).
+- `radius`: Distance of the point from the origin
+- `colat`: Polar angle (co-latitude in radians)
+- `lon`: Azimuthal angle (longitude)
 
 ### References ###
 

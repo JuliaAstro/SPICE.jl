@@ -129,7 +129,7 @@
             dafpath = tempname()
             ifname = "Test CK type 1 segment created by cspice_ckw01"
             handle = ckopn(dafpath, ifname, 10)
-            ckw01(handle, -77701, "J2000", "Test type 1 CK segment",
+            ckw01(handle, 1.1, 4.1, -77701, "J2000", "Test type 1 CK segment",
                   [1.1, 4.1], [[1.0, 1.0, 1.0, 1.0], [2.0, 2.0, 2.0, 2.0]],
                   [[0.0, 0.0, 1.0], [0.0, 0.0, 2.0]])
             ckcls(handle)
