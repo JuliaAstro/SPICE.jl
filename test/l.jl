@@ -1,62 +1,63 @@
 @testset "L" begin
-    let str="ABCDE"
-        @test lastnb(str) == 5
-        str="AN EXAMPLE"
-        @test lastnb(str) == 10
-        str="AN EXAMPLE        "
-        @test lastnb(str) == 10
-        str="        "
-        @test lastnb(str) == 0
+    @testset "lastnb" begin
+        str = "ABCDE"
+        @test SPICE._lastnb(str) == findprev(!isspace, str, length(str))
+        str = "AN EXAMPLE"
+        @test SPICE._lastnb(str) == findprev(!isspace, str, length(str))
+        str = "AN EXAMPLE        "
+        @test SPICE._lastnb(str) == findprev(!isspace, str, length(str))
     end
-    let exp1 = [1.0, 0.0, 0.0]
+    @testset "latcyl" begin
+        exp1 = [1.0, 0.0, 0.0]
         exp2 = [1.0, deg2rad(90.0), 0.0]
         exp3 = [1.0, deg2rad(180.0), 0.0]
-        act1=collect(latcyl(1.0, 0.0, 0.0))
-        act2=collect(latcyl(1.0, deg2rad(90.0), 0.0))
-        act3=collect(latcyl(1.0, deg2rad(180.0), 0.0))
+        act1 = collect(latcyl(1.0, 0.0, 0.0))
+        act2 = collect(latcyl(1.0, deg2rad(90.0), 0.0))
+        act3 = collect(latcyl(1.0, deg2rad(180.0), 0.0))
         @testset for i in eachindex(act1, exp1)
-            @test isapprox(act1[i],exp1[i],atol=1e-16)
+            @test act1[i] ≈ exp1[i] atol=1e-16
         end
         @testset for i in eachindex(act2, exp2)
-            @test isapprox(act2[i],exp2[i],atol=1e-16)
+            @test act2[i] ≈ exp2[i] atol=1e-16
         end
         @testset for i in eachindex(act3, exp3)
-            @test isapprox(act3[i],exp3[i],atol=1e-16)
+            @test act3[i] ≈ exp3[i] atol=1e-16
         end
     end
-    let exp1 = [1.0, 0.0, 0.0]
+    @testset "latrec" begin
+        exp1 = [1.0, 0.0, 0.0]
         exp2 = [0.0, 1.0, 0.0]
         exp3 = [-1.0, 0.0, 0.0]
         act1 = latrec(1.0, 0.0, 0.0)
         act2 = latrec(1.0, deg2rad(90.0), 0.0)
         act3 = latrec(1.0, deg2rad(180.0), 0.0)
         @testset for i in eachindex(act1, exp1)
-            @test isapprox(act1[i],exp1[i],atol=1e-15)
+            @test act1[i] ≈ exp1[i] atol=1e-15
         end
         @testset for i in eachindex(act2, exp2)
-            @test isapprox(act2[i],exp2[i],atol=1e-15)
+            @test act2[i] ≈ exp2[i] atol=1e-15
         end
         @testset for i in eachindex(act3, exp3)
-            @test isapprox(act3[i],exp3[i],atol=1e-15)
+            @test act3[i] ≈ exp3[i] atol=1e-15
         end
     end
-    let exp1 = [1.0, deg2rad(90), 0.0]
+    @testset "latsph" begin
+        exp1 = [1.0, deg2rad(90), 0.0]
         exp2 = [1.0, deg2rad(90), deg2rad(90)]
         exp3 = [1.0, deg2rad(90), deg2rad(180)]
         act1 = collect(latsph(1.0, 0.0, 0.0))
         act2 = collect(latsph(1.0, deg2rad(90), 0.0))
         act3 = collect(latsph(1.0, deg2rad(180), 0.0))
         @testset for i in eachindex(act1, exp1)
-            @test isapprox(act1[i],exp1[i],atol=1e-15)
+            @test act1[i] ≈ exp1[i] atol=1e-15
         end
         @testset for i in eachindex(act2, exp2)
-            @test isapprox(act2[i],exp2[i],atol=1e-15)
+            @test act2[i] ≈ exp2[i] atol=1e-15
         end
         @testset for i in eachindex(act3, exp3)
-            @test isapprox(act3[i],exp3[i],atol=1e-15)
+            @test act3[i] ≈ exp3[i] atol=1e-15
         end
     end
-
     @testset "latsrf" begin
         try
             furnsh(path(EXTRA, :phobos_dsk))
@@ -69,15 +70,15 @@
             kclear()
         end
     end
-
-    @test SPICE._lcase("THIS IS AN EXAMPLE") == "this is an example"
-    @test SPICE._lcase("1234") == "1234"
-
-    kclear()
-    let kerneltemp = tempname()
+    @testset "lcase" begin
+        @test SPICE._lcase("THIS IS AN EXAMPLE") == "this is an example"
+        @test SPICE._lcase("1234") == "1234"
+    end
+    @testset "ldpool" begin
         try
-            ldpoolNames = ["DELTET/DELTA_T_A", "DELTET/K", "DELTET/EB", "DELTET/M", "DELTET/DELTA_AT"]
-            ldpoolLens = [1, 1, 1, 2, 46]
+            kerneltemp = tempname()
+            ldpool_names = ["DELTET/DELTA_T_A", "DELTET/K", "DELTET/EB", "DELTET/M", "DELTET/DELTA_AT"]
+            ldpool_lens = [1, 1, 1, 2, 46]
             textbuf = ["DELTET/DELTA_T_A = 32.184",
             "DELTET/K         = 1.657D-3",
             "DELTET/EB        = 1.671D-2",
@@ -105,82 +106,86 @@
             "                     30, @1996-JAN-1",
             "                     31, @1997-JUL-1",
             "                     32, @1999-JAN-1 )"]
-            kernelFile = open(kerneltemp, "w")
-            write(kernelFile, "\\begindata\n")
+            kernel_file = open(kerneltemp, "w")
+            write(kernel_file, "\\begindata\n")
             for line in textbuf
-                write(kernelFile, string(line, "\n"))
+                write(kernel_file, string(line, "\n"))
             end
-            write(kernelFile, "\\begintext\n")
-            close(kernelFile)
+            write(kernel_file, "\\begintext\n")
+            close(kernel_file)
             ldpool(kerneltemp)
-            for (var, expectLen) in zip(ldpoolNames, ldpoolLens)
+            for (var, expect_len) in zip(ldpool_names, ldpool_lens)
                 n, vartype = dtpool(var)
-                @test expectLen == n
+                @test expect_len == n
                 @test vartype == :N
             end
         finally
             kclear()
-            rm(kerneltemp, force=true)
         end
     end
-
-    p, dp = lgrind([-1.0, 0.0, 1.0, 3.0], [-2.0, -7.0, -8.0, 26.0], 2.0)
-    @test p ≈ 1.0
-    @test dp ≈ 16.0
-
-    kclear()
-    furnsh(
-        path(CORE, :spk),
-        path(CORE, :pck),
-        path(CORE, :lsk),
-        path(EXTRA, :mars_spk),
-        path(EXTRA, :phobos_dsk))
-    let et = str2et("1972 AUG 11 00:00:00")
-        npts, points, epochs, tangts = limbpt("TANGENT/DSK/UNPRIORITIZED", "Phobos", et, "IAU_PHOBOS",
-                                              "CN+S", "CENTER", "MARS", [0.0, 0.0, 1.0], 2*π/3.0,
-                                              3, 1.0e-4, 1.0e-7, 10000)
-        @test size(points)[2] == 3
+    @testset "lgrind" begin
+        p, dp = lgrind([-1.0, 0.0, 1.0, 3.0], [-2.0, -7.0, -8.0, 26.0], 2.0)
+        @test p ≈ 1.0
+        @test dp ≈ 16.0
     end
-    kclear()
-
-    kclear()
-    let lmpoolNames = ["DELTET/DELTA_T_A", "DELTET/K", "DELTET/EB", "DELTET/M", "DELTET/DELTA_AT"]
-        lmpoolLens = [1, 1, 1, 2, 46]
-        textbuf = ["DELTET/DELTA_T_A = 32.184",
-                    "DELTET/K         = 1.657D-3",
-                    "DELTET/EB        = 1.671D-2",
-                    "DELTET/M         = ( 6.239996 1.99096871D-7 )",
-                    "DELTET/DELTA_AT  = ( 10, @1972-JAN-1",
-                    "                     11, @1972-JUL-1",
-                    "                     12, @1973-JAN-1",
-                    "                     13, @1974-JAN-1",
-                    "                     14, @1975-JAN-1",
-                    "                     15, @1976-JAN-1",
-                    "                     16, @1977-JAN-1",
-                    "                     17, @1978-JAN-1",
-                    "                     18, @1979-JAN-1",
-                    "                     19, @1980-JAN-1",
-                    "                     20, @1981-JUL-1",
-                    "                     21, @1982-JUL-1",
-                    "                     22, @1983-JUL-1",
-                    "                     23, @1985-JUL-1",
-                    "                     24, @1988-JAN-1",
-                    "                     25, @1990-JAN-1",
-                    "                     26, @1991-JAN-1",
-                    "                     27, @1992-JUL-1",
-                    "                     28, @1993-JUL-1",
-                    "                     29, @1994-JUL-1",
-                    "                     30, @1996-JAN-1",
-                    "                     31, @1997-JUL-1",
-                    "                     32, @1999-JAN-1 )"]
-        lmpool(textbuf)
-        for (var, expectLen) in zip(lmpoolNames, lmpoolLens)
-            n, vartype = dtpool(var)
-            expectLen == n
-            vartype == :N
+    @testset "limbpt" begin
+        try
+            furnsh(path(CORE, :spk), path(CORE, :pck), path(CORE, :lsk),
+                   path(EXTRA, :mars_spk), path(EXTRA, :phobos_dsk))
+            et = str2et("1972 AUG 11 00:00:00")
+            npts, points, epochs, tangts = limbpt("TANGENT/DSK/UNPRIORITIZED", "Phobos", et, "IAU_PHOBOS",
+                                                  "CN+S", "CENTER", "MARS", [0.0, 0.0, 1.0], 2*π/3.0,
+                                                  3, 1.0e-4, 1.0e-7, 10000)
+            @test length(points) == 10000
+        finally
+            kclear()
         end
     end
-    kclear()
+    @testset "lmpool" begin
+        try
+            lmpool_names = ["DELTET/DELTA_T_A",
+                           "DELTET/K",
+                           "DELTET/EB",
+                           "DELTET/M",
+                           "DELTET/DELTA_AT"]
+            lmpool_lens = [1, 1, 1, 2, 46]
+            textbuf = ["DELTET/DELTA_T_A = 32.184",
+                       "DELTET/K         = 1.657D-3",
+                       "DELTET/EB        = 1.671D-2",
+                       "DELTET/M         = ( 6.239996 1.99096871D-7 )",
+                       "DELTET/DELTA_AT  = ( 10, @1972-JAN-1",
+                       "                     11, @1972-JUL-1",
+                       "                     12, @1973-JAN-1",
+                       "                     13, @1974-JAN-1",
+                       "                     14, @1975-JAN-1",
+                       "                     15, @1976-JAN-1",
+                       "                     16, @1977-JAN-1",
+                       "                     17, @1978-JAN-1",
+                       "                     18, @1979-JAN-1",
+                       "                     19, @1980-JAN-1",
+                       "                     20, @1981-JUL-1",
+                       "                     21, @1982-JUL-1",
+                       "                     22, @1983-JUL-1",
+                       "                     23, @1985-JUL-1",
+                       "                     24, @1988-JAN-1",
+                       "                     25, @1990-JAN-1",
+                       "                     26, @1991-JAN-1",
+                       "                     27, @1992-JUL-1",
+                       "                     28, @1993-JUL-1",
+                       "                     29, @1994-JUL-1",
+                       "                     30, @1996-JAN-1",
+                       "                     31, @1997-JUL-1",
+                       "                     32, @1999-JAN-1 )"]
+            lmpool(textbuf)
+            for (var, expect_len) in zip(lmpool_names, lmpool_lens)
+                n, vartype = dtpool(var)
+                @test expect_len == n
+                @test vartype == :N
+            end
+        finally
+            kclear()
+        end
+    end
 
     let stringtest = "one two three four"
         exp = ["one", "two", "three", "four"]
@@ -210,7 +215,7 @@
             @test act[i] == exp[i]
         end
     end
-    
+
     kclear()
     furnsh(
         path(CORE, :lsk),
@@ -221,7 +226,7 @@
         @test lon ≈ 0.48153755894179384
     end
     kclear()
-    
+
     let array = ["BOHR", "EINSTEIN", "FEYNMAN", "GALILEO", "NEWTON"]
         @test lstle("NEWTON", array) == 5
         @test lstle("EINSTEIN", array) == 2
@@ -272,11 +277,11 @@
 
     kclear()
     furnsh(path(CORE, :lsk), path(CORE, :spk))
-    let OBS = 399   
-        TARGET = 5   
-        TIME_STR = "July 4, 2004"    
-        et = str2et(TIME_STR)   
-        arrive, ltime_act = ltime(et, OBS, "->", TARGET) 
+    let OBS = 399
+        TARGET = 5
+        TIME_STR = "July 4, 2004"
+        et = str2et(TIME_STR)
+        arrive, ltime_act = ltime(et, OBS, "->", TARGET)
         arrive_utc = et2utc(arrive, "C", 3)
         @test ltime_act ≈ 2918.71705
         @test arrive_utc == "2004 JUL 04 00:48:38.717"
@@ -286,7 +291,7 @@
         @test receive_utc == "2004 JUL 03 23:11:21.248"
     end
     kclear()
-    
+
     @test lx4dec("1%2%3", 1) == (1, 1)
     @test lx4dec("1%2%3", 2) == (1, 0)
     @test lx4dec("1%2%3", 3) == (3, 1)

@@ -517,7 +517,7 @@ function dafrfr(handle, lenout=128)
            Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceInt}),
           handle, lenout, nd, ni, ifname, fward, bward, free)
     handleerror()
-    nd[], ni[], chararray_to_string(ifname), fward[], bward[], free[]
+    Int(nd[]), Int(ni[]), chararray_to_string(ifname), Int(fward[]), Int(bward[]), Int(free[])
 end
 
 """
@@ -564,7 +564,7 @@ function dafus(sum, nd, ni)
     ccall((:dafus_c, libcspice), Cvoid,
          (Ref{SpiceDouble}, SpiceInt, SpiceInt, Ref{SpiceDouble}, Ref{SpiceInt}),
          sum, nd, ni, dc, ic)
-    dc, ic
+    dc, Int.(ic)
 end
 
 """
@@ -782,7 +782,8 @@ function dasrfr(handle, idwlen=128, ifnlen=256)
            Ref{SpiceInt}, Ref{SpiceInt}),
           handle, idwlen, ifnlen, idword, ifname, nresvr, nresvc, ncomr, ncomc)
     handleerror()
-    chararray_to_string(idword), chararray_to_string(ifname), nresvr[], nresvc[], ncomr[], ncomc[]
+    chararray_to_string(idword), chararray_to_string(ifname),
+    Int(nresvr[]), Int(nresvc[]), Int(ncomr[]), Int(ncomc[])
 end
 
 """
@@ -889,7 +890,7 @@ Diagonalize a symmetric 2x2 matrix.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/diags2_c.html)
 """
 function diags2(symmat)
-    size(symmat) != (2, 2) && throw(ArgumentError("`symmat` must be a 2x2 matrix."))
+    @checkdims 2 2 symmat
     diag = Array{SpiceDouble}(undef, 2, 2)
     rotate = Array{SpiceDouble}(undef, 2, 2)
     ccall((:diags2_c, libcspice), Cvoid,
@@ -1365,7 +1366,8 @@ function dskb02(handle, dladsc)
           handle, dladsc, nv, np, nvxtot, vtxbds, voxsiz, voxori, vgrext, cgscal, vtxnpl,
           voxnpt, voxnpl)
     handleerror()
-    nv[], np[], nvxtot[], vtxbds, voxsiz[], voxori, vgrext, cgscal[], vtxnpl[], voxnpt[], voxnpl[]
+    Int(nv[]), Int(np[]), Int(nvxtot[]), vtxbds, voxsiz[], voxori, vgrext, Int(cgscal[]),
+    Int(vtxnpl[]), Int(voxnpt[]), Int(voxnpl[])
 end
 
 """
@@ -1545,7 +1547,7 @@ function dskmi2(vrtces, plates, finscl, corscl, worksz, voxpsz, voxlsz, makvtl, 
           nv, vrtces_, np, plates_, finscl, corscl, worksz, voxpsz, voxlsz, makvtl, spxisz,
           work, spaixd, spaixi)
     handleerror()
-    spaixd, spaixi
+    spaixd, Int.(spaixi)
 end
 
 """
@@ -1820,7 +1822,8 @@ Write a type 2 segment to a DSK file.
 function dskw02(handle, center, surfid, dclass, frame, corsys, corpar, mncor1, mxcor1,
                 mncor2, mxcor2, mncor3, mxcor3, first, last, vrtces, plates, spaixd, spaixi)
     vrtces_ = array_to_cmatrix(vrtces, n=3)
-    plates_ = array_to_cmatrix(plates, n=3)
+    plates_ = SpiceInt.(array_to_cmatrix(plates, n=3))
+    spaixi_ = SpiceInt.(spaixi)
     nv = length(vrtces)
     np = length(plates)
     ccall((:dskw02_c, libcspice), Cvoid,
@@ -1829,7 +1832,7 @@ function dskw02(handle, center, surfid, dclass, frame, corsys, corpar, mncor1, m
            SpiceDouble, SpiceDouble, SpiceInt, Ref{SpiceDouble}, SpiceInt, Ref{SpiceInt},
            Ref{SpiceDouble}, Ref{SpiceInt}),
           handle, center, surfid, dclass, frame, corsys, corpar, mncor1, mxcor1, mncor2,
-          mxcor2, mncor3, mxcor3, first, last, nv, vrtces_, np, plates_, spaixd, spaixi)
+          mxcor2, mncor3, mxcor3, first, last, nv, vrtces_, np, plates_, spaixd, spaixi_)
     handleerror()
 end
 
@@ -1858,8 +1861,7 @@ Returns `nothing` if no intercept exists or
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskx02_c.html)
 """
 function dskx02(handle, dladsc, vertex, raydir)
-    length(vertex) != 3 && throw(ArgumentError("`vertex` must have three elements."))
-    length(raydir) != 3 && throw(ArgumentError("`raydir` must have three elements."))
+    @checkdims 3 vertex raydir
     plid = Ref{SpiceInt}()
     xpt = Array{SpiceDouble}(undef, 3)
     found = Ref{SpiceBoolean}()
@@ -1869,7 +1871,7 @@ function dskx02(handle, dladsc, vertex, raydir)
           handle, dladsc, vertex, raydir, plid, xpt, found)
     handleerror()
     Bool(found[]) || return nothing
-    plid[], xpt
+    Int(plid[]), xpt
 end
 
 """
@@ -1907,9 +1909,9 @@ Returns `nothing` if no intercept exists or
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskxsi_c.html)
 """
 function dskxsi(pri, target, srflst, et, fixref, vertex, raydir, maxd=1, maxi=1)
-    length(vertex) != 3 && throw(ArgumentError("`vertex` must have three elements."))
-    length(raydir) != 3 && throw(ArgumentError("`raydir` must have three elements."))
+    @checkdims 3 vertex raydir
     nsurf = length(srflst)
+    srflst_ = SpiceInt.(srflst)
     xpt = Array{SpiceDouble}(undef, 3)
     handle = Ref{SpiceInt}()
     dladsc = Ref{DLADescr}()
@@ -1921,11 +1923,11 @@ function dskxsi(pri, target, srflst, et, fixref, vertex, raydir, maxd=1, maxi=1)
           (SpiceBoolean, Cstring, SpiceInt, Ref{SpiceInt}, SpiceDouble, Cstring, Ref{SpiceDouble},
            Ref{SpiceDouble}, SpiceInt, SpiceInt, Ref{SpiceDouble}, Ref{SpiceInt},
            Ref{DLADescr}, Ref{DSKDescr}, Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceBoolean}),
-          pri, target, nsurf, srflst, et, fixref, vertex, raydir, maxd, maxi,
+          pri, target, nsurf, srflst_, et, fixref, vertex, raydir, maxd, maxi,
           xpt, handle, dladsc, dskdsc, dc, ic, found)
     handleerror()
     Bool(found[]) || return nothing
-    xpt, handle[], dladsc[], dskdsc[], dc, ic
+    xpt, handle[], dladsc[], dskdsc[], dc, Int.(ic)
 end
 
 """
@@ -1955,9 +1957,10 @@ segments.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskxv_c.html)
 """
 function dskxv(pri, target, srflst, et, fixref, vtxarr, dirarr)
+    srflst_ = SpiceInt.(srflst)
     nrays = length(vtxarr)
     nsurf = length(srflst)
-    length(dirarr) != nrays && throw(ArgumentError("`vtxarr` and `dirarr` must have the same length."))
+    @checkdims nrays dirarr
     vtxarr_ = array_to_cmatrix(vtxarr, n=3)
     dirarr_ = array_to_cmatrix(dirarr, n=3)
     xptarr = Array{SpiceDouble}(undef, 3, nrays)
@@ -1965,7 +1968,7 @@ function dskxv(pri, target, srflst, et, fixref, vtxarr, dirarr)
     ccall((:dskxv_c, libcspice), Cvoid,
           (SpiceBoolean, Cstring, SpiceInt, Ref{SpiceInt}, SpiceDouble, Cstring, SpiceInt,
            Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
-          pri, target, nsurf, srflst, et, fixref, nrays, vtxarr_, dirarr_, xptarr, fndarr)
+          pri, target, nsurf, srflst_, et, fixref, nrays, vtxarr_, dirarr_, xptarr, fndarr)
     handleerror()
     cmatrix_to_array(xptarr), Bool.(fndarr)
 end
@@ -1996,7 +1999,7 @@ function dskz02(handle, dladsc)
           (SpiceInt, Ref{DLADescr}, Ref{SpiceInt}, Ref{SpiceInt}),
           handle, dladsc, nv, np)
     handleerror()
-    nv[], np[]
+    Int(nv[]), Int(np[])
 end
 
 """
@@ -2056,7 +2059,7 @@ function dtpool(name)
     ccall((:dtpool_c, libcspice), Cvoid, (Cstring, Ref{SpiceBoolean}, Ref{SpiceInt}, Ref{Cchar}),
           name, found, n, vartype)
     handleerror()
-    n[], Symbol(Char(vartype[]))
+    Int(n[]), Symbol(Char(vartype[]))
 end
 
 """
@@ -2079,8 +2082,7 @@ Returns the unit vector and derivative of the cross product.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ducrss_c.html)
 """
 function ducrss(s1, s2)
-    length(s1) != 6 && throw(ArgumentError("`s1` must have six elements."))
-    length(s2) != 6 && throw(ArgumentError("`s2` must have six elements."))
+    @checkdims 6 s1 s2
     sout = Array{SpiceDouble}(undef, 6)
     ccall((:ducrss_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
@@ -2107,8 +2109,7 @@ Returns the cross product and its derivative.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dvcrss_c.html)
 """
 function dvcrss(s1, s2)
-    length(s1) != 6 && throw(ArgumentError("`s1` must have six elements."))
-    length(s2) != 6 && throw(ArgumentError("`s2` must have six elements."))
+    @checkdims 6 s1 s2
     sout = Array{SpiceDouble}(undef, 6)
     ccall((:dvcrss_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
@@ -2135,8 +2136,7 @@ Returns the derivative of the dot product `s1 ⋅ s2`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dvdot_c.html)
 """
 function dvdot(s1, s2)
-    length(s1) != 6 && throw(ArgumentError("`s1` must have six elements."))
-    length(s2) != 6 && throw(ArgumentError("`s2` must have six elements."))
+    @checkdims 6 s1 s2
     ccall((:dvdot_c, libcspice), SpiceDouble, (Ref{SpiceDouble}, Ref{SpiceDouble}), s1, s2)
 end
 
@@ -2158,7 +2158,7 @@ Returns the unit vector `s1 / |s1|`, and its time derivative.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dvhat_c.html)
 """
 function dvhat(s1)
-    length(s1) != 6 && throw(ArgumentError("`s1` must have six elements."))
+    @checkdims 6 s1
     sout = Array{SpiceDouble}(undef, 6)
     ccall((:dvhat_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{SpiceDouble}),
@@ -2184,6 +2184,7 @@ Returns the derivative of the norm of `state`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dvnorm_c.html)
 """
 function dvnorm(state)
+    @checkdims 6 state
     length(state) != 6 && throw(ArgumentError("`state` must have six elements."))
     ccall((:dvnorm_c, libcspice), SpiceDouble, (Ref{SpiceDouble},), state)
 end
@@ -2225,8 +2226,7 @@ Returns the value of the time derivative of the angular separation between `s1` 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dvsep_c.html)
 """
 function dvsep(s1, s2)
-    length(s1) != 6 && throw(ArgumentError("`s1` must have six elements."))
-    length(s2) != 6 && throw(ArgumentError("`s2` must have six elements."))
+    @checkdims 6 s1 s2
     res = ccall((:dvsep_c, libcspice), SpiceDouble, (Ref{SpiceDouble}, Ref{SpiceDouble}), s1, s2)
     handleerror()
     res

@@ -73,7 +73,7 @@ The illumination source is a specified ephemeris object.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/illumf_c.html)
 """
 function illumf(method, target, ilusrc, et, fixref, abcorr, obsrvr, spoint)
-    length(spoint) != 3 && throw(ArgumentError("Length of `spoint` must be 3."))
+    @checkdims 3 spoint
     trgepc = Ref{SpiceDouble}()
     srfvec = Array{SpiceDouble}(undef, 3)
     phase = Ref{SpiceDouble}()
@@ -153,32 +153,32 @@ of a target body.
 
 ### Arguments ###
 
-- `method`: Computation method.
-- `target`: Name of target body.
-- `et`: Epoch in ephemeris seconds past J2000 TDB.
-- `fixref`: Body-fixed, body-centered target body frame.
-- `obsrvr`: Name of observing body.
-- `spoint`: Body-fixed coordinates of a target surface point.
-- `abcorr`: Aberration correction.
+- `method`: Computation method
+- `target`: Name of target body
+- `et`: Epoch in ephemeris seconds past J2000 TDB
+- `fixref`: Body-fixed, body-centered target body frame
+- `obsrvr`: Name of observing body
+- `spoint`: Body-fixed coordinates of a target surface point
+- `abcorr`: Aberration correction
 
 ### Output ###
 
-- `trgepc`: Sub-solar point epoch.
-- `srfvec`: Vector from observer to sub-solar point.
-- `phase`: Phase angle at the surface point.
-- `incdnc`: Solar incidence angle at the surface point.
-- `emissn`: Emission angle at the surface point.
+- `trgepc`: Sub-solar point epoch
+- `srfvec`: Vector from observer to sub-solar point
+- `phase`: Phase angle at the surface point
+- `incdnc`: Solar incidence angle at the surface point
+- `emissn`: Emission angle at the surface point
 
 ### References ###
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ilumin_c.html
 """
 function ilumin(method, target, et, fixref, obsrvr, spoint; abcorr="NONE")
-    trgepc = Ref{SpiceDouble}(0)
+    trgepc = Ref{SpiceDouble}()
     srfvec = Array{SpiceDouble}(undef, 3)
-    phase  = Ref{SpiceDouble}(0)
-    incdnc = Ref{SpiceDouble}(0)
-    emissn = Ref{SpiceDouble}(0)
+    phase  = Ref{SpiceDouble}()
+    incdnc = Ref{SpiceDouble}()
+    emissn = Ref{SpiceDouble}()
     ccall((:ilumin_c, libcspice), Cvoid,
           (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Ref{SpiceDouble},
            Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble},
@@ -217,7 +217,7 @@ function inedpl(a, b, c, plane)
           (SpiceDouble, SpiceDouble, SpiceDouble, Ref{Plane}, Ref{Ellipse}, Ref{SpiceBoolean}),
           a, b, c, plane, ellipse, found)
     handleerror()
-    !Bool(found[]) && return nothing
+    Bool(found[]) || return nothing
     ellipse[]
 end
 
@@ -248,7 +248,7 @@ function inelpl(ellips, plane)
           (Ref{Ellipse}, Ref{Plane}, Ref{SpiceInt}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           ellips, plane, nxpts, xpt1, xpt2)
     handleerror()
-    nxpts[], xpt1, xpt2
+    Int(nxpts[]), xpt1, xpt2
 end
 
 """
@@ -271,15 +271,14 @@ Find the intersection of a ray and a plane.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/inrypl_c.html)
 """
 function inrypl(vertex, dir, plane)
-    length(vertex) != 3 && throw(ArgumentError("Length of `vertex` must be 3."))
-    length(dir) != 3 && throw(ArgumentError("Length of `dir` must be 3."))
+    @checkdims 3 vertex dir
     nxpts = Ref{SpiceInt}()
     xpt = Array{SpiceDouble}(undef, 3)
     ccall((:inrypl_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{Plane}, Ref{SpiceInt}, Ref{SpiceDouble}),
           vertex, dir, plane, nxpts, xpt)
     handleerror()
-    nxpts[], xpt
+    Int(nxpts[]), xpt
 end
 
 """
@@ -358,7 +357,7 @@ end
 @deprecate insrti insrti!
 
 """
-	inter(a, b)
+    inter(a, b)
 
 Intersect two sets of any data type to form a third set.
 
@@ -376,14 +375,14 @@ Returns intersection of a and b.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/inter_c.html)
 """
 function inter(a::SpiceCell{T}, b::SpiceCell{T}) where {T}
-	n = card(a) + card(b)
-	l = max(a.cell.length, b.cell.length)
-	out = SpiceCell{T}(n, l)
-	ccall((:inter_c, libcspice), Cvoid,
-		  (Ref{Cell{T}}, Ref{Cell{T}}, Ref{Cell{T}}),
-		  a.cell, b.cell, out.cell)
-	handleerror()
-	out
+    n = card(a) + card(b)
+    l = max(a.cell.length, b.cell.length)
+    out = SpiceCell{T}(n, l)
+    ccall((:inter_c, libcspice), Cvoid,
+              (Ref{Cell{T}}, Ref{Cell{T}}, Ref{Cell{T}}),
+              a.cell, b.cell, out.cell)
+    handleerror()
+    out
 end
 
 function _intmax()
@@ -547,7 +546,7 @@ Returns `true` if `m` is a rotation matrix.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/isrot_c.html)
 """
 function isrot(m, ntol, dtol)
-    size(m) != (3, 3) && throw(ArgumentError("`m` must be a 3x3 matrix."))
+    @checkdims 3 3 m
     res = ccall((:isrot_c, libcspice), SpiceBoolean,
                 (Ref{SpiceDouble}, SpiceDouble, SpiceDouble),
                 m, ntol, dtol)

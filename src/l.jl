@@ -31,23 +31,12 @@ export
 """
     lastnb(str)
 
-Return the index of the last non-blank character in a character string.
-
-### Arguments ###
-
-- `str`: Input character string
-
-### Output ###
-
-The function returns the one-based index of the last non-blank
-character in a character string. If the string is entirely blank
-or is empty, the value 0 is returned.
-
-### References ###
-
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lastnb_c.html)
+!!! warning Deprecated
+    Use `findprev(!isspace, str, length(str))` instead.
 """
-function lastnb(str)
+lastnb
+
+function _lastnb(str)
     r = ccall((:lastnb_c, libcspice), SpiceInt, (Cstring,), str)
     handleerror()
     r + 1
@@ -160,12 +149,11 @@ ellipsoid or by topographic data provided by DSK files.
 - `target`: Name of target body
 - `et`: Epoch in TDB seconds past J2000 TDB
 - `fixref`: Body-fixed, body-centered target body frame
-- `npts`: Number of coordinate pairs in input array
 - `lonlat`: Array of longitude/latitude coordinate pairs
 
 ### Output ###
 
-Returns an array of surface points
+Returns an array of surface points.
 
 ### References ###
 
@@ -238,8 +226,6 @@ Return the value of both polynomial and derivative.
 
 ### Output ###
 
-Returns the tuple `(p, dp)`.
-
 - `p`: The value at x of the unique polynomial of
        degree n-1 that fits the points in the plane
        defined by xvals and yvals
@@ -252,25 +238,28 @@ Returns the tuple `(p, dp)`.
 """
 function lgrind(xvals, yvals, x)
     n = length(xvals)
+    @checkdims n yvals
     p = Ref{SpiceDouble}()
     dp = Ref{SpiceDouble}()
-    work = Matrix{SpiceDouble}(undef,2,n)
-    ccall((:lgrind_c, libcspice), Cvoid, (SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble},
-          Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble}, Ref{SpiceDouble}), n, xvals, yvals, work, x, p, dp)
+    work = Matrix{SpiceDouble}(undef, 2, n)
+    ccall((:lgrind_c, libcspice), Cvoid,
+          (SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble},
+           Ref{SpiceDouble}),
+          n, xvals, yvals, work, x, p, dp)
     handleerror()
     p[], dp[]
 end
 
 """
-    limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp, ncuts, schstp, soltol, maxn)
+    limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp, ncuts, schstp,
+           soltol, maxn)
 
-Find limb points on a target body. The limb is the set of points
-of tangency on the target of rays emanating from the observer.
-The caller specifies half-planes bounded by the observer-target
+Find limb points on a target body. The limb is the set of points of tangency on the target of rays
+emanating from the observer.  The caller specifies half-planes bounded by the observer-target
 center vector in which to search for limb points.
 
-The surface of the target body may be represented either by a
-triaxial ellipsoid or by topographic data.
+The surface of the target body may be represented either by a triaxial ellipsoid or by
+topographic data.
 
 ### Arguments ###
 
@@ -303,10 +292,11 @@ Returns the tuple `(npts, points, epochs, tangts)`.
 """
 function limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec,
                 rolstp, ncuts, schstp, soltol, maxn)
+    @checkdims 3 refvec
     npts = Array{SpiceInt}(undef, ncuts)
-    points = Matrix{SpiceDouble}(undef, 3, maxn)
+    points = Array{SpiceDouble}(undef, 3, maxn)
     epochs = Array{SpiceDouble}(undef, maxn)
-    tangts = Matrix{SpiceDouble}(undef, 3, maxn)
+    tangts = Array{SpiceDouble}(undef, 3, maxn)
     ccall((:limbpt_c, libcspice), Cvoid,
           (Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Cstring,
           Ref{SpiceDouble}, SpiceDouble, SpiceInt, SpiceDouble, SpiceDouble,
@@ -314,7 +304,7 @@ function limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec,
           method, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp,
           ncuts, schstp, soltol, maxn, npts, points, epochs, tangts)
     handleerror()
-    npts, permutedims(points), epochs, permutedims(tangts)
+    npts, cmatrix_to_array(points), epochs, cmatrix_to_array(tangts)
 end
 
 """
@@ -327,18 +317,24 @@ kernel pool.
 
 - `cvals`: An array that contains a SPICE text kernel
 
-### Output ###
-
-None
-
 ### References ###
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lmpool_c.html)
 """
 function lmpool(cvals)
     cvals, n, lenvals = chararray(cvals)
-    ccall((:lmpool_c, libcspice), Cvoid, (Ref{UInt8}, SpiceInt, SpiceInt), cvals, lenvals, n)
+    ccall((:lmpool_c, libcspice), Cvoid, (Ref{SpiceChar}, SpiceInt, SpiceInt), cvals, lenvals, n)
     handleerror()
+end
+
+function lparse(list, delim, nmax)
+    lenout = length(list)+1
+    n = Ref{SpiceInt}()
+    items = Array{UInt8}(undef, lenout, nmax)
+    ccall((:lparse_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{UInt8}),
+          list, delim, nmax, lenout, n , items)
+    handleerror()
+    chararray_to_string(items, n[])
 end
 
 """
@@ -360,15 +356,7 @@ Returns an array with the items in the list, left justified.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lparse_c.html)
 """
-function lparse(list, delim, nmax)
-    lenout = length(list)+1
-    n = Ref{SpiceInt}()
-    items = Array{UInt8}(undef, lenout, nmax)
-    ccall((:lparse_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{UInt8}),
-          list, delim, nmax, lenout, n , items)
-    handleerror()
-    chararray_to_string(items, n[])
-end
+lparse
 
 """
    lparsm(list, delims, nmax)

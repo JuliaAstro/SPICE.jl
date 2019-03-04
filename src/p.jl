@@ -387,11 +387,11 @@ Returns the area.
 function pltar(vrtces, plates)
     nv = length(vrtces)
     np = length(plates)
-    vrtces = array_to_cmatrix(vrtces)
-    plates = array_to_cmatrix(plates)
+    vrtces_ = array_to_cmatrix(vrtces)
+    plates_ = SpiceInt.(array_to_cmatrix(plates))
     res = ccall((:pltar_c, libcspice), SpiceDouble,
                 (SpiceInt, Ref{SpiceDouble}, SpiceInt, Ref{SpiceInt}),
-                nv, vrtces, np, plates)
+                nv, vrtces_, np, plates_)
     handleerror()
     res
 end
@@ -446,11 +446,7 @@ Returns a tuple consisting of
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/pltnp_c.html)
 """
 function pltnp(point, v1, v2, v3)
-    length(point) != 3 && throw(ArgumentError("Length of `point` must be 3."))
-    length(v1) != 3 && throw(ArgumentError("Length of `v1` must be 3."))
-    length(v2) != 3 && throw(ArgumentError("Length of `v2` must be 3."))
-    length(v3) != 3 && throw(ArgumentError("Length of `v3` must be 3."))
-
+    @checkdims 3 point v1 v2 v3
     pnear = Array{SpiceDouble}(undef, 3)
     dist = Ref{SpiceDouble}()
     ccall((:pltnp_c, libcspice), Cvoid,
@@ -479,10 +475,7 @@ Returns the plate's outward normal vector.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/pltnrm_c.html)
 """
 function pltnrm(v1, v2, v3)
-    length(v1) != 3 && throw(ArgumentError("Length of `v1` must be 3."))
-    length(v2) != 3 && throw(ArgumentError("Length of `v2` must be 3."))
-    length(v3) != 3 && throw(ArgumentError("Length of `v3` must be 3."))
-
+    @checkdims 3 v1 v2 v3
     normal = Array{SpiceDouble}(undef, 3)
     ccall((:pltnrm_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
@@ -511,11 +504,11 @@ Returns the volume of the spatial region bounded by the plates.
 function pltvol(vrtces, plates)
     nv = length(vrtces)
     np = length(plates)
-    vrtces = array_to_cmatrix(vrtces, n=3)
-    plates = array_to_cmatrix(plates, n=3)
+    vrtces_ = array_to_cmatrix(vrtces, n=3)
+    plates_ = SpiceInt.(array_to_cmatrix(plates, n=3))
     res = ccall((:pltvol_c, libcspice), SpiceDouble,
                 (SpiceInt, Ref{SpiceDouble}, SpiceInt, Ref{SpiceInt}),
-                nv, vrtces, np, plates)
+                nv, vrtces_, np, plates_)
     handleerror()
     res
 end
@@ -605,7 +598,7 @@ Returns the propagated state.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/prop2b_c.html)
 """
 function prop2b(gm, pvinit, dt)
-    length(pvinit) != 6 && throw(ArgumentError("Length of `pvinit` must be 6."))
+    @checkdims 6 pvinit
     pvprop = Array{SpiceDouble}(undef, 6)
     ccall((:prop2b_c, libcspice), Cvoid,
           (SpiceDouble, Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble}),
@@ -664,9 +657,7 @@ Returns the plane.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/psv2pl_c.html)
 """
 function psv2pl(point, span1, span2)
-    length(point) != 3 && throw(ArgumentError("Length of `point` needs to be 3."))
-    length(span1) != 3 && throw(ArgumentError("Length of `span1` needs to be 3."))
-    length(span2) != 3 && throw(ArgumentError("Length of `span2` needs to be 3."))
+    @checkdims 3 point span1 span2
     plane = Ref{Plane}()
     ccall((:psv2pl_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{Plane}),

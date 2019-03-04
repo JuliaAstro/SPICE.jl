@@ -41,7 +41,8 @@ macro checkdims(m::Int, n::Int, arr::Symbol)
     quote
         m1, n1 = size($(esc(arr)))
         if (m1, n1) != ($m, $n)
-            throw(ArgumentError("`$($name)` must be a $($m)x$($n) matrix but is $($m1)x$($n1)."))
+            msg = string("`$($name)` must be a $($m)x$($n) matrix but is ", m1, "x", n1, ".")
+            throw(ArgumentError(msg))
         end
         nothing
     end

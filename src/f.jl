@@ -31,7 +31,7 @@ Returns `true` if the ray is visible.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/fovray_c.html)
 """
 function fovray(inst, raydir, rframe, abcorr, observer, et)
-    length(raydir) != 3 && throw(ArgumentError("Length of `raydir` must be 3."))
+    @checkdims 3 raydir
     visible = Ref{SpiceBoolean}()
     ccall((:fovray_c, libcspice), Cvoid,
           (Cstring, Ref{SpiceDouble}, Cstring, Cstring, Cstring, Ref{SpiceDouble}, Ref{SpiceBoolean}),
@@ -94,7 +94,7 @@ where the output `x` is parallel to the input `x`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/frame_c.html)
 """
 function frame(x)
-    length(x) != 3 && throw(ArgumentError("Length of `x` must be 3."))
+    @checkdims 3 x
     x = copy(x)
     y = Array{SpiceDouble}(undef, 3)
     z = Array{SpiceDouble}(undef, 3)
@@ -135,8 +135,8 @@ function frinfo(frcode)
           (SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceBoolean}),
           frcode, cent, frclss, clssid, found)
 
-    !Bool(found[]) && return nothing
-    cent[], frclss[], clssid[]
+    Bool(found[]) || return nothing
+    Int(cent[]), Int(frclss[]), Int(clssid[])
 end
 
 """
@@ -158,8 +158,8 @@ Returns the name associated with the reference frame.
 """
 function frmnam(frcode)
     lenout = 33
-    frname = Array{UInt8}(undef, lenout)
-    ccall((:frmnam_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{UInt8}),
+    frname = Array{SpiceChar}(undef, lenout)
+    ccall((:frmnam_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{SpiceChar}),
           frcode, lenout, frname)
     chararray_to_string(frname)
 end

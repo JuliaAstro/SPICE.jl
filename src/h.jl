@@ -36,7 +36,7 @@ Evaluate a Hermite interpolating polynomial at a specified abscissa value.
 """
 function hrmint(xvals, yvals, x)
     n = length(xvals)
-    length(yvals) != 2n && throw(ArgumentError("`yvals` must have double the length of `xvals`."))
+    @checkdims 2n yvals
     work = Array{SpiceDouble}(undef, 4n)
     f = Ref{SpiceDouble}()
     df = Ref{SpiceDouble}()

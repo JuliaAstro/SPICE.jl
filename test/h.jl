@@ -1,5 +1,5 @@
 @testset "H" begin
-    @testset "hex2dp" begin
+    @testset "hx2dp" begin
         @test hx2dp("2A^3") == 672.0
         @test_throws SpiceError hx2dp("2A^3000")
         @test_throws SpiceError hx2dp("-2A^3000")

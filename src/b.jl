@@ -118,7 +118,7 @@ A common name for the body identified by code or `nothing` if none was found.
 """
 function bodc2n(code)
     len = 36
-    name = Array{UInt8}(undef, len)
+    name = Array{SpiceChar}(undef, len)
     found = Ref{SpiceBoolean}()
     ccall((:bodc2n_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{SpiceChar}, Ref{SpiceBoolean}),
           code, len, name, found)
@@ -146,7 +146,7 @@ Returns a string corresponding to `code`
 """
 function bodc2s(code)
     len = 36
-    name = Array{UInt8}(undef, len)
+    name = Array{SpiceChar}(undef, len)
     ccall((:bodc2s_c, libcspice), Cvoid, (SpiceInt, SpiceInt, Ref{SpiceChar}),
           code, len, name)
     chararray_to_string(name)
