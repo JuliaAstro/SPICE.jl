@@ -30,7 +30,7 @@ function namfrm(frname)
     frcode = Ref{SpiceInt}()
     ccall((:namfrm_c, libcspice), Cvoid, (Cstring, Ref{SpiceInt}), frname, frcode)
     handleerror()
-    frcode[]
+    Int(frcode[])
 end
 
 """
@@ -85,7 +85,7 @@ that is not in the collection `chars`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ncposr_c.html)
 """
 function ncposr(str, chars, start)
-    res = ccall((:ncposr_c, libcspice), SpiceInt, (Cstring, Cstring, Cint),
+    res = ccall((:ncposr_c, libcspice), SpiceInt, (Cstring, Cstring, SpiceInt),
           str, String(chars), start - 1)
     handleerror()
     Int(res) + 1
@@ -117,7 +117,7 @@ Returns a tuple consisting of `npoint` and `alt`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/nearpt_c.html)
 """
 function nearpt(positn, a, b, c)
-    length(positn) != 3 && throw(ArgumentError("`positn` must be an iterable with three elements."))
+    @checkdims 3 positn
     npoint = Array{SpiceDouble}(undef, 3)
     alt = Ref{SpiceDouble}()
     ccall((:nearpt_c, libcspice), Cvoid,
@@ -136,17 +136,17 @@ distance from the ellipsoid to the line.
 
 ### Arguments ###
 
-- `a`: Length of semi-axis in the x direction 
-- `b`: Length of semi-axis in the y direction 
-- `c`: Length of semi-axis in the z direction 
-- `linept`: Point on line 
-- `linedr`: Direction vector of line 
+- `a`: Length of semi-axis in the x direction
+- `b`: Length of semi-axis in the y direction
+- `c`: Length of semi-axis in the z direction
+- `linept`: Point on line
+- `linedr`: Direction vector of line
 
 ### Output ###
 
 Returns a tuple consisting of `pnear` and `dist`.
 
-- `pnear`: Nearest point on ellipsoid to line 
+- `pnear`: Nearest point on ellipsoid to line
 - `dist`: Distance of ellipsoid from line
 
 ### References ###
@@ -154,8 +154,7 @@ Returns a tuple consisting of `pnear` and `dist`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/npedln_c.html)
 """
 function npedln(a, b, c, linept, linedr)
-    length(linept) != 3 && throw(ArgumentError("`linept` must be an iterable with three elements."))
-    length(linedr) != 3 && throw(ArgumentError("`linedr` must be an iterable with three elements."))
+    @checkdims 3 linept linedr
     pnear = Array{SpiceDouble}(undef, 3)
     dist = Ref{SpiceDouble}()
     ccall((:npedln_c, libcspice), Cvoid,
@@ -190,7 +189,7 @@ Returns a tuple consisting of `pnear` and `dist`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/npelpt_c.html)
 """
 function npelpt(point, ellips)
-    length(point) != 3 && throw(ArgumentError("`point` must be an iterable with three elements."))
+    @checkdims 3 point
     pnear = Array{SpiceDouble}(undef, 3)
     dist = Ref{SpiceDouble}()
     ccall((:npelpt_c, libcspice), Cvoid,
@@ -208,8 +207,8 @@ between the two points.
 
 ### Arguments ###
 
-- `linept`: Point on line 
-- `linedr`: Direction vector of line 
+- `linept`: Point on line
+- `linedr`: Direction vector of line
 - `point`: A second point
 
 ### Output ###
@@ -224,9 +223,7 @@ Returns a tuple consisting of `pnear` and `dist`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/nplnpt_c.html)
 """
 function nplnpt(linept, linedr, point)
-    length(linept) != 3 && throw(ArgumentError("`linept` must be an iterable with three elements."))
-    length(linedr) != 3 && throw(ArgumentError("`linedr` must be an iterable with three elements."))
-    length(point) != 3 && throw(ArgumentError("`point` must be an iterable with three elements."))
+    @checkdims 3 linept linedr point
     pnear = Array{SpiceDouble}(undef, 3)
     dist = Ref{SpiceDouble}()
     ccall((:nplnpt_c, libcspice), Cvoid,
@@ -256,7 +253,7 @@ Returns a struct representing the plane.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/nvc2pl_c.html)
 """
 function nvc2pl(norm, constant)
-    length(norm) != 3 && throw(ArgumentError("`norm` must be an iterable with three elements."))
+    @checkdims 3 norm
     plane = Ref{Plane}()
     ccall((:nvc2pl_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, SpiceDouble, Ref{Plane}), collect(norm), constant, plane)
@@ -283,8 +280,7 @@ Returns a struct representing the plane.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/nvp2pl_c.html)
 """
 function nvp2pl(norm, orig)
-    length(norm) != 3 && throw(ArgumentError("`norm` must be an iterable with three elements."))
-    length(orig) != 3 && throw(ArgumentError("`orig` must be an iterable with three elements."))
+    @checkdims 3 norm orig
     plane = Ref{Plane}()
     ccall((:nvp2pl_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{Plane}),
@@ -292,3 +288,4 @@ function nvp2pl(norm, orig)
     handleerror()
     plane[]
 end
+

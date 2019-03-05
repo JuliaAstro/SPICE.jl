@@ -1,6 +1,16 @@
 using LinearAlgebra: I, ⋅
 
 @testset "P" begin
+    @testset "pckopn/pckw02/pckcls" begin
+        try
+            pck = tempname()
+            handle = pckopn(pck, "Test PCK file", 5000)
+            pckw02(handle, 301, "j2000", 0.0, 1.0, "segid", 1.0, [[1.0, 2.0, 3.0]], 0.0)
+            pckcls(handle)
+        finally
+            kclear()
+        end
+    end
     @testset "pckcov" begin
         try
             ids = SpiceIntCell(1000)

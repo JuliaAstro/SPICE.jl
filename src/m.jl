@@ -1,4 +1,4 @@
-export 
+export
     m2eul,
     matchi,
     matchw,
@@ -41,7 +41,7 @@ A tuple consisting of the third, second, and first Euler angles in radians.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/m2eul_c.html)
 """
 function m2eul(r, axis3, axis2, axis1)
-    size(r) != (3, 3) && throw(ArgumentError("`r` must be a 3x3 rotation matrix."))
+    @checkdims 3 3 r
     angle3 = Ref{SpiceDouble}()
     angle2 = Ref{SpiceDouble}()
     angle1 = Ref{SpiceDouble}()
@@ -415,7 +415,7 @@ A unit quaternion representing `r'
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/m2q_c.html)
 """
 function m2q(r)
-    size(r) != (3, 3) && throw(ArgumentError("`r` must be a 3x3 rotation matrix."))
+    @checkdims 3 3 r
     q = Array{SpiceDouble}(undef, 4)
     ccall((:m2q_c, libcspice), Cvoid, (Ref{Float64}, Ref{Float64}), permutedims(r), q)
     handleerror()

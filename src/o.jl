@@ -47,7 +47,7 @@ function occult(targ1, shape1, frame1, targ2, shape2, frame2, abcorr, obsrvr, et
            Ref{SpiceInt}),
           targ1, shape1, frame1, targ2, shape2, frame2, abcorr, obsrvr, et, ocltid)
     handleerror()
-    ocltid[]
+    Int(ocltid[])
 end
 
 """
@@ -219,7 +219,7 @@ Returns the equivalent conic elements:
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/oscelt_c.html)
 """
 function oscelt(state, et, mu)
-    length(state) != 6 && throw(ArgumentError("`state` must have six elements."))
+    @checkdims 6 state
     elts = Array{SpiceDouble}(undef, 8)
     ccall((:oscelt_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
@@ -262,7 +262,7 @@ Returns the extended set of classical conic elements:
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/oscltx_c.html)
 """
 function oscltx(state, et, mu)
-    length(state) != 6 && throw(ArgumentError("`state` must have six elements."))
+    @checkdims 6 state
     elts = Array{SpiceDouble}(undef, 11)
     ccall((:oscltx_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),

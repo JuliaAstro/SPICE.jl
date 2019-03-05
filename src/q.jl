@@ -1,16 +1,16 @@
-export 
+export
     q2m,
     qxq,
     qdq2av
 
 """
-    q2m(q...)
+    q2m(q)
 
 Find the rotation matrix corresponding to a specified unit quaternion.
 
 ### Arguments ###
 
-- `q`: A unit quaternion (as any kind of iterable with four elements)
+- `q`: A unit quaternion
 
 ### Output ###
 
@@ -20,19 +20,17 @@ A rotation matrix corresponding to `q`.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/q2m_c.html)
 """
-q2m(q...) = q2m(collect(q))
-    
 function q2m(q)
-    length(q) != 4 && throw(ArgumentError("`q` needs to be an iterable with four elements."))    
+    @checkdims 4 q
     r = Matrix{SpiceDouble}(undef, 3, 3)
-    ccall((:q2m_c, libcspice), Cvoid, (Ref{SpiceDouble}, Ref{SpiceDouble}), collect(q), r)
+    ccall((:q2m_c, libcspice), Cvoid, (Ref{SpiceDouble}, Ref{SpiceDouble}), q, r)
     permutedims(r)
 end
 
 """
-    qxq(q1,q2)
+    qxq(q1, q2)
 
-Multiply two quaternions. 
+Multiply two quaternions.
 
 ### Arguments ###
 
@@ -48,18 +46,19 @@ A quaternion corresponding to the product of `q1' and `q2'
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/qxq_c.html)
 """
 function qxq(q1, q2)
-    length(q1) != 4 && throw(ArgumentError("`q1` needs to be an iterable with four elements.")) 
-    length(q2) != 4 && throw(ArgumentError("`q2` needs to be an iterable with four elements."))   
+    @checkdims 4 q1 q2
     q = Array{SpiceDouble}(undef, 4)
-    ccall((:qxq_c, libcspice), Cvoid, (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}), collect(q1), collect(q2), q)
+    ccall((:qxq_c, libcspice), Cvoid,
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          q1, q2, q)
     q
 end
 
 """
-    qdq2av(q,dq)
+    qdq2av(q, dq)
 
-Derive angular velocity from a unit quaternion and its derivative 
-with respect to time. 
+Derive angular velocity from a unit quaternion and its derivative
+with respect to time.
 
 ### Arguments ###
 
@@ -75,9 +74,11 @@ Angular velocity vector defined by `q' and `dq'
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/qdq2av_c.html)
 """
 function qdq2av(q,dq)
-    length(q) != 4 && throw(ArgumentError("`q` needs to be an iterable with four elements.")) 
-    length(dq) != 4 && throw(ArgumentError("`dq` needs to be an iterable with four elements."))   
+    @checkdims 4 q dq
     av = Array{SpiceDouble}(undef, 3)
-    ccall((:qdq2av_c, libcspice), Cvoid, (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}), collect(q), collect(dq), av)
+    ccall((:qdq2av_c, libcspice), Cvoid,
+          (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          q, dq, av)
     av
 end
+

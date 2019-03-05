@@ -1,10 +1,13 @@
 export
+    pckcls,
     pckcov!,
     pckcov,
     pckfrm!,
     pckfrm,
     pcklof,
+    pckopn,
     pckuof,
+    pckw02,
     pcpool,
     pdpool,
     pgrrec,
@@ -28,6 +31,24 @@ export
     psv2pl,
     pxform,
     pxfrm2
+
+"""
+    pckcls(handle)
+
+Close an open PCK file.
+
+### Arguments ###
+
+- `handle`: Handle of the PCK file to be closed
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/pckcls_c.html)
+"""
+function pckcls(handle)
+    ccall((:pckcls_c, libcspice), Cvoid, (SpiceInt,), handle)
+    handleerror()
+end
 
 """
     pckcov!(cover, pck, idcode)
@@ -110,6 +131,34 @@ function pcklof(filename)
 end
 
 """
+    pckopn(name, ifname, ncomch)
+
+Create a new PCK file, returning the handle of the opened file.
+
+### Arguments ###
+
+- `name`: The name of the PCK file to be opened
+- `ifname`: The internal filename for the PCK
+- `ncomch`: The number of characters to reserve for comments
+
+### Output ###
+
+Returns the handle of the opened PCK file.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/pckopn_c.html)
+"""
+function pckopn(name, ifname, ncomch)
+    handle = Ref{SpiceInt}()
+    ccall((:pckopn_c, libcspice), Cvoid,
+          (Cstring, Cstring, SpiceInt, Ref{SpiceInt}),
+          name, ifname, ncomch, handle)
+    handleerror()
+    handle[]
+end
+
+"""
     pckuof(handle)
 
 Unload a binary PCK file so that it will no longer be searched by the readers.
@@ -124,6 +173,39 @@ Unload a binary PCK file so that it will no longer be searched by the readers.
 """
 function pckuof(handle)
     ccall((:pckuof_c, libcspice), Cvoid, (SpiceInt,), handle)
+end
+
+"""
+    pckw02(handle, clssid, frame, first, last, segid, intlen, cdata, btime)
+
+Write a type 2 segment to a PCK binary file given the file handle, frame class ID, base frame, time
+range covered by the segment, and the Chebyshev polynomial coefficients.
+
+### Arguments ###
+
+- `handle`: Handle of binary PCK file open for writing.
+- `clssid`: Frame class ID of body-fixed frame.
+- `frame`: Name of base reference frame.
+- `first`: Start time of interval covered by segment.
+- `last`: End time of interval covered by segment.
+- `segid`: Segment identifier.
+- `intlen`: Length of time covered by logical record.
+- `cdata`: Array of Chebyshev coefficients.
+- `btime`: Begin time of first logical record.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/pckw02_c.html)
+"""
+function pckw02(handle, clssid, frame, first, last, segid, intlen, cdata, btime)
+    n = length(cdata)
+    polydg = length(cdata[1]) - 1
+    cdata_ = array_to_cmatrix(cdata, n=polydg + 1)
+    ccall((:pckw02_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring, SpiceDouble, SpiceInt,
+           SpiceInt, Ref{SpiceDouble}, SpiceDouble),
+          handle, clssid, frame, first, last, segid, intlen, n, polydg, cdata_, btime)
+    handleerror()
 end
 
 """

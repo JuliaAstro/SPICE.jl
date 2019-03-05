@@ -71,6 +71,8 @@ Returns state transformation matrix associated with `rot` and `av`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/rav2xf_c.html)
 """
 function rav2xf(rot, av)
+    @checkdims 3 3 rot
+    @checkdims 3 av
     xform = Array{SpiceDouble}(undef, 6, 6)
     ccall((:rav2xf_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
@@ -98,7 +100,7 @@ about that axis.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/raxisa_c.html)
 """
 function raxisa(matrix)
-    size(matrix) != (3, 3) && throw(ArgumentError("`matrix` must be a 3x3 matrix."))
+    @checkdims 3 3 matrix
     axis = Array{SpiceDouble}(undef, 3)
     angle = Ref{SpiceDouble}()
     ccall((:raxisa_c, libcspice), Cvoid,
@@ -128,7 +130,7 @@ Convert from rectangular to cylindrical coordinates.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/reccyl_c.html)
 """
 function reccyl(rectan)
-    length(rectan) != 3 && throw(ArgumentError("Length of `rectan` must be 3."))
+    @checkdims 3 rectan
     r = Ref{SpiceDouble}()
     lon = Ref{SpiceDouble}()
     z = Ref{SpiceDouble}()
@@ -161,7 +163,7 @@ Convert from rectangular coordinates to geodetic coordinates.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/recgeo_c.html)
 """
 function recgeo(rectan, re, f)
-    length(rectan) != 3 && throw(ArgumentError("Length of `rectan` must be 3."))
+    @checkdims 3 rectan
     lon = Ref{SpiceDouble}()
     lat = Ref{SpiceDouble}()
     alt = Ref{SpiceDouble}()
@@ -195,7 +197,7 @@ Returns a tuple consisting of:
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/reclat_c.html)
 """
 function reclat(rectan)
-    length(rectan) != 3 && throw(ArgumentError("Length of `rectan` must be 3."))
+    @checkdims 3 rectan
     lon = Ref{SpiceDouble}()
     lat = Ref{SpiceDouble}()
     rad = Ref{SpiceDouble}()
@@ -228,7 +230,7 @@ Convert rectangular coordinates to planetographic coordinates.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/recpgr_c.html)
 """
 function recpgr(body, rectan, re, f)
-    length(rectan) != 3 && throw(ArgumentError("Length of `rectan` must be 3."))
+    @checkdims 3 rectan
     lon = Ref{SpiceDouble}()
     lat = Ref{SpiceDouble}()
     alt = Ref{SpiceDouble}()
@@ -263,6 +265,7 @@ Return the tuple `(range, ra, dec)`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/recrad_c.html)
 """
 function recrad(rectan)
+    @checkdims 3 rectan
     range = Ref{SpiceDouble}()
     ra = Ref{SpiceDouble}()
     dec = Ref{SpiceDouble}()
@@ -292,7 +295,7 @@ Convert from rectangular coordinates to spherical coordinates.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/recsph_c.html)
 """
 function recsph(rectan)
-    length(rectan) != 3 && throw(ArgumentError("Length of `rectan` must be 3."))
+    @checkdims 3 rectan
     r = Ref{SpiceDouble}()
     colat = Ref{SpiceDouble}()
     lon = Ref{SpiceDouble}()
@@ -572,7 +575,7 @@ Returns the resulting rotated matrix.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/rotmat_c.html)
 """
 function rotmat(m1, angle, iaxis)
-    size(m1) != (3, 3) && throw(ArgumentError("`m1` must be 3x3 matrix."))
+    @checkdims 3 3 m1
     mout = Array{SpiceDouble}(undef, 3, 3)
     ccall((:rotmat_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, SpiceDouble, SpiceInt, Ref{SpiceDouble}),
@@ -601,7 +604,7 @@ Returns the resulting vector expressed in the new coordinate system.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/rotvec_c.html)
 """
 function rotvec(v1, angle, iaxis)
-    length(v1) != 3 && throw(ArgumentError("`v1` must have three elements."))
+    @checkdims 3 v1
     vout = Array{SpiceDouble}(undef, 3)
     ccall((:rotvec_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, SpiceDouble, SpiceInt, Ref{SpiceDouble}),
@@ -624,18 +627,24 @@ end
 rpd
 
 """
+    rquad(a, b, c)
+
+Find the roots of a quadratic equation.
 
 ### Arguments ###
 
+- `a`: Coefficient of quadratic term
+- `b`: Coefficient of linear term
+- `c`: Constant
 
 ### Output ###
 
-Returns `nothing` if no kernel was found or
-
+- `root1`: Root built from positive discriminant term
+- `root2`: Root built from negative discriminant term
 
 ### References ###
 
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/XXX_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/rquad_c.html)
 """
 function rquad(a, b, c)
     root1 = Array{SpiceDouble}(undef, 2)
