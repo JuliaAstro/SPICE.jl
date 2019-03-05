@@ -8,7 +8,7 @@ using LinearAlgebra: I, norm
         try
             furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
             et = str2et("2007 FEB 3 00:00:00.000")
-            trgepc, obspos, trmpts = edterm("UMBRAL", "SUN", "MOON", et, "IAU_MOON", "EARTH", 3, abcorr="LT+S")
+            trgepc, obspos, trmpts = edterm("UMBRAL", "SUN", "MOON", et, "IAU_MOON", "LT+S", "EARTH", 3)
             expected_trgepc = 223732863.86351672
             expected_obspos = [394721.1024056578753516078,
                                27265.11780063395417528227,

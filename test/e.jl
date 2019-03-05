@@ -15,7 +15,7 @@
         try
             furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
             et = str2et("2007 FEB 3 00:00:00.000")
-            trgepc, obspos, trmpts = edterm("UMBRAL", "SUN", "MOON", et, "IAU_MOON", "EARTH", 3, abcorr="LT+S")
+            trgepc, obspos, trmpts = edterm("UMBRAL", "SUN", "MOON", et, "IAU_MOON", "LT+S", "EARTH", 3)
             expected_trgepc = 223732863.86351674795
             expected_obspos = [394721.1024056578753516078,
                                27265.11780063395417528227,
@@ -58,7 +58,7 @@
                                                               "EARTH", trmpts[:,3], abcorr="LT+S")
             @test rad2deg(solar2) ≈ 90.269765730
             # penumbral
-            trgepc, obspos, trmpts = edterm("PENUMBRAL", "SUN", "MOON", et, "IAU_MOON", "EARTH", 3, abcorr="LT+S")
+            trgepc, obspos, trmpts = edterm("PENUMBRAL", "SUN", "MOON", et, "IAU_MOON", "LT+S", "EARTH", 3)
             expected_trmpts = [1.54019056755619715204e+02,
                                1.73055969989532059117e+03,
                                -1.23508409498995316844e-01,
@@ -88,464 +88,187 @@
             kclear()
         end
     end
-#=     @testset "ekacec" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekacec.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno = ekbseg(handle, "test_table_ekacec", ["c1"], ["DATATYPE = CHARACTER*(*), NULLS_OK = TRUE"]) =#
-#=         recno = ekappr(handle, segno) =#
-#=         ekacec(handle, segno, recno, "c1", 2, ["1.0", "2.0"], False) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekaced" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekaced.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno = ekbseg(handle, "test_table_ekaced", ["c1"], ["DATATYPE = DOUBLE PRECISION, NULLS_OK = TRUE"]) =#
-#=         recno = ekappr(handle, segno) =#
-#=         ekaced(handle, segno, recno, "c1", 2, [1.0, 2.0], False) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekmany" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekmany.ek") =#
-#=         tablename = "test_table_ekmany" =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         # Create new EK and new segment with table =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         decls = ["DATATYPE = CHARACTER*(10),   NULLS_OK = FALSE, SIZE = VARIABLE", =#
-#=                  "DATATYPE = DOUBLE PRECISION, NULLS_OK = FALSE, SIZE = VARIABLE", =#
-#=                  "DATATYPE = INTEGER,          NULLS_OK = FALSE, SIZE = VARIABLE"] =#
-#=         segno = ekbseg(handle, tablename, ['c1', 'd1', 'i1'], decls) =#
-#=         # Insert records:  1, 2, and 3 entries at rows 0, 1, 2, respectively =#
-#=         c_data = [['100'], ['101', '101'], ['102', '102', '102']] =#
-#=         d_data = [[100.0], [101.0, 101.0], [102.0, 102.0, 102.0]] =#
-#=         i_data = [[100], [101, 101], [102, 102, 102]] =#
-#=         for r in range(0, 3): =#
-#=             ekinsr(handle, segno, r) =#
-#=             ekacec(handle, segno, r, "c1", len(c_data[r]), c_data[r], False) =#
-#=             ekaced(handle, segno, r, "d1", len(d_data[r]), d_data[r], False) =#
-#=             ekacei(handle, segno, r, "i1", len(i_data[r]), i_data[r], False) =#
-#=         # Try record insertion beyond the next available, verify the exception =#
-#=         with pytest.raises(stypes.SpiceyError): =#
-#=             ekinsr(handle, segno, 4) =#
-#=         # Close EK, then reopen for reading =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         # =#
-#=         # Start of part two =#
-#=         # =#
-#=         handle = eklef(ekpath) =#
-#=         @test handle is not None =#
-#=         # Test query using ekpsel =#
-#=         query = "SELECT c1, d1, i1 from {}".format(tablename) =#
-#=         n, xbegs, xends, xtypes, xclass, tabs, cols, err, errmsg = ekpsel(query, 99, 99, 99) =#
-#=         @test n == 3 =#
-#=         @test stypes.SpiceEKDataType.SPICE_CHR == xtypes[0] =#
-#=         @test stypes.SpiceEKDataType.SPICE_DP  == xtypes[1] =#
-#=         @test stypes.SpiceEKDataType.SPICE_INT == xtypes[2] =#
-#=         @test ([stypes.SpiceEKExprClass.SPICE_EK_EXP_COL]*3) == list(xclass) =#
-#=         @test (["TEST_TABLE_EKMANY"]*3) == tabs =#
-#=         @test "C1 D1 I1".split() == cols =#
-#=         @test not err =#
-#=         @test "" == errmsg =#
-#=         # Run query to retrieve the row count =#
-#=         nmrows, error, errmsg = ekfind(query, 99) =#
-#=         @test nmrows == 3 =#
-#=         @test not error =#
-#=         @test '' == errmsg =#
-#=         # test fail case for eknelt =#
-#=         with pytest.raises(stypes.SpiceyError): =#
-#=             eknelt(0, nmrows+1) =#
-#=         # Validate the content of each field, including exceptions when =#
-#=         # Loop over rows, test .ekgc/.ekgd/.ekgi =#
-#=         for r in range(nmrows): =#
-#=             # get number of elements in this row =#
-#=             n_elm = eknelt(0, r) =#
-#=             @test  n_elm == r + 1 =#
-#=             for e in range(0, n_elm): =#
-#=                 # get row int data =#
-#=                 i_datum, i_null = ekgi(2, r, e) =#
-#=                 @test not i_null =#
-#=                 @test i_datum == i_data[r][e] =#
-#=                 # get row double data =#
-#=                 d_datum, d_null = ekgd(1, r, e) =#
-#=                 @test not d_null =#
-#=                 @test d_datum == d_data[r][e] =#
-#=                 # get row char data =#
-#=                 c_datum, c_null = ekgc(0, r, e) =#
-#=                 @test not c_null =#
-#=                 @test c_datum == c_data[r][e] =#
-#=         # Loop over rows, test .ekrcec/.ekrced/.ekrcei =#
-#=         for r in range(nmrows): =#
-#=             # get row int data =#
-#=             ni_vals, ri_data, i_null = ekrcei(handle, segno, r, "i1") =#
-#=             @test not i_null =#
-#=             @test ni_vals == r + 1 =#
-#=             npt.@test_array_equal(ri_data, i_data[r]) =#
-#=             # get row double data =#
-#=             nd_vals, rd_data, d_null = ekrced(handle, segno, r, "d1") =#
-#=             @test not d_null =#
-#=             @test nd_vals == r + 1 =#
-#=             npt.@test_array_equal(rd_data, d_data[r]) =#
-#=             # get row char data =#
-#=             nc_vals, rc_data, c_null = ekrcec(handle, segno, r, "c1", 11) =#
-#=             @test not c_null =#
-#=             @test nc_vals == r + 1 =#
-#=             @test rc_data == c_data[r] =#
-#=         # test out of bounds =#
-#=         with pytest.raises(stypes.SpiceyError): =#
-#=             ekrcei(handle, segno, 3, "i1") =#
-#=         with pytest.raises(stypes.SpiceyError): =#
-#=             ekrced(handle, segno, 3, "d1") =#
-#=         #with pytest.raises(stypes.SpiceyError): TODO: FIX =#
-#=         #    ekrcec(handle, segno, 4, "c1", 4) # this causes a SIGSEGV =#
-#=         # =#
-#=         # Part 3 =#
-#=         # =#
-#=         # Close file, re-open for writing =#
-#=         ekuef(handle) =#
-#=         handle = ekopw(ekpath) =#
-#=         # Loop over rows, update values using .ekucec/.ekuced/.ekucei =#
-#=         c_data = [['200'], ['201', '201'], ['202', '202', '202']] =#
-#=         d_data = [[200.0], [201.0, 201.0], [202.0, 202.0, 202.0]] =#
-#=         i_data = [[200], [201, 201], [202, 202, 202]] =#
-#=         for r in range(0, 3): =#
-#=             ekucec(handle, segno, r, "c1", len(c_data[r]), c_data[r], False) =#
-#=             ekuced(handle, segno, r, "d1", len(d_data[r]), d_data[r], False) =#
-#=             ekucei(handle, segno, r, "i1", len(i_data[r]), i_data[r], False) =#
-#=         # Test invalid updates =#
-#=         with pytest.raises(stypes.SpiceyError): =#
-#=             ekucec(handle, segno, 3, "c1", 1, ['300'], False) =#
-#=         with pytest.raises(stypes.SpiceyError): =#
-#=             ekuced(handle, segno, 3, "d1", 1, [300.0], False) =#
-#=         with pytest.raises(stypes.SpiceyError): =#
-#=             ekucei(handle, segno, 3, "i1", 1, [300], False) =#
-#=         # Loop over rows, use .ekrcec/.ekrced/.ekrcei to test updates =#
-#=         for r in range(nmrows): =#
-#=             # get row int data =#
-#=             ni_vals, ri_data, i_null = ekrcei(handle, segno, r, "i1") =#
-#=             @test not i_null =#
-#=             @test ni_vals == r + 1 =#
-#=             npt.@test_array_equal(ri_data, i_data[r]) =#
-#=             # get row double data =#
-#=             nd_vals, rd_data, d_null = ekrced(handle, segno, r, "d1") =#
-#=             @test not d_null =#
-#=             @test nd_vals == r + 1 =#
-#=             npt.@test_array_equal(rd_data, d_data[r]) =#
-#=             # get row char data =#
-#=             nc_vals, rc_data, c_null = ekrcec(handle, segno, r, "c1", 11) =#
-#=             @test not c_null =#
-#=             @test nc_vals == r + 1 =#
-#=             @test rc_data == c_data[r] =#
-#=         # Cleanup =#
-#=         ekcls(handle) =#
-#=         @test not failed() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=     @testset "ekaclc" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekaclc.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno, rcptrs = ekifld(handle, "test_table_ekaclc", 1, 2, 200, ["c1"], 200, =#
-#=                                      ["DATATYPE = CHARACTER*(*), INDEXED  = TRUE"]) =#
-#=         ekaclc(handle, segno, "c1", 10, ["1.0", "2.0"], [4, 4], [False, False], rcptrs, [0, 0]) =#
-#=         ekffld(handle, segno, rcptrs) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekacld" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekacld.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno, rcptrs = ekifld(handle, "test_table_ekacld", 1, 2, 200, ["c1"], 200, =#
-#=                                      ["DATATYPE = DOUBLE PRECISION, NULLS_OK = FALSE"]) =#
-#=         ekacld(handle, segno, "c1", [1.0, 2.0], [1, 1], [False, False], rcptrs, [0, 0]) =#
-#=         ekffld(handle, segno, rcptrs) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekacli" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekacli.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno, rcptrs = ekifld(handle, "test_table_ekacli", 1, 2, 200, ["c1"], 200, =#
-#=                                      ["DATATYPE = INTEGER, NULLS_OK = TRUE"]) =#
-#=         ekacli(handle, segno, "c1", [1, 2], [1, 1], [False, False], rcptrs, [0, 0]) =#
-#=         ekffld(handle, segno, rcptrs) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekacli_stress" begin =#
-#=         for i in range(10): =#
-#=             test_ekacli() =#
-#=     @testset "ekappr" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekappr.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno = ekbseg(handle, "test_table_ekappr", ["c1"], ["DATATYPE  = INTEGER, NULLS_OK = TRUE"]) =#
-#=         recno = ekappr(handle, segno) =#
-#=         ekacei(handle, segno, recno, "c1", 2, [1, 2], False) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekbseg" begin =#
-#=         ekpath = os.path.join(cwd, "example_ekbseg.ek") =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, "Test EK", 100) =#
-#=         cnames = ['INT_COL_1'] =#
-#=         cdecls = ["DATATYPE=INTEGER, INDEXED=TRUE, NULLS_OK=TRUE"] =#
-#=         segno = ekbseg(handle, "SCALAR_DATA", cnames, cdecls) =#
-#=         recno = ekappr(handle, segno) =#
-#=         @test recno != -1 =#
-#=         ordids = [x for x in range(5)] =#
-#=         ekacei(handle, segno, recno, 'INT_COL_1', 5, ordids, False) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekbseg_stress" begin =#
-#=         for i in range(10): =#
-#=             test_ekbseg() =#
-#=     @testset "ekccnt" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekccnt.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno = ekbseg(handle, "TEST_TABLE_EKCCNT", ["c1"], ["DATATYPE  = INTEGER, NULLS_OK = TRUE"]) =#
-#=         recno = ekappr(handle, segno) =#
-#=         ekacei(handle, segno, recno, "c1", 2, [1, 2], False) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         furnsh(ekpath) =#
-#=         @test ekntab() == 1 =#
-#=         @test ektnam(0, 100) == "TEST_TABLE_EKCCNT" =#
-#=         @test ekccnt("TEST_TABLE_EKCCNT") == 1 =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekcii" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekcii.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno = ekbseg(handle, "TEST_TABLE_EKCII", ["c1"], ["DATATYPE  = INTEGER, NULLS_OK = TRUE"]) =#
-#=         recno = ekappr(handle, segno) =#
-#=         ekacei(handle, segno, recno, "c1", 2, [1, 2], False) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         furnsh(ekpath) =#
-#=         @test ekntab() == 1 =#
-#=         @test ektnam(0, 100) == "TEST_TABLE_EKCII" =#
-#=         @test ekccnt("TEST_TABLE_EKCII") == 1 =#
-#=         column, attdsc = ekcii("TEST_TABLE_EKCII", 0, 30) =#
-#=         kclear() =#
-#=         @test column == "C1" =#
-#=         @test attdsc.cclass == 1 =#
-#=         @test attdsc.dtype == 2 =#
-#=         @test attdsc.size == 1 =#
-#=         @test attdsc.strlen == 1 =#
-#=         @test not attdsc.indexd =#
-#=         @test attdsc.nullok # this used to be false, although clearly it should be true given the call to ekbseg =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekcls" begin =#
-#=         kclear()  # same as ekopn test =#
-#=         ekpath = os.path.join(cwd, "example_ekcls.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 80) =#
-#=         ekcls(handle) =#
-#=         @test exists(ekpath) =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         kclear() =#
-#=     @testset "ekdelr" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekdelr.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno, rcptrs = ekifld(handle, "test_table_ekdelr", 1, 10, 200, ["c1"], 200, =#
-#=                                      ["DATATYPE = INTEGER, NULLS_OK = TRUE"]) =#
-#=         ekacli(handle, segno, "c1", [1, 2], [1], [False, False], rcptrs, [1]) =#
-#=         ekffld(handle, segno, rcptrs) =#
-#=         ekdelr(handle, segno, 2) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekdelr_stress" begin =#
-#=         for i in range(10): =#
-#=             test_ekdelr() =#
-#=     @testset "ekffld" begin =#
-#=         # same as test_ekacli =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekffld.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno, rcptrs = ekifld(handle, "test_table_ekffld", 1, 10, 200, ["c1"], 200, =#
-#=                                      ["DATATYPE = INTEGER, NULLS_OK = TRUE"]) =#
-#=         ekacli(handle, segno, "c1", [1, 2], [1], [False, False], rcptrs, [1]) =#
-#=         ekffld(handle, segno, rcptrs) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekffld_stress" begin =#
-#=         for i in range(10): =#
-#=             test_ekffld() =#
-#=     @testset "ekfind" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekfind.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno, rcptrs = ekifld(handle, "test_table_ekfind", 1, 2, 200, ["cc1"], 200, =#
-#=                                      ["DATATYPE = INTEGER, NULLS_OK = TRUE"]) =#
-#=         ekacli(handle, segno, "cc1", [1, 2], [1, 1], [False, False], rcptrs, [0, 0]) =#
-#=         ekffld(handle, segno, rcptrs) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         furnsh(ekpath) =#
-#=         nmrows, error, errmsg = ekfind("SELECT CC1 FROM TEST_TABLE_EKFIND WHERE CC1 > 0", 100) =#
-#=         @test nmrows != 0  # should be 2 but I am not concerned about correctness in this case =#
-#=         @test not error =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekfind_stess" begin =#
-#=         for i in range(10): =#
-#=             test_ekfind() =#
-#=     @testset "ekgc" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekgc.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno, rcptrs = ekifld(handle, "test_table_ekgc", 1, 2, 200, ["c1"], 200, =#
-#=                                      ["DATATYPE = CHARACTER*(*), INDEXED  = TRUE"]) =#
-#=         ekaclc(handle, segno, "c1", 10, ["1.0", "2.0"], [4, 4], [False, False], rcptrs, [0, 0]) =#
-#=         ekffld(handle, segno, rcptrs) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         furnsh(ekpath) =#
-#=         nmrows, error, errmsg = ekfind("SELECT C1 FROM TEST_TABLE_EKGC", 100) =#
-#=         @test not error =#
-#=         c, null = ekgc(0, 0, 0, 4) =#
-#=         @test not null =#
-#=         @test c == "1.0" =#
-#=         c, null = ekgc(0, 1, 0, 4) =#
-#=         @test not null =#
-#=         # @test c == "2.0" this fails, c is an empty string despite found being true. =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekgd" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekgd.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno, rcptrs = ekifld(handle, "test_table_ekgd", 1, 2, 200, ["c1"], 200, =#
-#=                                      ["DATATYPE = DOUBLE PRECISION, NULLS_OK = TRUE"]) =#
-#=         ekacld(handle, segno, "c1", [1.0, 2.0], [1, 1], [False, False], rcptrs, [0, 0]) =#
-#=         ekffld(handle, segno, rcptrs) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         furnsh(ekpath) =#
-#=         nmrows, error, errmsg = ekfind("SELECT C1 FROM TEST_TABLE_EKGD", 100) =#
-#=         @test not error =#
-#=         d, null = ekgd(0, 0, 0) =#
-#=         @test not null =#
-#=         @test d == 1.0 =#
-#=         d, null = ekgd(0, 1, 0) =#
-#=         @test not null =#
-#=         @test d == 2.0 =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekgi" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekgi.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno, rcptrs = ekifld(handle, "test_table_ekgi", 1, 2, 200, ["c1"], 200, =#
-#=                                      ["DATATYPE = INTEGER, NULLS_OK = FALSE"]) =#
-#=         ekacli(handle, segno, "c1", [1, 2], [1, 1], [False, False], rcptrs, [0, 0]) =#
-#=         ekffld(handle, segno, rcptrs) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         furnsh(ekpath) =#
-#=         nmrows, error, errmsg = ekfind("SELECT C1 FROM TEST_TABLE_EKGI", 100) =#
-#=         @test not error =#
-#=         i, null = ekgi(0, 0, 0) =#
-#=         @test not null =#
-#=         @test i == 1 =#
-#=         i, null = ekgi(0, 1, 0) =#
-#=         @test not null =#
-#=         @test i == 2 =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekifld" begin =#
-#=         # Same as test_ekacli =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekifld.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno, rcptrs = ekifld(handle, "test_table_ekifld", 1, 2, 200, ["c1"], 200, =#
-#=                                      ["DATATYPE = INTEGER, NULLS_OK = TRUE"]) =#
-#=         ekacli(handle, segno, "c1", [1, 2], [1, 1], [False, False], rcptrs, [0, 0]) =#
-#=         ekffld(handle, segno, rcptrs) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
+    @testset "ekacec" begin
+        try
+            ekpath = tempname()
+            handle = ekopn(ekpath, ekpath, 0)
+            segno = ekbseg(handle, "test_table_ekacec", ["c1"],
+                           ["DATATYPE = CHARACTER*(*), NULLS_OK = TRUE"])
+            recno = ekappr(handle, segno)
+            ekacec(handle, segno, recno, "c1", ["1.0", "2.0"], false)
+            ekcls(handle)
+        finally
+            kclear()
+        end
+    end
+    @testset "ekaced" begin
+        try
+            ekpath = tempname()
+            handle = ekopn(ekpath, ekpath, 0)
+            segno = ekbseg(handle, "test_table_ekaced", ["c1"],
+                           ["DATATYPE = DOUBLE PRECISION, NULLS_OK = TRUE"])
+            recno = ekappr(handle, segno)
+            ekaced(handle, segno, recno, "c1", [1.0, 2.0], false)
+            ekcls(handle)
+        finally
+            kclear()
+        end
+    end
+    @testset "ekacei" begin
+        try
+            ekpath = tempname()
+            handle = ekopn(ekpath, ekpath, 0)
+            segno = ekbseg(handle, "test_table_ekacei", ["c1"],
+                           ["DATATYPE = INTEGER, NULLS_OK = TRUE"])
+            recno = ekappr(handle, segno)
+            ekacei(handle, segno, recno, "c1", [1, 2], false)
+            ekcls(handle)
+        finally
+            kclear()
+        end
+    end
+    @testset "ekntab/ektnam/ekccnt" begin
+        try
+            ekpath = tempname()
+            handle = ekopn(ekpath, ekpath, 0)
+            segno = ekbseg(handle, "TEST_TABLE_EKCCNT", ["c1"], ["DATATYPE  = INTEGER, NULLS_OK = TRUE"])
+            recno = ekappr(handle, segno)
+            ekacei(handle, segno, recno, "c1", [1, 2], false)
+            ekcls(handle)
+            kclear()
+            furnsh(ekpath)
+            @test ekntab() == 1
+            @test ektnam(1) == "TEST_TABLE_EKCCNT"
+            @test ekccnt("TEST_TABLE_EKCCNT") == 1
+        finally
+            kclear()
+        end
+    end
+    @testset "ekcii" begin
+        try
+            ekpath = tempname()
+            handle = ekopn(ekpath, ekpath, 0)
+            segno = ekbseg(handle, "TEST_TABLE_EKCII", ["c1"], ["DATATYPE = INTEGER, NULLS_OK = TRUE"])
+            recno = ekappr(handle, segno)
+            ekacei(handle, segno, recno, "c1", [1, 2], false)
+            ekcls(handle)
+            kclear()
+            furnsh(ekpath)
+            @test ekntab() == 1
+            @test ektnam(1) == "TEST_TABLE_EKCII"
+            @test ekccnt("TEST_TABLE_EKCII") == 1
+            column, attdsc = ekcii("TEST_TABLE_EKCII", 1)
+            @test column == "C1"
+            @test attdsc.cclass == 1
+            @test attdsc.dtype == 2
+            @test attdsc.size == 1
+            @test attdsc.strlen == 1
+            @test attdsc.indexd == 0
+            @test attdsc.nullok == 1
+        finally
+            kclear()
+        end
+    end
+    @testset "ekdelr" begin
+        try
+            ekpath = tempname()
+            handle = ekopn(ekpath, ekpath, 0)
+            segno, rcptrs = ekifld(handle, "TEST_TABLE_EKDELR", 2, ["c1"],
+                                   ["DATATYPE = INTEGER, NULLS_OK = TRUE"])
+            ekacli(handle, segno, "c1", [[1], [2]], [false, false], rcptrs)
+            ekffld(handle, segno, rcptrs)
+            ekdelr(handle, segno, 1)
+            ekcls(handle)
+        finally
+            kclear()
+        end
+    end
+    @testset "ekfind" begin
+        try
+            ekpath = tempname()
+            handle = ekopn(ekpath, ekpath, 0)
+            segno, rcptrs = ekifld(handle, "test_table_ekfind", 2, ["cc1"],
+                                   ["DATATYPE = INTEGER, NULLS_OK = TRUE"])
+            ekacli(handle, segno, "cc1", [[1], [2]], [false, false], rcptrs)
+            ekffld(handle, segno, rcptrs)
+            ekcls(handle)
+            kclear()
+            furnsh(ekpath)
+            nmrows = ekfind("SELECT CC1 FROM TEST_TABLE_EKFIND WHERE CC1 > 0", 100)
+            @test nmrows == 2
+        finally
+            kclear()
+        end
+    end
+    @testset "ekclc/ekgc" begin
+        try
+            ekpath = tempname()
+            handle = ekopn(ekpath, ekpath, 0)
+            segno, rcptrs = ekifld(handle, "TEST_TABLE_EKGC", 3, ["c1"],
+                                   ["DATATYPE = CHARACTER*(*), INDEXED = TRUE, NULLS_OK = TRUE"])
+            ekaclc(handle, segno, "c1", ["1.0", "2.0", ""], [false, false, true], rcptrs)
+            ekffld(handle, segno, rcptrs)
+            ekcls(handle)
+            kclear()
+            furnsh(ekpath)
+            nmrows = ekfind("SELECT C1 FROM TEST_TABLE_EKGC", 100)
+            @test nmrows == 3
+            c = ekgc(1, 1, 1)
+            @test c == "1.0"
+            c = ekgc(1, 2, 1)
+            @test c == "2.0"
+            c = ekgc(1, 3, 1)
+            @test c === missing
+        finally
+            kclear()
+        end
+    end
+    @testset "ekcld/ekgd" begin
+        try
+            ekpath = tempname()
+            handle = ekopn(ekpath, ekpath, 0)
+            segno, rcptrs = ekifld(handle, "TEST_TABLE_EKGD", 3, ["c1"],
+                                   ["DATATYPE = DOUBLE PRECISION, NULLS_OK = TRUE"])
+            ekacld(handle, segno, "c1", [[1.0], [2.0], [1.0]], [false, false, true], rcptrs)
+            ekffld(handle, segno, rcptrs)
+            ekcls(handle)
+            kclear()
+            furnsh(ekpath)
+            nmrows = ekfind("SELECT C1 FROM TEST_TABLE_EKGD", 100)
+            @test nmrows == 3
+            d = ekgd(1, 1, 1)
+            @test d == 1.0
+            d = ekgd(1, 2, 1)
+            @test d == 2.0
+            d = ekgd(1, 3, 1)
+            @test d === missing
+        finally
+            kclear()
+        end
+    end
+    @testset "ekcli/ekgi" begin
+        try
+            ekpath = tempname()
+            handle = ekopn(ekpath, ekpath, 0)
+            segno, rcptrs = ekifld(handle, "TEST_TABLE_EKGI", 3, ["c1"],
+                                   ["DATATYPE = INTEGER, NULLS_OK = TRUE"])
+            ekacli(handle, segno, "c1", [[1, 2], [2, 3], [1, 1]], [false, false, true], rcptrs)
+            ekffld(handle, segno, rcptrs)
+            ekcls(handle)
+            kclear()
+            furnsh(ekpath)
+            nmrows = ekfind("SELECT C1 FROM TEST_TABLE_EKGI", 100)
+            @test nmrows == 3
+            d = ekgi(1, 1, 1)
+            @test d == 1
+            d = ekgi(1, 2, 1)
+            @test d == 2
+            d = ekgi(1, 3, 1)
+            @test d === missing
+        finally
+            kclear()
+        end
+    end
 #=     @testset "eklef" begin =#
 #=         kclear() =#
 #=         ekpath = os.path.join(cwd, "example_eklef.ek") =#
@@ -554,7 +277,7 @@
 #=         handle = ekopn(ekpath, ekpath, 0) =#
 #=         segno = ekbseg(handle, "test_table_eklef", ["c1"], ["DATATYPE  = INTEGER, NULLS_OK = TRUE"]) =#
 #=         recno = ekappr(handle, segno) =#
-#=         ekacei(handle, segno, recno, "c1", 2, [1, 2], False) =#
+#=         ekacei(handle, segno, recno, "c1", 2, [1, 2], false) =#
 #=         ekcls(handle) =#
 #=         kclear() =#
 #=         handle = eklef(ekpath) =#
@@ -570,7 +293,7 @@
 #=         handle = ekopn(ekpath, ekpath, 0) =#
 #=         segno = ekbseg(handle, "TEST_TABLE_EKNSEG", ["c1"], ["DATATYPE  = INTEGER, NULLS_OK = TRUE"]) =#
 #=         recno = ekappr(handle, segno) =#
-#=         ekacei(handle, segno, recno, "c1", 2, [1, 2], False) =#
+#=         ekacei(handle, segno, recno, "c1", 2, [1, 2], false) =#
 #=         ekcls(handle) =#
 #=         kclear() =#
 #=         handle = ekopr(ekpath) =#
@@ -635,7 +358,7 @@
 #=         handle = ekopn(ekpath, ekpath, 0) =#
 #=         segno, rcptrs = ekifld(handle, "test_table_ekssum", 1, 2, 200, ["c1"], 200, =#
 #=                                      ["DATATYPE = INTEGER, NULLS_OK = TRUE"]) =#
-#=         ekacli(handle, segno, "c1", [1, 2], [1, 1], [False, False], rcptrs, [0, 0]) =#
+#=         ekacli(handle, segno, "c1", [1, 2], [1, 1], [false, false], rcptrs, [0, 0]) =#
 #=         ekffld(handle, segno, rcptrs) =#
 #=         segsum = ekssum(handle, segno) =#
 #=         @test segsum.ncols == 1 =#
@@ -644,8 +367,8 @@
 #=         @test segsum.tabnam == "TEST_TABLE_EKSSUM" =#
 #=         c1descr = segsum.cdescrs[0] =#
 #=         @test c1descr.dtype == 2 =#
-#=         @test c1descr.indexd is False =#
-#=         # @test c1descr.null == True, for some reason this is actually false, SpikeEKAttDsc may not be working correctly =#
+#=         @test c1descr.indexd is false =#
+#=         # @test c1descr.null == true, for some reason this is actually false, SpikeEKAttDsc may not be working correctly =#
 #=         ekcls(handle) =#
 #=         kclear() =#
 #=         if exists(ekpath): =#
@@ -659,7 +382,7 @@
 #=         handle = ekopn(ekpath, ekpath, 0) =#
 #=         segno = ekbseg(handle, "TEST_TABLE_EKTNAM", ["c1"], ["DATATYPE  = INTEGER, NULLS_OK = TRUE"]) =#
 #=         recno = ekappr(handle, segno) =#
-#=         ekacei(handle, segno, recno, "c1", 2, [1, 2], False) =#
+#=         ekacei(handle, segno, recno, "c1", 2, [1, 2], false) =#
 #=         ekcls(handle) =#
 #=         kclear() =#
 #=         furnsh(ekpath) =#
@@ -755,7 +478,7 @@
 #=     @testset "eqstr" begin =#
 #=         @test eqstr("A short string    ", "ashortstring") =#
 #=         @test eqstr("Embedded        blanks", "Em be dd ed bl an ks") =#
-#=         @test eqstr("One word left out", "WORD LEFT OUT") is False =#
+#=         @test eqstr("One word left out", "WORD LEFT OUT") is false =#
 #=     @testset "erract" begin =#
 #=         @test erract("GET", 10, "") == "RETURN" =#
 #=         @test erract("GET", 10) == "RETURN" =#

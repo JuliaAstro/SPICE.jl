@@ -2185,7 +2185,6 @@ Returns the derivative of the norm of `state`.
 """
 function dvnorm(state)
     @checkdims 6 state
-    length(state) != 6 && throw(ArgumentError("`state` must have six elements."))
     ccall((:dvnorm_c, libcspice), SpiceDouble, (Ref{SpiceDouble},), state)
 end
 

@@ -1,6 +1,7 @@
 export
     DLADescr,
     DSKDescr,
+    EKAttDsc,
     Ellipse,
     center,
     semi_major,
@@ -52,5 +53,14 @@ struct DSKDescr
     co3max::SpiceDouble
     start::SpiceDouble
     stop::SpiceDouble
+end
+
+struct EKAttDsc
+    cclass::SpiceInt
+    dtype::SpiceInt
+    strlen::SpiceInt
+    size::SpiceInt
+    indexd::SpiceInt
+    nullok::SpiceInt
 end
 
