@@ -577,7 +577,12 @@
             vertex = latrec(r, 0.0, 0.0)
             raydir = -vertex
             plid, xpt = dskx02(handle, dladsc, vertex, raydir)
-            @test plid == 421
+            if Sys.WORD_SIZE == 64
+                @test plid == 421
+            else
+                # TODO: This result is different on 32-bit machines (even in C). Is this a bug in CSPICE?
+                @test plid == 423
+            end
             @test xpt ≈ [12.36679999999999957083, 0.0, 0.0]
         finally
             kclear()
@@ -597,7 +602,12 @@
             srflst = [dskdsc.surfce]
             xpt, handle, dladsc2, dskdsc2, dc, ic  = dskxsi(false, target, srflst, 0.0,
                                                             fixref, vertex, raydir)
-            @test ic[1] == 420
+            if Sys.WORD_SIZE == 64
+                @test ic[1] == 420
+            else
+                # TODO: This result is different on 32-bit machines (even in C). Is this a bug in CSPICE?
+                @test ic[1] == 423
+            end
             @test dc[1] == 0.0
             @test xpt ≈ [12.36679999999999957083, 0.0, 0.0]
         finally
