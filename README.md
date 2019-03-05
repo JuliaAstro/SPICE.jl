@@ -2,7 +2,7 @@
 
 *Julia wrapper for NASA NAIF's SPICE toolkit*
 
-[![Build Status Unix][travis-badge]][travis-url] [![Build Status Windows][av-badge]][av-url] [![Coveralls][coveralls-badge]][coveralls-url] [![Codecov][codecov-badge]][codecov-url] [![Docs Stable][docs-badge-stable]][docs-url-stable] [![Docs Latest][docs-badge-latest]][docs-url-latest]
+[![Build Status Unix][travis-badge]][travis-url] [![Build Status Windows][av-badge]][av-url] [![Build Status FreeBSD][cirrus-badge]][cirrus-url] [![Coveralls][coveralls-badge]][coveralls-url] [![Codecov][codecov-badge]][codecov-url] [![Docs Stable][docs-badge-stable]][docs-url-stable] [![Docs Latest][docs-badge-latest]][docs-url-latest]
 
 ## Installation
 
@@ -14,6 +14,8 @@ Pkg.clone("https://github.com/JuliaAstrodynamics/SPICE.jl.git")
 [travis-url]: https://travis-ci.org/JuliaAstro/SPICE.jl
 [av-badge]: https://ci.appveyor.com/api/projects/status/rv89bw5tl1bfqo7h?svg=true
 [av-url]: https://ci.appveyor.com/project/helgee/spice-jl
+[cirrus-badge]: https://api.cirrus-ci.com/github/JuliaAstro/SPICE.jl.svg
+[cirrus-url]: https://cirrus-ci.com/github/JuliaAstro/SPICE.jl
 [coveralls-badge]: https://coveralls.io/repos/github/JuliaAstro/SPICE.jl/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/JuliaAstro/SPICE.jl?branch=master
 [codecov-badge]: http://codecov.io/github/JuliaAstro/SPICE.jl/coverage.svg?branch=master
