@@ -93,7 +93,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.appnd",
     "category": "method",
-    "text": "appnd(item, cell)\n\nAppend an item to the char/double/integer SpiceCell cell.\n\nhttps://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/appndcc.html https://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/appnddc.html https://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/appndic.html\n\n\n\n\n\n"
+    "text": "appnd(item, cell)\n\nAppend an item to the char/double/integer SpiceCell cell.\n\nReferences\n\nappndc - NAIF Documentation\nappndd - NAIF Documentation\nappndi - NAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -229,7 +229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.bschoi",
     "category": "function",
-    "text": "bschoi(value, array, order)\n\nwarning: Deprecated\nUse `findfirst(array .== value)` instead.\n\n\n\n\n\n"
+    "text": "bschoi(value, array, order)\n\nwarning: Deprecated\nUse findfirst(array .== value) instead.\n\n\n\n\n\n"
 },
 
 {
