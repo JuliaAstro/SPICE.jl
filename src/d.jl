@@ -686,7 +686,7 @@ Returns the corresponding file name.
 
 ### References ###
 
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/XXX_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dashfn_c.html)
 """
 function dashfn(handle, namelen=256)
     name = Array{SpiceChar}(undef, namelen)

@@ -368,8 +368,8 @@ end
     bschoi(value, array, order)
 
 !!! warning "Deprecated"
-        Use `findfirst(array .== value)` instead.
-    """
+    Use `findfirst(array .== value)` instead.
+"""
 bschoi
 
 @deprecate bschoi(value, array, order) findfirst(array .== value)

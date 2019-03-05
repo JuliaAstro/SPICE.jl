@@ -127,9 +127,11 @@ end
 
 Append an `item` to the char/double/integer SpiceCell `cell`.
 
-[https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndc_c.html](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndc_c.html)
-[https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndd_c.html](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndd_c.html)
-[https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndi_c.html](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndi_c.html)
+### References ###
+
+- [appndc - NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndc_c.html)
+- [appndd - NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndd_c.html)
+- [appndi - NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndi_c.html)
 """
 function appnd(item, cell::SpiceCharCell)
     ccall((:appndc_c, libcspice), Cvoid, (Cstring, Ref{Cell{SpiceChar}}), item, cell.cell)
