@@ -281,11 +281,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.chbder-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.chbder",
+    "category": "method",
+    "text": "chbder(cp, x2s, x, nderiv)\n\nGiven the coefficients for the Chebyshev expansion of a polynomial, this returns the value of the polynomial and its first nderiv derivatives evaluated at the input x.\n\nArguments\n\ncp: Chebyshev polynomial coefficients\nx2s: Transformation parameters of polynomial\nx: Value for which the polynomial is to be evaluated\nnderiv: The number of derivatives to compute\n\nOutput\n\nReturns the derivatives of the polynomial.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.cidfrm-Tuple{Any}",
     "page": "API",
     "title": "SPICE.cidfrm",
     "category": "method",
-    "text": "cidfrm(cent)\n\nRetrieve frame ID code and name to associate with a frame center.\n\nArguments\n\ncent: ID code for an object for which there is a preferred reference frame\n\nOutput\n\nReturns the tuple (frcode, frname)\n\nfrcode: The ID code of the frame associated with cent\nfrname: The name of the frame with ID frcode\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "cidfrm(cent)\n\nRetrieve frame ID code and name to associate with a frame center.\n\nArguments\n\ncent: ID code for an object for which there is a preferred reference frame\n\nOutput\n\nReturns nothing if no frame was found or\n\nfrcode: The ID code of the frame associated with cent\nfrname: The name of the frame with ID frcode\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -317,7 +325,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.ckgp",
     "category": "method",
-    "text": "ckgp(inst, sclkdp, tol, ref)\n\nGet pointing (attitude) for a specified spacecraft clock time.\n\nArguments\n\ninst: NAIF ID of instrument, spacecraft, or structure\nsclkdp: Encoded spacecraft clock time\ntol: Time tolerance\nref: Reference frame\n\nOutputs\n\ncmat: C-matrix pointing data\nclkout: Output encoded spacecraft clock time\nfound: true when requested pointing is available\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "ckgp(inst, sclkdp, tol, ref)\n\nGet pointing (attitude) for a specified spacecraft clock time.\n\nArguments\n\ninst: NAIF ID of instrument, spacecraft, or structure\nsclkdp: Encoded spacecraft clock time\ntol: Time tolerance\nref: Reference frame\n\nOutputs\n\nReturns nothing if the requested pointing is not available or\n\ncmat: C-matrix pointing data\nclkout: Output encoded spacecraft clock time\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -325,7 +333,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.ckgpav",
     "category": "method",
-    "text": "ckgpav(inst, sclkdp, tol, ref)\n\nGet pointing (attitude) and angular velocity for a specified spacecraft clock time.\n\nArguments\n\ninst: NAIF ID of instrument, spacecraft, or structure\nsclkdp: Encoded spacecraft clock time\ntol: Time tolerance\nref: Reference frame\n\nOutputs\n\ncmat: C-matrix pointing data\nav: Angular velocity vector\nclkout: Output encoded spacecraft clock time\nfound: true when requested pointing is available\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "ckgpav(inst, sclkdp, tol, ref)\n\nGet pointing (attitude) and angular velocity for a specified spacecraft clock time.\n\nArguments\n\ninst: NAIF ID of instrument, spacecraft, or structure\nsclkdp: Encoded spacecraft clock time\ntol: Time tolerance\nref: Reference frame\n\nOutputs\n\nReturns nothing if the requested pointing is not available or\n\ncmat: C-matrix pointing data\nav: Angular velocity vector\nclkout: Output encoded spacecraft clock time\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -357,7 +365,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.ckopn",
     "category": "function",
-    "text": "ckopn(fname, ifname=\"CK_file\", ncomch=0)\n\nOpen a new CK file, returning the handle of the opened file.\n\nArguments\n\nfname: The name of the CK file to be opened\nifname=\"CK_file\": The internal filename for the CK, default is \"CK_file\"\nncomch=0: The number of characters to reserve for comments, default is zero\n\nOutput\n\nhandle: The handle of the opened CK file\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "ckopn(fname, ifname=\"CK_file\", ncomch=0)\n\nOpen a new CK file, returning the handle of the opened file.\n\nArguments\n\nfname: The name of the CK file to be opened\nifname: The internal filename for the CK (default: \"CK_file\")\nncomch: The number of characters to reserve for comments (default: 0)\n\nOutput\n\nhandle: The handle of the opened CK file\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -373,7 +381,39 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.ckw01",
     "category": "function",
-    "text": "ckw01(handle, inst, ref, segid, sclkdp, quats, avvs=Matrix{SpiceDouble}(0,0);\n    begtim=sclkdp[1], endtim=sclkdp[end])\n\nAdd a type 1 segment to a C-kernel.\n\nArguments\n\nhandle: Handle of an open CK file\ninst: The NAIF instrument ID code\nref: The reference frame of the segment\nsegid: Segment identifier\nsclkdp: Encoded SCLK times\nquats: Quaternions representing instrument pointing\navvs: Angular velocity vectors (optional)\nbegtim: The beginning encoded SCLK of the segment (optional)\nendtim: The ending encoded SCLK of the segment (optional)\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "ckw01(handle, begtim, endtim, inst, ref, segid, sclkdp, quats, avvs=[zeros(3)])\n\nAdd a type 1 segment to a C-kernel.\n\nArguments\n\nhandle: Handle of an open CK file\nbegtim: The beginning encoded SCLK of the segment\nendtim: The ending encoded SCLK of the segment\ninst: The NAIF instrument ID code\nref: The reference frame of the segment\nsegid: Segment identifier\nsclkdp: Encoded SCLK times\nquats: Quaternions representing instrument pointing\navvs: Angular velocity vectors (optional)\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ckw02-NTuple{11,Any}",
+    "page": "API",
+    "title": "SPICE.ckw02",
+    "category": "method",
+    "text": "ckw02(handle, begtim, endtim, inst, ref, segid, start, stop, quats, avvs, rates)\n\nWrite a type 2 segment to a C-kernel.\n\nArguments\n\nhandle: Handle of an open CK file\nbegtim: The beginning encoded SCLK of the segment\nendtim: The ending encoded SCLK of the segment\ninst: The NAIF instrument ID code\nref: The reference frame of the segment\nsegid: Segment identifier\nstart: Encoded SCLK interval start times\nstop: Encoded SCLK interval stop times\nquats: Quaternions representing instrument pointing\navvs: Angular velocity vectors\nrates: Number of seconds per tick for each interval\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ckw03",
+    "page": "API",
+    "title": "SPICE.ckw03",
+    "category": "function",
+    "text": "ckw03(handle, begtim, endtim, inst, ref, segid, sclkdp, quats, starts, avvs=[zeros(3)])\n\nAdd a type 3 segment to a C-kernel.\n\nArguments\n\nhandle: Handle of an open CK file\nbegtim: The beginning encoded SCLK of the segment\nendtim: The ending encoded SCLK of the segment\ninst: The NAIF instrument ID code\nref: The reference frame of the segment\nsegid: Segment identifier\nsclkdp: Encoded SCLK times\nquats: Quaternions representing instrument pointing\nstarts: Encoded SCLK interval start times\navvs: Angular velocity vectors (optional)\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ckw05-NTuple{14,Any}",
+    "page": "API",
+    "title": "SPICE.ckw05",
+    "category": "method",
+    "text": "ckw05(handle, subtyp, degree, begtim, endtim, inst, ref, avflag, segid, sclkdp, packts,\n      rate, nints, starts)\n\nWrite a type 5 segment to a CK file.\n\nArguments\n\nhandle: Handle of an open CK file\nsubtyp: CK type 5 subtype code\ndegree: Degree of interpolating polynomials\nbegtim: The beginning encoded SCLK of the segment\nendtim: The ending encoded SCLK of the segment\ninst: The NAIF instrument ID code\nref: The reference frame of the segment\navflag: True if the segment will contain angular velocity\nsegid: Segment identifier\nsclkdp: Encoded SCLK times\npackts: Array of packets\nrate: Nominal SCLK rate in seconds per tick\nnints: Number of intervals\nstarts: Encoded SCLK interval start times\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.cleard",
+    "page": "API",
+    "title": "SPICE.cleard",
+    "category": "function",
+    "text": "cleard(array)\n\n!!! warning Deprecates     Use empty!(array) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -381,7 +421,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.clight",
     "category": "method",
-    "text": "clight()\n\nReturns the speed of light in vacuo (km/sec).\n\n\n\n\n\n"
+    "text": "clight()\n\nReturns the speed of light in vacuo (km/sec).\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -445,7 +485,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.cvpool",
     "category": "method",
-    "text": "cvpool(agent)\n\nIndicate whether or not any watched kernel variables that have a specified agent on their notification list have been updated.\n\nArguments\n\nagent: Name of the agent to check for notices\n\nOutput\n\ntrue if variables for agent have been updated.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "cvpool(agent)\n\nIndicate whether or not any watched kernel variables that have a specified agent on their notification list have been updated.\n\nArguments\n\nagent: Name of the agent to check for notices\n\nOutput\n\nReturns true if variables for agent have been updated.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -453,7 +493,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.cyllat",
     "category": "method",
-    "text": "cyllat(r, lonc, z)\n\nConvert from cylindrical to latitudinal coordinates.\n\nArguments\n\nr: Distance of point from z axis\nlonc: Cylindrical angle of point from XZ plane (radians)\nz: Height of point above XY plane\n\nOutput\n\nReturns a tuple of radius, longitude (radians), and latitude (radians).\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "cyllat(r, lonc, z)\n\nConvert from cylindrical to latitudinal coordinates.\n\nArguments\n\nr: Distance of point from z axis\nlonc: Cylindrical angle of point from XZ plane (radians)\nz: Height of point above XY plane\n\nOutput\n\nradius: Radius\nlon: Longitude (radians)\nlat: Latitude (radians)\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -469,7 +509,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.cylsph",
     "category": "method",
-    "text": "cylsph(r, lonc, z)\n\nConvert from cylindrical to spherical coordinates.\n\nArguments\n\nr: Distance of point from z axis\nlonc: Angle (radians) of point from XZ plane\nz: Height of point above XY plane\n\nOutput\n\nReturns a tuple of distance of the point from the origin, polar angle (co-latitude in radians), and azimuthal angle (longitude).\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "cylsph(r, lonc, z)\n\nConvert from cylindrical to spherical coordinates.\n\nArguments\n\nr: Distance of point from z axis\nlonc: Angle (radians) of point from XZ plane\nz: Height of point above XY plane\n\nOutput\n\nradius: Distance of the point from the origin\ncolat: Polar angle (co-latitude in radians)\nlon: Azimuthal angle (longitude)\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1277,7 +1317,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.ilumin",
     "category": "method",
-    "text": "ilumin(method, target, et, fixref, obsrvr, spoint, abcorr)\n\nFind the illumination angles (phase, solar incidence, and emission) at a specified surface point of a target body.\n\nArguments\n\nmethod: Computation method.\ntarget: Name of target body.\net: Epoch in ephemeris seconds past J2000 TDB.\nfixref: Body-fixed, body-centered target body frame.\nobsrvr: Name of observing body.\nspoint: Body-fixed coordinates of a target surface point.\nabcorr: Aberration correction.\n\nOutput\n\ntrgepc: Sub-solar point epoch.\nsrfvec: Vector from observer to sub-solar point.\nphase: Phase angle at the surface point.\nincdnc: Solar incidence angle at the surface point.\nemissn: Emission angle at the surface point.\n\nReferences\n\n[NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/iluminc.html\n\n\n\n\n\n"
+    "text": "ilumin(method, target, et, fixref, obsrvr, spoint, abcorr)\n\nFind the illumination angles (phase, solar incidence, and emission) at a specified surface point of a target body.\n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in ephemeris seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nobsrvr: Name of observing body\nspoint: Body-fixed coordinates of a target surface point\nabcorr: Aberration correction\n\nOutput\n\ntrgepc: Sub-solar point epoch\nsrfvec: Vector from observer to sub-solar point\nphase: Phase angle at the surface point\nincdnc: Solar incidence angle at the surface point\nemissn: Emission angle at the surface point\n\nReferences\n\n[NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/iluminc.html\n\n\n\n\n\n"
 },
 
 {
@@ -1505,11 +1545,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.lastnb-Tuple{Any}",
+    "location": "api/#SPICE.lastnb",
     "page": "API",
     "title": "SPICE.lastnb",
-    "category": "method",
-    "text": "lastnb(str)\n\nReturn the index of the last non-blank character in a character string.\n\nArguments\n\nstr: Input character string\n\nOutput\n\nThe function returns the one-based index of the last non-blank character in a character string. If the string is entirely blank or is empty, the value 0 is returned.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "category": "function",
+    "text": "lastnb(str)\n\n!!! warning Deprecated     Use findprev(!isspace, str, length(str)) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1541,7 +1581,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.latsrf",
     "category": "method",
-    "text": "latsrf(method, target, et, fixref, npts, lonlat)\n\nMap array of planetocentric longitude/latitude coordinate pairs to surface points on a specified target body.\n\nThe surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files.\n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in TDB seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nnpts: Number of coordinate pairs in input array\nlonlat: Array of longitude/latitude coordinate pairs\n\nOutput\n\nReturns an array of surface points\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "latsrf(method, target, et, fixref, npts, lonlat)\n\nMap array of planetocentric longitude/latitude coordinate pairs to surface points on a specified target body.\n\nThe surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files.\n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in TDB seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nlonlat: Array of longitude/latitude coordinate pairs\n\nOutput\n\nReturns an array of surface points.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1565,7 +1605,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lgrind",
     "category": "method",
-    "text": "lgrind(xvals, yvals, x)\n\nEvaluate a Lagrange interpolating polynomial for a specified set of coordinate pairs, at a specified abscissa value. Return the value of both polynomial and derivative.\n\nArguments\n\nxvals: Abscissa values of coordinate pairs\nyvals: Ordinate values of coordinate pairs\nx: Point at which to interpolate the polynomial\n\nOutput\n\nReturns the tuple (p, dp).\n\np: The value at x of the unique polynomial of      degree n-1 that fits the points in the plane      defined by xvals and yvals\ndp: The derivative at x of the interpolating       polynomial described above\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lgrind(xvals, yvals, x)\n\nEvaluate a Lagrange interpolating polynomial for a specified set of coordinate pairs, at a specified abscissa value. Return the value of both polynomial and derivative.\n\nArguments\n\nxvals: Abscissa values of coordinate pairs\nyvals: Ordinate values of coordinate pairs\nx: Point at which to interpolate the polynomial\n\nOutput\n\np: The value at x of the unique polynomial of      degree n-1 that fits the points in the plane      defined by xvals and yvals\ndp: The derivative at x of the interpolating       polynomial described above\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1573,7 +1613,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.limbpt",
     "category": "method",
-    "text": "limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp, ncuts, schstp, soltol, maxn)\n\nFind limb points on a target body. The limb is the set of points of tangency on the target of rays emanating from the observer. The caller specifies half-planes bounded by the observer-target center vector in which to search for limb points.\n\nThe surface of the target body may be represented either by a triaxial ellipsoid or by topographic data.\n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in ephemeris seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nabcorr: Aberration correction\ncorloc: Aberration correction locus\nobsrvr: Name of observing body\nrefvec: Reference vector for cutting half-planes\nrolstp: Roll angular step for cutting half-planes\nncuts: Number of cutting half-planes\nschstp: Angular step size for searching\nsoltol: Solution convergence tolerance\nmaxn: Maximum number of entries in output arrays\n\nOutput\n\nReturns the tuple (npts, points, epochs, tangts).\n\nnpts: Counts of limb points corresponding to cuts\npoints: Limb points\nepochs: Times associated with limb points\ntangts: Tangent vectors emanating from the observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp, ncuts, schstp,\n       soltol, maxn)\n\nFind limb points on a target body. The limb is the set of points of tangency on the target of rays emanating from the observer.  The caller specifies half-planes bounded by the observer-target center vector in which to search for limb points.\n\nThe surface of the target body may be represented either by a triaxial ellipsoid or by topographic data.\n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in ephemeris seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nabcorr: Aberration correction\ncorloc: Aberration correction locus\nobsrvr: Name of observing body\nrefvec: Reference vector for cutting half-planes\nrolstp: Roll angular step for cutting half-planes\nncuts: Number of cutting half-planes\nschstp: Angular step size for searching\nsoltol: Solution convergence tolerance\nmaxn: Maximum number of entries in output arrays\n\nOutput\n\nReturns the tuple (npts, points, epochs, tangts).\n\nnpts: Counts of limb points corresponding to cuts\npoints: Limb points\nepochs: Times associated with limb points\ntangts: Tangent vectors emanating from the observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1581,14 +1621,14 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lmpool",
     "category": "method",
-    "text": "lmpool(cvals)\n\nLoad the variables contained in an internal buffer into the kernel pool.\n\nArguments\n\ncvals: An array that contains a SPICE text kernel\n\nOutput\n\nNone\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lmpool(cvals)\n\nLoad the variables contained in an internal buffer into the kernel pool.\n\nArguments\n\ncvals: An array that contains a SPICE text kernel\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
-    "location": "api/#SPICE.lparse-Tuple{Any,Any,Any}",
+    "location": "api/#SPICE.lparse",
     "page": "API",
     "title": "SPICE.lparse",
-    "category": "method",
+    "category": "function",
     "text": "lparse(list, delim, nmax)\n\nParse a list of items delimited by a single character.\n\nArguments\n\nlist: List of items delimited by delim\ndelim: Single character used to delimit items\nnmax: Maximum number of items to return\n\nOutput\n\nReturns an array with the items in the list, left justified.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
