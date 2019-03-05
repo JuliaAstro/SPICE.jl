@@ -187,132 +187,121 @@
         end
     end
 
-    let stringtest = "one two three four"
-        exp = ["one", "two", "three", "four"]
-        act = lparse(stringtest, " ", 25)
-        @testset for i in eachindex(act, exp)
-            @test act[i] == exp[i]
-        end
+    @testset "lparse" begin
+        stringtest = "one two three four"
+        @test split(stringtest, " ", limit=4) == SPICE._lparse(stringtest, " ", 4)
     end
-
-    let stringtest = "  A number of words   separated   by spaces   "
-        exp = ["A", "number", "of", "words", "separated", "by", "spaces"]
-        act = lparsm(stringtest, " ", 20, 23)
-        @testset for i in eachindex(act, exp)
-            @test act[i] == exp[i]
-        end
-        act = lparsm(stringtest, " ", length(stringtest)+10)
-        @testset for i in eachindex(act, exp)
-            @test act[i] == exp[i]
-        end
+    @testset "lparsm" begin
+        stringtest = "  A number of words   separated   by spaces   "
+        @test split(stringtest, " ", limit=10, keepempty=false) ==
+            SPICE._lparsm(stringtest, " ", 10)
     end
-
-    let stringtest = "  A number of words   separated   by spaces.   "
+    @testset "lparss" begin
+        stringtest = "  A number of words   separated   by spaces.   "
         delims = " ,."
-        act = lparss(stringtest, delims)
-        exp = ["", "A", "by", "number", "of", "separated", "spaces", "words"]
-        @testset for i in 1:length(exp)
-            @test act[i] == exp[i]
+        @test Set(String.(split(stringtest, collect(delims)))) ==
+            Set(collect(SPICE._lparss(stringtest, delims)))
+    end
+    @testset "lspcn" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
+            et = str2et("21 march 2005")
+            lon = rad2deg(lspcn("EARTH", et, "NONE"))
+            @test lon ≈ 0.48153755894179384
+        finally
+            kclear()
         end
     end
-
-    kclear()
-    furnsh(
-        path(CORE, :lsk),
-        path(CORE, :pck),
-        path(CORE, :spk))
-    let et = str2et("21 march 2005")
-        lon = rad2deg(lspcn("EARTH", et, "NONE"))
-        @test lon ≈ 0.48153755894179384
+    @testset "lstlec" begin
+        array = ["BOHR", "EINSTEIN", "FEYNMAN", "GALILEO", "NEWTON"]
+        @test SPICE._lstle("NEWTON", array) == findlast(array .<= "NEWTON")
+        @test SPICE._lstle("EINSTEIN", array) == findlast(array .<= "EINSTEIN")
+        @test SPICE._lstle("GALILEO", array) == findlast(array .<= "GALILEO")
     end
-    kclear()
-
-    let array = ["BOHR", "EINSTEIN", "FEYNMAN", "GALILEO", "NEWTON"]
-        @test lstle("NEWTON", array) == 5
-        @test lstle("EINSTEIN", array) == 2
-        @test lstle("GALILEO", array) == 4
-        @test lstle("Galileo", array) == 4
-        @test lstle("BETHE", array) == 0
+    @testset "lstled" begin
+        array = [-2.0, -2.0, 0.0, 1.0, 1.0, 11.0]
+        @test SPICE._lstle(-3.0, array) == searchsortedlast(array, -3.0)
+        @test SPICE._lstle(-2.0, array) == searchsortedlast(array, -2.0)
+        @test SPICE._lstle(0.0, array) == searchsortedlast(array, 0.0)
+        @test SPICE._lstle(1.0, array) == searchsortedlast(array, 1.0)
+        @test SPICE._lstle(11.1, array) == searchsortedlast(array, 11.1)
     end
-
-    let array = [-2.0, -2.0, 0.0, 1.0, 1.0, 11.0]
-        @test lstle(-3.0, array) == 0
-        @test lstle(-2.0, array) == 2
-        @test lstle(0.0, array) == 3
-        @test lstle(1.0, array) == 5
-        @test lstle(11.1, array) == 6
+    @testset "lstlei" begin
+        array = [-2, -2, 0, 1, 1, 11]
+        @test SPICE._lstle(-3, array) == searchsortedlast(array, -3)
+        @test SPICE._lstle(-2, array) == searchsortedlast(array, -2)
+        @test SPICE._lstle(0, array) == searchsortedlast(array, 0)
+        @test SPICE._lstle(1, array) == searchsortedlast(array, 1)
+        @test SPICE._lstle(12, array) == searchsortedlast(array, 12)
     end
-
-    let array = [-2, -2, 0, 1, 1, 11]
-        @test lstle(-3, array) == 0
-        @test lstle(-2, array) == 2
-        @test lstle(0, array) == 3
-        @test lstle(1, array) == 5
-        @test lstle(12, array) == 6
+    @testset "lstltc" begin
+        array = ["BOHR", "EINSTEIN", "FEYNMAN", "GALILEO", "NEWTON"]
+        @test SPICE._lstlt("NEWTON", array) == findlast(array .< "NEWTON")
+        @test SPICE._lstlt("EINSTEIN", array) == findlast(array .< "EINSTEIN")
+        @test SPICE._lstlt("GALILEO", array) == findlast(array .< "GALILEO")
     end
-
-    let array = ["BOHR", "EINSTEIN", "FEYNMAN", "GALILEO", "NEWTON"]
-        @test lstlt("NEWTON", array) == 4
-        @test lstlt("EINSTEIN", array) == 1
-        @test lstlt("GALILEO", array) == 3
-        @test lstlt("Galileo", array) == 4
-        @test lstlt("BETHE", array) == 0
+    @testset "lstltd" begin
+        array = [-2.0, -2.0, 0.0, 1.0, 1.0, 11.0]
+        @test SPICE._lstlt(-3.0, array) == searchsortedlast(array, -3.0, lt=<=)
+        @test SPICE._lstlt(-2.0, array) == searchsortedlast(array, -2.0, lt=<=)
+        @test SPICE._lstlt(0.0, array) == searchsortedlast(array, 0.0, lt=<=)
+        @test SPICE._lstlt(1.0, array) == searchsortedlast(array, 1.0, lt=<=)
+        @test SPICE._lstlt(11.1, array) == searchsortedlast(array, 11.1, lt=<=)
     end
-
-    let array = [-2.0, -2.0, 0.0, 1.0, 1.0, 11.0]
-        @test lstlt(-3.0, array) == 0
-        @test lstlt(-2.0, array) == 0
-        @test lstlt(0.0, array) == 2
-        @test lstlt(1.0, array) == 3
-        @test lstlt(11.1, array) == 6
+    @testset "lstlti" begin
+        array = [-2, -2, 0, 1, 1, 11]
+        @test SPICE._lstlt(-3, array) == searchsortedlast(array, -3, lt=<=)
+        @test SPICE._lstlt(-2, array) == searchsortedlast(array, -2, lt=<=)
+        @test SPICE._lstlt(0, array) == searchsortedlast(array, 0, lt=<=)
+        @test SPICE._lstlt(1, array) == searchsortedlast(array, 1, lt=<=)
+        @test SPICE._lstlt(12, array) == searchsortedlast(array, 12, lt=<=)
     end
-
-    let array = [-2, -2, 0, 1, 1, 11]
-        @test lstlt(-3, array) == 0
-        @test lstlt(-2, array) == 0
-        @test lstlt(0, array) == 2
-        @test lstlt(1, array) == 3
-        @test lstlt(12, array) == 6
+    @testset "ltime" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :spk))
+            obs = 399
+            target = 5
+            time_str = "July 4, 2004"
+            et = str2et(time_str)
+            arrive, ltime_act = ltime(et, obs, "->", target)
+            arrive_utc = et2utc(arrive, "C", 3)
+            @test ltime_act ≈ 2918.71705
+            @test arrive_utc == "2004 JUL 04 00:48:38.717"
+            receive, rtime_act = ltime(et, obs, "<-", target)
+            receive_utc = et2utc(receive, "C", 3)
+            @test rtime_act ≈ 2918.75247
+            @test receive_utc == "2004 JUL 03 23:11:21.248"
+        finally
+            kclear()
+        end
     end
-
-    kclear()
-    furnsh(path(CORE, :lsk), path(CORE, :spk))
-    let OBS = 399
-        TARGET = 5
-        TIME_STR = "July 4, 2004"
-        et = str2et(TIME_STR)
-        arrive, ltime_act = ltime(et, OBS, "->", TARGET)
-        arrive_utc = et2utc(arrive, "C", 3)
-        @test ltime_act ≈ 2918.71705
-        @test arrive_utc == "2004 JUL 04 00:48:38.717"
-        receive, rtime_act = ltime(et, OBS, "<-", TARGET)
-        receive_utc = et2utc(receive, "C", 3)
-        @test rtime_act ≈ 2918.75247
-        @test receive_utc == "2004 JUL 03 23:11:21.248"
+    @testset "lx4dec" begin
+        @test lx4dec("1%2%3", 1) == (1, 1)
+        @test lx4dec("1%2%3", 2) == (1, 0)
+        @test lx4dec("1%2%3", 3) == (3, 1)
     end
-    kclear()
-
-    @test lx4dec("1%2%3", 1) == (1, 1)
-    @test lx4dec("1%2%3", 2) == (1, 0)
-    @test lx4dec("1%2%3", 3) == (3, 1)
-
-    @test lx4num("1%2%3", 1) == (1, 1)
-    @test lx4num("1%2%3", 2) == (1, 0)
-    @test lx4num("1%2%3", 3) == (3, 1)
-    @test lx4num("1%2e1%3", 3) == (5, 3)
-
-    @test lx4sgn("1%2%3", 1) == (1, 1)
-    @test lx4sgn("1%2%3", 2) == (1, 0)
-    @test lx4sgn("1%2%3", 3) == (3, 1)
-
-    @test lx4uns("test 10 end", 5) == (4, 0)
-
-    @test lxqstr("The 'SPICE' system", '\'', 5) == (11, 7)
-    @test lxqstr("The 'SPICE' system", '\'', 5) == (11, 7)
-    @test lxqstr("The 'SPICE' system", '\'', 1) == (0, 0)
-    @test lxqstr("The 'SPICE' system", '\"', 5) == (4, 0)
-    @test lxqstr("The '''SPICE'''' system", '\'', 5) == (15, 11)
-    @test lxqstr("The &&&SPICE system", '&', 5) == (6, 2)
-    @test lxqstr("' '", '\'', 1) == (3, 3)
-    @test lxqstr("''", '\'', 1) == (2, 2)
+    @testset "lx4num" begin
+        @test lx4num("1%2%3", 1) == (1, 1)
+        @test lx4num("1%2%3", 2) == (1, 0)
+        @test lx4num("1%2%3", 3) == (3, 1)
+        @test lx4num("1%2e1%3", 3) == (5, 3)
+    end
+    @testset "lx4sgn" begin
+        @test lx4sgn("1%2%3", 1) == (1, 1)
+        @test lx4sgn("1%2%3", 2) == (1, 0)
+        @test lx4sgn("1%2%3", 3) == (3, 1)
+    end
+    @testset "lx4uns" begin
+        @test lx4uns("test 10 end", 5) == (4, 0)
+    end
+    @testset "lxqstr" begin
+        @test lxqstr("The 'SPICE' system", '\'', 5) == (11, 7)
+        @test lxqstr("The 'SPICE' system", '\'', 5) == (11, 7)
+        @test lxqstr("The 'SPICE' system", '\'', 1) == (0, 0)
+        @test lxqstr("The 'SPICE' system", '\"', 5) == (4, 0)
+        @test lxqstr("The '''SPICE'''' system", '\'', 5) == (15, 11)
+        @test lxqstr("The &&&SPICE system", '&', 5) == (6, 2)
+        @test lxqstr("' '", '\'', 1) == (3, 3)
+        @test lxqstr("''", '\'', 1) == (2, 2)
+    end
 end

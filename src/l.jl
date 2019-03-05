@@ -309,6 +309,9 @@ function limbpt(method, target, et, fixref, abcorr, corloc, obsrvr, refvec,
     npts, cmatrix_to_array(points), epochs, cmatrix_to_array(tangts)
 end
 
+@deprecate limb_pl02 limbpt
+@deprecate llgrid_pl02 latsrf
+
 """
    lmpool(cvals)
 
@@ -329,7 +332,7 @@ function lmpool(cvals)
     handleerror()
 end
 
-function lparse(list, delim, nmax)
+function _lparse(list, delim, nmax)
     lenout = length(list)+1
     n = Ref{SpiceInt}()
     items = Array{UInt8}(undef, lenout, nmax)
@@ -339,49 +342,18 @@ function lparse(list, delim, nmax)
     chararray_to_string(items, n[])
 end
 
+@deprecate lparse(list, delim, nmax) split(list, delim, limit=nmax)
+
 """
    lparse(list, delim, nmax)
 
-Parse a list of items delimited by a single character.
-
-### Arguments ###
-
-- `list`: List of items delimited by delim
-- `delim`: Single character used to delimit items
-- `nmax`: Maximum number of items to return
-
-### Output ###
-
-Returns an array with the items in the list, left justified.
-
-### References ###
-
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lparse_c.html)
+!!! warning Deprecated
+    Use `split(list, delim, limit=nmax)` instead.
 """
 lparse
 
-"""
-   lparsm(list, delims, nmax)
-
-Parse a list of items separated by multiple delimiters.
-
-### Arguments ###
-
-- `list`: List of items delimited by delim
-- `delims`: Single characters which delimit items
-- `nmax`: Maximum number of items to return
-
-### Output ###
-
-Returns an array with the items in the list, left justified.
-
-### References ###
-
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lparse_c.html)
-"""
-lparsm(list, delims, nmax) = lparsm(list, delims, nmax, length(list)+1)
-
-function lparsm(list, delims, nmax, lenout)
+function _lparsm(list, delims, nmax)
+    lenout = length(list) + 1
     n = Ref{SpiceInt}()
     items = Array{UInt8}(undef, lenout, nmax)
     ccall((:lparsm_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{UInt8}),
@@ -390,32 +362,33 @@ function lparsm(list, delims, nmax, lenout)
     chararray_to_string(items, n[])
 end
 
+@deprecate lparsm(list, delim, nmax) split(list, delim, limit=nmax, keepempty=false)
+
 """
-   lparss(list, delims)
+   lparsm(list, delims, nmax)
 
-Parse a list of items separated by multiple delimiters, placing the
-resulting items into a set.
-
-### Arguments ###
-
-- `list`: List of items delimited by delim
-- `delims`: Single characters which delimit items
-
-### Output ###
-
-Returns a set containing items in the list, left justified
-
-### References ###
-
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lparse_c.html)
+!!! warning Deprecated
+    Use `split(list, delim, limit=nmax, keepempty=false)` instead.
 """
-function lparss(list, delims)
+lparsm
+
+function _lparss(list, delims)
     items = SpiceCharCell(length(list), length(list))
     ccall((:lparss_c, libcspice), Cvoid, (Cstring, Cstring, Ref{Cell{UInt8}}),
           list, delims, Ref(items.cell))
     handleerror()
     items
 end
+
+@deprecate lparss(list, delim) Set(split(list, collect(delim)))
+
+"""
+   lparss(list, delims)
+
+!!! warning Deprecated
+    Use `Set(split(list, collect(delim)))` instead.
+"""
+lparss
 
 """
    lspcn(body, et, abcorr)
@@ -438,46 +411,15 @@ at the specified time in radians.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lspcn_c.html)
 """
-function lspcn(body , et, abcorr)
+function lspcn(body, et, abcorr)
     out = ccall((:lspcn_c, libcspice), SpiceDouble, (Cstring, SpiceDouble, Cstring),
          body, et, abcorr)
     handleerror()
     out
 end
 
-"""
-   lstle(x, array)
 
-Given an element `x` and an array of non-decreasing elements (floats, integers, or strings),
-find the index of the largest array element less than or equal to `x`.
-
-### Arguments ###
-
-- `x`: Value to search against
-- `arrays`: Array of possible lower bounds
-
-### Output ###
-
-Returns the index of the highest-indexed element in the
-input array that is less than or equal to `x`.  The routine assumes
-the array elements are sorted in non-decreasing order.
-
-If all elements of the input array are greater than `x`, the function
-returns 0.
-
-### References ###
-
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstlec_c.html)
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstled_c.html)
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstlei_c.html)
-"""
-lstle
-
-@deprecate lstlec lstle
-@deprecate lstled lstle
-@deprecate lstlei lstle
-
-function lstle(string::AbstractString, array)
+function _lstle(string::AbstractString, array)
     n = length(array)
     array, n, lenvals = chararray(array)
     out = ccall((:lstlec_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ref{UInt8}),
@@ -486,7 +428,7 @@ function lstle(string::AbstractString, array)
     out + 1
 end
 
-function lstle(x::AbstractFloat, array)
+function _lstle(x::AbstractFloat, array)
     n = length(array)
     array = Vector{SpiceDouble}(array)
     out = ccall((:lstled_c, libcspice), SpiceInt, (SpiceDouble, SpiceInt, Ref{SpiceDouble}),
@@ -494,7 +436,7 @@ function lstle(x::AbstractFloat, array)
     out + 1
 end
 
-function lstle(x::Signed, array)
+function _lstle(x::Signed, array)
     n = length(array)
     array = Vector{SpiceInt}(array)
     out = ccall((:lstlei_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, Ref{SpiceInt}),
@@ -502,62 +444,73 @@ function lstle(x::Signed, array)
     out + 1
 end
 
+@deprecate lstlec(item, array) findfirst(item .<= array)
+@deprecate lstled(item, array) searchsortedlast(array, item)
+@deprecate lstlei(item, array) searchsortedlast(array, item)
+
 """
-   lstle(x, array)
+    lstlecd(x, array)
 
-Given an element `x` and an array of non-decreasing elements (floats, integers, or strings),
-find the index of the largest array element less than `x`.
-
-### Arguments ###
-
-- `x`: Value to search against
-- `arrays`: Array of possible lower bounds
-
-### Output ###
-
-Returns the index of the highest-indexed element in the
-input array that is less than `x`.  The routine assumes
-the array elements are sorted in non-decreasing order.
-
-If all elements of the input array are greater than or equal to `x`, the function
-returns 0.
-
-### References ###
-
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstltc_c.html)
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstltd_c.html)
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lstlti_c.html)
+!!! warning Deprecated
+    Use `findfirst(item .<= array)` instead.
 """
-lstlt
+lstlec
 
-@deprecate lstltc lstlt
-@deprecate lstltd lstlt
-@deprecate lstlti lstlt
+"""
+    lstle[di](x, array)
 
-function lstlt(string::AbstractString, array)
+!!! warning Deprecated
+    Use `searchsortedlast(array, x)` instead.
+"""
+lstled
+lstlei
+
+function _lstlt(string::AbstractString, array)
     n = length(array)
     array, n, lenvals = chararray(array)
     out = ccall((:lstltc_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ref{UInt8}),
                 string, n, lenvals, array)
     handleerror()
-    out+1
+    out + 1
 end
 
-function lstlt(x::AbstractFloat, array)
+function _lstlt(x::AbstractFloat, array)
     n = length(array)
-    array = Vector{SpiceDouble}(array)
+    array = SpiceDouble.(array)
     out = ccall((:lstltd_c, libcspice), SpiceInt, (SpiceDouble, SpiceInt, Ref{SpiceDouble}),
                 x, n, array)
     out + 1
 end
 
-function lstlt(x::Signed, array)
+function _lstlt(x::Signed, array)
     n = length(array)
-    array = Vector{SpiceInt}(array)
+    array = SpiceInt.(array)
     out = ccall((:lstlti_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, Ref{SpiceInt}),
                 x, n, array)
     out + 1
 end
+
+@deprecate lstltc(item, array) findfirst(item .< array)
+@deprecate lstltd(item, array) searchsortedlast(array, item, lt=<=)
+@deprecate lstlti(item, array) searchsortedlast(array, item, lt=<=)
+
+"""
+    lstltcd(x, array)
+
+!!! warning Deprecated
+    Use `findfirst(item .< array)` instead.
+"""
+lstltc
+
+"""
+    lstlt[di](x, array)
+
+!!! warning Deprecated
+    Use `searchsortedlast(array, x, lt=<=)` instead.
+"""
+lstltd
+lstlti
+
 
 """
     ltime(etobs, obs, dir, targ)
@@ -575,8 +528,6 @@ time between transmit and receive is also returned.
 - `targ`: Time between transmit and receipt of the signal
 
 ### Output ###
-
-Returns the tuple `(ettarg, elapsd)`.
 
 - `ettarg`: Epoch of the signal at the target
 - `obs`: NAIF ID of some observer
@@ -607,8 +558,6 @@ end of a decimal number.
 
 ### Output ###
 
-Returns the tuple `(last, nchar)`.
-
 - `last`: Last character that is part of a decimal number. If there is no such
           character, last will be returned with the value first-1.
 - `nchar`: Number of characters in the decimal number
@@ -624,7 +573,7 @@ function lx4dec(string, first)
           (Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}),
           string, first - 1, last, nchar)
     handleerror()
-    last[] + 1, nchar[]
+    last[] + 1, Int(nchar[])
 end
 
 """
@@ -639,8 +588,6 @@ end of a number.
 - `first`: First character to scan from in string
 
 ### Output ###
-
-Returns the tuple `(last, nchar)`.
 
 - `last`: Last character that is part of a number. If there is no such
           character, last will be returned with the value first-1.
@@ -657,14 +604,13 @@ function lx4num(string, first)
           (Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}),
           string, first - 1, last, nchar)
     handleerror()
-    last[] + 1, nchar[]
+    last[] + 1, Int(nchar[])
 end
 
 """
     lx4sgn(string, first)
 
-Scan a string from a specified starting position for the
-end of a signed integer.
+Scan a string from a specified starting position for the end of a signed integer.
 
 ### Arguments ###
 
@@ -672,8 +618,6 @@ end of a signed integer.
 - `first`: First character to scan from in string
 
 ### Output ###
-
-Returns the tuple `(last, nchar)`.
 
 - `last`: Last character that is part of a signed integer. If there is no such
           character, last will be returned with the value first-1.
@@ -706,8 +650,6 @@ end of a unsigned integer.
 
 ### Output ###
 
-Returns the tuple `(last, nchar)`.
-
 - `last`: Last character that is part of an unsigned integer. If there is no such
           character, last will be returned with the value first-1.
 - `nchar`: Number of characters in the unsigned integer
@@ -726,6 +668,26 @@ function lx4uns(string, first)
     last[] + 1, nchar[]
 end
 
+"""
+    lxqstr(string, qchar, first)
+
+Lex (scan) a quoted string.
+
+### Arguments ###
+
+- `string`: String to be scanned
+- `qchar`: Quote delimiter character
+- `first`: Character position at which to start scanning
+
+### Output ###
+
+- `last`: Character position of end of token
+- `nchar`: Number of characters in token
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lxqstr_c.html)
+"""
 function lxqstr(string, qchar, first)
     last = Ref{SpiceInt}()
     nchar = Ref{SpiceInt}()
@@ -735,6 +697,4 @@ function lxqstr(string, qchar, first)
     handleerror()
     last[] + 1, nchar[]
 end
-
-
 

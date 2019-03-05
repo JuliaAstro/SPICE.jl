@@ -74,7 +74,7 @@ function show(io::IO, cell::SpiceCell{T}) where T
     print(io, "SpiceCell{$(T.name.name)}($(cell.cell.size))")
 end
 function show(io::IO, cell::SpiceCharCell)
-    print(io, "SpiceCell{$(T.name.name)}($(cell.cell.size),$(cell.cell.length))")
+    print(io, "SpiceCell{SpiceChar}($(cell.cell.size),$(cell.cell.length))")
 end
 
 function check_ind(cell, inds)
