@@ -1933,7 +1933,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.npedln",
     "category": "method",
-    "text": "npedln(a, b, c, linept, linedr)\n\nFind nearest point on a triaxial ellipsoid to a specified line, and the distance from the ellipsoid to the line.\n\nArguments\n\na: Length of semi-axis in the x direction \nb: Length of semi-axis in the y direction \nc: Length of semi-axis in the z direction \nlinept: Point on line \nlinedr: Direction vector of line \n\nOutput\n\nReturns a tuple consisting of pnear and dist.\n\npnear: Nearest point on ellipsoid to line \ndist: Distance of ellipsoid from line\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "npedln(a, b, c, linept, linedr)\n\nFind nearest point on a triaxial ellipsoid to a specified line, and the distance from the ellipsoid to the line.\n\nArguments\n\na: Length of semi-axis in the x direction\nb: Length of semi-axis in the y direction\nc: Length of semi-axis in the z direction\nlinept: Point on line\nlinedr: Direction vector of line\n\nOutput\n\nReturns a tuple consisting of pnear and dist.\n\npnear: Nearest point on ellipsoid to line\ndist: Distance of ellipsoid from line\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1949,7 +1949,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.nplnpt",
     "category": "method",
-    "text": "nplnpt(linept, linedr, point)\n\nFind the nearest point on a line to a specified point, and find the distance between the two points.\n\nArguments\n\nlinept: Point on line \nlinedr: Direction vector of line \npoint: A second point\n\nOutput\n\nReturns a tuple consisting of pnear and dist.\n\npnear: Nearest point on the line to point\ndist: Distance between point and pnear\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "nplnpt(linept, linedr, point)\n\nFind the nearest point on a line to a specified point, and find the distance between the two points.\n\nArguments\n\nlinept: Point on line\nlinedr: Direction vector of line\npoint: A second point\n\nOutput\n\nReturns a tuple consisting of pnear and dist.\n\npnear: Nearest point on the line to point\ndist: Distance between point and pnear\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -2041,6 +2041,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.pckcls-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.pckcls",
+    "category": "method",
+    "text": "pckcls(handle)\n\nClose an open PCK file.\n\nArguments\n\nhandle: Handle of the PCK file to be closed\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.pckcov!-Tuple{Any,Any,Any}",
     "page": "API",
     "title": "SPICE.pckcov!",
@@ -2065,11 +2073,27 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.pckopn-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.pckopn",
+    "category": "method",
+    "text": "pckopn(name, ifname, ncomch)\n\nCreate a new PCK file, returning the handle of the opened file.\n\nArguments\n\nname: The name of the PCK file to be opened\nifname: The internal filename for the PCK\nncomch: The number of characters to reserve for comments\n\nOutput\n\nReturns the handle of the opened PCK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.pckuof-Tuple{Any}",
     "page": "API",
     "title": "SPICE.pckuof",
     "category": "method",
     "text": "pckuof(handle)\n\nUnload a binary PCK file so that it will no longer be searched by the readers.\n\nArguments\n\nhandle: Integer handle of a PCK file\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.pckw02-NTuple{9,Any}",
+    "page": "API",
+    "title": "SPICE.pckw02",
+    "category": "method",
+    "text": "pckw02(handle, clssid, frame, first, last, segid, intlen, cdata, btime)\n\nWrite a type 2 segment to a PCK binary file given the file handle, frame class ID, base frame, time range covered by the segment, and the Chebyshev polynomial coefficients.\n\nArguments\n\nhandle: Handle of binary PCK file open for writing.\nclssid: Frame class ID of body-fixed frame.\nframe: Name of base reference frame.\nfirst: Start time of interval covered by segment.\nlast: End time of interval covered by segment.\nsegid: Segment identifier.\nintlen: Length of time covered by logical record.\ncdata: Array of Chebyshev coefficients.\nbtime: Begin time of first logical record.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -2257,11 +2281,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.q2m-Tuple",
+    "location": "api/#SPICE.q2m-Tuple{Any}",
     "page": "API",
     "title": "SPICE.q2m",
     "category": "method",
-    "text": "q2m(q...)\n\nFind the rotation matrix corresponding to a specified unit quaternion.\n\nArguments\n\nq: A unit quaternion (as any kind of iterable with four elements)\n\nOutput\n\nA rotation matrix corresponding to q.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "q2m(q)\n\nFind the rotation matrix corresponding to a specified unit quaternion.\n\nArguments\n\nq: A unit quaternion\n\nOutput\n\nA rotation matrix corresponding to q.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -2269,7 +2293,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.qdq2av",
     "category": "method",
-    "text": "qdq2av(q,dq)\n\nDerive angular velocity from a unit quaternion and its derivative  with respect to time. \n\nArguments\n\nq: Unit SPICE quaternion (as any kind of iterable with four elements)\ndq: Derivative of `q\' with respect to time\n\nOutput\n\nAngular velocity vector defined by q\' anddq\'\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "qdq2av(q, dq)\n\nDerive angular velocity from a unit quaternion and its derivative with respect to time.\n\nArguments\n\nq: Unit SPICE quaternion (as any kind of iterable with four elements)\ndq: Derivative of `q\' with respect to time\n\nOutput\n\nAngular velocity vector defined by q\' anddq\'\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -2277,7 +2301,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.qxq",
     "category": "method",
-    "text": "qxq(q1,q2)\n\nMultiply two quaternions. \n\nArguments\n\nq1: First SPICE quaternion factor (as any kind of iterable with four elements)\nq2: Second SPICE quaternion factor (as any kind of iterable with four elements)\n\nOutput\n\nA quaternion corresponding to the product of q1\' andq2\'\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "qxq(q1, q2)\n\nMultiply two quaternions.\n\nArguments\n\nq1: First SPICE quaternion factor (as any kind of iterable with four elements)\nq2: Second SPICE quaternion factor (as any kind of iterable with four elements)\n\nOutput\n\nA quaternion corresponding to the product of q1\' andq2\'\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -2493,7 +2517,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.rquad",
     "category": "method",
-    "text": "Arguments\n\nOutput\n\nReturns nothing if no kernel was found or\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "rquad(a, b, c)\n\nFind the roots of a quadratic equation.\n\nArguments\n\na: Coefficient of quadratic term\nb: Coefficient of linear term\nc: Constant\n\nOutput\n\nroot1: Root built from positive discriminant term\nroot2: Root built from negative discriminant term\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
