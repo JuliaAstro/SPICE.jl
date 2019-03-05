@@ -28,6 +28,14 @@ export
     lx4uns,
     lxqstr
 
+function _lastnb(str)
+    r = ccall((:lastnb_c, libcspice), SpiceInt, (Cstring,), str)
+    handleerror()
+    r + 1
+end
+
+@deprecate lastnb(str) findprev(!isspace, str, length(str))
+
 """
     lastnb(str)
 
@@ -35,12 +43,6 @@ export
     Use `findprev(!isspace, str, length(str))` instead.
 """
 lastnb
-
-function _lastnb(str)
-    r = ccall((:lastnb_c, libcspice), SpiceInt, (Cstring,), str)
-    handleerror()
-    r + 1
-end
 
 """
     latcyl(radius, lon, lat)
