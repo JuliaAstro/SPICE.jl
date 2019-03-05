@@ -1629,23 +1629,23 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lparse",
     "category": "function",
-    "text": "lparse(list, delim, nmax)\n\nParse a list of items delimited by a single character.\n\nArguments\n\nlist: List of items delimited by delim\ndelim: Single character used to delimit items\nnmax: Maximum number of items to return\n\nOutput\n\nReturns an array with the items in the list, left justified.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lparse(list, delim, nmax)\n\n!!! warning Deprecated     Use split(list, delim, limit=nmax) instead.\n\n\n\n\n\n"
 },
 
 {
-    "location": "api/#SPICE.lparsm-Tuple{Any,Any,Any}",
+    "location": "api/#SPICE.lparsm",
     "page": "API",
     "title": "SPICE.lparsm",
-    "category": "method",
-    "text": "lparsm(list, delims, nmax)\n\nParse a list of items separated by multiple delimiters.\n\nArguments\n\nlist: List of items delimited by delim\ndelims: Single characters which delimit items\nnmax: Maximum number of items to return\n\nOutput\n\nReturns an array with the items in the list, left justified.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "category": "function",
+    "text": "lparsm(list, delims, nmax)\n\n!!! warning Deprecated     Use split(list, delim, limit=nmax, keepempty=false) instead.\n\n\n\n\n\n"
 },
 
 {
-    "location": "api/#SPICE.lparss-Tuple{Any,Any}",
+    "location": "api/#SPICE.lparss",
     "page": "API",
     "title": "SPICE.lparss",
-    "category": "method",
-    "text": "lparss(list, delims)\n\nParse a list of items separated by multiple delimiters, placing the resulting items into a set.\n\nArguments\n\nlist: List of items delimited by delim\ndelims: Single characters which delimit items\n\nOutput\n\nReturns a set containing items in the list, left justified\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "category": "function",
+    "text": "lparss(list, delims)\n\n!!! warning Deprecated     Use Set(split(list, collect(delim))) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1657,19 +1657,35 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.lstle",
+    "location": "api/#SPICE.lstlec",
     "page": "API",
-    "title": "SPICE.lstle",
+    "title": "SPICE.lstlec",
     "category": "function",
-    "text": "lstle(x, array)\n\nGiven an element x and an array of non-decreasing elements (floats, integers, or strings), find the index of the largest array element less than or equal to x.\n\nArguments\n\nx: Value to search against\narrays: Array of possible lower bounds\n\nOutput\n\nReturns the index of the highest-indexed element in the input array that is less than or equal to x.  The routine assumes the array elements are sorted in non-decreasing order.\n\nIf all elements of the input array are greater than x, the function returns 0.\n\nReferences\n\nNAIF Documentation\nNAIF Documentation\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lstlecd(x, array)\n\n!!! warning Deprecated     Use findfirst(item .<= array) instead.\n\n\n\n\n\n"
 },
 
 {
-    "location": "api/#SPICE.lstlt",
+    "location": "api/#SPICE.lstled",
     "page": "API",
-    "title": "SPICE.lstlt",
+    "title": "SPICE.lstled",
     "category": "function",
-    "text": "lstle(x, array)\n\nGiven an element x and an array of non-decreasing elements (floats, integers, or strings), find the index of the largest array element less than x.\n\nArguments\n\nx: Value to search against\narrays: Array of possible lower bounds\n\nOutput\n\nReturns the index of the highest-indexed element in the input array that is less than x.  The routine assumes the array elements are sorted in non-decreasing order.\n\nIf all elements of the input array are greater than or equal to x, the function returns 0.\n\nReferences\n\nNAIF Documentation\nNAIF Documentation\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lstle[di](x, array)\n\n!!! warning Deprecated     Use searchsortedlast(array, x) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lstltc",
+    "page": "API",
+    "title": "SPICE.lstltc",
+    "category": "function",
+    "text": "lstltcd(x, array)\n\n!!! warning Deprecated     Use findfirst(item .< array) instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lstltd",
+    "page": "API",
+    "title": "SPICE.lstltd",
+    "category": "function",
+    "text": "lstlt[di](x, array)\n\n!!! warning Deprecated     Use searchsortedlast(array, x, lt=<=) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1677,7 +1693,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.ltime",
     "category": "method",
-    "text": "ltime(etobs, obs, dir, targ)\n\nThis routine computes the transmit (or receive) time of a signal at a specified target, given the receive (or transmit) time at a specified observer. The elapsed time between transmit and receive is also returned.\n\nArguments\n\netobs: Epoch of a signal at some observer\nobs: NAIF ID of some observer\ndir: Direction the signal travels ( \"->\" or \"<-\" )\ntarg: Time between transmit and receipt of the signal\n\nOutput\n\nReturns the tuple (ettarg, elapsd).\n\nettarg: Epoch of the signal at the target\nobs: NAIF ID of some observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "ltime(etobs, obs, dir, targ)\n\nThis routine computes the transmit (or receive) time of a signal at a specified target, given the receive (or transmit) time at a specified observer. The elapsed time between transmit and receive is also returned.\n\nArguments\n\netobs: Epoch of a signal at some observer\nobs: NAIF ID of some observer\ndir: Direction the signal travels ( \"->\" or \"<-\" )\ntarg: Time between transmit and receipt of the signal\n\nOutput\n\nettarg: Epoch of the signal at the target\nobs: NAIF ID of some observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1685,7 +1701,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lx4dec",
     "category": "method",
-    "text": "lx4dec(string, first)\n\nScan a string from a specified starting position for the end of a decimal number.\n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of a decimal number. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the decimal number\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lx4dec(string, first)\n\nScan a string from a specified starting position for the end of a decimal number.\n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nlast: Last character that is part of a decimal number. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the decimal number\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1693,7 +1709,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lx4num",
     "category": "method",
-    "text": "lx4num(string, first)\n\nScan a string from a specified starting position for the end of a number.\n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of a number. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the number\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lx4num(string, first)\n\nScan a string from a specified starting position for the end of a number.\n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nlast: Last character that is part of a number. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the number\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1701,7 +1717,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lx4sgn",
     "category": "method",
-    "text": "lx4sgn(string, first)\n\nScan a string from a specified starting position for the end of a signed integer.\n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of a signed integer. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the signed integer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lx4sgn(string, first)\n\nScan a string from a specified starting position for the end of a signed integer.\n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nlast: Last character that is part of a signed integer. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the signed integer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1709,7 +1725,15 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lx4uns",
     "category": "method",
-    "text": "lx4uns(string, first)\n\nScan a string from a specified starting position for the end of a unsigned integer.\n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nReturns the tuple (last, nchar).\n\nlast: Last character that is part of an unsigned integer. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the unsigned integer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "lx4uns(string, first)\n\nScan a string from a specified starting position for the end of a unsigned integer.\n\nArguments\n\nstring: Any character string\nfirst: First character to scan from in string\n\nOutput\n\nlast: Last character that is part of an unsigned integer. If there is no such         character, last will be returned with the value first-1.\nnchar: Number of characters in the unsigned integer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.lxqstr-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.lxqstr",
+    "category": "method",
+    "text": "lxqstr(string, qchar, first)\n\nLex (scan) a quoted string.\n\nArguments\n\nstring: String to be scanned\nqchar: Quote delimiter character\nfirst: Character position at which to start scanning\n\nOutput\n\nlast: Character position of end of token\nnchar: Number of characters in token\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
