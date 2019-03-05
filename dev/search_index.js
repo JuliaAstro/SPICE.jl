@@ -1129,11 +1129,203 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.edterm-NTuple{7,Any}",
+    "location": "api/#SPICE.edterm-NTuple{8,Any}",
     "page": "API",
     "title": "SPICE.edterm",
     "category": "method",
-    "text": "edterm(trmtyp, source, target, et, fixref, obsrvr, abcorr)\n\nCompute a set of points on the umbral or penumbral terminator of a specified target body, where the target shape is modeled as an ellipsoid.\n\nArguments\n\ntrmtyp: Terminator type.\nsource: Light source.\ntarget: Target body.\net: Observation epoch.\nfixref: Body-fixed frame associated with target.\nobsrvr: Observer.\nnpts: Number of points in terminator set.\nabcorr: Aberration correction.\n\nOutput\n\ntrgepc: Epoch associated with target center.\nobspos: Position of observer in body-fixed frame.\ntrmpts: Terminator point set.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "edterm(trmtyp, source, target, et, fixref, abcorr, obsrvr, npts)\n\nCompute a set of points on the umbral or penumbral terminator of a specified target body, where the target shape is modeled as an ellipsoid.\n\nArguments\n\ntrmtyp: Terminator type\nsource: Light source\ntarget: Target body\net: Observation epoch\nfixref: Body-fixed frame associated with target\nabcorr: Aberration correction\nobsrvr: Observer\nnpts: Number of points in terminator set\n\nOutput\n\ntrgepc: Epoch associated with target center\nobspos: Position of observer in body-fixed frame\ntrmpts: Terminator point set\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekacec-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.ekacec",
+    "category": "method",
+    "text": "ekacec(handle, segno, recno, column, cvals, isnull)\n\nAdd data to a character column in a specified EK record.\n\nArguments\n\nhandle: EK file handle\nsegno: Index of segment containing record\nrecno: Record to which data is to be added\ncolumn: Column name\ncvals: Character values to add to column\nisnull: Flag indicating whether column entry is null\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekaced-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.ekaced",
+    "category": "method",
+    "text": "ekaced(handle, segno, recno, column, dvals, isnull)\n\nAdd data to an double precision column in a specified EK record.\n\nArguments\n\nhandle: EK file handle\nsegno: Index of segment containing record\nrecno: Record to which data is to be added\ncolumn: Column name\ndvals: Double precision values to add to column\nisnull: Flag indicating whether column entry is null\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekacei-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.ekacei",
+    "category": "method",
+    "text": "ekacei(handle, segno, recno, column, ivals, isnull)\n\nAdd data to an integer column in a specified EK record.\n\nArguments\n\nhandle: EK file handle\nsegno: Index of segment containing record\nrecno: Record to which data is to be added\ncolumn: Column name\nivals: Integer values to add to column\nisnull: Flag indicating whether column entry is null\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekaclc-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.ekaclc",
+    "category": "method",
+    "text": "ekaclc(handle, segno, column, cvals, nlflgs, rcptrs)\n\nAdd an entire character column to an EK segment.\n\nArguments\n\nhandle: EK file handle.\nsegno: Number of segment to add column to.\ncolumn: Column name.\ncvals: Character values to add to column.\nnlflgs: Array of null flags for column entries.\nrcptrs: Record pointers for segment.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekacld-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.ekacld",
+    "category": "method",
+    "text": "ekacld(handle, segno, column, dvals, nlflgs, rcptrs)\n\nAdd an entire double precision column to an EK segment.\n\nArguments\n\nhandle: EK file handle\nsegno: Number of segment to add column to\ncolumn: Column name\ndvals: Double precision values to add to column\nnlflgs: Array of null flags for column entries\nrcptrs: Record pointers for segment\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekacli-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.ekacli",
+    "category": "method",
+    "text": "ekacli(handle, segno, column, ivals, nlflgs, rcptrs)\n\nAdd an entire integer column to an EK segment.\n\nArguments\n\nhandle: EK file handle\nsegno: Number of segment to add column to\ncolumn: Column name\nivals: Integer values to add to column\nnlflgs: Array of null flags for column entries\nrcptrs: Record pointers for segment\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekappr-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.ekappr",
+    "category": "method",
+    "text": "ekappr(handle, segno)\n\nAppend a new, empty record at the end of a specified E-kernel segment.\n\nArguments\n\nhandle: File handle\nsegno: Segment number\n\nOutput\n\nReturns the number of appended record.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekbseg-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.ekbseg",
+    "category": "method",
+    "text": "ekbseg(handle, tabnam, cnames, decls)\n\nStart a new segment in an E-kernel.\n\nArguments\n\nhandle: File handle\ntabnam: Table name\ncnames: Names of columns\ndecls: Declarations of columns\n\nOutput\n\nReturns the segment number.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekccnt-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.ekccnt",
+    "category": "method",
+    "text": "ekccnt(table)\n\nReturn the number of distinct columns in a specified, currently loaded table\n\nArguments\n\ntable: Name of table\n\nOutput\n\nReturns the count of distinct, currently loaded columns.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekcii",
+    "page": "API",
+    "title": "SPICE.ekcii",
+    "category": "function",
+    "text": "ekcii(table, cindex, lenout=256)\n\nReturn attribute information about a column belonging to a loaded EK table, specifying the column by table and index.\n\nArguments\n\ntable: Name of table containing column\ncindex: Index of column whose attributes are to be found\nlenout: Maximum allowed length of column name (default: 256)\n\nOutput\n\ncolumn: Name of column\nattdsc: Column attribute descriptor\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekcls-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.ekcls",
+    "category": "method",
+    "text": "ekcls(handle)\n\nClose an E-kernel.\n\nArguments\n\nhandle: EK file handle\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekdelr-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.ekdelr",
+    "category": "method",
+    "text": "ekdelr(handle, segno, recno)\n\nDelete a specified record from a specified E-kernel segment.\n\nArguments\n\nhandle: File handle\nsegno: Segment number\nrecno: Record number\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekffld-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.ekffld",
+    "category": "method",
+    "text": "ekffld(handle, segno, rcptrs)\n\nComplete a fast write operation on a new E-kernel segment.\n\nArguments\n\nhandle: File handle\nsegno: Segment number\nrcptrs: Record pointers\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekfind",
+    "page": "API",
+    "title": "SPICE.ekfind",
+    "category": "function",
+    "text": "ekfind(query, lenout=256)\n\nFind E-kernel data that satisfy a set of constraints.\n\nArguments\n\nquery: Query specifying data to be found.\nlenout: Declared length of output error message string (default: 256)\n\nOutput\n\nReturns the number of matching rows.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekgc",
+    "page": "API",
+    "title": "SPICE.ekgc",
+    "category": "function",
+    "text": "ekgc(selidx, row, elment, lenout=256)\n\nReturn an element of an entry in a column of character type in a specified row.\n\nArguments\n\nselidx: Index of parent column in SELECT clause\nrow: Row to fetch from\nelment: Index of element, within column entry, to fetch\nlenout: Maximum length of column element (default: 256)\n\nOutput\n\nReturns the character string element of column entry or missing if it was null or nothing if the column was not found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekgd-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.ekgd",
+    "category": "method",
+    "text": "ekgd(selidx, row, element)\n\nReturn an element of an entry in a column of double precision type in a specified row.\n\nArguments\n\nselidx: Index of parent column in SELECT clause\nrow: Row to fetch from\nelment: Index of element, within column entry, to fetch\n\nOutput\n\nReturns the double precision element of column entry or missing if it was null or nothing if the column was not found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekgi-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.ekgi",
+    "category": "method",
+    "text": "ekgi(selidx, row, element)\n\nReturn an element of an entry in a column of integer type in a specified row.\n\nArguments\n\nselidx: Index of parent column in SELECT clause\nrow: Row to fetch from\nelment: Index of element, within column entry, to fetch\n\nOutput\n\nReturns the integer element of column entry or missing if it was null or nothing if the column was not found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekifld-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.ekifld",
+    "category": "method",
+    "text": "ekifld(handle, tabnam, nrows, cnames, decls)\n\nInitialize a new E-kernel segment to allow fast writing.\n\nArguments\n\nhandle: File handle\ntabnam: Table name\nnrows: Number of rows in the segment\ncnames: Names of columns\ndecls: Declarations of columns\n\nOutput\n\nsegno: Segment number\nrcptrs: Array of record pointers\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekntab-Tuple{}",
+    "page": "API",
+    "title": "SPICE.ekntab",
+    "category": "method",
+    "text": "ekntab()\n\nReturn the number of loaded EK tables.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekopn-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.ekopn",
+    "category": "method",
+    "text": "ekopn(fname, ifname, ncomch)\n\nOpen a new E-kernel file and prepare the file for writing.\n\nArguments\n\nfname: Name of EK file\nifname: Internal file name\nncomch: The number of characters to reserve for comments\n\nOutput\n\nReturn the handle attached to the new EK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekopr-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.ekopr",
+    "category": "method",
+    "text": "ekopr(fname)\n\nOpen an existing E-kernel file for reading.\n\nArguments\n\nfname: Name of EK file\n\nOutput\n\nReturns the handle attached to the EK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekops-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.ekops",
+    "category": "method",
+    "text": "ekops(fname)\n\nOpen a scratch (temporary) E-kernel file and prepare the file for writing.\n\nArguments\n\nfname: Name of EK file\n\nOutput\n\nReturns the handle attached to the EK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekopw-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.ekopw",
+    "category": "method",
+    "text": "ekopw(fname)\n\nOpen an existing E-kernel file for writing.\n\nArguments\n\nfname: Name of EK file\n\nOutput\n\nReturns the handle attached to the EK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ektnam",
+    "page": "API",
+    "title": "SPICE.ektnam",
+    "category": "function",
+    "text": "ektnam(n, lenout=256)\n\nReturn the name of a specified, loaded table.\n\nArguments\n\nn: Index of table\nlenout: Maximum table name length (default: 256)\n\nOutput\n\nReturns the name of table.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
