@@ -12,7 +12,7 @@ export ucase,
 
 function _ucase(in)
     n = length(in) + 1
-    out = Array{UInt8}(undef, n)
+    out = Array{SpiceChar}(undef, n)
     ccall((:ucase_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{UInt8}),
           in, n, out)
     chararray_to_string(out)
@@ -68,12 +68,12 @@ Returns the approximate derivative of `udfunc` at `x`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/uddf_c.html)
 """
 function uddf(udfunc, x, dx)
-    function _udfunc(et::SpiceDouble, value::Ref{SpiceDouble})
-        value = unsafe_wrap(Array, value, 1)
-        value[1] = udfunc(et)
+    function _udfunc(et::SpiceDouble, value::Ptr{SpiceDouble})
+        value_ = GC.@preserve value unsafe_wrap(Array{SpiceDouble}, value, 1)
+        value_[1] = udfunc(et)
         nothing
     end
-    func = @cfunction($_udfunc, Cvoid, (SpiceDouble, Ref{SpiceDouble}))
+    func = @cfunction($_udfunc, Cvoid, (SpiceDouble, Ptr{SpiceDouble}))
     deriv = Ref{SpiceDouble}()
     ccall((:uddf_c, libcspice), Cvoid,
           (Ref{Cvoid}, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
@@ -213,7 +213,7 @@ unormg
 
 Convert an input time from Calendar or Julian Date format, UTC, to ephemeris
 seconds past J2000.
- 
+
 ### Arguments ###
 
 - `utcstr`: Input time string, UTC
@@ -221,7 +221,7 @@ seconds past J2000.
 ### Output ###
 
 Returns the equivalent of utcstr, expressed in ephemeris seconds past J2000.
- 
+
 ### References ###
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/utc2et_c.html)
@@ -233,3 +233,4 @@ function utc2et(utcstr)
     handleerror()
     et[]
 end
+

@@ -1133,7 +1133,7 @@ using LinearAlgebra: I, norm, cross, normalize
             et = str2et("2008 aug 11 00:00:00")
             re, _, rp = bodvrd("MARS", "RADII", 3)
             f = (re - rp) / re
-            methods = ["Intercept:  ellipsoid", "Near point: ellipsoid"]
+            methods = ["INTERCEPT: ELLIPSOID", "NEAR POINT: ELLIPSOID"]
             expecteds = [[349199089.604657,
                           349199089.64135259,
                           0.0,
@@ -1157,7 +1157,7 @@ using LinearAlgebra: I, norm, cross, normalize
                           25.729407227461937,
                           25.994934171391463]]
             for (expected, method) in zip(expecteds, methods)
-                spoint, trgepc, srfvec = subpnt(method, "Mars", et, "IAU_MARS", "earth", abcorr="LT+S")
+                spoint, trgepc, srfvec = subpnt(method, "MARS", et, "IAU_MARS", "LT+S", "EARTH")
                 odist = norm(srfvec)
                 @test odist ≈ expected[2]
                 spglon, spglat, spgalt = recpgr("mars", spoint, re, f)

@@ -403,6 +403,7 @@ Returns the component `a` orthogonal to `b`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/vperp_c.html)
 """
 function vperp(a, b)
+    @checkdims 3 a b
     p = Array{SpiceDouble}(undef, 3)
     ccall((:vperp_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
@@ -429,6 +430,7 @@ Returns the vector resulting from the projection.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/vprjp_c.html)
 """
 function vprjp(vin, plane)
+    @checkdims 3 vin
     vout = Array{SpiceDouble}(undef, 3)
     ccall((:vprjp_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{Plane}, Ref{SpiceDouble}),
@@ -458,6 +460,7 @@ Returns the inverse projection of `vin` or `nothing` if `vin` could not be calcu
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/vprjpi_c.html)
 """
 function vprjpi(vin, projpl, invpl)
+    @checkdims 3 vin
     vout = Array{SpiceDouble}(undef, 3)
     found = Ref{SpiceBoolean}()
     ccall((:vprjpi_c, libcspice), Cvoid,
@@ -486,6 +489,7 @@ Returns the projection of `a` onto `b`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/vproj_c.html)
 """
 function vproj(a, b)
+    @checkdims 3 a b
     p = Array{SpiceDouble}(undef, 3)
     ccall((:vproj_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}), a, b, p)
@@ -510,6 +514,7 @@ Returns the relative differences between `v1` and `v2`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/vrel_c.html)
 """
 function vrel(v1, v2)
+    @checkdims 3 v1 v2
     ccall((:vrel_c, libcspice), SpiceDouble,
           (Ref{SpiceDouble}, Ref{SpiceDouble}), v1, v2)
 end
@@ -533,6 +538,7 @@ Returns the relative differences between `v1` and `v2`.
 """
 function vrelg(v1, v2)
     ndim = length(v1)
+    @checkdims ndim v2
     ccall((:vrelg_c, libcspice), SpiceDouble,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt), v1, v2, ndim)
 end
@@ -558,6 +564,7 @@ Result of rotating `v` about `axis` by `theta`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/vrotv_c.html)
 """
 function vrotv(v, axis, theta)
+    @checkdims 3 v
     r = Array{SpiceDouble}(undef, 3)
     ccall((:vrotv_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble}),
@@ -619,6 +626,7 @@ Returns the angle between `v1` and `v2` in radians.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/vsep_c.html)
 """
 function vsep(v1, v2)
+    @checkdims 3 v1 v2
     ccall((:vsep_c, libcspice), SpiceDouble,
           (Ref{SpiceDouble}, Ref{SpiceDouble}), v1, v2)
 end
@@ -642,6 +650,7 @@ Returns the angle between `v1` and `v2` in radians.
 """
 function vsepg(v1, v2)
     ndim = length(v1)
+    @checkdims ndim v2
     ccall((:vsepg_c, libcspice), SpiceDouble,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt), v1, v2, ndim)
 end
@@ -765,3 +774,4 @@ end
 vzerog
 
 @deprecate vzerog(v1) iszero(v1)
+

@@ -1,7 +1,9 @@
 using LinearAlgebra: cross, norm, dot, normalize
 
 @testset "V" begin
-    let v1 = randn(3), v2 = randn(3)
+    @testset "Vector operations" begin
+        v1 = randn(3)
+        v2 = randn(3)
         @test SPICE._vadd(v1, v2) == v1 .+ v2
         @test SPICE._vaddg(v1, v2) == v1 .+ v2
         @test SPICE._vcrss(v1, v2) ≈ cross(v1, v2)
@@ -34,7 +36,9 @@ using LinearAlgebra: cross, norm, dot, normalize
         @test z1 == z2
         @test SPICE._vzero([0.0, 0.0, 0.0]) == iszero([0.0, 0.0, 0.0])
     end
-    let v1 = randn(6), v2 = randn(6)
+    @testset "Vector operations 2" begin
+        v1 = randn(6)
+        v2 = randn(6)
         @test SPICE._vdistg(v1, v2) ≈ norm(v1 .- v2)
         @test SPICE._vdotg(v1, v2) ≈ dot(v1, v2)
         w1 = fill(0.0, 6)
@@ -54,15 +58,18 @@ using LinearAlgebra: cross, norm, dot, normalize
         @test SPICE._vtmvg(v1, A, v2) ≈ v1' * A * v2
         @test SPICE._vzerog([0.0, 0.0, 0.0]) == iszero([0.0, 0.0, 0.0])
     end
-    let c = SpiceIntCell(3)
+    @testset "valid" begin
+        c = SpiceIntCell(3)
         push!(c, 2, 1, 2)
         valid!(c)
         @test c[1:end] == [1, 2]
     end
-    let a = [6.0, 6.0, 6.0], b = [2.0, 0.0, 0.0]
+    @testset "vperp" begin
+        a = [6.0, 6.0, 6.0]
+        b = [2.0, 0.0, 0.0]
         @test vperp(a, b) == [0.0, 6.0, 6.0]
     end
-    let
+    @testset "vprjp" begin
         vec1 = [-5.0, 7.0, 2.2]
         norm = [0.0, 0.0, 1.0]
         orig = [0.0, 0.0, 0.0]
@@ -71,7 +78,7 @@ using LinearAlgebra: cross, norm, dot, normalize
         expected = [-5.0, 7.0, 0.0]
         @test proj ≈ expected
     end
-    let
+    @testset "vprjpi" begin
         norm1 = [0.0, 0.0, 1.0]
         norm2 = [1.0, 0.0, 1.0]
         con1 = 1.2
@@ -83,24 +90,24 @@ using LinearAlgebra: cross, norm, dot, normalize
         expected = [1.0, 1.0, -0.35]
         @test result ≈ expected
     end
-    let
+    @testset "vproj" begin
         v1 = [6.0, 6.0, 6.0]
         v2 = [2.0, 0.0, 0.0]
         expected = [6.0, 0.0, 0.0]
         vout = vproj(v1, v2)
         @test expected ≈ vout
     end
-    let
+    @testset "vrel" begin
         vec1 = [12.3, -4.32, 76.0]
         vec2 = [23.0423, -11.99, -0.10]
         @test vrel(vec1, vec2) ≈ 1.0016370 rtol=1e-6
     end
-    let
+    @testset "vrel" begin
         vec1 = [12.3, -4.32, 76.0, 1.87]
         vec2 = [23.0423, -11.99, -0.10, -99.1]
         @test vrelg(vec1, vec2) ≈ 1.2408623 rtol=1e-6
     end
-    let
+    @testset "vrotv" begin
         v = [1.0, 2.0, 3.0]
         axis = [0.0, 0.0, 1.0]
         theta = π/2
@@ -108,12 +115,12 @@ using LinearAlgebra: cross, norm, dot, normalize
         expected = [-2.0, 1.0, 3.0]
         @test vout ≈ expected rtol=1e-7
     end
-    let
+    @testset "vsep" begin
         v1 = [1.0, 0.0, 0.0]
         v2 = [0.0, 1.0, 0.0]
         @test vsep(v1, v2) ≈ π/2
     end
-    let
+    @testset "vsepg" begin
         v1 = [3.0, 0.0]
         v2 = [-5.0, 0.0]
         @test vsepg(v1, v2) ≈ π

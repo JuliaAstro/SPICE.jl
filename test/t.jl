@@ -1,6 +1,23 @@
 import LinearAlgebra
 
-@testset "T" begin 
+@testset "T" begin
+    @testset "termpt" begin
+        try
+            furnsh(path(CORE, :spk),
+                   path(CORE, :pck),
+                   path(CORE, :lsk),
+                   path(EXTRA, :mars_spk),
+                   path(EXTRA, :phobos_dsk))
+            et = str2et("1972 AUG 11 00:00:00")
+            points, epochs, tangts = termpt("UMBRAL/TANGENT/DSK/UNPRIORITIZED", "SUN",
+                                            "PHOBOS", et, "IAU_PHOBOS", "CN+S", "CENTER",
+                                            "MARS", [0.0, 0.0, 1.0], 2/3 * π, 3, 1.0e-4,
+                                            1.0e-7, 10000)
+            @test length(points) == 3
+        finally
+            kclear()
+        end
+    end
     @testset "timdef" begin
         try
             furnsh(path(CORE, :lsk))
@@ -144,4 +161,4 @@ import LinearAlgebra
     @testset "tyear" begin
         @test tyear() == 3.15569259747e7
     end
-end 
+end

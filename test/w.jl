@@ -1,5 +1,5 @@
 @testset "W" begin
-    @testset "wncard, wninsd" begin
+    @testset "wncard/wninsd" begin
         window = SpiceDoubleCell(8)
         darray = [[1.0, 3.0], [7.0, 11.0], [23.0, 27.0]]
         for d in darray

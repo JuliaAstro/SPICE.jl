@@ -48,7 +48,7 @@ Determine the complement of a double precision window with respect to a specifie
 
 ### Arguments ###
 
-- `window`: Input window. 
+- `window`: Input window
 - `left`:  Left endpoint of the complement interval
 - `right`:  Right endpoint of the complement interval
 
@@ -428,7 +428,7 @@ Returns a tuple consisting of:
 - `avg`: Average measure
 - `stddev`: Standard deviation
 - `shortest`: Location of shortest interval
-- `longest`: Location of longest interval 
+- `longest`: Location of longest interval
 
 ### References ###
 
@@ -483,7 +483,7 @@ Form a valid double precision window from the contents of a window array.
 ### Arguments ###
 
 - `window`: A (possibly uninitialized) `SpiceDoubleCell` containing endpoints of
-    (possibly unordered and non-disjoint) intervals. 
+    (possibly unordered and non-disjoint) intervals.
 
 ### Output ###
 
@@ -502,3 +502,4 @@ function wnvald!(window)
 end
 
 @deprecate wnvald wnvald!
+

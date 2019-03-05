@@ -88,7 +88,7 @@ using LinearAlgebra: I, norm
                    path(CASSINI, :ik))
             et = str2et("2013 FEB 25 11:50:00 UTC")
             spoint, trgepc, srfvec = subpnt("NEAR POINT/ELLIPSOID", "ENCELADUS", et, "IAU_ENCELADUS",
-                                            "EARTH", abcorr="CN+S")
+                                            "CN+S", "EARTH")
             trgepc2, srfvec2, phase, incid, emissn = illumg("ELLIPSOID", "ENCELADUS", "SUN", et,
                                                             "IAU_ENCELADUS", "CASSINI", spoint, abcorr="CN+S")
 

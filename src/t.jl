@@ -1,4 +1,6 @@
 export
+    term_pl02,
+    termpt,
     timdef,
     timout,
     tipbod,
@@ -11,6 +13,72 @@ export
     twopi,
     twovec,
     tyear
+
+"""
+
+Find terminator points on a target body. The caller specifies
+half-planes, bounded by the illumination source center-target center
+vector, in which to search for terminator points.
+
+The terminator can be either umbral or penumbral. The umbral
+terminator is the boundary of the region on the target surface
+where no light from the source is visible. The penumbral
+terminator is the boundary of the region on the target surface
+where none of the light from the source is blocked by the target
+itself.
+
+The surface of the target body may be represented either by a
+triaxial ellipsoid or by topographic data.
+
+### Arguments ###
+
+- `method`: Computation method
+- `ilusrc`: Illumination source
+- `target`: Name of target body
+- `et    `: Epoch in ephemeris seconds past J2000 TDB
+- `fixref`: Body-fixed, body-centered target body frame
+- `abcorr`: Aberration correction
+- `corloc`: Aberration correction locus
+- `obsrvr`: Name of observing body
+- `refvec`: Reference vector for cutting half-planes
+- `rolstp`: Roll angular step for cutting half-planes
+- `ncuts `: Number of cutting planes
+- `schstp`: Angular step size for searching
+- `soltol`: Solution convergence tolerance
+- `maxn  `: Maximum number of entries in output arrays
+
+### Output ###
+
+- `npts  `: Counts of terminator points corresponding to cuts
+- `points`: Terminator points
+- `epochs`: Times associated with terminator points
+- `trmvcs`: Terminator vectors emanating from the observer
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/termpt_c.html)
+"""
+function termpt(method, ilusrc, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp,
+                ncuts, schstp, soltol, maxn)
+    @checkdims 3 refvec
+    npts = zeros(SpiceInt, maxn)
+    points = Array{SpiceDouble}(undef, 3, maxn)
+    epochs = Array{SpiceDouble}(undef, maxn)
+    trmvcs = Array{SpiceDouble}(undef, 3, maxn)
+
+    ccall((:termpt_c, libcspice), Cvoid,
+          (Cstring, Cstring, Cstring, SpiceDouble, Cstring, Cstring, Cstring, Cstring,
+           Ref{SpiceDouble}, SpiceDouble, SpiceInt, SpiceDouble, SpiceDouble, SpiceInt,
+           Ref{SpiceInt}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          method, ilusrc, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp,
+          ncuts, schstp, soltol, maxn, npts, points, epochs, trmvcs)
+    handleerror()
+    valid_points = npts .>= 1
+    npts[valid_points], cmatrix_to_array(points)[valid_points],
+        epochs, cmatrix_to_array(trmvcs)[valid_points]
+end
+
+@deprecate term_pl02 termpt
 
 """
     timdef(action, item, value="")
@@ -56,7 +124,7 @@ function timdef(action, item, value="")
     val = fill(UInt8(0), lenout)
     val[1:length(value)] .= collect(value)
     ccall((:timdef_c, libcspice), Cvoid,
-          (Cstring, Cstring, SpiceInt, Ref{UInt8}),
+          (Cstring, Cstring, SpiceInt, Ref{SpiceChar}),
           string(action), string(item), lenout, val)
     handleerror()
     chararray_to_string(val)
@@ -86,7 +154,7 @@ Returns a string representation of the input epoch.
 function timout(et, pictur, lenout=128)
     string = Array{UInt8}(undef, lenout)
     ccall((:timout_c, libcspice), Cvoid,
-          (Cdouble, Cstring, Cint, Ref{UInt8}),
+          (Cdouble, Cstring, SpiceInt, Ref{SpiceChar}),
           et, pictur, lenout, string)
     handleerror()
     chararray_to_string(string)
@@ -296,8 +364,7 @@ Returns output rotation matrix.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/twovec_c.html)
 """
 function twovec(axdef, indexa, plndef, indexp)
-    length(axdef) != 3 && throw(ArgumentError("`axdef` must be an iterable with three elements."))
-    length(plndef) != 3 && throw(ArgumentError("`plndef` must be an iterable with three elements."))
+    @checkdims 3 axdef plndef
     mout = Array{SpiceDouble}(undef, 3, 3)
     ccall((:twovec_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}),
@@ -316,5 +383,6 @@ Returns the number of seconds per tropical year.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/tyear_c.html)
 """
 function tyear()
-    ccall((:tyear_c, libcspice), Cdouble, ())
+    ccall((:tyear_c, libcspice), SpiceDouble, ())
 end
+
