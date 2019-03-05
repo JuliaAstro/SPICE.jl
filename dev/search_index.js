@@ -2589,7 +2589,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.scpart",
     "category": "method",
-    "text": "scpart(sc)\n\nGet spacecraft clock partition information from a spacecraft clock kernel file.\n\nArguments\n\nsc: NAIF spacecraft identification code\n\nOutput\n\nnparts: The number of spacecraft clock partitions\npstart: Array of partition start times\npstop: Array of partition stop times\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "scpart(sc)\n\nGet spacecraft clock partition information from a spacecraft clock kernel file.\n\nArguments\n\nsc: NAIF spacecraft identification code\n\nOutput\n\npstart: Array of partition start times\npstop: Array of partition stop times\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -2781,7 +2781,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.spkcpt",
     "category": "method",
-    "text": "Return the state, relative to a specified observer, of a target having constant position in a specified reference frame. The target\'s position is provided by the calling program rather than by loaded SPK files.\n\nArguments\n\ntrgpos: Target position relative to center of motion\ntrgctr: Center of motion of target\ntrgref: Frame of target position\net: Observation epoch\noutref: Reference frame of output state\nrefloc: Output reference frame evaluation locus\nabcorr: Aberration correction\nobsrvr: Name of observing ephemeris object\n\nOutput\n\nstate: State of target with respect to observer\nlt: One way light time between target and observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "spkcpt(trgpos, trgctr, trgref, et, outref, refloc, abcorr, obsrvr)\n\nReturn the state, relative to a specified observer, of a target having constant position in a specified reference frame. The target\'s position is provided by the calling program rather than by loaded SPK files.\n\nArguments\n\ntrgpos: Target position relative to center of motion\ntrgctr: Center of motion of target\ntrgref: Frame of target position\net: Observation epoch\noutref: Reference frame of output state\nrefloc: Output reference frame evaluation locus\nabcorr: Aberration correction\nobsrvr: Name of observing ephemeris object\n\nOutput\n\nstate: State of target with respect to observer\nlt: One way light time between target and observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -3129,11 +3129,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.subpnt-NTuple{5,Any}",
+    "location": "api/#SPICE.subpnt-NTuple{6,Any}",
     "page": "API",
     "title": "SPICE.subpnt",
     "category": "method",
-    "text": "subpnt(method, target, et, fixref, obsrvr, abcorr)\n\nCompute the rectangular coordinates of the sub-observer point on a target body at a specified epoch, optionally corrected for light time and stellar aberration.\n\nArguments\n\nmethod: Computation method.\ntarget: Name of target body.\net: Epoch in ephemeris seconds past J2000 TDB.\nfixref: Body-fixed, body-centered target body frame.\nobsrvr: Name of observing body.\nabcorr: Aberration correction.\n\nOutput\n\nspoint: Sub-solar point on the target body.\ntrgepc: Sub-solar point epoch.\nsrfvec: Vector from observer to sub-solar point.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "subpnt(method, target, et, fixref, obsrvr, abcorr)\n\nCompute the rectangular coordinates of the sub-observer point on a target body at a specified epoch, optionally corrected for light time and stellar aberration.\n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in ephemeris seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nabcorr: Aberration correction\nobsrvr: Name of observing body\n\nOutput\n\nspoint: Sub-solar point on the target body\ntrgepc: Sub-solar point epoch\nsrfvec: Vector from observer to sub-solar point\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -3238,6 +3238,14 @@ var documenterSearchIndex = {"docs": [
     "title": "SPICE.szpool",
     "category": "method",
     "text": "szpool(name)\n\nReturn the kernel pool size limitations.\n\nArguments\n\nname: Name of the parameter to be returned\n\nOutput\n\nReturns the value of the parameter specified by name or nothing if none was found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.termpt-NTuple{14,Any}",
+    "page": "API",
+    "title": "SPICE.termpt",
+    "category": "method",
+    "text": "Find terminator points on a target body. The caller specifies half-planes, bounded by the illumination source center-target center vector, in which to search for terminator points.\n\nThe terminator can be either umbral or penumbral. The umbral terminator is the boundary of the region on the target surface where no light from the source is visible. The penumbral terminator is the boundary of the region on the target surface where none of the light from the source is blocked by the target itself.\n\nThe surface of the target body may be represented either by a triaxial ellipsoid or by topographic data.\n\nArguments\n\nmethod: Computation method\nilusrc: Illumination source\ntarget: Name of target body\net: Epoch in ephemeris seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nabcorr: Aberration correction\ncorloc: Aberration correction locus\nobsrvr: Name of observing body\nrefvec: Reference vector for cutting half-planes\nrolstp: Roll angular step for cutting half-planes\nncuts: Number of cutting planes\nschstp: Angular step size for searching\nsoltol: Solution convergence tolerance\nmaxn: Maximum number of entries in output arrays\n\nOutput\n\nnpts: Counts of terminator points corresponding to cuts\npoints: Terminator points\nepochs: Times associated with terminator points\ntrmvcs: Terminator vectors emanating from the observer\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -3717,7 +3725,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.wncomd",
     "category": "method",
-    "text": "wncomd(window, left, right)\n\nDetermine the complement of a double precision window with respect to a specified interval.\n\nArguments\n\nwindow: Input window. \nleft:  Left endpoint of the complement interval\nright:  Right endpoint of the complement interval\n\nOutput\n\nReturns the complement of window with respect to [left,right].\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "wncomd(window, left, right)\n\nDetermine the complement of a double precision window with respect to a specified interval.\n\nArguments\n\nwindow: Input window\nleft:  Left endpoint of the complement interval\nright:  Right endpoint of the complement interval\n\nOutput\n\nReturns the complement of window with respect to [left,right].\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -3821,7 +3829,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.wnsumd",
     "category": "method",
-    "text": "wnsumd(window)\n\nSummarize the contents of a double precision window.\n\nArguments\n\nwindow: Window to be summarized\n\nOutput\n\nReturns a tuple consisting of:\n\nmeas: Total measure of intervals in window\navg: Average measure\nstddev: Standard deviation\nshortest: Location of shortest interval\nlongest: Location of longest interval \n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "wnsumd(window)\n\nSummarize the contents of a double precision window.\n\nArguments\n\nwindow: Window to be summarized\n\nOutput\n\nReturns a tuple consisting of:\n\nmeas: Total measure of intervals in window\navg: Average measure\nstddev: Standard deviation\nshortest: Location of shortest interval\nlongest: Location of longest interval\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -3837,7 +3845,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.wnvald!",
     "category": "method",
-    "text": "wnvald!(window)\n\nForm a valid double precision window from the contents of a window array.\n\nArguments\n\nwindow: A (possibly uninitialized) SpiceDoubleCell containing endpoints of   (possibly unordered and non-disjoint) intervals. \n\nOutput\n\nReturns the validated window.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "wnvald!(window)\n\nForm a valid double precision window from the contents of a window array.\n\nArguments\n\nwindow: A (possibly uninitialized) SpiceDoubleCell containing endpoints of   (possibly unordered and non-disjoint) intervals.\n\nOutput\n\nReturns the validated window.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
