@@ -394,11 +394,10 @@ bsrchc
 @deprecate bsrchc(value, array) findfirst(array .== value)
 
 function _bsrchd(value, array)
-    arr = Array{SpiceDouble}(array)
-    n = length(arr)
+    n = length(array)
     idx = ccall((:bsrchd_c, libcspice), SpiceInt,
         (SpiceDouble, SpiceInt, Ref{SpiceDouble}),
-        value, n, arr)
+        value, n, array)
     handleerror()
     return idx == -1 ? idx : idx + 1
 end
@@ -414,11 +413,11 @@ bsrchd
 @deprecate bsrchd(value, array) findfirst(array .== value)
 
 function _bsrchi(value, array)
-    arr = Array{SpiceInt}(array)
-    n = length(arr)
+    array_ = SpiceInt.(array)
+    n = length(array)
     idx = ccall((:bsrchi_c, libcspice), SpiceInt,
         (SpiceInt, SpiceInt, Ref{SpiceInt}),
-        value, n, arr)
+        value, n, array_)
     handleerror()
     return idx == -1 ? idx : idx + 1
 end
