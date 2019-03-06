@@ -498,11 +498,11 @@ Returns the vertices of the expanded plate.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/pltexp_c.html)
 """
 function pltexp(iverts, delta)
-    iverts = array_to_cmatrix(iverts)
+    iverts_ = array_to_cmatrix(iverts)
     overts = Array{SpiceDouble}(undef, 3, 3)
     ccall((:pltexp_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, SpiceDouble, Ref{SpiceDouble}),
-          iverts, delta, overts)
+          iverts_, delta, overts)
     cmatrix_to_array(overts)
 end
 

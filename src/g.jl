@@ -3,10 +3,12 @@ export
     gdpool,
     georec,
     getelm,
+    getfat,
     getfov,
     gfpa,
     gfpa!,
-    gipool
+    gipool,
+    gnpool
 
 """
     gcpool(name; start=1, room=100, lenout=128)
@@ -135,6 +137,36 @@ function getelm(frstyr, lines)
 end
 
 """
+    getfat(file, arclen=10, typlen=10)
+
+Determine the file architecture and file type of most SPICE kernel files.
+
+### Arguments ###
+
+- `file`: The name of a file to be examined
+- `arclen`: Maximum length of output architecture string (default: 10)
+- `typlen`: Maximum length of output type string (default: 10)
+
+### Output ###
+
+- `arch`: The architecture of the kernel file
+- `typ`: The type of the kernel file
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/getfat_c.html)
+"""
+function getfat(file, arclen=10, typlen=10)
+    arch = Array{SpiceChar}(undef, arclen)
+    typ = Array{SpiceChar}(undef, typlen)
+    ccall((:getfat_c, libcspice), Cvoid,
+          (Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}, Ref{SpiceChar}),
+          file, arclen, typlen, arch, typ)
+    handleerror()
+    chararray_to_string(arch), chararray_to_string(typ)
+end
+
+"""
     getfov(instid, room=10, shapelen=128, framelen=128)
 
 Return the field-of-view (FOV) parameters for a specified instrument.
@@ -249,3 +281,37 @@ function gipool(name; start=1, room=100)
     handleerror()
     Bool(found[]) ? Int.(values[1:n[]]) : nothing
 end
+
+"""
+    gnpool(name, start, room, lenout=128)
+
+Return names of kernel variables matching a specified template.
+
+### Arguments ###
+
+- `name`: Template that names should match
+- `start`: Index of first matching name to retrieve
+- `room`: The largest number of values to return
+- `lenout`: Length of strings in output array `kvars` (default: 128)
+
+### Output ###
+
+Returns lernel pool variables whose names match `name`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gnpool_c.html)
+"""
+function gnpool(name, start, room, lenout=128)
+    n = Ref{SpiceInt}()
+    kvars = Array{SpiceChar}(undef, lenout, room)
+    found = Ref{SpiceBoolean}()
+    ccall((:gnpool_c, libcspice), Cvoid,
+          (Cstring, SpiceInt, SpiceInt, SpiceInt,
+           Ref{SpiceInt}, Ref{SpiceChar}, Ref{SpiceBoolean}),
+          name, start - 1, room, lenout, n, kvars, found)
+    handleerror()
+    Bool(found[]) || return nothing
+    chararray_to_string(kvars)[1:n[]]
+end
+

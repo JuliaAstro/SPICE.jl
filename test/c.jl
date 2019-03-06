@@ -1,5 +1,3 @@
-using Random: randstring
-
 @testset "C" begin
     @testset "ccifrm" begin
         @test ccifrm(2, 3000) == (13000, "ITRF93", 399)

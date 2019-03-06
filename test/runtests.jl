@@ -1,5 +1,4 @@
 using SPICE
-using Random: randstring
 using RemoteFiles
 using Test
 
