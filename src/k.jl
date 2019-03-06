@@ -165,7 +165,7 @@ Returns `nothing` if `keywd` was found or a tuple consisting of
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/kxtrct_c.html)
 """
 function kxtrct(keywd, terms, string, substrlen=256)
-    terms, nterms, termlen = chararray(terms)
+    terms_, nterms, termlen = chararray(terms)
     stringlen = length(string) + 1
     str = fill(0x00, stringlen)
     str[1:end-1] .= Array{SpiceChar}(string)
@@ -174,7 +174,7 @@ function kxtrct(keywd, terms, string, substrlen=256)
     ccall((:kxtrct_c, libcspice), Cvoid,
           (Cstring, SpiceInt, Ref{SpiceChar}, SpiceInt, SpiceInt, SpiceInt,
            Ref{SpiceChar}, Ref{SpiceBoolean}, Ref{SpiceChar}),
-          keywd, termlen, terms, nterms, stringlen, substrlen, str, found, substr)
+          keywd, termlen, terms_, nterms, stringlen, substrlen, str, found, substr)
     Bool(found[]) || return nothing
     chararray_to_string(str), chararray_to_string(substr)
 end

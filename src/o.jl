@@ -129,11 +129,11 @@ function ordi(set, item)
 end
 
 function _orderc(array)
-    array, ndim, lenvals = chararray(array)
+    array_, ndim, lenvals = chararray(array)
     iorder = Array{SpiceInt}(undef, ndim)
     ccall((:orderc_c, libcspice), Cvoid,
           (SpiceInt, Ref{SpiceChar}, SpiceInt, Ref{SpiceInt}),
-          lenvals, array, ndim, iorder)
+          lenvals, array_, ndim, iorder)
     handleerror()
     Int.(iorder) .+ 1
 end
@@ -169,12 +169,12 @@ end
 orderd
 
 function _orderi(array)
-    array = SpiceInt.(array)
+    array_ = SpiceInt.(array)
     ndim = length(array)
     iorder = Array{SpiceInt}(undef, ndim)
     ccall((:orderi_c, libcspice), Cvoid,
           (Ref{SpiceInt}, SpiceInt, Ref{SpiceInt}),
-          array, ndim, iorder)
+          array_, ndim, iorder)
     handleerror()
     Int.(iorder) .+ 1
 end

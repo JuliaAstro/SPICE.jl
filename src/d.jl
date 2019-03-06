@@ -97,10 +97,10 @@ them to any comments which are already present in the file's comment area.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafac_c.html)
 """
 function dafac(handle, buffer)
-    buffer, n, lenvals = chararray(buffer)
+    buffer_, n, lenvals = chararray(buffer)
     ccall((:dafac_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceChar}),
-          handle, n, lenvals, buffer)
+          handle, n, lenvals, buffer_)
     handleerror()
 end
 
@@ -472,11 +472,11 @@ function dafps(dc, ic)
     nd = length(dc)
     ni = length(ic)
     len = nd + (ni - 1) ÷ 2 + 1
-    ic_c = SpiceInt.(ic)
+    ic_ = SpiceInt.(ic)
     sum = Array{SpiceDouble}(undef, len)
     ccall((:dafps_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceDouble}),
-          nd, ni, dc, ic_c, sum)
+          nd, ni, dc, ic_, sum)
     sum
 end
 
@@ -583,10 +583,10 @@ them to any comments which are already present in the file's comment area.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dasac_c.html)
 """
 function dasac(handle, buffer)
-    buffer, n, lenvals = chararray(buffer)
+    buffer_, n, lenvals = chararray(buffer)
     ccall((:dasac_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceChar}),
-          handle, n, lenvals, buffer)
+          handle, n, lenvals, buffer_)
     handleerror()
 end
 
@@ -1822,7 +1822,7 @@ Write a type 2 segment to a DSK file.
 function dskw02(handle, center, surfid, dclass, frame, corsys, corpar, mncor1, mxcor1,
                 mncor2, mxcor2, mncor3, mxcor3, first, last, vrtces, plates, spaixd, spaixi)
     vrtces_ = array_to_cmatrix(vrtces, n=3)
-    plates_ = SpiceInt.(array_to_cmatrix(plates, n=3))
+    plates_ = array_to_cmatrix(plates, n=3)
     spaixi_ = SpiceInt.(spaixi)
     nv = length(vrtces)
     np = length(plates)

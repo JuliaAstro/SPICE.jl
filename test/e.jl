@@ -385,7 +385,7 @@
             handle = ekopn(ekpath, ekpath, 0)
             segno, rcptrs = ekifld(handle, "test_table_ekssum", 2, ["c1"],
                                    ["DATATYPE = INTEGER, NULLS_OK = TRUE"])
-            ekacli(handle, segno, "c1", [1, 2], [false, false], rcptrs)
+            ekacli(handle, segno, "c1", [[1], [2]], [false, false], rcptrs)
             ekffld(handle, segno, rcptrs)
             segsum = ekssum(handle, segno)
             @test segsum.ncols == 1

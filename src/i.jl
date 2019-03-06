@@ -450,11 +450,11 @@ end
 invort
 
 function _isordv(vec)
-    vec = SpiceInt.(copy(vec) .- 1)
+    vec_ = SpiceInt.(vec .- 1)
     n = length(vec)
     res = ccall((:isordv_c, libcspice), SpiceBoolean,
                 (Ref{SpiceInt}, SpiceInt),
-                vec, n)
+                vec_, n)
     Bool(res[])
 end
 
@@ -469,10 +469,10 @@ end
 isordv
 
 function _isrchc(value, array)
-    data, m, n = chararray(array)
+    array_, m, n = chararray(array)
     res = ccall((:isrchc_c, libcspice), SpiceInt,
                 (Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}),
-                value, m, n, data)
+                value, m, n, array_)
     handleerror()
     res[] + 1
 end
@@ -507,11 +507,11 @@ end
 isrchd
 
 function _isrchi(value, array)
-    array = SpiceInt.(copy(array))
+    array_ = SpiceInt.(array)
     n = length(array)
     res = ccall((:isrchi_c, libcspice), SpiceBoolean,
                 (SpiceInt, SpiceInt, Ref{SpiceInt}),
-                value, n, array)
+                value, n, array_)
     handleerror()
     res[] + 1
 end

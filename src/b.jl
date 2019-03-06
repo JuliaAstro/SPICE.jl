@@ -334,11 +334,11 @@ brckti
 @deprecate brckti clamp
 
 function _bschoc(value, array, order)
-    arr, m, n = chararray(array)
-    ord = Array{SpiceInt}(order .- 1)
+    array_, m, n = chararray(array)
+    order_ = SpiceInt.(order .- 1)
     idx = ccall((:bschoc_c, libcspice), SpiceInt,
         (Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}, Ref{SpiceInt}),
-        value, m, n, arr, ord)
+        value, m, n, array_, order_)
     handleerror()
     return idx == -1 ? idx : idx + 1
 end
@@ -354,12 +354,12 @@ bschoc
 @deprecate bschoc(value, array, order) findfirst(array .== value)
 
 function _bschoi(value, array, order)
-    arr = Array{SpiceInt}(array)
-    n = length(arr)
-    ord = Array{SpiceInt}(order .- 1)
+    array_ = SpiceInt.(array)
+    n = length(array)
+    order_ = SpiceInt.(order .- 1)
     idx = ccall((:bschoi_c, libcspice), SpiceInt,
         (SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}),
-        value, n, arr, ord)
+        value, n, array_, order_)
     handleerror()
     return idx == -1 ? idx : idx + 1
 end
@@ -375,10 +375,10 @@ bschoi
 @deprecate bschoi(value, array, order) findfirst(array .== value)
 
 function _bsrchc(value, array)
-    arr, m, n = chararray(array)
+    array_, m, n = chararray(array)
     idx = ccall((:bsrchc_c, libcspice), SpiceInt,
         (Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}),
-        value, m, n, arr)
+        value, m, n, array_)
     handleerror()
     return idx == -1 ? idx : idx + 1
 end

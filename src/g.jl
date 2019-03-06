@@ -126,12 +126,12 @@ suitable for use in SPICE software.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/getelm_c.html)
 """
 function getelm(frstyr, lines)
-    array, _, lineln = chararray(lines)
+    lines_, _, lineln = chararray(lines)
     epoch = Ref{SpiceDouble}()
     elems = Array{SpiceDouble}(undef, 10)
     ccall((:getelm_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, Ref{SpiceChar}, Ref{SpiceDouble}, Ref{SpiceDouble}),
-          frstyr, lineln, array, epoch, elems)
+          frstyr, lineln, lines_, epoch, elems)
     handleerror()
     epoch[], elems
 end
@@ -207,6 +207,33 @@ function getfov(instid, room=10, shapelen=128, framelen=128)
     shp = chararray_to_string(shape)
     frm = chararray_to_string(frame)
     shp, frm, bsight, arr_bounds[1:n[]]
+end
+
+"""
+
+Return the time window over which a specified constraint on observer-target distance is met.
+
+### Arguments ###
+
+target            I   Name of the target body. 
+abcorr            I   Aberration correction flag. 
+obsrvr            I   Name of the observing body. 
+relate            I   Relational operator. 
+refval            I   Reference value. 
+adjust            I   Adjustment value for absolute extrema searches. 
+step              I   Step size used for locating extrema and roots. 
+nintvls           I   Workspace window interval count. 
+cnfine           I-O  SPICE window to which the search is confined. 
+result            O   SPICE window containing results. 
+
+### Output ###
+
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfdist_c.html)
+"""
+function gfdist()
 end
 
 """

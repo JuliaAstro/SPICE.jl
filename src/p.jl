@@ -223,10 +223,10 @@ Insert character data into the kernel pool.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/pcpool_c.html)
 """
 function pcpool(name, vals)
-    cvals, n, lenvals = chararray(vals)
+    vals_, n, lenvals = chararray(vals)
     ccall((:pcpool_c, libcspice), Cvoid,
           (Cstring, SpiceInt, SpiceInt, Ref{UInt8}),
-          name, n, lenvals, cvals)
+          name, n, lenvals, vals_)
     handleerror()
 end
 
@@ -329,9 +329,10 @@ Insert integer data into the kernel pool.
 """
 function pipool(name, ivals)
     n = length(ivals)
+    ivals_ = SpiceInt.(ivals)
     ccall((:pipool_c, libcspice), Cvoid,
           (Cstring, SpiceInt, Ref{SpiceInt}),
-          name, n, SpiceInt.(ivals))
+          name, n, ivals_)
     handleerror()
 end
 
@@ -470,7 +471,7 @@ function pltar(vrtces, plates)
     nv = length(vrtces)
     np = length(plates)
     vrtces_ = array_to_cmatrix(vrtces)
-    plates_ = SpiceInt.(array_to_cmatrix(plates))
+    plates_ = array_to_cmatrix(plates)
     res = ccall((:pltar_c, libcspice), SpiceDouble,
                 (SpiceInt, Ref{SpiceDouble}, SpiceInt, Ref{SpiceInt}),
                 nv, vrtces_, np, plates_)
@@ -587,7 +588,7 @@ function pltvol(vrtces, plates)
     nv = length(vrtces)
     np = length(plates)
     vrtces_ = array_to_cmatrix(vrtces, n=3)
-    plates_ = SpiceInt.(array_to_cmatrix(plates, n=3))
+    plates_ = array_to_cmatrix(plates, n=3)
     res = ccall((:pltvol_c, libcspice), SpiceDouble,
                 (SpiceInt, Ref{SpiceDouble}, SpiceInt, Ref{SpiceInt}),
                 nv, vrtces_, np, plates_)

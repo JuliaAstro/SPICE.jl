@@ -163,11 +163,11 @@ Returns an array of surface points.
 """
 function latsrf(method, target, et, fixref, lonlat)
     npts = length(lonlat)
-    lonlat = array_to_cmatrix(lonlat, n=2)
+    lonlat_ = array_to_cmatrix(lonlat, n=2)
     srfpts = Matrix{SpiceDouble}(undef, 3, npts)
     ccall((:latsrf_c, libcspice), Cvoid,
           (Cstring, Cstring, SpiceDouble, Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
-          method, target, et, fixref, npts, lonlat, srfpts)
+          method, target, et, fixref, npts, lonlat_, srfpts)
     handleerror()
     cmatrix_to_array(srfpts)
 end
@@ -327,8 +327,8 @@ kernel pool.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/lmpool_c.html)
 """
 function lmpool(cvals)
-    cvals, n, lenvals = chararray(cvals)
-    ccall((:lmpool_c, libcspice), Cvoid, (Ref{SpiceChar}, SpiceInt, SpiceInt), cvals, lenvals, n)
+    cvals_, n, lenvals = chararray(cvals)
+    ccall((:lmpool_c, libcspice), Cvoid, (Ref{SpiceChar}, SpiceInt, SpiceInt), cvals_, lenvals, n)
     handleerror()
 end
 
@@ -421,16 +421,15 @@ end
 
 function _lstle(string::AbstractString, array)
     n = length(array)
-    array, n, lenvals = chararray(array)
+    array_, n, lenvals = chararray(array)
     out = ccall((:lstlec_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ref{UInt8}),
-                string, n, lenvals, array)
+                string, n, lenvals, array_)
     handleerror()
     out + 1
 end
 
 function _lstle(x::AbstractFloat, array)
     n = length(array)
-    array = Vector{SpiceDouble}(array)
     out = ccall((:lstled_c, libcspice), SpiceInt, (SpiceDouble, SpiceInt, Ref{SpiceDouble}),
                 x, n, array)
     out + 1
@@ -438,9 +437,9 @@ end
 
 function _lstle(x::Signed, array)
     n = length(array)
-    array = Vector{SpiceInt}(array)
+    array_ = SpiceInt.(array)
     out = ccall((:lstlei_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, Ref{SpiceInt}),
-                x, n, array)
+                x, n, array_)
     out + 1
 end
 
@@ -467,16 +466,15 @@ lstlei
 
 function _lstlt(string::AbstractString, array)
     n = length(array)
-    array, n, lenvals = chararray(array)
+    array_, n, lenvals = chararray(array)
     out = ccall((:lstltc_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ref{UInt8}),
-                string, n, lenvals, array)
+                string, n, lenvals, array_)
     handleerror()
     out + 1
 end
 
 function _lstlt(x::AbstractFloat, array)
     n = length(array)
-    array = SpiceDouble.(array)
     out = ccall((:lstltd_c, libcspice), SpiceInt, (SpiceDouble, SpiceInt, Ref{SpiceDouble}),
                 x, n, array)
     out + 1
@@ -484,9 +482,9 @@ end
 
 function _lstlt(x::Signed, array)
     n = length(array)
-    array = SpiceInt.(array)
+    array_ = SpiceInt.(array)
     out = ccall((:lstlti_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, Ref{SpiceInt}),
-                x, n, array)
+                x, n, array_)
     out + 1
 end
 

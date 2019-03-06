@@ -485,12 +485,12 @@ function set(a::SpiceCell{T}, op, b::SpiceCell{T}) where T
 end
 
 function _shellc(array)
-    carray, m, n = chararray(array)
+    array_, m, n = chararray(array)
     ccall((:shellc_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, Ref{SpiceChar}),
-          m, n, carray)
+          m, n, array_)
     handleerror()
-    array[:] .= chararray_to_string(carray, m)
+    array[:] .= chararray_to_string(array_, m)
 end
 
 """
@@ -1688,14 +1688,14 @@ Write a type 2 segment to an SPK file.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkw02_c.html)
 """
 function spkw02(handle, body, center, frame, first, last, segid, intlen, cdata, btime)
-    coeffs = array_to_cmatrix(cdata)
-    m, n = size(coeffs)
+    cdata_ = array_to_cmatrix(cdata)
+    m, n = size(cdata_)
     polydg = m - 1
     ccall((:spkw02_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring, SpiceDouble,
            SpiceInt, SpiceInt, Ref{SpiceDouble}, SpiceDouble),
           handle, body, center, frame, first, last, segid, intlen,
-          n, polydg, coeffs, btime)
+          n, polydg, cdata_, btime)
     handleerror()
 end
 
@@ -1722,14 +1722,14 @@ Write a type 3 segment to an SPK file.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkw03_c.html)
 """
 function spkw03(handle, body, center, frame, first, last, segid, intlen, cdata, btime)
-    coeffs = array_to_cmatrix(cdata)
-    m, n = size(coeffs)
+    cdata_ = array_to_cmatrix(cdata)
+    m, n = size(cdata_)
     polydg = m ÷ 6 - 1
     ccall((:spkw03_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring, SpiceDouble,
            SpiceInt, SpiceInt, Ref{SpiceDouble}, SpiceDouble),
           handle, body, center, frame, first, last, segid, intlen,
-          n, polydg, coeffs, btime)
+          n, polydg, cdata_, btime)
     handleerror()
 end
 
@@ -1759,12 +1759,12 @@ and the gravitational parameter of a central body.
 function spkw05(handle, body, center, frame, first, last, segid, gm, states, epochs)
     n = length(states)
     @checkdims n epochs
-    s = array_to_cmatrix(states, n=6)
+    states_ = array_to_cmatrix(states, n=6)
     ccall((:spkw05_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
            SpiceDouble, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           handle, body, center, frame, first, last, segid,
-          gm, n, s, epochs)
+          gm, n, states_, epochs)
     handleerror()
 end
 
@@ -1793,12 +1793,12 @@ Write a type 8 segment to an SPK file.
 """
 function spkw08(handle, body, center, frame, first, last, segid, degree, states, epoch1, step)
     n = length(states)
-    s = array_to_cmatrix(states, n=6)
+    states_ = array_to_cmatrix(states, n=6)
     ccall((:spkw08_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
            SpiceInt, SpiceInt, Ref{SpiceDouble}, SpiceDouble, SpiceDouble),
           handle, body, center, frame, first, last, segid,
-          degree, n, s, epoch1, step)
+          degree, n, states_, epoch1, step)
     handleerror()
 end
 
@@ -1827,12 +1827,12 @@ Write a type 9 segment to an SPK file.
 function spkw09(handle, body, center, frame, first, last, segid, degree, states, epochs)
     n = length(states)
     @checkdims n epochs
-    s = array_to_cmatrix(states, n=6)
+    states_ = array_to_cmatrix(states, n=6)
     ccall((:spkw09_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
            SpiceInt, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           handle, body, center, frame, first, last, segid,
-          degree, n, s, epochs)
+          degree, n, states_, epochs)
     handleerror()
 end
 
@@ -1861,12 +1861,12 @@ Write a type 10 segment to an SPK file.
 function spkw10(handle, body, center, frame, first, last, segid, consts, elems, epochs)
     n = length(elems)
     @checkdims n epochs
-    elems = array_to_cmatrix(elems, n=10)
+    elems_ = array_to_cmatrix(elems, n=10)
     ccall((:spkw10_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
            Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           handle, body, center, frame, first, last, segid,
-          consts, n, elems, epochs)
+          consts, n, elems_, epochs)
     handleerror()
 end
 
@@ -1895,12 +1895,12 @@ Write a type 12 segment to an SPK file.
 """
 function spkw12(handle, body, center, frame, first, last, segid, degree, states, epoch1, step)
     n = length(states)
-    s = array_to_cmatrix(states, n=6)
+    states_ = array_to_cmatrix(states, n=6)
     ccall((:spkw12_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
            SpiceInt, SpiceInt, Ref{SpiceDouble}, SpiceDouble, SpiceDouble),
           handle, body, center, frame, first, last, segid,
-          degree, n, s, epoch1, step)
+          degree, n, states_, epoch1, step)
     handleerror()
 end
 
@@ -1929,12 +1929,12 @@ Write a type 13 segment to an SPK file.
 function spkw13(handle, body, center, frame, first, last, segid, degree, states, epochs)
     n = length(states)
     @checkdims n epochs
-    s = array_to_cmatrix(states, n=6)
+    states_ = array_to_cmatrix(states, n=6)
     ccall((:spkw13_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
            SpiceInt, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           handle, body, center, frame, first, last, segid,
-          degree, n, s, epochs)
+          degree, n, states_, epochs)
     handleerror()
 end
 
@@ -2043,11 +2043,11 @@ function spkw18(handle, subtyp, body, center, frame, first, last, segid, degree,
     n = length(packts)
     @checkdims n epochs
     m = subtyp == :S18TP0 ? 12 : subtyp == :S18TP1 ? 6 : 0
-    packts = array_to_cmatrix(packts, n=m)
+    packts_ = array_to_cmatrix(packts, n=m)
     ccall((:spkw18_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
            SpiceInt, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
-          handle, subtyp, body, center, frame, first, last, segid, degree, n, packts, epochs)
+          handle, subtyp, body, center, frame, first, last, segid, degree, n, packts_, epochs)
     handleerror()
 end
 
@@ -2081,13 +2081,13 @@ function spkw20(handle, body, center, frame, first, last, segid, intlen, cdata, 
                 tscale, initjd, initfr)
     n = length(cdata)
     polydg = length(cdata[1]) ÷ 3 - 2
-    coeffs = array_to_cmatrix(cdata)
+    cdata_ = array_to_cmatrix(cdata)
     ccall((:spkw20_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceDouble, SpiceDouble, Cstring,
            SpiceDouble, SpiceInt, SpiceInt, Ref{SpiceDouble},
            SpiceDouble, SpiceDouble, SpiceDouble, SpiceDouble),
           handle, body, center, frame, first, last, segid,
-          intlen, n, polydg, coeffs,
+          intlen, n, polydg, cdata_,
           dscale, tscale, initjd, initfr)
     handleerror()
 end
@@ -2532,7 +2532,8 @@ sumad
 
 function _sumai(array)
     n = length(array)
-    ccall((:sumai_c, libcspice), SpiceInt, (Ref{SpiceInt}, SpiceInt), SpiceInt.(array), n)
+    array_ = SpiceInt.(array)
+    ccall((:sumai_c, libcspice), SpiceInt, (Ref{SpiceInt}, SpiceInt), array_, n)
 end
 
 @deprecate sumai sum
@@ -2659,9 +2660,9 @@ Add a name to the list of agents to notify whenever a member of a list of kernel
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/swpool_c.html)
 """
 function swpool(agent, names)
-    names, m, n = chararray(names)
+    names_, m, n = chararray(names)
     ccall((:swpool_c, libcspice), Cvoid, (Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}),
-          agent, m, n, names)
+          agent, m, n, names_)
     handleerror()
 end
 

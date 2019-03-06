@@ -287,7 +287,7 @@ function ekacli(handle, segno, column, ivals, nlflgs, rcptrs)
     nrows = length(ivals)
     entszs = SpiceInt.(length.(ivals))
     entszs[nlflgs] .= 0
-    ivals_ = SpiceInt.(array_to_cmatrix(ivals))
+    ivals_ = array_to_cmatrix(ivals)
     nlflgs_ = SpiceBoolean.(nlflgs)
     @checkdims nrows nlflgs rcptrs
     wkindx = Array{SpiceInt}(undef, nrows)
@@ -1108,18 +1108,17 @@ Update a double precision column entry in a specified EK record.
 """
 function ekuced(handle, segno, recno, column, dvals, isnull)
     nvals = length(dvals)
-    dvals_ = array_to_cmatrix(dvals)
     ccall((:ekuced_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceInt,
            Ref{SpiceDouble}, SpiceBoolean),
-          handle, segno - 1, recno - 1, column, nvals, dvals_, isnull)
+          handle, segno - 1, recno - 1, column, nvals, dvals, isnull)
     handleerror()
 end
 
 """
     ekucei(handle, segno, recno, column, dvals, isnull)
 
-Update a double precision column entry in a specified EK record.
+Update an integer column entry in a specified EK record.
 
 ### Arguments ###
 
@@ -1127,7 +1126,7 @@ Update a double precision column entry in a specified EK record.
 - `segno`: Index of segment containing record
 - `recno`: Record in which entry is to be updated
 - `column`: Column name
-- `dvals`: Double precision values comprising new column entry
+- `ivals`: Integer values comprising new column entry
 - `isnull`: Flag indicating whether column entry is null
 
 ### References ###
@@ -1136,7 +1135,7 @@ Update a double precision column entry in a specified EK record.
 """
 function ekucei(handle, segno, recno, column, ivals, isnull)
     nvals = length(ivals)
-    ivals_ = SpiceInt.(array_to_cmatrix(ivals))
+    ivals_ = SpiceInt.(ivals)
     ccall((:ekucei_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceInt,
            Ref{SpiceInt}, SpiceBoolean),

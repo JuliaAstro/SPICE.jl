@@ -381,12 +381,12 @@ end
 @deprecate removi removi!
 
 function _reordc(iorder, array)
-    iorder = SpiceInt.(iorder .- 1)
-    array, m, n = chararray(array)
+    iorder_ = SpiceInt.(iorder .- 1)
+    array_, m, n = chararray(array)
     ccall((:reordc_c, libcspice), Cvoid,
           (Ref{SpiceInt}, SpiceInt, SpiceInt, Ref{SpiceChar}),
-          iorder, m, n, array)
-    chararray_to_string(array, m)
+          iorder_, m, n, array_)
+    chararray_to_string(array_, m)
 end
 
 @deprecate reordc(iorder, array) array[iorder]
@@ -400,11 +400,11 @@ end
 reordc
 
 function _reordd(iorder, array)
-    iorder = SpiceInt.(iorder .- 1)
+    iorder_ = SpiceInt.(iorder .- 1)
     n = length(iorder)
     ccall((:reordd_c, libcspice), Cvoid,
           (Ref{SpiceInt}, SpiceInt, Ref{SpiceDouble}),
-          iorder, n, array)
+          iorder_, n, array)
     array
 end
 
@@ -419,13 +419,13 @@ end
 reordd
 
 function _reordi(iorder, array)
-    iorder = SpiceInt.(iorder .- 1)
-    array = SpiceInt.(array)
+    iorder_ = SpiceInt.(iorder .- 1)
+    array_ = SpiceInt.(array)
     n = length(iorder)
     ccall((:reordi_c, libcspice), Cvoid,
           (Ref{SpiceInt}, SpiceInt, Ref{SpiceInt}),
-          iorder, n, array)
-    Int.(array)
+          iorder_, n, array_)
+    Int.(array_)
 end
 
 @deprecate reordi(iorder, array) array[iorder]
@@ -439,13 +439,13 @@ end
 reordi
 
 function _reordl(iorder, array)
-    iorder = SpiceInt.(iorder .- 1)
-    array = SpiceBoolean.(array)
+    iorder_ = SpiceInt.(iorder .- 1)
+    array_ = SpiceBoolean.(array)
     n = length(iorder)
     ccall((:reordl_c, libcspice), Cvoid,
           (Ref{SpiceInt}, SpiceInt, Ref{SpiceBoolean}),
-          iorder, n, array)
-    Bool.(array)
+          iorder_, n, array_)
+    Bool.(array_)
 end
 
 @deprecate reordl(iorder, array) array[iorder]
