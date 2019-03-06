@@ -146,7 +146,7 @@
                 @test_throws SpiceError ekrcei(handle, segno, 5, "i1")
                 @test_throws SpiceError ekrced(handle, segno, 5, "d1")
                 # This segfaults on some platforms
-                @test_skip SpiceError ekrcec(handle, segno, 5, "c1")
+                @test_skip ekrcec(handle, segno, 5, "c1")
             end
             @test ekrcei(handle, segno, 4, "i1") === missing
             @test ekrced(handle, segno, 4, "d1") === missing
