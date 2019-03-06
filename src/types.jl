@@ -2,6 +2,7 @@ export
     DLADescr,
     DSKDescr,
     EKAttDsc,
+    EKSegSum,
     Ellipse,
     center,
     semi_major,
@@ -63,4 +64,15 @@ struct EKAttDsc
     indexd::SpiceInt
     nullok::SpiceInt
 end
+
+struct EKSegSum
+    tabnam::NTuple{65, SpiceChar}
+    nrows::SpiceInt
+    ncols::SpiceInt
+    cnames::NTuple{100*33, SpiceChar}
+    cdescrs::NTuple{100, EKAttDsc}
+end
+
+tabnam(e::EKSegSum) = chararray_to_string(collect(e.tabnam))
+cnames(e::EKSegSum) = chararray_to_string(reshape(collect(e.cnames), 33, 100))[1:e.ncols]
 

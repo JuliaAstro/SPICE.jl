@@ -88,41 +88,90 @@
             kclear()
         end
     end
-    @testset "ekacec" begin
+    @testset "ek" begin
         try
             ekpath = tempname()
+            tablename = "TEST_TABLE_EK"
             handle = ekopn(ekpath, ekpath, 0)
-            segno = ekbseg(handle, "test_table_ekacec", ["c1"],
-                           ["DATATYPE = CHARACTER*(*), NULLS_OK = TRUE"])
-            recno = ekappr(handle, segno)
-            ekacec(handle, segno, recno, "c1", ["1.0", "2.0"], false)
+            decls = ["DATATYPE = CHARACTER*(10),   NULLS_OK = TRUE, SIZE = VARIABLE",
+                     "DATATYPE = DOUBLE PRECISION, NULLS_OK = TRUE, SIZE = VARIABLE",
+                     "DATATYPE = INTEGER,          NULLS_OK = TRUE, SIZE = VARIABLE"]
+            segno = ekbseg(handle, tablename, ["c1", "d1", "i1"], decls)
+            c_data = [["100"], ["101", "101"], ["102", "102", "102"]]
+            d_data = [[100.0], [101.0, 101.0], [102.0, 102.0, 102.0]]
+            i_data = [[100], [101, 101], [102, 102, 102]]
+            for r in 1:3
+                ekinsr(handle, segno, r)
+                ekacec(handle, segno, r, "c1", c_data[r], false)
+                ekaced(handle, segno, r, "d1", d_data[r], false)
+                ekacei(handle, segno, r, "i1", i_data[r], false)
+            end
+            ekinsr(handle, segno, 4)
+            ekacec(handle, segno, 4, "c1", c_data[1], true)
+            ekaced(handle, segno, 4, "d1", d_data[1], true)
+            ekacei(handle, segno, 4, "i1", i_data[1], true)
+            @test_throws SpiceError ekinsr(handle, segno, 6)
             ekcls(handle)
-        finally
             kclear()
-        end
-    end
-    @testset "ekaced" begin
-        try
-            ekpath = tempname()
-            handle = ekopn(ekpath, ekpath, 0)
-            segno = ekbseg(handle, "test_table_ekaced", ["c1"],
-                           ["DATATYPE = DOUBLE PRECISION, NULLS_OK = TRUE"])
-            recno = ekappr(handle, segno)
-            ekaced(handle, segno, recno, "c1", [1.0, 2.0], false)
+
+            handle = eklef(ekpath)
+            query = "SELECT c1, d1, i1 from $tablename"
+            xbegs, xends, xtypes, xclass, tabs, cols = ekpsel(query)
+            @test xtypes == collect(0:2)
+            @test xclass == zeros(Int, 3)
+            @test tabs == fill("TEST_TABLE_EK", 3)
+            @test cols == ["C1", "D1", "I1"]
+            nmrows = ekfind(query)
+            @test nmrows == 4
+            for r in 1:nmrows - 1
+                n_elm = eknelt(1, r)
+                @test n_elm == r
+                for e in 1:n_elm
+                    i_datum = ekgi(3, r, e)
+                    @test i_datum == i_data[r][e]
+                    d_datum = ekgd(2, r, e)
+                    @test d_datum == d_data[r][e]
+                    c_datum = ekgc(1, r, e)
+                    @test c_datum == c_data[r][e]
+                end
+            end
+            for r in 1:nmrows - 1
+                ri_data = ekrcei(handle, segno, r, "i1")
+                @test ri_data == i_data[r]
+                rd_data = ekrced(handle, segno, r, "d1")
+                @test rd_data == d_data[r]
+                rc_data = ekrcec(handle, segno, r, "c1")
+                @test rc_data == c_data[r]
+
+                @test_throws SpiceError ekrcei(handle, segno, 5, "i1")
+                @test_throws SpiceError ekrced(handle, segno, 5, "d1")
+                @test_throws SpiceError ekrcec(handle, segno, 5, "c1")
+            end
+            @test ekrcei(handle, segno, 4, "i1") === missing
+            @test ekrced(handle, segno, 4, "d1") === missing
+            @test ekrcec(handle, segno, 4, "c1") === missing
+
+            ekuef(handle)
+            handle = ekopw(ekpath)
+            c_data = [["200"], ["201", "201"], ["202", "202", "202"]]
+            d_data = [[200.0], [201.0, 201.0], [202.0, 202.0, 202.0]]
+            i_data = [[200], [201, 201], [202, 202, 202]]
+            for r in 1:3
+                ekucec(handle, segno, r, "c1", c_data[r], false)
+                ekuced(handle, segno, r, "d1", d_data[r], false)
+                ekucei(handle, segno, r, "i1", i_data[r], false)
+            end
             ekcls(handle)
-        finally
-            kclear()
-        end
-    end
-    @testset "ekacei" begin
-        try
-            ekpath = tempname()
-            handle = ekopn(ekpath, ekpath, 0)
-            segno = ekbseg(handle, "test_table_ekacei", ["c1"],
-                           ["DATATYPE = INTEGER, NULLS_OK = TRUE"])
-            recno = ekappr(handle, segno)
-            ekacei(handle, segno, recno, "c1", [1, 2], false)
-            ekcls(handle)
+            handle = ekopr(ekpath)
+            for r in 1:nmrows - 1
+                ri_data = ekrcei(handle, segno, r, "i1")
+                @test ri_data == i_data[r]
+                rd_data = ekrced(handle, segno, r, "d1")
+                @test rd_data == d_data[r]
+                rc_data = ekrcec(handle, segno, r, "c1")
+                @test rc_data == c_data[r]
+            end
+            ekuef(handle)
         finally
             kclear()
         end
@@ -269,262 +318,147 @@
             kclear()
         end
     end
-#=     @testset "eklef" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_eklef.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno = ekbseg(handle, "test_table_eklef", ["c1"], ["DATATYPE  = INTEGER, NULLS_OK = TRUE"]) =#
-#=         recno = ekappr(handle, segno) =#
-#=         ekacei(handle, segno, recno, "c1", 2, [1, 2], false) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         handle = eklef(ekpath) =#
-#=         @test handle is not None =#
-#=         ekuef(handle) =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=     @testset "eknseg" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_eknseg.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno = ekbseg(handle, "TEST_TABLE_EKNSEG", ["c1"], ["DATATYPE  = INTEGER, NULLS_OK = TRUE"]) =#
-#=         recno = ekappr(handle, segno) =#
-#=         ekacei(handle, segno, recno, "c1", 2, [1, 2], false) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         handle = ekopr(ekpath) =#
-#=         @test eknseg(handle) == 1 =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekntab" begin =#
-#=         @test ekntab() == 0 =#
-#=     @testset "ekopn" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ek.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 80) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         @test exists(ekpath) =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=     @testset "ekopr" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekopr.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 80) =#
-#=         ekcls(handle) =#
-#=         @test exists(ekpath) =#
-#=         testhandle = ekopr(ekpath) =#
-#=         @test testhandle is not None =#
-#=         ekcls(testhandle) =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=     @testset "ekops" begin =#
-#=         kclear() =#
-#=         handle = ekops() =#
-#=         @test handle is not None =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=     @testset "ekopw" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekopw.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 80) =#
-#=         ekcls(handle) =#
-#=         @test exists(ekpath) =#
-#=         testhandle = ekopw(ekpath) =#
-#=         @test testhandle is not None =#
-#=         ekcls(testhandle) =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         kclear() =#
-#=     @testset "ekssum" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekssum.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno, rcptrs = ekifld(handle, "test_table_ekssum", 1, 2, 200, ["c1"], 200, =#
-#=                                      ["DATATYPE = INTEGER, NULLS_OK = TRUE"]) =#
-#=         ekacli(handle, segno, "c1", [1, 2], [1, 1], [false, false], rcptrs, [0, 0]) =#
-#=         ekffld(handle, segno, rcptrs) =#
-#=         segsum = ekssum(handle, segno) =#
-#=         @test segsum.ncols == 1 =#
-#=         @test segsum.nrows == 2 =#
-#=         @test segsum.cnames == ["C1"] =#
-#=         @test segsum.tabnam == "TEST_TABLE_EKSSUM" =#
-#=         c1descr = segsum.cdescrs[0] =#
-#=         @test c1descr.dtype == 2 =#
-#=         @test c1descr.indexd is false =#
-#=         # @test c1descr.null == true, for some reason this is actually false, SpikeEKAttDsc may not be working correctly =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ektnam" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ektnam.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 0) =#
-#=         segno = ekbseg(handle, "TEST_TABLE_EKTNAM", ["c1"], ["DATATYPE  = INTEGER, NULLS_OK = TRUE"]) =#
-#=         recno = ekappr(handle, segno) =#
-#=         ekacei(handle, segno, recno, "c1", 2, [1, 2], false) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         furnsh(ekpath) =#
-#=         @test ekntab() == 1 =#
-#=         @test ektnam(0, 100) == "TEST_TABLE_EKTNAM" =#
-#=         @test ekccnt("TEST_TABLE_EKTNAM") == 1 =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         @test not exists(ekpath) =#
-#=     @testset "ekucec" begin =#
-#=         @test 1 =#
-#=     @testset "ekuced" begin =#
-#=         @test 1 =#
-#=     @testset "ekucei" begin =#
-#=         @test 1 =#
-#=     @testset "ekuef" begin =#
-#=         kclear() =#
-#=         ekpath = os.path.join(cwd, "example_ekuef.ek") =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=         handle = ekopn(ekpath, ekpath, 80) =#
-#=         ekcls(handle) =#
-#=         kclear() =#
-#=         @test exists(ekpath) =#
-#=         testhandle = ekopr(ekpath) =#
-#=         @test testhandle is not None =#
-#=         ekuef(testhandle) =#
-#=         ekcls(testhandle) =#
-#=         kclear() =#
-#=         if exists(ekpath): =#
-#=             os.remove(ekpath) # pragma: no cover =#
-#=     @testset "el2cgv" begin =#
-#=         vec1 = [1.0, 1.0, 1.0] =#
-#=         vec2 = [1.0, -1.0, 1.0] =#
-#=         center = [1.0, 1.0, 1.0] =#
-#=         smajor, sminor = saelgv(vec1, vec2) =#
-#=         ellipse = cgv2el(center, smajor, sminor) =#
-#=         outCenter, outSmajor, outSminor = el2cgv(ellipse) =#
-#=         expectedCenter = [1.0, 1.0, 1.0] =#
-#=         expectedSmajor = [sqrt(2.0), 0.0, sqrt(2.0)] =#
-#=         expectedSminor = [0.0, sqrt(2.0), 0.0] =#
-#=         npt.@test_array_almost_equal(outCenter, expectedCenter) =#
-#=         npt.@test_array_almost_equal(outSmajor, expectedSmajor) =#
-#=         npt.@test_array_almost_equal(outSminor, expectedSminor) =#
-#=     @testset "elemc" begin =#
-#=         testCellOne = cell_char(10, 10) =#
-#=         insrtc("one", testCellOne) =#
-#=         insrtc("two", testCellOne) =#
-#=         insrtc("three", testCellOne) =#
-#=         @test elemc("one", testCellOne) =#
-#=         @test elemc("two", testCellOne) =#
-#=         @test elemc("three", testCellOne) =#
-#=         @test not elemc("not", testCellOne) =#
-#=         @test not elemc("there", testCellOne) =#
-#=     @testset "elemd" begin =#
-#=         testCellOne = cell_double(8) =#
-#=         insrtd(1.0, testCellOne) =#
-#=         insrtd(2.0, testCellOne) =#
-#=         insrtd(3.0, testCellOne) =#
-#=         @test elemd(1.0, testCellOne) =#
-#=         @test elemd(2.0, testCellOne) =#
-#=         @test elemd(3.0, testCellOne) =#
-#=         @test not elemd(4.0, testCellOne) =#
-#=         @test not elemd(-1.0, testCellOne) =#
-#=     @testset "elemi" begin =#
-#=         testCellOne = cell_int(8) =#
-#=         insrti(1, testCellOne) =#
-#=         insrti(2, testCellOne) =#
-#=         insrti(3, testCellOne) =#
-#=         @test elemi(1, testCellOne) =#
-#=         @test elemi(2, testCellOne) =#
-#=         @test elemi(3, testCellOne) =#
-#=         @test not elemi(4, testCellOne) =#
-#=         @test not elemi(-1, testCellOne) =#
-#=     @testset "eqncpv" begin =#
-#=         p = 10000.0 =#
-#=         gm = 398600.436 =#
-#=         ecc = 0.1 =#
-#=         a = p / (1.0 - ecc) =#
-#=         n = sqrt(gm / a) / a =#
-#=         argp = 30. * rpd() =#
-#=         node = 15. * rpd() =#
-#=         inc = 10. * rpd() =#
-#=         m0 = 45. * rpd() =#
-#=         t0 = -100000000.0 =#
-#=         eqel = [a, ecc * sin(argp + node), ecc * cos(argp + node), m0 + argp + node, =#
-#=                 tan(inc / 2.0) * sin(node), tan(inc / 2.0) * cos(node), 0.0, n, 0.0] =#
-#=         state = eqncpv(t0 - 9750.0, t0, eqel, halfpi() * -1, halfpi()) =#
-#=         expected = [-10732.167433285387, 3902.505790600528, 1154.4516152766892, =#
-#=                     -2.540766899262123, -5.15226920298345, -0.7615758062877463] =#
-#=         npt.@test_array_almost_equal(expected, state, decimal=5) =#
-#=     @testset "eqstr" begin =#
-#=         @test eqstr("A short string    ", "ashortstring") =#
-#=         @test eqstr("Embedded        blanks", "Em be dd ed bl an ks") =#
-#=         @test eqstr("One word left out", "WORD LEFT OUT") is false =#
-#=     @testset "erract" begin =#
-#=         @test erract("GET", 10, "") == "RETURN" =#
-#=         @test erract("GET", 10) == "RETURN" =#
-#=     @testset "errch" begin =#
-#=         setmsg("test errch value: #") =#
-#=         errch("#", "some error") =#
-#=         sigerr("some error") =#
-#=         message = getmsg("LONG", 2000) =#
-#=         @test message == "test errch value: some error" =#
-#=         reset() =#
-#=     @testset "errdev" begin =#
-#=         @test errdev("GET", 10, "Screen") == "NULL" =#
-#=     @testset "errdp" begin =#
-#=         setmsg("test errdp value: #") =#
-#=         errdp("#", 42.1) =#
-#=         sigerr("some error") =#
-#=         message = getmsg("LONG", 2000) =#
-#=         @test message == "test errdp value: 4.2100000000000E+01" =#
-#=         reset() =#
-#=     @testset "errint" begin =#
-#=         setmsg("test errint value: #") =#
-#=         errint("#", 42) =#
-#=         sigerr("some error") =#
-#=         message = getmsg("LONG", 2000) =#
-#=         @test message == "test errint value: 42" =#
-#=         reset() =#
-#=     @testset "errprt" begin =#
-#=         @test errprt("GET", 40, "ALL") == "NULL" =#
-#=     @testset "esrchc" begin =#
-#=         array = ["This", "is", "a", "test"] =#
-#=         @test esrchc("This", array) == 0 =#
-#=         @test esrchc("is", array) == 1 =#
-#=         @test esrchc("a", array) == 2 =#
-#=         @test esrchc("test", array) == 3 =#
-#=         @test esrchc("fail", array) == -1 =#
-#=     @testset "et2lst" begin =#
-#=         kclear() =#
-#=         furnsh(CoreKernels.testMetaKernel) =#
-#=         et = str2et("2004 may 17 16:30:00") =#
-#=         hr, mn, sc, time, ampm = et2lst(et, 399, 281.49521300000004 * rpd(), "planetocentric", 51, 51) =#
-#=         @test hr == 11 =#
-#=         @test mn == 19 =#
-#=         @test sc == 22 =#
-#=         @test time == "11:19:22" =#
-#=         @test ampm == '11:19:22 A.M.' =#
-#=         kclear() =#
+    @testset "ekinsr" begin
+        try
+            ekpath = tempname()
+            handle = ekopn(ekpath, ekpath, 0)
+            segno = ekbseg(handle, "TEST_TABLE_EKINSR", ["c1"],
+                           ["DATATYPE = INTEGER, NULLS_OK = TRUE"])
+            ekinsr(handle, segno, 1)
+            ekacei(handle, segno, 1, "c1", [1, 2], false)
+            ekcls(handle)
+            furnsh(ekpath)
+            nmrows = ekfind("SELECT C1 FROM TEST_TABLE_EKINSR", 100)
+            @test nmrows == 1
+        finally
+            kclear()
+        end
+    end
+    @testset "eklef/eknelt/ekuef" begin
+        try
+            ekpath = tempname()
+            handle = ekopn(ekpath, ekpath, 0)
+            segno = ekbseg(handle, "TEST_TABLE_EKLEF", ["C1"],
+                           ["DATATYPE  = INTEGER, NULLS_OK = TRUE"])
+            recno = ekappr(handle, segno)
+            ekacei(handle, segno, recno, "c1", [1, 2], false)
+            ekcls(handle)
+            handle = eklef(ekpath)
+            nmrows = ekfind("SELECT C1 FROM TEST_TABLE_EKLEF", 100)
+            @test eknelt(1, 1) == 1
+            @test nmrows == 1
+            ekuef(handle)
+        finally
+            kclear()
+        end
+    end
+    @testset "eknseg" begin
+        try
+            ekpath = tempname()
+            handle = ekopn(ekpath, ekpath, 0)
+            segno = ekbseg(handle, "TEST_TABLE_EKNSEG", ["C1"],
+                           ["DATATYPE  = INTEGER, NULLS_OK = TRUE"])
+            recno = ekappr(handle, segno)
+            ekacei(handle, segno, recno, "c1", [1, 2], false)
+            ekcls(handle)
+            kclear()
+            handle = ekopr(ekpath)
+            @test eknseg(handle) == 1
+            ekcls(handle)
+        finally
+            kclear()
+        end
+    end
+    @testset "ekops" begin
+        try
+            handle = ekops()
+            @test handle != -1
+            ekcls(handle)
+        finally
+            kclear()
+        end
+    end
+    @testset "ekssum" begin
+        try
+            ekpath = tempname()
+            handle = ekopn(ekpath, ekpath, 0)
+            segno, rcptrs = ekifld(handle, "test_table_ekssum", 2, ["c1"],
+                                   ["DATATYPE = INTEGER, NULLS_OK = TRUE"])
+            ekacli(handle, segno, "c1", [1, 2], [false, false], rcptrs)
+            ekffld(handle, segno, rcptrs)
+            segsum = ekssum(handle, segno)
+            @test segsum.ncols == 1
+            @test segsum.nrows == 2
+            @test SPICE.cnames(segsum) == ["C1"]
+            @test SPICE.tabnam(segsum) == "TEST_TABLE_EKSSUM"
+            c1descr = segsum.cdescrs[1]
+            @test c1descr.dtype == 2
+            @test !Bool(c1descr.indexd)
+            @test Bool(c1descr.nullok)
+            ekcls(handle)
+        finally
+            kclear()
+        end
+    end
+    @testset "el2cgv" begin
+        vec1 = [1.0, 1.0, 1.0]
+        vec2 = [1.0, -1.0, 1.0]
+        center = [1.0, 1.0, 1.0]
+        smajor, sminor = saelgv(vec1, vec2)
+        ellipse = cgv2el(center, smajor, sminor)
+        out_center, out_smajor, out_sminor = el2cgv(ellipse)
+        expected_center = [1.0, 1.0, 1.0]
+        expected_smajor = [sqrt(2.0), 0.0, sqrt(2.0)]
+        expected_sminor = [0.0, sqrt(2.0), 0.0]
+        @test out_center ≈ expected_center
+        @test out_smajor ≈ expected_smajor
+        @test out_sminor ≈ expected_sminor
+    end
+    @testset "eqncpv" begin
+        p = 10000.0
+        gm = 398600.436
+        ecc = 0.1
+        a = p / (1.0 - ecc)
+        n = sqrt(gm / a) / a
+        argp = deg2rad(30.0)
+        node = deg2rad(15.0)
+        inc = deg2rad(10.0)
+        m0 = deg2rad(45.0)
+        t0 = -100000000.0
+        eqel = [a, ecc * sin(argp + node), ecc * cos(argp + node), m0 + argp + node,
+                tan(inc / 2.0) * sin(node), tan(inc / 2.0) * cos(node), 0.0, n, 0.0]
+        state = eqncpv(t0 - 9750.0, t0, eqel,  -π/2, π/2)
+        expected = [-10732.167433285387, 3902.505790600528, 1154.4516152766892,
+                    -2.540766899262123, -5.15226920298345, -0.7615758062877463]
+        @test expected ≈ state rtol=1e-6
+    end
+    @testset "eqstr" begin
+        @test eqstr("A short string    ", "ashortstring")
+        @test eqstr("Embedded        blanks", "Em be dd ed bl an ks")
+        @test !eqstr("One word left out", "WORD LEFT OUT")
+    end
+    @testset "esrchc" begin
+        array = ["This", "is", "a", "test"]
+        @test esrchc("This", array) == 1
+        @test esrchc("is", array) == 2
+        @test esrchc("a", array) == 3
+        @test esrchc("test", array) == 4
+        @test esrchc("fail", array) == -1
+    end
+    @testset "et2lst" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
+            et = str2et("2004 may 17 16:30:00")
+            hr, mn, sc, time, ampm = et2lst(et, 399, deg2rad(281.49521300000004), "planetocentric", 51, 51)
+            @test hr == 11
+            @test mn == 19
+            @test sc == 22
+            @test time == "11:19:22"
+            @test ampm == "11:19:22 A.M."
+        finally
+            kclear()
+        end
+    end
     @testset "et2utc" begin
         try
             furnsh(path(CORE, :lsk))
@@ -551,18 +485,19 @@
             @test act[i] ≈ exp[i]
         end
     end
-#=     @testset "eul2xf" begin =#
-#=         kclear() =#
-#=         furnsh(CoreKernels.testMetaKernel) =#
-#=         et = str2et("Jan 1, 2009") =#
-#=         expected = sxform('IAU_EARTH', 'J2000', et) =#
-#=         eul = [1.571803284049681, 0.0008750002978301174, 2.9555269829740034, =#
-#=                3.5458495690569166e-12, 3.080552365717176e-12, -7.292115373266558e-05] =#
-#=         out = eul2xf(eul, 3, 1, 3) =#
-#=         npt.@test_array_almost_equal(out, expected) =#
-#=         kclear() =#
-#=     @testset "exists" begin =#
-#=         @test exists(CoreKernels.testMetaKernel) =#
+    @testset "eul2xf" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck))
+            et = str2et("Jan 1, 2009")
+            expected = sxform("IAU_EARTH", "J2000", et)
+            eul = [1.571803284049681, 0.0008750002978301174, 2.9555269829740034,
+                   3.5458495690569166e-12, 3.080552365717176e-12, -7.292115373266558e-05]
+            out = eul2xf(eul, 3, 1, 3)
+            @test out ≈ expected
+        finally
+            kclear()
+        end
+    end
     @testset "expool" begin
         try
             textbuf = ["DELTET/K = 1.657D-3", "DELTET/EB = 1.671D-2"]

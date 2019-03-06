@@ -83,7 +83,9 @@ function chararray(strings)
 end
 
 function chararray_to_string(array::Vector{UInt8})
-    String(array[1:findfirst(iszero, array) - 1])
+    idx = findfirst(iszero, array)
+    idx = idx === nothing ? length(array) : idx - 1
+    String(array[1:idx])
 end
 
 function chararray_to_string(array::Matrix{UInt8}, nmax=-1)
@@ -93,7 +95,8 @@ function chararray_to_string(array::Matrix{UInt8}, nmax=-1)
     n == 0 && return strings
     for i = 1:n
         line = array[:, i]
-        idx = findfirst(iszero, line) - 1
+        idx = findfirst(iszero, line)
+        idx = idx === nothing ? length(line) : idx - 1
         push!(strings, String(line[1:idx]))
     end
     strings

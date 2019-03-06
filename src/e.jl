@@ -18,16 +18,38 @@ export
     ekgc,
     ekgd,
     ekgi,
+    ekinsr,
     ekifld,
+    eklef,
+    eknelt,
+    eknseg,
     ekntab,
     ekopn,
     ekopr,
     ekops,
     ekopw,
+    ekpsel,
+    ekrcec,
+    ekrced,
+    ekrcei,
+    ekssum,
     ektnam,
+    ekucec,
+    ekuced,
+    ekucei,
+    ekuef,
+    el2cgv,
+    elemc,
+    elemd,
+    elemi,
+    eqncpv,
+    eqstr,
+    esrchc,
+    et2lst,
     et2utc,
     etcal,
     eul2m,
+    eul2xf,
     expool
 
 """
@@ -121,7 +143,7 @@ function ekacec(handle, segno, recno, column, cvals, isnull)
     cvals_, nvals, vallen = chararray(cvals)
     ccall((:ekacec_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}, SpiceBoolean),
-          handle, segno, recno, column, nvals, vallen, cvals_, isnull)
+          handle, segno - 1, recno - 1, column, nvals, vallen, cvals_, isnull)
     handleerror()
 end
 
@@ -147,7 +169,7 @@ function ekaced(handle, segno, recno, column, dvals, isnull)
     nvals = length(dvals)
     ccall((:ekaced_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceInt, Ref{SpiceDouble}, SpiceBoolean),
-          handle, segno, recno, column, nvals, dvals, isnull)
+          handle, segno - 1, recno - 1, column, nvals, dvals, isnull)
     handleerror()
 end
 
@@ -174,7 +196,7 @@ function ekacei(handle, segno, recno, column, ivals, isnull)
     ivals_ = SpiceInt.(ivals)
     ccall((:ekacei_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceInt, Ref{SpiceInt}, SpiceBoolean),
-          handle, segno, recno, column, nvals, ivals_, isnull)
+          handle, segno - 1, recno - 1, column, nvals, ivals_, isnull)
     handleerror()
 end
 
@@ -206,7 +228,7 @@ function ekaclc(handle, segno, column, cvals, nlflgs, rcptrs)
     ccall((:ekaclc_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, Cstring, SpiceInt, Ref{SpiceChar}, Ref{SpiceInt}, Ref{SpiceBoolean},
            Ref{SpiceInt}, Ref{SpiceInt}),
-          handle, segno, column, vallen, cvals_, entszs, nlflgs_, rcptrs, wkindx)
+          handle, segno - 1, column, vallen, cvals_, entszs, nlflgs_, rcptrs, wkindx)
     handleerror()
 end
 
@@ -239,7 +261,7 @@ function ekacld(handle, segno, column, dvals, nlflgs, rcptrs)
     ccall((:ekacld_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, Cstring, Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceBoolean},
            Ref{SpiceInt}, Ref{SpiceInt}),
-          handle, segno, column, dvals_, entszs, nlflgs_, rcptrs, wkindx)
+          handle, segno - 1, column, dvals_, entszs, nlflgs_, rcptrs, wkindx)
     handleerror()
 end
 
@@ -272,7 +294,7 @@ function ekacli(handle, segno, column, ivals, nlflgs, rcptrs)
     ccall((:ekacli_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, Cstring, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceBoolean},
            Ref{SpiceInt}, Ref{SpiceInt}),
-          handle, segno, column, ivals_, entszs, nlflgs_, rcptrs, wkindx)
+          handle, segno - 1, column, ivals_, entszs, nlflgs_, rcptrs, wkindx)
     handleerror()
 end
 
@@ -298,9 +320,9 @@ function ekappr(handle, segno)
     recno = Ref{SpiceInt}()
     ccall((:ekappr_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, Ref{SpiceInt}),
-          handle, segno, recno)
+          handle, segno - 1, recno)
     handleerror()
-    Int(recno[])
+    recno[] + 1
 end
 
 """
@@ -333,7 +355,7 @@ function ekbseg(handle, tabnam, cnames, decls)
            Ref{SpiceInt}),
           handle, tabnam, ncols, cnmlen, cnames_, declen, decls_, segno)
     handleerror()
-    Int(segno[])
+    segno[] + 1
 end
 
 """
@@ -427,7 +449,7 @@ Delete a specified record from a specified E-kernel segment.
 function ekdelr(handle, segno, recno)
     ccall((:ekdelr_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt),
-          handle, segno, recno)
+          handle, segno - 1, recno - 1)
     handleerror()
 end
 
@@ -449,7 +471,7 @@ Complete a fast write operation on a new E-kernel segment.
 function ekffld(handle, segno, rcptrs)
     ccall((:ekffld_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, Ref{SpiceInt}),
-          handle, segno, rcptrs)
+          handle, segno - 1, rcptrs)
     handleerror()
 end
 
@@ -586,6 +608,28 @@ function ekgi(selidx, row, elment)
 end
 
 """
+    ekinsr(handle, segno, recno)
+
+Add a new, empty record to a specified E-kernel segment at a specified index.
+
+### Arguments ###
+
+- `handle`: File handle
+- `segno`: Segment number
+- `recno`: Record number
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ekinsr_c.html)
+"""
+function ekinsr(handle, segno, recno)
+    ccall((:ekinsr_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt),
+          handle, segno - 1, recno - 1)
+    handleerror()
+end
+
+"""
     ekifld(handle, tabnam, nrows, cnames, decls)
 
 Initialize a new E-kernel segment to allow fast writing.
@@ -618,7 +662,82 @@ function ekifld(handle, tabnam, nrows, cnames, decls)
            Ref{SpiceChar}, Ref{SpiceInt}, Ref{SpiceInt}),
           handle, tabnam, ncols, nrows, cnmlen, cnames_, declen, decls_, segno, rcptrs)
     handleerror()
-    Int(segno[]), rcptrs
+    segno[] + 1, rcptrs
+end
+
+"""
+    eklef(fname)
+
+Load an EK file, making it accessible to the EK readers.
+
+### Arguments ###
+
+- `fname`: Name of EK file to load
+
+### Output ###
+
+Returns the file handle of loaded EK file.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/eklef_c.html)
+"""
+function eklef(fname)
+    handle = Ref{SpiceInt}()
+    ccall((:eklef_c, libcspice), Cvoid,
+          (Cstring, Ref{SpiceInt}),
+          fname, handle)
+    handleerror()
+    handle[]
+end
+
+"""
+    eknelt(selidx, row)
+
+Return the number of elements in a specified column entry in the current row.
+
+### Arguments ###
+
+- `selidx`: Index of parent column in SELECT clause
+- `row`: Row containing element
+
+### Output ###
+
+Returns the number of elements in entry in current row.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/eknelt_c.html)
+"""
+function eknelt(selidx, row)
+    res = ccall((:eknelt_c, libcspice), SpiceInt,
+                (SpiceInt, SpiceInt),
+                selidx - 1, row - 1)
+    handleerror()
+    Int(res)
+end
+
+"""
+    eknseg(handle)
+
+Return the number of segments in a specified EK.
+
+### Arguments ###
+
+- `handle`: EK file handle
+
+### Output ###
+
+Returns the number of segments in the specified E-kernel.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/eknseg_c.html)
+"""
+function eknseg(handle)
+    res = ccall((:eknseg_c, libcspice), SpiceInt, (SpiceInt,), handle)
+    handleerror()
+    Int(res)
 end
 
 """
@@ -691,13 +810,9 @@ function ekopr(fname)
 end
 
 """
-    ekops(fname)
+    ekops()
 
 Open a scratch (temporary) E-kernel file and prepare the file for writing.
-
-### Arguments ###
-
-- `fname`: Name of EK file
 
 ### Output ###
 
@@ -707,11 +822,9 @@ Returns the handle attached to the EK file.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ekops_c.html)
 """
-function ekops(fname)
+function ekops()
     handle = Ref{SpiceInt}()
-    ccall((:ekops_c, libcspice), Cvoid,
-          (Cstring, Ref{SpiceInt}),
-          fname, handle)
+    ccall((:ekops_c, libcspice), Cvoid, (Ref{SpiceInt},), handle)
     handleerror()
     handle[]
 end
@@ -743,6 +856,185 @@ function ekopw(fname)
 end
 
 """
+    ekpsel(query, msglen=256, tablen=256, collen=256)
+
+Parse the SELECT clause of an EK query, returning full particulars concerning each selected item.
+
+### Arguments ###
+
+- `query`: EK query
+- `msglen`: Available space in the output error message string (default: 256)
+- `tablen`: Length of strings in `tabs' output array (default: 256)
+- `collen`: Length of strings in `cols' output array (default: 256)
+
+### Output ###
+
+- `xbegs`: Begin positions of expressions in SELECT clause
+- `xends`: End positions of expressions in SELECT clause
+- `xtypes`: Data types of expressions
+- `xclass`: Classes of expressions
+- `tabs`: Names of tables qualifying SELECT columns
+- `cols`: Names of columns in SELECT clause of query
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ekpsel_c.html)
+"""
+function ekpsel(query, msglen=256, tablen=256, collen=256)
+    maxqsel = 100
+    n = Ref{SpiceInt}()
+    xbegs = Array{SpiceInt}(undef, maxqsel)
+    xends = Array{SpiceInt}(undef, maxqsel)
+    xtypes = Array{SpiceInt}(undef, maxqsel)
+    xclass = Array{SpiceInt}(undef, maxqsel)
+    tabs = Array{SpiceChar}(undef, tablen, maxqsel)
+    cols = Array{SpiceChar}(undef, collen, maxqsel)
+    error = Ref{SpiceBoolean}()
+    errmsg = Array{SpiceChar}(undef, msglen)
+    ccall((:ekpsel_c, libcspice), Cvoid,
+          (Cstring, SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceInt},
+           Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceChar}, Ref{SpiceChar}, Ref{SpiceBoolean},
+           Ref{SpiceChar}),
+          query, msglen, tablen, collen, n, xbegs, xends, xtypes, xclass, tabs, cols, error, errmsg)
+    handleerror()
+    if Bool(error[])
+        throw(SpiceError(chararray_to_string(errmsg)))
+    end
+    Int.(xbegs[1:n[]]), Int.(xends[1:n[]]), Int.(xtypes[1:n[]]), Int.(xclass[1:n[]]),
+    chararray_to_string(tabs)[1:n[]], chararray_to_string(cols)[1:n[]]
+end
+
+"""
+    ekrcec(handle, segno, recno, column, lenout=256, nelts=100)
+
+Read data from a character column in a specified EK record.
+
+### Arguments ###
+
+- `handle`: Handle attached to EK file
+- `segno`: Index of segment containing record
+- `recno`: Record from which data is to be read
+- `column`: Column name
+- `lenout`: Maximum length of output strings
+- `nelts`: Maximum number of elements to return (default: 100)
+
+### Output ###
+
+Returns the character values in column entry or `missing` if they are null.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ekrcec_c.html)
+"""
+function ekrcec(handle, segno, recno, column, lenout=256, nelts=100)
+    nvals = Ref{SpiceInt}()
+    cvals = Array{SpiceChar}(undef, lenout, nelts)
+    isnull = Ref{SpiceBoolean}()
+    ccall((:ekrcec_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceInt,
+           Ref{SpiceInt}, Ref{SpiceChar}, Ref{SpiceBoolean}),
+          handle, segno - 1, recno - 1, column, lenout, nvals, cvals, isnull)
+    handleerror()
+    Bool(isnull[]) && return missing
+    strip.(chararray_to_string(cvals)[1:nvals[]])
+end
+
+"""
+    ekrced(handle, segno, recno, column, nelts=100)
+
+Read data from a double precision column in a specified EK record.
+
+### Arguments ###
+
+- `handle`: Handle attached to EK file
+- `segno`: Index of segment containing record
+- `recno`: Record from which data is to be read
+- `column`: Column name
+- `nelts`: Maximum number of elements to return (default: 100)
+
+### Output ###
+
+Returns the values in column entry.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ekrced_c.html)
+"""
+function ekrced(handle, segno, recno, column, nelts=100)
+    nvals = Ref{SpiceInt}()
+    dvals = Array{SpiceDouble}(undef, nelts)
+    isnull = Ref{SpiceBoolean}()
+    ccall((:ekrced_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring,
+           Ref{SpiceInt}, Ref{SpiceDouble}, Ref{SpiceBoolean}),
+          handle, segno - 1, recno - 1, column, nvals, dvals, isnull)
+    handleerror()
+    Bool(isnull[]) && return missing
+    dvals[1:nvals[]]
+end
+
+"""
+    ekrcei(handle, segno, recno, column, nelts=100)
+
+Read data from an integer column in a specified EK record.
+
+### Arguments ###
+
+- `handle`: Handle attached to EK file
+- `segno`: Index of segment containing record
+- `recno`: Record from which data is to be read
+- `column`: Column name
+- `nelts`: Maximum number of elements to return (default: 100)
+
+### Output ###
+
+Returns the values in column entry.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ekrcei_c.html)
+"""
+function ekrcei(handle, segno, recno, column, nelts=100)
+    nvals = Ref{SpiceInt}()
+    ivals = Array{SpiceInt}(undef, nelts)
+    isnull = Ref{SpiceBoolean}()
+    ccall((:ekrcei_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring,
+           Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceBoolean}),
+          handle, segno - 1, recno - 1, column, nvals, ivals, isnull)
+    handleerror()
+    Bool(isnull[]) && return missing
+    Int.(ivals[1:nvals[]])
+end
+
+"""
+    ekssum(handle, segno)
+
+Return summary information for a specified segment in a specified EK.
+
+### Arguments ###
+
+- `handle`: Handle of EK
+- `segno`: Number of segment to be summarized
+
+### Output ###
+
+Returns the EK segment summary.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ekssum_c.html)
+"""
+function ekssum(handle, segno)
+    sum = Ref{EKSegSum}()
+    ccall((:ekssum_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, Ref{EKSegSum}),
+          handle, segno - 1, sum)
+    handleerror()
+    sum[]
+end
+
+"""
     ektnam(n, lenout=256)
 
 Return the name of a specified, loaded table.
@@ -767,6 +1059,273 @@ function ektnam(n, lenout=256)
           n - 1, lenout, table)
     handleerror()
     chararray_to_string(table)
+end
+
+"""
+    ekucec(handle, segno, recno, column, cvals, isnull)
+
+Update a character column entry in a specified EK record.
+
+### Arguments ###
+
+- `handle`: EK file handle
+- `segno`: Index of segment containing record
+- `recno`: Record to which data is to be updated
+- `column`: Column name
+- `cvals`: Character values comprising new column entry
+- `isnull`: Flag indicating whether column entry is null
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ekucec_c.html)
+"""
+function ekucec(handle, segno, recno, column, cvals, isnull)
+    cvals_, nvals, vallen = chararray(cvals)
+    ccall((:ekucec_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceInt, SpiceInt,
+           Ref{SpiceChar}, SpiceBoolean),
+          handle, segno - 1, recno - 1, column, nvals, vallen, cvals_, isnull)
+    handleerror()
+end
+
+"""
+    ekuced(handle, segno, recno, column, dvals, isnull)
+
+Update a double precision column entry in a specified EK record.
+
+### Arguments ###
+
+- `handle`: Handle attached to EK file
+- `segno`: Index of segment containing record
+- `recno`: Record in which entry is to be updated
+- `column`: Column name
+- `dvals`: Double precision values comprising new column entry
+- `isnull`: Flag indicating whether column entry is null
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ekuced_c.html)
+"""
+function ekuced(handle, segno, recno, column, dvals, isnull)
+    nvals = length(dvals)
+    dvals_ = array_to_cmatrix(dvals)
+    ccall((:ekuced_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceInt,
+           Ref{SpiceDouble}, SpiceBoolean),
+          handle, segno - 1, recno - 1, column, nvals, dvals_, isnull)
+    handleerror()
+end
+
+"""
+    ekucei(handle, segno, recno, column, dvals, isnull)
+
+Update a double precision column entry in a specified EK record.
+
+### Arguments ###
+
+- `handle`: Handle attached to EK file
+- `segno`: Index of segment containing record
+- `recno`: Record in which entry is to be updated
+- `column`: Column name
+- `dvals`: Double precision values comprising new column entry
+- `isnull`: Flag indicating whether column entry is null
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ekucei_c.html)
+"""
+function ekucei(handle, segno, recno, column, ivals, isnull)
+    nvals = length(ivals)
+    ivals_ = SpiceInt.(array_to_cmatrix(ivals))
+    ccall((:ekucei_c, libcspice), Cvoid,
+          (SpiceInt, SpiceInt, SpiceInt, Cstring, SpiceInt,
+           Ref{SpiceInt}, SpiceBoolean),
+          handle, segno - 1, recno - 1, column, nvals, ivals_, isnull)
+    handleerror()
+end
+
+"""
+    ekuef(handle)
+
+Unload an EK file, making its contents inaccessible to the EK reader routines, and clearing space
+in order to allow other EK files to be loaded.
+
+### Arguments ###
+
+- `handle`: Handle of EK file
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ekuef_c.html)
+"""
+function ekuef(handle)
+    ccall((:ekuef_c, libcspice), Cvoid, (SpiceInt,), handle)
+    handleerror()
+end
+
+"""
+
+Convert an ellipse to a center vector and two generating vectors.
+The selected generating vectors are semi-axes of the ellipse.
+
+### Arguments ###
+
+- `ellipse`: An ellipse
+
+### Output ###
+
+Returns the center and semi-axes of ellipse.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/el2cgv_c.html)
+"""
+function el2cgv(ellipse)
+    center = Array{SpiceDouble}(undef, 3)
+    smajor = Array{SpiceDouble}(undef, 3)
+    sminor = Array{SpiceDouble}(undef, 3)
+    ccall((:el2cgv_c, libcspice), Cvoid,
+          (Ref{Ellipse}, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          ellipse, center, smajor, sminor)
+    center, smajor, sminor
+end
+
+@deprecate elemc(item, cell) item in cell
+@deprecate elemd(item, cell) item in cell
+@deprecate elemi(item, cell) item in cell
+
+"""
+    elem[c/d/i](item, cell)
+
+!!! warning Deprecated
+    Use `item in cell` instead.
+"""
+elemc
+elemd
+elemi
+
+"""
+    eqstr(a, b)
+
+Determine whether two strings are equivalent.
+
+### Arguments ###
+
+- `a`, `b`: Arbitrary character strings
+
+### Output ###
+
+Returns `true` if `a` and `b` are equivalent.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/eqstr_c.html)
+"""
+function eqstr(a, b)
+    res = ccall((:eqstr_c, libcspice), SpiceBoolean,
+                (Cstring, Cstring), a, b)
+    handleerror()
+    Bool(res)
+end
+
+"""
+    eqncpv(et, epoch, eqel, rapol, decpol)
+
+Compute the state (position and velocity of an object whose trajectory is described via equinoctial
+elements relative to some fixed plane (usually the equatorial plane of some planet).
+
+### Arguments ###
+
+- `et`: Epoch in seconds past J2000 to find state
+- `epoch`: Epoch of elements in seconds past J2000
+- `eqel`: Array of equinoctial elements
+- `rapol`: Right Ascension of the pole of the reference plane
+- `decpol`: Declination of the pole of the reference plane
+
+### Output ###
+
+Returns the state of the object described by `eqel`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/eqncpv_c.html)
+"""
+function eqncpv(et, epoch, eqel, rapol, decpol)
+    @checkdims 9 eqel
+    state = Array{SpiceDouble}(undef, 6)
+    ccall((:eqncpv_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, Ref{SpiceDouble}, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
+          et, epoch, eqel, rapol, decpol, state)
+    handleerror()
+    state
+end
+
+"""
+    esrchc(value, array)
+
+Search for a given value within a character string array.
+
+### Arguments ###
+
+- `value`: Key value to be found in array
+- `array`: Character string array to search
+
+### Output ###
+
+Returns the index of the first equivalent array entry, or -1 if no equivalent element is found.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/esrchc_c.html)
+"""
+function esrchc(value, array)
+    array_, ndim, lenvals = chararray(array)
+    res = Int(ccall((:esrchc_c, libcspice), SpiceInt,
+                    (Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}),
+                    value, ndim, lenvals, array_))
+    handleerror()
+    res == -1 ? res : res + 1
+end
+
+"""
+    et2lst(et, body, lon, typ, timlen=128, ampmlen=128)
+
+Given an ephemeris epoch, compute the local solar time for an object on the surface of a body at a
+specified longitude.
+
+### Arguments ###
+
+- `et`: Epoch in seconds past J2000 epoch
+- `body`: ID-code of the body of interest
+- `lon`: Longitude of surface point (radians)
+- `typ`: Type of longitude "PLANETOCENTRIC", etc
+- `timlen`: Available room in output time string (default: 128)
+- `ampmlen`: Available room in output `ampm' string (default: 128)
+
+### Output ###
+
+- `hr`: Local hour on a "24 hour" clock
+- `mn`: Minutes past the hour
+- `sc`: Seconds past the minute
+- `time`: String giving local time on 24 hour clock
+- `ampm`: String giving time on A.M./ P.M. scale
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/et2lst_c.html)
+"""
+function et2lst(et, body, lon, typ, timlen=128, ampmlen=128)
+    hr = Ref{SpiceInt}()
+    mn = Ref{SpiceInt}()
+    sc = Ref{SpiceInt}()
+    time = Array{SpiceChar}(undef, timlen)
+    ampm = Array{SpiceChar}(undef, ampmlen)
+    ccall((:et2lst_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceInt, SpiceDouble, Cstring, SpiceInt, SpiceInt,
+           Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceInt}, Ref{SpiceChar}, Ref{SpiceChar}),
+          et, body, lon, typ, timlen, ampmlen, hr, mn, sc, time, ampm)
+    handleerror()
+    Int(hr[]), Int(mn[]), Int(sc[]), chararray_to_string(time), chararray_to_string(ampm)
 end
 
 """
@@ -855,6 +1414,37 @@ function eul2m(angle3, angle2, angle1, axis3, axis2, axis1)
           angle3, angle2, angle1, axis3, axis2, axis1, r)
     handleerror()
     permutedims(r)
+end
+
+"""
+    eul2xf(eulang, axisa, axisb, axisc)
+
+Compute a state transformation from an Euler angle factorization of a rotation and the derivatives
+of those Euler angles.
+
+### Arguments ###
+
+- `eulang`: An array of Euler angles and their derivatives
+- `axisa`: Axis A of the Euler angle factorization
+- `axisb`: Axis B of the Euler angle factorization
+- `axisc`: Axis C of the Euler angle factorization
+
+### Output ###
+
+Returns a state transformation matrix.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/eul2xf_c.html)
+"""
+function eul2xf(eulang, axisa, axisb, axisc)
+    @checkdims 6 eulang
+    xform = Array{SpiceDouble}(undef, 6, 6)
+    ccall((:eul2xf_c, libcspice), Cvoid,
+          (Ref{SpiceDouble}, SpiceInt, SpiceInt, SpiceInt, Ref{SpiceDouble}),
+          eulang, axisa, axisb, axisc, xform)
+    handleerror()
+    permutedims(xform)
 end
 
 """
