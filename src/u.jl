@@ -13,7 +13,7 @@ export ucase,
 function _ucase(in)
     n = length(in) + 1
     out = Array{SpiceChar}(undef, n)
-    ccall((:ucase_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{UInt8}),
+    ccall((:ucase_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{SpiceChar}),
           in, n, out)
     chararray_to_string(out)
 end

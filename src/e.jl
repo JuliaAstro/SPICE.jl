@@ -1354,9 +1354,9 @@ Returns an output time string equivalent to the input epoch, in the specified fo
 """
 function et2utc(et, format, prec)
     lenout = 32
-    utcstr = Array{UInt8}(undef, lenout)
+    utcstr = Array{SpiceChar}(undef, lenout)
     ccall((:et2utc_c, libcspice), Cvoid,
-          (SpiceDouble, Cstring, SpiceInt, SpiceInt, Ref{UInt8}),
+          (SpiceDouble, Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}),
           et, string(format), prec, lenout, utcstr)
     handleerror()
     chararray_to_string(utcstr)
@@ -1382,8 +1382,8 @@ Returns a standard calendar representation of `et`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/etcal_c.html)
 """
 function etcal(et, lenout=128)
-    string = Array{UInt8}(undef, lenout)
-    ccall((:etcal_c, libcspice), Cvoid, (SpiceDouble, SpiceInt, Ref{UInt8}),
+    string = Array{SpiceChar}(undef, lenout)
+    ccall((:etcal_c, libcspice), Cvoid, (SpiceDouble, SpiceInt, Ref{SpiceChar}),
           et, lenout, string)
     chararray_to_string(string)
 end

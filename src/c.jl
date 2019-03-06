@@ -665,7 +665,7 @@ frame is found.
 """
 function cnmfrm(cname, lenout=256)
     frcode = Ref{SpiceInt}()
-    frname = Array{UInt8}(undef, lenout)
+    frname = Array{SpiceChar}(undef, lenout)
     found = Ref{SpiceBoolean}()
     ccall((:cnmfrm_c, libcspice), Cvoid,
           (Cstring, SpiceInt, Ref{SpiceInt}, Ref{SpiceChar}, Ref{SpiceBoolean}),

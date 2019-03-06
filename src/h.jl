@@ -69,9 +69,9 @@ into its equivalent double precision number.
 function hx2dp(str)
     dp = Ref{SpiceDouble}()
     error = Ref{SpiceBoolean}()
-    errmsg = Array{UInt8}(undef, 46)
+    errmsg = Array{SpiceChar}(undef, 46)
     ccall((:hx2dp_c, libcspice), Cvoid,
-        (Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceBoolean}, Ref{UInt8}),
+        (Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceBoolean}, Ref{SpiceChar}),
         str, 46, dp, error, errmsg)
     if Bool(error[])
         throw(SpiceError(chararray_to_string(errmsg)))

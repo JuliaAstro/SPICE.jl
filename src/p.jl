@@ -225,7 +225,7 @@ Insert character data into the kernel pool.
 function pcpool(name, vals)
     vals_, n, lenvals = chararray(vals)
     ccall((:pcpool_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, SpiceInt, Ref{UInt8}),
+          (Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}),
           name, n, lenvals, vals_)
     handleerror()
 end

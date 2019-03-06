@@ -32,10 +32,10 @@ Returns an array of values if the variable exists or `nothing` if not.
 """
 function gcpool(name; start=1, room=100, lenout=128)
     n = Ref{SpiceInt}()
-    values = Array{UInt8}(undef, lenout, room)
+    values = Array{SpiceChar}(undef, lenout, room)
     found = Ref{SpiceInt}()
     ccall((:gcpool_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{UInt8}, Ref{SpiceBoolean}),
+          (Cstring, SpiceInt, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{SpiceChar}, Ref{SpiceBoolean}),
           name, start - 1, room, lenout, n, values, found)
     handleerror()
     if Bool(found[])
@@ -193,14 +193,14 @@ Returns a tuple consisting of
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/getfov_c.html)
 """
 function getfov(instid, room=10, shapelen=128, framelen=128)
-    shape = Array{UInt8}(undef, shapelen)
-    frame = Array{UInt8}(undef, framelen)
+    shape = Array{SpiceChar}(undef, shapelen)
+    frame = Array{SpiceChar}(undef, framelen)
     bsight = Array{SpiceDouble}(undef, 3)
     n = Ref{SpiceInt}()
     bounds = Array{SpiceDouble}(undef, 3, room)
     ccall((:getfov_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, SpiceInt,
-           Ref{UInt8}, Ref{UInt8}, Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceDouble}),
+           Ref{SpiceChar}, Ref{SpiceChar}, Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceDouble}),
           instid, room, shapelen, framelen, shape, frame, bsight, n, bounds)
     handleerror()
     arr_bounds = cmatrix_to_array(bounds)

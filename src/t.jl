@@ -121,7 +121,7 @@ Returns the value associated with the default item.
 """
 function timdef(action, item, value="")
     lenout = 10
-    val = fill(UInt8(0), lenout)
+    val = fill(SpiceChar(0), lenout)
     val[1:length(value)] .= collect(value)
     ccall((:timdef_c, libcspice), Cvoid,
           (Cstring, Cstring, SpiceInt, Ref{SpiceChar}),
@@ -152,7 +152,7 @@ Returns a string representation of the input epoch.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/timout_c.html)
 """
 function timout(et, pictur, lenout=128)
-    string = Array{UInt8}(undef, lenout)
+    string = Array{SpiceChar}(undef, lenout)
     ccall((:timout_c, libcspice), Cvoid,
           (Cdouble, Cstring, SpiceInt, Ref{SpiceChar}),
           et, pictur, lenout, string)
@@ -252,9 +252,9 @@ Returns UTC expressed in seconds since J2000.
 function tparse(string)
     lenout = 128
     sp2000 = Ref{SpiceDouble}()
-    errmsg = Array{UInt8}(undef, lenout)
+    errmsg = Array{SpiceChar}(undef, lenout)
     ccall((:tparse_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, Ref{SpiceDouble}, Ref{UInt8}),
+          (Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceChar}),
           string, lenout, sp2000, errmsg)
     msg = chararray_to_string(errmsg)
     if !isempty(msg)
@@ -284,11 +284,11 @@ Returns a format picture that describes sample.
 """
 function tpictr(sample, lenout=80)
     lenerr = 128
-    pictur = Array{UInt8}(undef, lenout)
+    pictur = Array{SpiceChar}(undef, lenout)
     ok = Ref{SpiceBoolean}()
-    errmsg = Array{UInt8}(undef, lenerr)
+    errmsg = Array{SpiceChar}(undef, lenerr)
     ccall((:tpictr_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, SpiceInt, Ref{UInt8}, Ref{SpiceBoolean}, Ref{UInt8}),
+          (Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}, Ref{SpiceBoolean}, Ref{SpiceChar}),
           sample, lenout, lenerr, pictur, ok, errmsg)
     if !Bool(ok[])
         throw(SpiceError(chararray_to_string(errmsg)))

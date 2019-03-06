@@ -164,7 +164,7 @@ Returns an array of surface points.
 function latsrf(method, target, et, fixref, lonlat)
     npts = length(lonlat)
     lonlat_ = array_to_cmatrix(lonlat, n=2)
-    srfpts = Matrix{SpiceDouble}(undef, 3, npts)
+    srfpts = Array{SpiceDouble}(undef, 3, npts)
     ccall((:latsrf_c, libcspice), Cvoid,
           (Cstring, Cstring, SpiceDouble, Cstring, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
           method, target, et, fixref, npts, lonlat_, srfpts)
@@ -175,8 +175,8 @@ end
 _lcase(in) = _lcase(in,length(in)+1)
 
 function _lcase(in,lenout)
-    out = Array{UInt8}(undef, lenout)
-    ccall((:lcase_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{UInt8}), in, lenout, out)
+    out = Array{SpiceChar}(undef, lenout)
+    ccall((:lcase_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{SpiceChar}), in, lenout, out)
     handleerror()
     chararray_to_string(out)
 end
@@ -335,8 +335,8 @@ end
 function _lparse(list, delim, nmax)
     lenout = length(list)+1
     n = Ref{SpiceInt}()
-    items = Array{UInt8}(undef, lenout, nmax)
-    ccall((:lparse_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{UInt8}),
+    items = Array{SpiceChar}(undef, lenout, nmax)
+    ccall((:lparse_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{SpiceChar}),
           list, delim, nmax, lenout, n , items)
     handleerror()
     chararray_to_string(items, n[])
@@ -355,8 +355,8 @@ lparse
 function _lparsm(list, delims, nmax)
     lenout = length(list) + 1
     n = Ref{SpiceInt}()
-    items = Array{UInt8}(undef, lenout, nmax)
-    ccall((:lparsm_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{UInt8}),
+    items = Array{SpiceChar}(undef, lenout, nmax)
+    ccall((:lparsm_c, libcspice), Cvoid, (Cstring, Cstring, SpiceInt, SpiceInt, Ref{SpiceInt}, Ref{SpiceChar}),
           list, delims, nmax, lenout, n , items)
     handleerror()
     chararray_to_string(items, n[])
@@ -374,7 +374,7 @@ lparsm
 
 function _lparss(list, delims)
     items = SpiceCharCell(length(list), length(list))
-    ccall((:lparss_c, libcspice), Cvoid, (Cstring, Cstring, Ref{Cell{UInt8}}),
+    ccall((:lparss_c, libcspice), Cvoid, (Cstring, Cstring, Ref{Cell{SpiceChar}}),
           list, delims, Ref(items.cell))
     handleerror()
     items
@@ -422,7 +422,7 @@ end
 function _lstle(string::AbstractString, array)
     n = length(array)
     array_, n, lenvals = chararray(array)
-    out = ccall((:lstlec_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ref{UInt8}),
+    out = ccall((:lstlec_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}),
                 string, n, lenvals, array_)
     handleerror()
     out + 1
@@ -467,7 +467,7 @@ lstlei
 function _lstlt(string::AbstractString, array)
     n = length(array)
     array_, n, lenvals = chararray(array)
-    out = ccall((:lstltc_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ref{UInt8}),
+    out = ccall((:lstltc_c, libcspice), SpiceInt, (Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}),
                 string, n, lenvals, array_)
     handleerror()
     out + 1
