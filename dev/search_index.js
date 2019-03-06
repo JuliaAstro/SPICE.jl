@@ -1281,6 +1281,38 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.ekinsr-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.ekinsr",
+    "category": "method",
+    "text": "ekinsr(handle, segno, recno)\n\nAdd a new, empty record to a specified E-kernel segment at a specified index.\n\nArguments\n\nhandle: File handle\nsegno: Segment number\nrecno: Record number\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.eklef-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.eklef",
+    "category": "method",
+    "text": "eklef(fname)\n\nLoad an EK file, making it accessible to the EK readers.\n\nArguments\n\nfname: Name of EK file to load\n\nOutput\n\nReturns the file handle of loaded EK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.eknelt-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.eknelt",
+    "category": "method",
+    "text": "eknelt(selidx, row)\n\nReturn the number of elements in a specified column entry in the current row.\n\nArguments\n\nselidx: Index of parent column in SELECT clause\nrow: Row containing element\n\nOutput\n\nReturns the number of elements in entry in current row.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.eknseg-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.eknseg",
+    "category": "method",
+    "text": "eknseg(handle)\n\nReturn the number of segments in a specified EK.\n\nArguments\n\nhandle: EK file handle\n\nOutput\n\nReturns the number of segments in the specified E-kernel.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.ekntab-Tuple{}",
     "page": "API",
     "title": "SPICE.ekntab",
@@ -1305,11 +1337,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.ekops-Tuple{Any}",
+    "location": "api/#SPICE.ekops-Tuple{}",
     "page": "API",
     "title": "SPICE.ekops",
     "category": "method",
-    "text": "ekops(fname)\n\nOpen a scratch (temporary) E-kernel file and prepare the file for writing.\n\nArguments\n\nfname: Name of EK file\n\nOutput\n\nReturns the handle attached to the EK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "ekops()\n\nOpen a scratch (temporary) E-kernel file and prepare the file for writing.\n\nOutput\n\nReturns the handle attached to the EK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1321,11 +1353,131 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.ekpsel",
+    "page": "API",
+    "title": "SPICE.ekpsel",
+    "category": "function",
+    "text": "ekpsel(query, msglen=256, tablen=256, collen=256)\n\nParse the SELECT clause of an EK query, returning full particulars concerning each selected item.\n\nArguments\n\nquery: EK query\nmsglen: Available space in the output error message string (default: 256)\ntablen: Length of strings in `tabs\' output array (default: 256)\ncollen: Length of strings in `cols\' output array (default: 256)\n\nOutput\n\nxbegs: Begin positions of expressions in SELECT clause\nxends: End positions of expressions in SELECT clause\nxtypes: Data types of expressions\nxclass: Classes of expressions\ntabs: Names of tables qualifying SELECT columns\ncols: Names of columns in SELECT clause of query\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekrcec",
+    "page": "API",
+    "title": "SPICE.ekrcec",
+    "category": "function",
+    "text": "ekrcec(handle, segno, recno, column, lenout=256, nelts=100)\n\nRead data from a character column in a specified EK record.\n\nArguments\n\nhandle: Handle attached to EK file\nsegno: Index of segment containing record\nrecno: Record from which data is to be read\ncolumn: Column name\nlenout: Maximum length of output strings\nnelts: Maximum number of elements to return (default: 100)\n\nOutput\n\nReturns the character values in column entry or missing if they are null.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekrced",
+    "page": "API",
+    "title": "SPICE.ekrced",
+    "category": "function",
+    "text": "ekrced(handle, segno, recno, column, nelts=100)\n\nRead data from a double precision column in a specified EK record.\n\nArguments\n\nhandle: Handle attached to EK file\nsegno: Index of segment containing record\nrecno: Record from which data is to be read\ncolumn: Column name\nnelts: Maximum number of elements to return (default: 100)\n\nOutput\n\nReturns the values in column entry.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekrcei",
+    "page": "API",
+    "title": "SPICE.ekrcei",
+    "category": "function",
+    "text": "ekrcei(handle, segno, recno, column, nelts=100)\n\nRead data from an integer column in a specified EK record.\n\nArguments\n\nhandle: Handle attached to EK file\nsegno: Index of segment containing record\nrecno: Record from which data is to be read\ncolumn: Column name\nnelts: Maximum number of elements to return (default: 100)\n\nOutput\n\nReturns the values in column entry.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekssum-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.ekssum",
+    "category": "method",
+    "text": "ekssum(handle, segno)\n\nReturn summary information for a specified segment in a specified EK.\n\nArguments\n\nhandle: Handle of EK\nsegno: Number of segment to be summarized\n\nOutput\n\nReturns the EK segment summary.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.ektnam",
     "page": "API",
     "title": "SPICE.ektnam",
     "category": "function",
     "text": "ektnam(n, lenout=256)\n\nReturn the name of a specified, loaded table.\n\nArguments\n\nn: Index of table\nlenout: Maximum table name length (default: 256)\n\nOutput\n\nReturns the name of table.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekucec-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.ekucec",
+    "category": "method",
+    "text": "ekucec(handle, segno, recno, column, cvals, isnull)\n\nUpdate a character column entry in a specified EK record.\n\nArguments\n\nhandle: EK file handle\nsegno: Index of segment containing record\nrecno: Record to which data is to be updated\ncolumn: Column name\ncvals: Character values comprising new column entry\nisnull: Flag indicating whether column entry is null\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekuced-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.ekuced",
+    "category": "method",
+    "text": "ekuced(handle, segno, recno, column, dvals, isnull)\n\nUpdate a double precision column entry in a specified EK record.\n\nArguments\n\nhandle: Handle attached to EK file\nsegno: Index of segment containing record\nrecno: Record in which entry is to be updated\ncolumn: Column name\ndvals: Double precision values comprising new column entry\nisnull: Flag indicating whether column entry is null\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekucei-NTuple{6,Any}",
+    "page": "API",
+    "title": "SPICE.ekucei",
+    "category": "method",
+    "text": "ekucei(handle, segno, recno, column, dvals, isnull)\n\nUpdate a double precision column entry in a specified EK record.\n\nArguments\n\nhandle: Handle attached to EK file\nsegno: Index of segment containing record\nrecno: Record in which entry is to be updated\ncolumn: Column name\ndvals: Double precision values comprising new column entry\nisnull: Flag indicating whether column entry is null\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.ekuef-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.ekuef",
+    "category": "method",
+    "text": "ekuef(handle)\n\nUnload an EK file, making its contents inaccessible to the EK reader routines, and clearing space in order to allow other EK files to be loaded.\n\nArguments\n\nhandle: Handle of EK file\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.el2cgv-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.el2cgv",
+    "category": "method",
+    "text": "Convert an ellipse to a center vector and two generating vectors. The selected generating vectors are semi-axes of the ellipse.\n\nArguments\n\nellipse: An ellipse\n\nOutput\n\nReturns the center and semi-axes of ellipse.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.elemc",
+    "page": "API",
+    "title": "SPICE.elemc",
+    "category": "function",
+    "text": "elem[c/d/i](item, cell)\n\n!!! warning Deprecated     Use item in cell instead.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.eqncpv-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.eqncpv",
+    "category": "method",
+    "text": "eqncpv(et, epoch, eqel, rapol, decpol)\n\nCompute the state (position and velocity of an object whose trajectory is described via equinoctial elements relative to some fixed plane (usually the equatorial plane of some planet).\n\nArguments\n\net: Epoch in seconds past J2000 to find state\nepoch: Epoch of elements in seconds past J2000\neqel: Array of equinoctial elements\nrapol: Right Ascension of the pole of the reference plane\ndecpol: Declination of the pole of the reference plane\n\nOutput\n\nReturns the state of the object described by eqel.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.eqstr-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.eqstr",
+    "category": "method",
+    "text": "eqstr(a, b)\n\nDetermine whether two strings are equivalent.\n\nArguments\n\na, b: Arbitrary character strings\n\nOutput\n\nReturns true if a and b are equivalent.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.esrchc-Tuple{Any,Any}",
+    "page": "API",
+    "title": "SPICE.esrchc",
+    "category": "method",
+    "text": "esrchc(value, array)\n\nSearch for a given value within a character string array.\n\nArguments\n\nvalue: Key value to be found in array\narray: Character string array to search\n\nOutput\n\nReturns the index of the first equivalent array entry, or -1 if no equivalent element is found.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.et2lst",
+    "page": "API",
+    "title": "SPICE.et2lst",
+    "category": "function",
+    "text": "et2lst(et, body, lon, typ, timlen=128, ampmlen=128)\n\nGiven an ephemeris epoch, compute the local solar time for an object on the surface of a body at a specified longitude.\n\nArguments\n\net: Epoch in seconds past J2000 epoch\nbody: ID-code of the body of interest\nlon: Longitude of surface point (radians)\ntyp: Type of longitude \"PLANETOCENTRIC\", etc\ntimlen: Available room in output time string (default: 128)\nampmlen: Available room in output `ampm\' string (default: 128)\n\nOutput\n\nhr: Local hour on a \"24 hour\" clock\nmn: Minutes past the hour\nsc: Seconds past the minute\ntime: String giving local time on 24 hour clock\nampm: String giving time on A.M./ P.M. scale\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1350,6 +1502,14 @@ var documenterSearchIndex = {"docs": [
     "title": "SPICE.eul2m",
     "category": "method",
     "text": "eul2m(angle3, angle2, angle1, axis3, axis2, axis1)\n\nConstruct a rotation matrix from a set of Euler angles.\n\nArguments\n\nangle3, angle2, angle1: Rotation angles about third, second, and first rotation axes (radians)\naxis3, axis2, axis1: Axis numbers of third, second, and first rotation axes\n\nOutput\n\nA rotation matrix corresponding to the product of the 3 rotations.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.eul2xf-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.eul2xf",
+    "category": "method",
+    "text": "eul2xf(eulang, axisa, axisb, axisc)\n\nCompute a state transformation from an Euler angle factorization of a rotation and the derivatives of those Euler angles.\n\nArguments\n\neulang: An array of Euler angles and their derivatives\naxisa: Axis A of the Euler angle factorization\naxisb: Axis B of the Euler angle factorization\naxisc: Axis C of the Euler angle factorization\n\nOutput\n\nReturns a state transformation matrix.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
