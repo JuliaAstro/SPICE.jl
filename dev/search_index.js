@@ -1601,6 +1601,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.getfat",
+    "page": "API",
+    "title": "SPICE.getfat",
+    "category": "function",
+    "text": "getfat(file, arclen=10, typlen=10)\n\nDetermine the file architecture and file type of most SPICE kernel files.\n\nArguments\n\nfile: The name of a file to be examined\narclen: Maximum length of output architecture string (default: 10)\ntyplen: Maximum length of output type string (default: 10)\n\nOutput\n\narch: The architecture of the kernel file\ntyp: The type of the kernel file\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.getfov",
     "page": "API",
     "title": "SPICE.getfov",
@@ -1622,6 +1630,14 @@ var documenterSearchIndex = {"docs": [
     "title": "SPICE.gipool",
     "category": "method",
     "text": "gipool(name; start=1, room=100)\n\nReturn the value of a kernel variable from the kernel pool.\n\nArguments\n\nname: Name of the variable whose value is to be returned\nstart: Which component to start retrieving for name (default: 1)\nroom: The largest number of values to return (default: 100)\n\nOutput\n\nReturns an array of values if the variable exists or nothing if not.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gnpool",
+    "page": "API",
+    "title": "SPICE.gnpool",
+    "category": "function",
+    "text": "gnpool(name, start, room, lenout=128)\n\nReturn names of kernel variables matching a specified template.\n\nArguments\n\nname: Template that names should match\nstart: Index of first matching name to retrieve\nroom: The largest number of values to return\nlenout: Length of strings in output array kvars (default: 128)\n\nOutput\n\nReturns lernel pool variables whose names match name.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
