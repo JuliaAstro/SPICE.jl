@@ -1421,7 +1421,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.ekucei",
     "category": "method",
-    "text": "ekucei(handle, segno, recno, column, dvals, isnull)\n\nUpdate a double precision column entry in a specified EK record.\n\nArguments\n\nhandle: Handle attached to EK file\nsegno: Index of segment containing record\nrecno: Record in which entry is to be updated\ncolumn: Column name\ndvals: Double precision values comprising new column entry\nisnull: Flag indicating whether column entry is null\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "ekucei(handle, segno, recno, column, dvals, isnull)\n\nUpdate an integer column entry in a specified EK record.\n\nArguments\n\nhandle: Handle attached to EK file\nsegno: Index of segment containing record\nrecno: Record in which entry is to be updated\ncolumn: Column name\nivals: Integer values comprising new column entry\nisnull: Flag indicating whether column entry is null\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
