@@ -92,7 +92,7 @@ using LinearAlgebra: I, ⋅
             wninsd!(cnfine, et0, et1)
             result = SpiceDoubleCell(10000)
             for relation in relate
-                gfpa!(cnfine, result, "Moon", "Sun", "LT+S", "Earth", relation, 0.57598845, 0.0, spd(), 5000)
+                result = gfpa("Moon", "Sun", "LT+S", "Earth", relation, 0.57598845, 0.0, spd(), 5000, cnfine)
                 count = wncard(result)
                 @test count > 0
                 if count > 0
