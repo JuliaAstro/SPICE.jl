@@ -47,8 +47,6 @@ mutable struct SpiceCell{S, T, N} <: AbstractArray{T, 1}
         cell = Cell{T}(length, size)
         data = init_data(T, size, length)
         self = new{T, itertype(T), dim(T)}(data, cell)
-        base = pointer(self.data, 1)
-        data = pointer(self.data, CTRLSZ + 1)
         self.cell.base = pointer(self.data, 1)
         self.cell.data = data_ptr(T, self.data, length)
         self
@@ -180,15 +178,10 @@ size(cell::SpiceCell) = (card(cell),)
 Duplicate the SpiceCell `cell`.
 """
 function Base.copy(cell::SpiceCell{T}) where {T}
-    copy = SpiceCell{T}(cell.cell.size)
-    ccall((:copy_c, libcspice), Cvoid, (Ref{Cell{T}}, Ref{Cell{T}}), cell.cell, copy.cell)
-    copy
-end
-
-function Base.copy(cell::SpiceCharCell)
-    copy = SpiceCharCell(cell.cell.size, cell.cell.length)
-    ccall((:copy_c, libcspice), Cvoid, (Ref{Cell{SpiceChar}}, Ref{Cell{SpiceChar}}), cell.cell, copy.cell)
-    copy
+    cell_copy = deepcopy(cell)
+    cell_copy.cell.base = pointer(cell_copy.data, 1)
+    cell_copy.cell.data = data_ptr(T, cell_copy.data, length)
+    cell_copy
 end
 
 """

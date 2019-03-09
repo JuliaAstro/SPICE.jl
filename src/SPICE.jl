@@ -28,6 +28,7 @@ function __init__()
     gfrepi_ptr[] = Libdl.dlsym(lib, :gfrepi_c)
     gfrepu_ptr[] = Libdl.dlsym(lib, :gfrepu_c)
     gfrepf_ptr[] = Libdl.dlsym(lib, :gfrepf_c)
+    nothing
 end
 
 struct SpiceError <: Exception
