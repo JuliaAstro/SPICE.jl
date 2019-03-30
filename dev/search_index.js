@@ -609,11 +609,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.dafgs!-Tuple{Any}",
+    "location": "api/#SPICE.dafgs",
     "page": "API",
-    "title": "SPICE.dafgs!",
-    "category": "method",
-    "text": "dafgs!(sum)\n\nReturn (get) the summary for the current array in the current DAF and write it to sum.\n\nArguments\n\nsum: An empty Vector{Float64} with the expected length\n\nOutput\n\nReturns the summary for the current array.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "title": "SPICE.dafgs",
+    "category": "function",
+    "text": "dafgs(lenout=125)\n\nReturn (get) the summary for the current array in the current DAF.\n\nArguments\n\nlenout: The maximum length of the summary array\n\nOutput\n\nReturns the summary for the current array.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1617,11 +1617,107 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.gfpa!-NTuple{11,Any}",
+    "location": "api/#SPICE.gfdist-NTuple{9,Any}",
     "page": "API",
-    "title": "SPICE.gfpa!",
+    "title": "SPICE.gfdist",
     "category": "method",
-    "text": "gfpa!(cnfine, result, target, illmn, abcorr, obsrvr, relate, refval, adjust, step, nintvls)\n\nDetermine time intervals for which a specified constraint on the phase angle between an illumination source, a target, and observer body centers is met.\n\nArguments\n\ncnfine: Window to which the search is confined\ntarget: Name of the target body\nillmn: Name of the illuminating body\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\nrelate: Relational operator\nrefval: Reference value\nadjust: Adjustment value for absolute extrema searches\nstep: Step size used for locating extrema and roots\nnintvls: Workspace window interval count\n\nOutput\n\nReturns a tuple consisting of\n\ncnfine: Window to which the search is confined.\nresult: Window containing results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "gfdist(target, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnfine)\n\nReturn the time window over which a specified constraint on observer-target distance is met.\n\nArguments\n\ntarget: Name of the target body\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\nrelate: Relational operator\nrefval: Reference value\nadjust: Adjustment value for absolute extrema searches\nstep: Step size used for locating extrema and roots\nnintvls: Workspace window interval count\ncnfine: Window to which the search is confined\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfilum-NTuple{14,Any}",
+    "page": "API",
+    "title": "SPICE.gfilum",
+    "category": "method",
+    "text": "gfilum(method, angtyp, target, illmn, fixref, abcorr, obsrvr, spoint, relate, refval,\n       adjust, step, nintvls, cnfine)\n\nReturn the time window over which a specified constraint on the observed phase, solar incidence, or emission angle at a specifed target body surface point is met.\n\nArguments\n\nmethod: Computation method\nangtyp: Type of illumination angle\ntarget: Name of the target body\nillmn: Name of the illumination source\nfixref: Body-fixed, body-centered target body frame\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\nspoint: Body-fixed coordinates of a target surface point\nrelate: Relational operator\nrefval: Reference value\nadjust: Adjustment value for absolute extrema searches\nstep: Step size used for locating extrema and roots\nnintvls: Workspace window interval count\ncnfine: Window to which the search is confined\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfoclt",
+    "page": "API",
+    "title": "SPICE.gfoclt",
+    "category": "function",
+    "text": "gfoclt(occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, step, cnfine,\n       maxwin=100)\n\nDetermine time intervals when an observer sees one target occulted by, or in transit across, another.\n\nThe surfaces of the target bodies may be represented by triaxial ellipsoids or by topographic data provided by DSK files.\n\nArguments\n\nocctyp: Type of occultation\nfront: Name of body occulting the other\nfshape: Type of shape model used for front body\nfframe: Body-fixed, body-centered frame for front body\nback: Name of body occulted by the other\nbshape: Type of shape model used for back body\nbframe: Body-fixed, body-centered frame for back body\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\nstep: Step size in seconds for finding occultation events\ncnfine: Window to which the search is restricted\nmaxwin: Maximum size of the output window (default: 100)\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfpa-NTuple{10,Any}",
+    "page": "API",
+    "title": "SPICE.gfpa",
+    "category": "method",
+    "text": "gfpa(result, target, illmn, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnfine)\n\nDetermine time intervals for which a specified constraint on the phase angle between an illumination source, a target, and observer body centers is met.\n\nArguments\n\ntarget: Name of the target body\nillmn: Name of the illuminating body\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\nrelate: Relational operator\nrefval: Reference value\nadjust: Adjustment value for absolute extrema searches\nstep: Step size used for locating extrema and roots\nnintvls: Workspace window interval count\ncnfine: Window to which the search is confined\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfposc-NTuple{12,Any}",
+    "page": "API",
+    "title": "SPICE.gfposc",
+    "category": "method",
+    "text": "gfposc(target, frame, abcorr, obsrvr, crdsys, coord, relate, refval, adjust, step,\n       nintvls, cnfine)\n\nDetermine time intervals for which a coordinate of an observer-target position vector satisfies a numerical constraint.\n\nArguments\n\ntarget: Name of the target body\nframe: Name of the reference frame for coordinate calculations\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\ncrdsys: Name of the coordinate system containing coord\ncoord: Name of the coordinate of interest\nrelate: Operator that either looks for an extreme value (max, min, local, absolute) or compares   the coordinate value and refval\nrefval: Reference value\nadjust: Adjustment value for absolute extrema searches\nstep: Step size used for locating extrema and roots\nnintvls: Workspace window interval count\ncnfine: Window to which the search is restricted\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfrfov",
+    "page": "API",
+    "title": "SPICE.gfrfov",
+    "category": "function",
+    "text": "gfrfov(inst, raydir, rframe, abcorr, obsrvr, step, cnfine, maxwin=10000)\n\nDetermine time intervals when a specified ray intersects the space bounded by the field-of-view (FOV) of a specified instrument.\n\nArguments\n\ninst: Name of the instrument\nraydir: Ray\'s direction vector\nrframe: Reference frame of ray\'s direction vector\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\nstep: Step size in seconds for finding FOV events\ncnfine: SPICE window to which the search is restricted\nmaxwin: Maximum length of the output window (default: 10000)\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfrr-NTuple{9,Any}",
+    "page": "API",
+    "title": "SPICE.gfrr",
+    "category": "method",
+    "text": "gfrr(target, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnfine)\n\nDetermine time intervals for which a specified constraint on the observer-target range rate is met.\n\nArguments\n\ntarget: Name of the target body\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\nrelate: Relational operator\nrefval: Reference value\nadjust: Adjustment value for absolute extrema searches\nstep: Step size used for locating extrema and roots\nnintvls: Workspace window interval count\ncnfine: Window to which the search is confined\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfsep-NTuple{14,Any}",
+    "page": "API",
+    "title": "SPICE.gfsep",
+    "category": "method",
+    "text": "Determine time intervals when the angular separation between the position vectors of two target bodies relative to an observer satisfies a numerical relationship.\n\nArguments\n\ntarg1: Name of first body\nshape1: Name of shape model describing the first body\nframe1: The body-fixed reference frame of the first body\ntarg2: Name of second body\nshape2: Name of the shape model describing the second body\nframe2: The body-fixed reference frame of the second body\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\nrelate: Operator that either looks for an extreme value (max, min, local, absolute) or compares   the angular separation value and refval\nrefval: Reference value\nadjust: Absolute extremum adjustment value\nstep: Step size in seconds for finding angular separation events\nnintvls: Workspace window interval count\ncnfine: Window to which the search is restricted\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfsntc-NTuple{15,Any}",
+    "page": "API",
+    "title": "SPICE.gfsntc",
+    "category": "method",
+    "text": "gfsntc(target, fixref, method, abcorr, obsrvr, dref, dvec, crdsys, coord, relate, refval,\n       adjust, step, nintvls, cnfine)\n\nDetermine time intervals for which a coordinate of an surface intercept position vector satisfies a numerical constraint.\n\nArguments\n\ntarget: Name of the target body\nfixref: Body fixed frame associated with target\nmethod: Name of method type for surface intercept calculation\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\ndref: Reference frame of direction vector dvec\ndvec: Pointing direction vector from obsrvr\ncrdsys: Name of the coordinate system containing COORD\ncoord: Name of the coordinate of interest\nrelate: Operator that either looks for an extreme value (max, min, local, absolute) or compares the coordinate value and refval\nrefval: Reference value\nadjust: Adjustment value for absolute extrema searches\nstep: Step size used for locating extrema and roots\nnintvls: Workspace window interval count\ncnfine: Window to which the search is restricted\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfsstp-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.gfsstp",
+    "category": "method",
+    "text": "gfsstp(step)\n\nSet the step size to be returned by gfstep.\n\nArguments\n\nstep: Time step to take\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfstol-Tuple{Any}",
+    "page": "API",
+    "title": "SPICE.gfstol",
+    "category": "method",
+    "text": "gfstol(value)\n\nOverride the default GF convergence value used in the high level GF routines.\n\nArguments\n\nvalue: Double precision value returned or to store\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfsubc-NTuple{13,Any}",
+    "page": "API",
+    "title": "SPICE.gfsubc",
+    "category": "method",
+    "text": "gfsubc(target, fixref, method, abcorr, obsrvr, crdsys, coord, relate, refval, adjust, step,\n       nintvls, cnfine)\n\nDetermine time intervals for which a coordinate of an subpoint position vector satisfies a numerical constraint.\n\nArguments\n\ntarget: Name of the target body\nfixref: Body fixed frame associated with target\nmethod: Name of method type for subpoint calculation\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\ncrdsys: Name of the coordinate system containing coord\ncoord: Name of the coordinate of interest\nrelate: Operator that either looks for an extreme value (max, min, local, absolute) or compares   the coordinate value and refval\nrefval: Reference value\nadjust: Adjustment value for absolute extrema searches\nstep: Step size used for locating extrema and roots\nnintvls: Workspace window interval count\ncnfine: Window to which the search is restricted\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gftfov-NTuple{9,Any}",
+    "page": "API",
+    "title": "SPICE.gftfov",
+    "category": "method",
+    "text": "gftfov(inst, target, tshape, tframe, abcorr, obsrvr, step, nintvls, cnfine)\n\nDetermine time intervals when a specified ephemeris object intersects the space bounded by the field-of-view (FOV) of a specified instrument.\n\nArguments\n\ninst: Name of the instrument\ntarget: Name of the target body\ntshape: Type of shape model used for target body\ntframe: Body-fixed, body-centered frame for target body\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\nstep: Step size in seconds for finding FOV events\nnintvls: Workspace window interval count\ncnfine: Window to which the search is restricted\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
