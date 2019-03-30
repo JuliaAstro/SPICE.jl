@@ -80,8 +80,7 @@
             dafbfs(handle)
             found = daffna()
             @test found
-            out = zeros(2)
-            dafgs!(out)
+            out = dafgs(2)
             @test out ≈ [-9.46511378160646408796e+07, 3.15662463183953464031e+08]
             outname = dafgn(100)
             @test outname == "DE-405"
@@ -139,8 +138,7 @@
             dafbfs(handle)
             found = daffna()
             @test found
-            out = zeros(124)
-            dafgs!(out)
+            out = dafgs(124)
             dc, ic = dafus(out, 2, 6)
             ic[1] = -1999
             ic[2] = -2999
@@ -153,8 +151,7 @@
             dafbfs(handle)
             found = daffna()
             @test found
-            out = zeros(124)
-            dafgs!(out)
+            out = dafgs(124)
             dc, ic = dafus(out, 2, 6)
             @test ic[1] == -1999
             @test ic[2] == -2999

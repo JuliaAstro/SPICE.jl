@@ -11,7 +11,6 @@ export
     dafgda,
     dafgh,
     dafgn,
-    dafgs!,
     dafgs,
     dafgsr,
     dafopr,
@@ -348,13 +347,13 @@ function dafgn(lenout=128)
 end
 
 """
-    dafgs!(sum)
+    dafgs(lenout=125)
 
-Return (get) the summary for the current array in the current DAF and write it to `sum`.
+Return (get) the summary for the current array in the current DAF.
 
 ### Arguments ###
 
-- `sum`: An empty `Vector{Float64}` with the expected length
+- `lenout`: The maximum length of the summary array
 
 ### Output ###
 
@@ -364,13 +363,12 @@ Returns the summary for the current array.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafgs_c.html)
 """
-function dafgs!(array)
+function dafgs(lenout=125)
+    array = zeros(125)
     ccall((:dafgs_c, libcspice), Cvoid, (Ref{SpiceDouble},), array)
     handleerror()
-    array
+    array[1:lenout]
 end
-
-@deprecate dafgs dafgs!
 
 """
 
