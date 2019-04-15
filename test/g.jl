@@ -145,10 +145,10 @@ using Random: randstring
                             true, gfrepi, gfrepu, gfrepf, 10000, cnfine)
             @test length(result) == 26
             s_timout = "YYYY-MON-DD HR:MN:SC.###### (TDB) ::TDB ::RND"
-            @test timout(result[1], s_timout) == "2001-JAN-24 19:22:01.418715 (TDB)"
-            @test timout(result[2], s_timout) == "2001-JAN-24 19:22:01.418715 (TDB)"
-            @test timout(result[3], s_timout) == "2001-FEB-20 21:52:07.900872 (TDB)"
-            @test timout(result[4], s_timout) == "2001-FEB-20 21:52:07.900872 (TDB)"
+            @test startswith(timout(result[1], s_timout), "2001-JAN-24 19:22:01.41871")
+            @test startswith(timout(result[2], s_timout), "2001-JAN-24 19:22:01.41871")
+            @test startswith(timout(result[3], s_timout), "2001-FEB-20 21:52:07.90087")
+            @test startswith(timout(result[4], s_timout), "2001-FEB-20 21:52:07.90087")
         finally
             gfsstp(0.5)
             kclear()
