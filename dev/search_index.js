@@ -1625,11 +1625,35 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.gfevnt-NTuple{18,Any}",
+    "page": "API",
+    "title": "SPICE.gfevnt",
+    "category": "method",
+    "text": "gfevnt(udstep, udrefn, gquant, qnpars, lenvals, qpnams, qcpars, qdpars, qipars, qlpars,\n       op, refval, tol, adjust, rpt, udrepi, udrepu, udrepf, nintvls, bail, udbail, cnfine)\n\nDetermine time intervals when a specified geometric quantity satisfies a specified mathematical condition.\n\nArguments\n\nudstep: Name of the routine that computes and returns a time step\nudrefn: Name of the routine that computes a refined time\ngquant: Type of geometric quantity\nqpnams: Names of quantity definition parameters\nqcpars: Array of character quantity definition parameters\nqdpars: Array of double precision quantity definition parameters\nqipars: Array of integer quantity definition parameters\nqlpars: Array of logical quantity definition parameters\nop: Operator that either looks for an extreme value (max, min, local, absolute) or compares the   geometric quantity value and a number\nrefval: Reference value\ntol: Convergence tolerance in second\nadjust: Absolute extremum adjustment value\nrpt: Progress reporter on (true) or off (false)\nudrepi: Function that initializes progress reporting\nudrepu: Function that updates the progress report\nudrepf: Function that finalizes progress reporting\nnintvls: Workspace window interval coun\ncnfine: SPICE window to which the search is restricted\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gffove!-NTuple{16,Any}",
+    "page": "API",
+    "title": "SPICE.gffove!",
+    "category": "method",
+    "text": "gffove!(inst, tshape, raydir, target, tframe, abcorr, obsrvr, tol, udstep, udrefn,\n            rpt, udrepi, udrepu, udrepf, cnfine, result)\n\nDetermine time intervals when a specified target body or ray intersects the space bounded by the field-of-view (FOV) of a specified instrument.\n\nArguments\n\ninst: Name of the instrument\ntshape: Type of shape model used for target body\nraydir: Ray\'s direction vector\ntarget: Name of the target body\ntframe: Body-fixed, body-centered frame for target body\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\ntol: Convergence tolerance in seconds\nudstep: Name of the routine returns a time step\nudrefn: Name of the routine that computes a refined time\nrpt: Progress report flag\nudrepi: Function that initializes progress reporting\nudrepu: Function that updates the progress report\nudrepf: Function that finalizes progress reporting\ncnfine: SPICE window to which the search is restricted\nresult: Window containing the results\n\nOutput\n\nReturns result.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.gfilum-NTuple{14,Any}",
     "page": "API",
     "title": "SPICE.gfilum",
     "category": "method",
     "text": "gfilum(method, angtyp, target, illmn, fixref, abcorr, obsrvr, spoint, relate, refval,\n       adjust, step, nintvls, cnfine)\n\nReturn the time window over which a specified constraint on the observed phase, solar incidence, or emission angle at a specifed target body surface point is met.\n\nArguments\n\nmethod: Computation method\nangtyp: Type of illumination angle\ntarget: Name of the target body\nillmn: Name of the illumination source\nfixref: Body-fixed, body-centered target body frame\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\nspoint: Body-fixed coordinates of a target surface point\nrelate: Relational operator\nrefval: Reference value\nadjust: Adjustment value for absolute extrema searches\nstep: Step size used for locating extrema and roots\nnintvls: Workspace window interval count\ncnfine: Window to which the search is confined\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfocce!-NTuple{18,Any}",
+    "page": "API",
+    "title": "SPICE.gfocce!",
+    "category": "method",
+    "text": "function gfocce!(occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, tol,\n    udstep, udrefn, rpt, udrepi, udrepu, udrepf, cnfine, result)\n\nDetermine time intervals when an observer sees one target occulted by another.\n\nArguments\n\nocctyp: Type of occultation\nfront: Name of body occulting the other\nfshape: Type of shape model used for front body\nfframe: Body-fixed, body-centered frame for front body\nback: Name of body occulted by the other\nbshape: Type of shape model used for back body\nbframe: Body-fixed, body-centered frame for back body\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\ntol: Convergence tolerance in seconds\nudstep: Name of the routine that returns a time step\nudrefn: Name of the routine that computes a refined time\nrpt: Progress report flag\nudrepi: Function that initializes progress reporting\nudrepu: Function that updates the progress report\nudrepf: Function that finalizes progress reporting\ncnfine: SPICE window to which the search is restricted\nresult: SPICE window containing results\n\nOutput\n\nReturns result.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1654,6 +1678,38 @@ var documenterSearchIndex = {"docs": [
     "title": "SPICE.gfposc",
     "category": "method",
     "text": "gfposc(target, frame, abcorr, obsrvr, crdsys, coord, relate, refval, adjust, step,\n       nintvls, cnfine)\n\nDetermine time intervals for which a coordinate of an observer-target position vector satisfies a numerical constraint.\n\nArguments\n\ntarget: Name of the target body\nframe: Name of the reference frame for coordinate calculations\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\ncrdsys: Name of the coordinate system containing coord\ncoord: Name of the coordinate of interest\nrelate: Operator that either looks for an extreme value (max, min, local, absolute) or compares   the coordinate value and refval\nrefval: Reference value\nadjust: Adjustment value for absolute extrema searches\nstep: Step size used for locating extrema and roots\nnintvls: Workspace window interval count\ncnfine: Window to which the search is restricted\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfrefn-NTuple{4,Any}",
+    "page": "API",
+    "title": "SPICE.gfrefn",
+    "category": "method",
+    "text": "gfrefn(t1, t2, s1, s2)\n\nFor those times when we can\'t do better, we use a bisection method to find the next time at which to test for state change.\n\nArguments\n\nt1: One of two values bracketing a state change\nt2: The other value that brackets a state change\ns1: State at t1\ns2: State at t2\n\nOutput\n\nReturns the new value at which to check for transition.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfrepf-Tuple{}",
+    "page": "API",
+    "title": "SPICE.gfrepf",
+    "category": "method",
+    "text": "gfrepf()\n\nFinish a GF progress report.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfrepi-Tuple{SPICE.SpiceCell{Float64,T,N} where N where T,Any,Any}",
+    "page": "API",
+    "title": "SPICE.gfrepi",
+    "category": "method",
+    "text": "gfrepi(window, begmss, endmss)\n\nInitialize a search progress report.\n\nArguments\n\nwindow: A window over which a job is to be performed\nbegmss: Beginning of the text portion of the output message\nendmss: End of the text portion of the output message\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfrepu-Tuple{Any,Any,Any}",
+    "page": "API",
+    "title": "SPICE.gfrepu",
+    "category": "method",
+    "text": "gfrepu(ivbeg, ivend, time)\n\nTell the progress reporting system how far a search has progressed.\n\nArguments\n\nivbeg: Start time of work interval\nivend: End time of work interval\ntime: Current time being examined in the search process\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -1697,6 +1753,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/#SPICE.gfstep-Tuple{}",
+    "page": "API",
+    "title": "SPICE.gfstep",
+    "category": "method",
+    "text": "gfstep()\n\nReturn the time step set by the most recent call to gfsstp.\n\nArguments\n\nstep: Time step to take\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
     "location": "api/#SPICE.gfstol-Tuple{Any}",
     "page": "API",
     "title": "SPICE.gfstol",
@@ -1718,6 +1782,22 @@ var documenterSearchIndex = {"docs": [
     "title": "SPICE.gftfov",
     "category": "method",
     "text": "gftfov(inst, target, tshape, tframe, abcorr, obsrvr, step, nintvls, cnfine)\n\nDetermine time intervals when a specified ephemeris object intersects the space bounded by the field-of-view (FOV) of a specified instrument.\n\nArguments\n\ninst: Name of the instrument\ntarget: Name of the target body\ntshape: Type of shape model used for target body\ntframe: Body-fixed, body-centered frame for target body\nabcorr: Aberration correction flag\nobsrvr: Name of the observing body\nstep: Step size in seconds for finding FOV events\nnintvls: Workspace window interval count\ncnfine: Window to which the search is restricted\n\nOutput\n\nReturns a window containing the results.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfudb!-NTuple{5,Any}",
+    "page": "API",
+    "title": "SPICE.gfudb!",
+    "category": "method",
+    "text": "gfudb!(udfuns, udfunb, step, cnfine, result)\n\nPerform a GF search on a user defined boolean quantity.\n\nArguments\n\nudfuns: Name of the routine that computes a scalar quantity of interest corresponding to an et, e.g. f(et) = ...\nudfunb: Name of the routine returning the boolean value corresponding to an et, e.g. g(f, et) = ...\nstep: Step size used for locating extrema and roots\ncnfine: Window to which the search is restricted\nresult: Window containing results\n\nOutput\n\nReturns result.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/#SPICE.gfuds!-NTuple{9,Any}",
+    "page": "API",
+    "title": "SPICE.gfuds!",
+    "category": "method",
+    "text": "gfuds!(udfuns, udqdec, relate, refval, adjust, step, nintvls, cnfine, result)\n\nPerform a GF search on a user defined scalar quantity.\n\nArguments\n\nudfuns: Name of the routine that computes the scalar quantity of interest at some time, e.g. f(et) = ...\nudqdec: Name of the routine that computes whether the scalar quantity is decreasing, e.g. g(f, et) = ...\nrelate: Operator that either looks for an extreme value (max, min, local, absolute) or compares the geometric quantity value and a number\nrefval: Value used as reference for scalar quantity condition\nadjust: Allowed variation for absolute extremal geometric conditions\nstep: Step size used for locating extrema and roots\nnintvls: Workspace window interval count\ncnfine: SPICE window to which the search is restricted\nresult: SPICE window containing results\n\nOutput\n\nReturns result.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -3829,7 +3909,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.uddf",
     "category": "method",
-    "text": "uddf(udfunc, x, dx)\n\nRoutine to calculate the first derivative of a caller-specified function using a three-point estimation.\n\nArguments\n\nudfunc: A callable that computes the scalar value of interest,   e.g. f(x::Float64) -> Float64.\nx: Independent variable of \'udfunc\'\ndx: Interval from x for derivative calculation\n\nOutput\n\nReturns the approximate derivative of udfunc at x.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "uddf(udfunc, x, dx)\n\nRoutine to calculate the first derivative of a caller-specified function using a three-point estimation.\n\nArguments\n\nudfunc: A callable that computes the scalar value of interest,   e.g. f(x::Float64) -> Float64\nx: Independent variable of udfunc\ndx: Interval from x for derivative calculation\n\nOutput\n\nReturns the approximate derivative of udfunc at x.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
