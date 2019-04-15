@@ -1,7 +1,5 @@
 module SPICE
 
-import Libdl
-
 export SpiceError
 
 deps = abspath(joinpath(splitdir(@__FILE__)[1], "..", "deps", "deps.jl"))
@@ -11,23 +9,11 @@ else
     error("libcspice was not found. Please run 'Pkg.build(\"SPICE\").")
 end
 
-const gfstep_ptr = Ref{Ptr{Cvoid}}(0)
-const gfrefn_ptr = Ref{Ptr{Cvoid}}(0)
-const gfrepi_ptr = Ref{Ptr{Cvoid}}(0)
-const gfrepu_ptr = Ref{Ptr{Cvoid}}(0)
-const gfrepf_ptr = Ref{Ptr{Cvoid}}(0)
-
 function __init__()
     # Set error handling to return on error
     ccall((:erract_c, libcspice), Cvoid, (Cstring, Cint, Cstring), "SET", 0, "RETURN")
     # Do not print error messages
     ccall((:errprt_c, libcspice), Cvoid, (Cstring, Cint, Cstring), "SET", 0, "NONE")
-    lib = Libdl.dlopen(libcspice)
-    gfstep_ptr[] = Libdl.dlsym(lib, :gfstep_c)
-    gfrefn_ptr[] = Libdl.dlsym(lib, :gfrefn_c)
-    gfrepi_ptr[] = Libdl.dlsym(lib, :gfrepi_c)
-    gfrepu_ptr[] = Libdl.dlsym(lib, :gfrepu_c)
-    gfrepf_ptr[] = Libdl.dlsym(lib, :gfrepf_c)
     nothing
 end
 

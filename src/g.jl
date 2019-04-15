@@ -6,20 +6,35 @@ export
     getfat,
     getfov,
     gfdist,
+    gfevnt,
+    gffove!,
     gfilum,
+    gfocce!,
     gfoclt,
     gfpa,
     gfposc,
+    gfrefn,
+    gfrepf,
+    gfrepi,
+    gfrepu,
     gfrfov,
     gfrr,
     gfsep,
     gfsntc,
     gfsstp,
+    gfstep,
     gfstol,
     gfsubc,
     gftfov,
+    gfudb!,
+    gfuds!,
     gipool,
     gnpool
+
+# Dummy routine for GF functions
+function udf(et::SpiceDouble, value::Ptr{SpiceDouble})
+    ccall((:udf_c, libcspice), Cvoid, (SpiceDouble, Ptr{SpiceDouble}), et, value)
+end
 
 """
     gcpool(name; start=1, room=100, lenout=128)
@@ -41,7 +56,7 @@ Returns an array of values if the variable exists or `nothing` if not.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gcpool_c.html)
 """
-function gcpool(name; start=1, room=100, lenout=128)
+function gcpool(name; start = 1, room = 100, lenout = 128)
     n = Ref{SpiceInt}()
     values = Array{SpiceChar}(undef, lenout, room)
     found = Ref{SpiceInt}()
@@ -74,7 +89,7 @@ Returns an array of values if the variable exists or `nothing` if not.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gdpool_c.html)
 """
-function gdpool(name; start=1, room=100)
+function gdpool(name; start = 1, room = 100)
     n = Ref{SpiceInt}()
     values = Array{SpiceDouble}(undef, room)
     found = Ref{SpiceInt}()
@@ -167,7 +182,7 @@ Determine the file architecture and file type of most SPICE kernel files.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/getfat_c.html)
 """
-function getfat(file, arclen=10, typlen=10)
+function getfat(file, arclen = 10, typlen = 10)
     arch = Array{SpiceChar}(undef, arclen)
     typ = Array{SpiceChar}(undef, typlen)
     ccall((:getfat_c, libcspice), Cvoid,
@@ -203,7 +218,7 @@ Returns a tuple consisting of
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/getfov_c.html)
 """
-function getfov(instid, room=10, shapelen=128, framelen=128)
+function getfov(instid, room = 10, shapelen = 128, framelen = 128)
     shape = Array{SpiceChar}(undef, shapelen)
     frame = Array{SpiceChar}(undef, framelen)
     bsight = Array{SpiceDouble}(undef, 3)
@@ -218,6 +233,14 @@ function getfov(instid, room=10, shapelen=128, framelen=128)
     shp = chararray_to_string(shape)
     frm = chararray_to_string(frame)
     shp, frm, bsight, arr_bounds[1:n[]]
+end
+
+function gfbail()
+    ccall((:gfbail_c, libcspice), SpiceBoolean, ())
+end
+
+function gfclrh()
+    ccall((:gfclrh_c, libcspice), Cvoid, ())
 end
 
 """
@@ -251,6 +274,161 @@ function gfdist(target, abcorr, obsrvr, relate, refval, adjust, step, nintvls, c
           (Cstring, Cstring, Cstring, Cstring, SpiceDouble, SpiceDouble, SpiceDouble,
            SpiceInt, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
           target, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnfine.cell, result.cell)
+    handleerror()
+    result
+end
+
+"""
+    gfevnt(udstep, udrefn, gquant, qnpars, lenvals, qpnams, qcpars, qdpars, qipars, qlpars,
+           op, refval, tol, adjust, rpt, udrepi, udrepu, udrepf, nintvls, bail, udbail, cnfine)
+
+Determine time intervals when a specified geometric quantity satisfies a specified mathematical
+condition.
+
+### Arguments ###
+
+- `udstep`: Name of the routine that computes and returns a time step
+- `udrefn`: Name of the routine that computes a refined time
+- `gquant`: Type of geometric quantity
+- `qpnams`: Names of quantity definition parameters
+- `qcpars`: Array of character quantity definition parameters
+- `qdpars`: Array of double precision quantity definition parameters
+- `qipars`: Array of integer quantity definition parameters
+- `qlpars`: Array of logical quantity definition parameters
+- `op`: Operator that either looks for an extreme value (max, min, local, absolute) or compares the
+    geometric quantity value and a number
+- `refval`: Reference value
+- `tol`: Convergence tolerance in second
+- `adjust`: Absolute extremum adjustment value
+- `rpt`: Progress reporter on (`true`) or off (`false`)
+- `udrepi`: Function that initializes progress reporting
+- `udrepu`: Function that updates the progress report
+- `udrepf`: Function that finalizes progress reporting
+- `nintvls`: Workspace window interval coun
+- `cnfine`: SPICE window to which the search is restricted
+
+### Output ###
+
+Returns a window containing the results.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfevnt_c.html)
+"""
+function gfevnt(udstep, udrefn, gquant, qpnams, qcpars, qdpars, qipars, qlpars,
+                op, refval, tol, adjust, rpt, udrepi, udrepu, udrepf, nintvls, cnfine)
+    result = SpiceDoubleCell(nintvls * 2)
+    _qpnams, qnpars, lenvals = chararray(qpnams)
+    _qcpars, _, lenvals_qc = chararray(qcpars)
+    lenvals != lenvals_qc &&
+        throw(SpiceError("The strings in `qpnams` and `qcpars` must all have the same length"))
+    @checkdims qnpars qcpars qdpars qipars qlpars
+    _qipars = SpiceInt.(qipars)
+    _qlpars = SpiceBoolean.(qlpars)
+    function _udstep(et::SpiceDouble, step::Ptr{SpiceDouble})
+        _step = GC.@preserve step unsafe_wrap(Array{SpiceDouble}, step, 1)
+        _step[1] = udstep(et)
+        nothing
+    end
+    udstep_ptr = @cfunction($_udstep, Cvoid, (SpiceDouble, Ptr{SpiceDouble}))
+    function _udrefn(t1::SpiceDouble, t2::SpiceDouble, s1::SpiceBoolean, s2::SpiceBoolean,
+                     t::Ptr{SpiceDouble})
+        _t = GC.@preserve t unsafe_wrap(Array{SpiceDouble}, t, 1)
+        _t[1] = udrefn(t1, t2, s1, s2)
+        nothing
+    end
+    udrefn_ptr = @cfunction($_udrefn, Cvoid,
+                            (SpiceDouble, SpiceDouble, SpiceBoolean, SpiceBoolean,
+                             Ptr{SpiceDouble}))
+    udrepf_ptr = @cfunction($udrepf, Cvoid, ())
+    function _udrepi(window::Ptr{Cell{SpiceDouble}}, begmss::Cstring, endmss::Cstring)
+        _window = GC.@preserve window unsafe_load(window, 1)
+        udrepi(_window, begmss, endmss)
+    end
+    udrepi_ptr = @cfunction($_udrepi, Cvoid, (Ptr{Cell{SpiceDouble}}, Cstring, Cstring))
+    udrepu_ptr = @cfunction($udrepu, Cvoid, (SpiceDouble, SpiceDouble, SpiceDouble))
+    # Julia should handle SIGINT
+    bail = false
+    udbail = @cfunction(gfbail, SpiceBoolean, ())
+    ccall((:gfevnt_c, libcspice), Cvoid,
+          (Ptr{Cvoid}, Ptr{Cvoid}, Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}, Ref{SpiceChar},
+           Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceBoolean}, Cstring, SpiceDouble, SpiceDouble,
+           SpiceDouble, SpiceBoolean, Ptr{Cvoid}, Ptr{Cvoid}, Ptr{Cvoid}, SpiceInt, SpiceBoolean,
+           Ptr{Cvoid}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+          udstep_ptr, udrefn_ptr, gquant, qnpars, lenvals, _qpnams, _qcpars, qdpars, _qipars,
+          _qlpars, op, refval, tol, adjust, rpt, udrepi_ptr, udrepu_ptr, udrepf_ptr, nintvls,
+          bail, udbail, cnfine.cell, result.cell)
+    handleerror()
+    result
+end
+
+"""
+    gffove!(inst, tshape, raydir, target, tframe, abcorr, obsrvr, tol, udstep, udrefn,
+                rpt, udrepi, udrepu, udrepf, cnfine, result)
+
+Determine time intervals when a specified target body or ray intersects the space bounded by the
+field-of-view (FOV) of a specified instrument.
+
+### Arguments ###
+
+- `inst`: Name of the instrument
+- `tshape`: Type of shape model used for target body
+- `raydir`: Ray's direction vector
+- `target`: Name of the target body
+- `tframe`: Body-fixed, body-centered frame for target body
+- `abcorr`: Aberration correction flag
+- `obsrvr`: Name of the observing body
+- `tol`: Convergence tolerance in seconds
+- `udstep`: Name of the routine returns a time step
+- `udrefn`: Name of the routine that computes a refined time
+- `rpt`: Progress report flag
+- `udrepi`: Function that initializes progress reporting
+- `udrepu`: Function that updates the progress report
+- `udrepf`: Function that finalizes progress reporting
+- `cnfine`: SPICE window to which the search is restricted
+- `result`: Window containing the results
+
+### Output ###
+
+Returns `result`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gffove_c.html)
+"""
+function gffove!(inst, tshape, raydir, target, tframe, abcorr, obsrvr, tol, udstep, udrefn,
+                rpt, udrepi, udrepu, udrepf, cnfine, result)
+    @checkdims 3 raydir
+    function _udstep(et::SpiceDouble, step::Ptr{SpiceDouble})
+        _step = GC.@preserve step unsafe_wrap(Array{SpiceDouble}, step, 1)
+        _step[1] = udstep(et)
+        nothing
+    end
+    udstep_ptr = @cfunction($_udstep, Cvoid, (SpiceDouble, Ptr{SpiceDouble}))
+    function _udrefn(t1::SpiceDouble, t2::SpiceDouble, s1::SpiceBoolean, s2::SpiceBoolean,
+                     t::Ptr{SpiceDouble})
+        _t = GC.@preserve t unsafe_wrap(Array{SpiceDouble}, t, 1)
+        _t[1] = udrefn(t1, t2, s1, s2)
+        nothing
+    end
+    udrefn_ptr = @cfunction($_udrefn, Cvoid,
+                            (SpiceDouble, SpiceDouble, SpiceBoolean, SpiceBoolean,
+                             Ptr{SpiceDouble}))
+    udrepf_ptr = @cfunction($udrepf, Cvoid, ())
+    function _udrepi(window::Ptr{Cell{SpiceDouble}}, begmss::Cstring, endmss::Cstring)
+        _window = GC.@preserve window unsafe_load(window, 1)
+        udrepi(_window, begmss, endmss)
+    end
+    udrepi_ptr = @cfunction($_udrepi, Cvoid, (Ptr{Cell{SpiceDouble}}, Cstring, Cstring))
+    udrepu_ptr = @cfunction($udrepu, Cvoid, (SpiceDouble, SpiceDouble, SpiceDouble))
+    # Julia should handle SIGINT
+    bail = false
+    udbail = @cfunction(gfbail, SpiceBoolean, ())
+    ccall((:gffove_c, libcspice), Cvoid,
+          (Cstring, Cstring, Ref{SpiceDouble}, Cstring, Cstring, Cstring, Cstring, SpiceDouble,
+           Ptr{Cvoid}, Ptr{Cvoid}, SpiceBoolean, Ptr{Cvoid}, Ptr{Cvoid}, Ptr{Cvoid}, SpiceBoolean,
+           Ptr{Cvoid}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+          inst, tshape, raydir, target, tframe, abcorr, obsrvr, tol, udstep_ptr, udrefn_ptr, rpt, udrepi_ptr, udrepu_ptr, udrepf_ptr, bail, udbail, cnfine.cell, result.cell)
     handleerror()
     result
 end
@@ -303,74 +481,75 @@ function gfilum(method, angtyp, target, illmn, fixref, abcorr, obsrvr, spoint, r
 end
 
 """
+    function gfocce!(occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, tol,
+        udstep, udrefn, rpt, udrepi, udrepu, udrepf, cnfine, result)
 
-
+Determine time intervals when an observer sees one target occulted by another.
 
 ### Arguments ###
 
-   occtyp     I   Type of occultation. 
-   front      I   Name of body occulting the other. 
-   fshape     I   Type of shape model used for front body. 
-   fframe     I   Body-fixed, body-centered frame for front body. 
-   back       I   Name of body occulted by the other. 
-   bshape     I   Type of shape model used for back body. 
-   bframe     I   Body-fixed, body-centered frame for back body. 
-   abcorr     I   Aberration correction flag. 
-   obsrvr     I   Name of the observing body. 
-   tol        I   Convergence tolerance in seconds. 
-   udstep     I   Name of the routine that returns a time step. 
-   udrefn     I   Name of the routine that computes a refined time. 
-   rpt        I   Progress report flag. 
-   udrepi     I   Function that initializes progress reporting. 
-   udrepu     I   Function that updates the progress report. 
-   udrepf     I   Function that finalizes progress reporting. 
-   bail       I   Logical indicating program interrupt monitoring. 
-   udbail     I   Name of a routine that signals a program interrupt. 
-   cnfine    I-O  SPICE window to which the search is restricted. 
-   result     O   SPICE window containing results. 
+- `occtyp`: Type of occultation
+- `front`: Name of body occulting the other
+- `fshape`: Type of shape model used for front body
+- `fframe`: Body-fixed, body-centered frame for front body
+- `back`: Name of body occulted by the other
+- `bshape`: Type of shape model used for back body
+- `bframe`: Body-fixed, body-centered frame for back body
+- `abcorr`: Aberration correction flag
+- `obsrvr`: Name of the observing body
+- `tol`: Convergence tolerance in seconds
+- `udstep`: Name of the routine that returns a time step
+- `udrefn`: Name of the routine that computes a refined time
+- `rpt`: Progress report flag
+- `udrepi`: Function that initializes progress reporting
+- `udrepu`: Function that updates the progress report
+- `udrepf`: Function that finalizes progress reporting
+- `cnfine`: SPICE window to which the search is restricted
+- `result`: SPICE window containing results
 
 ### Output ###
 
+Returns `result`.
 
 ### References ###
 
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/XXX_c.html)
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfocce_c.html)
 """
-function gfocce()
-    #= +   void gfocce_c ( ConstSpiceChar     * occtyp, =#
-    #=                ConstSpiceChar     * front, =#
-    #=                ConstSpiceChar     * fshape, =#
-    #=                ConstSpiceChar     * fframe, =#
-    #=                ConstSpiceChar     * back, =#
-    #=                ConstSpiceChar     * bshape, =#
-    #=                ConstSpiceChar     * bframe, =#
-    #=                ConstSpiceChar     * abcorr, =#
-    #=                ConstSpiceChar     * obsrvr, =#
-    #=                SpiceDouble          tol, =#
-    #=  =#
-    #=                void             ( * udstep ) ( SpiceDouble       et, =#
-    #=                                                SpiceDouble     * step ), =#
-    #=  =#
-    #=                void             ( * udrefn ) ( SpiceDouble       t1, =#
-    #=                                                SpiceDouble       t2, =#
-    #=                                                SpiceBoolean      s1, =#
-    #=                                                SpiceBoolean      s2, =#
-    #=                                                SpiceDouble     * t    ), =#
-    #=                SpiceBoolean         rpt,   =#
-    #=  =#
-    #=                void             ( * udrepi ) ( SpiceCell       * cnfine, =#
-    #=                                                ConstSpiceChar  * srcpre, =#
-    #=                                                ConstSpiceChar  * srcsuf ), =#
-    #=  =#
-    #=                void             ( * udrepu ) ( SpiceDouble       ivbeg, =#
-    #=                                                SpiceDouble       ivend, =#
-    #=                                                SpiceDouble       et      ), =#
-    #=  =#
-    #=                void             ( * udrepf ) ( void ), =#
-    #=                SpiceBoolean         bail,       =#
-    #=                SpiceBoolean     ( * udbail ) ( void ), =#
-    #=                SpiceCell          * cnfine, =#
-    #=                SpiceCell          * result                                ) =#
+function gfocce!(occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, tol, udstep, udrefn, rpt, udrepi, udrepu, udrepf, cnfine, result)
+    function _udstep(et::SpiceDouble, step::Ptr{SpiceDouble})
+        _step = GC.@preserve step unsafe_wrap(Array{SpiceDouble}, step, 1)
+        _step[1] = udstep(et)
+        nothing
+    end
+    udstep_ptr = @cfunction($_udstep, Cvoid, (SpiceDouble, Ptr{SpiceDouble}))
+    function _udrefn(t1::SpiceDouble, t2::SpiceDouble, s1::SpiceBoolean, s2::SpiceBoolean,
+                     t::Ptr{SpiceDouble})
+        _t = GC.@preserve t unsafe_wrap(Array{SpiceDouble}, t, 1)
+        _t[1] = udrefn(t1, t2, s1, s2)
+        nothing
+    end
+    udrefn_ptr = @cfunction($_udrefn, Cvoid,
+                            (SpiceDouble, SpiceDouble, SpiceBoolean, SpiceBoolean,
+                             Ptr{SpiceDouble}))
+    udrepf_ptr = @cfunction($udrepf, Cvoid, ())
+    function _udrepi(window::Ptr{Cell{SpiceDouble}}, begmss::Cstring, endmss::Cstring)
+        _window = GC.@preserve window unsafe_load(window, 1)
+        udrepi(_window, begmss, endmss)
+    end
+    udrepi_ptr = @cfunction($_udrepi, Cvoid, (Ptr{Cell{SpiceDouble}}, Cstring, Cstring))
+    udrepu_ptr = @cfunction($udrepu, Cvoid, (SpiceDouble, SpiceDouble, SpiceDouble))
+    # Julia should handle SIGINT
+    bail = false
+    udbail = @cfunction(gfbail, SpiceBoolean, ())
+    ccall((:gfocce_c, libcspice), Cvoid,
+          (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, SpiceDouble,
+           Ptr{Cvoid}, Ptr{Cvoid}, SpiceBoolean, Ptr{Cvoid}, Ptr{Cvoid}, Ptr{Cvoid}, SpiceBoolean,
+           Ptr{Cvoid}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+          occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, tol, udstep_ptr,
+          udrefn_ptr, rpt, udrepi_ptr, udrepu_ptr, udrepf_ptr, bail, udbail,
+          cnfine.cell, result.cell)
+    handleerror()
+    result
 end
 
 """
@@ -406,7 +585,7 @@ Returns a window containing the results.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfoclt_c.html)
 """
-function gfoclt(occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, step, cnfine, maxwin=100)
+function gfoclt(occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, step, cnfine, maxwin = 100)
     result = SpiceDoubleCell(maxwin * 2)
     ccall((:gfoclt_c, libcspice), Cvoid,
           (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring,
@@ -500,6 +679,99 @@ function gfposc(target, frame, abcorr, obsrvr, crdsys, coord, relate, refval, ad
 end
 
 """
+    gfrefn(t1, t2, s1, s2)
+
+For those times when we can't do better, we use a bisection method to find the next time at which
+to test for state change.
+
+### Arguments ###
+
+- `t1`: One of two values bracketing a state change
+- `t2`: The other value that brackets a state change
+- `s1`: State at `t1`
+- `s2`: State at `t2`
+
+### Output ###
+
+Returns the new value at which to check for transition.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfrefn_c.html)
+"""
+function gfrefn(t1, t2, s1, s2)
+    t = Ref{SpiceDouble}()
+    ccall((:gfrefn_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceBoolean, SpiceBoolean, Ref{SpiceDouble}),
+          t1, t2, s1, s2, t)
+    t[]
+end
+
+"""
+    gfrepf()
+
+Finish a GF progress report.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfrepf_c.html)
+"""
+function gfrepf()
+    ccall((:gfrepf_c, libcspice), Cvoid, ())
+    handleerror()
+end
+
+"""
+    gfrepi(window, begmss, endmss)
+
+Initialize a search progress report.
+
+### Arguments ###
+
+- `window`: A window over which a job is to be performed
+- `begmss`: Beginning of the text portion of the output message
+- `endmss`: End of the text portion of the output message
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfrepi_c.html)
+"""
+function gfrepi(window::SpiceDoubleCell, begmss, endmss)
+    ccall((:gfrepi_c, libcspice), Cvoid,
+          (Ref{Cell{SpiceDouble}}, Cstring, Cstring),
+          window.cell, begmss, endmss)
+    handleerror()
+end
+function gfrepi(window::Cell{SpiceDouble}, begmss, endmss)
+    ccall((:gfrepi_c, libcspice), Cvoid,
+          (Ref{Cell{SpiceDouble}}, Cstring, Cstring),
+          window, begmss, endmss)
+    handleerror()
+end
+
+"""
+    gfrepu(ivbeg, ivend, time)
+
+Tell the progress reporting system how far a search has progressed.
+
+### Arguments ###
+
+- `ivbeg`: Start time of work interval
+- `ivend`: End time of work interval
+- `time `: Current time being examined in the search process
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfrepu_c.html)
+"""
+function gfrepu(ivbeg, ivend, time)
+    ccall((:gfrepu_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble),
+          ivbeg, ivend, time)
+    handleerror()
+end
+
+"""
     gfrfov(inst, raydir, rframe, abcorr, obsrvr, step, cnfine, maxwin=10000)
 
 Determine time intervals when a specified ray intersects the space bounded by the
@@ -524,7 +796,7 @@ Returns a window containing the results.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfrfov_c.html)
 """
-function gfrfov(inst, raydir, rframe, abcorr, obsrvr, step, cnfine, maxwin=10000)
+function gfrfov(inst, raydir, rframe, abcorr, obsrvr, step, cnfine, maxwin = 10000)
     @checkdims 3 raydir
     result = SpiceDoubleCell(maxwin)
     ccall((:gfrfov_c, libcspice), Cvoid,
@@ -571,7 +843,6 @@ function gfrr(target, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnf
 end
 
 """
-
 Determine time intervals when the angular separation between the position vectors of two target
 bodies relative to an observer satisfies a numerical relationship.
 
@@ -679,14 +950,28 @@ function gfsstp(step)
     handleerror()
 end
 
-function _gfstep(time)
+"""
+    gfstep()
+
+Return the time step set by the most recent call to [`gfsstp`](@ref).
+
+### Arguments ###
+
+- `step`: Time step to take
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfstep_c.html)
+"""
+function gfstep()
     step = Ref{SpiceDouble}()
     ccall((:gfstep_c, libcspice), Cvoid,
           (SpiceDouble, Ref{SpiceDouble}),
-          time, step)
+          0.0, step)
     handleerror()
     step[]
 end
+gfstep(_) = gfstep()
 
 """
     gfstol(value)
@@ -787,6 +1072,93 @@ function gftfov(inst, target, tshape, tframe, abcorr, obsrvr, step, nintvls, cnf
 end
 
 """
+    gfudb!(udfuns, udfunb, step, cnfine, result)
+
+Perform a GF search on a user defined boolean quantity.
+
+### Arguments ###
+
+- `udfuns`: Name of the routine that computes a scalar quantity of interest corresponding to an `et`, e.g. `f(et) = ...`
+- `udfunb`: Name of the routine returning the boolean value corresponding to an `et`, e.g. `g(f, et) = ...`
+- `step  `: Step size used for locating extrema and roots
+- `cnfine`: Window to which the search is restricted
+- `result`: Window containing results
+
+### Output ###
+
+Returns `result`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfudb_c.html)
+"""
+function gfudb!(udfuns, udfunb, step, cnfine, result)
+    function _udfuns(et::SpiceDouble, value::Ptr{SpiceDouble})
+        _value = GC.@preserve value unsafe_wrap(Array{SpiceDouble}, value, 1)
+        _value[1] = udfuns(et)
+        nothing
+    end
+    udfuns_ptr = @cfunction($_udfuns, Cvoid, (SpiceDouble, Ptr{SpiceDouble}))
+    function _udfunb(_::Ptr{Cvoid}, et::SpiceDouble, value::Ptr{SpiceBoolean})
+        _value = GC.@preserve value unsafe_wrap(Array{SpiceBoolean}, value, 1)
+        _value[1] = udfunb(udfuns, et)
+        nothing
+    end
+    udfunb_ptr = @cfunction($_udfunb, Cvoid, (Ptr{Cvoid}, SpiceDouble, Ptr{SpiceBoolean}))
+    ccall((:gfudb_c, libcspice), Cvoid,
+          (Ptr{Cvoid}, Ptr{Cvoid}, SpiceDouble, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+          udfuns_ptr, udfunb_ptr, step, cnfine.cell, result.cell)
+    handleerror()
+    result
+end
+
+"""
+    gfuds!(udfuns, udqdec, relate, refval, adjust, step, nintvls, cnfine, result)
+
+Perform a GF search on a user defined scalar quantity.
+
+### Arguments ###
+
+- `udfuns`: Name of the routine that computes the scalar quantity of interest at some time, e.g. `f(et) = ...`
+- `udqdec`: Name of the routine that computes whether the scalar quantity is decreasing, e.g. `g(f, et) = ...`
+- `relate`: Operator that either looks for an extreme value (max, min, local, absolute) or compares the geometric quantity value and a number
+- `refval`: Value used as reference for scalar quantity condition
+- `adjust`: Allowed variation for absolute extremal geometric conditions
+- `step`: Step size used for locating extrema and roots
+- `nintvls`: Workspace window interval count
+- `cnfine`: SPICE window to which the search is restricted
+- `result`: SPICE window containing results
+
+### Output ###
+
+Returns `result`.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfuds_c.html)
+"""
+function gfuds!(udfuns, udqdec, relate, refval, adjust, step, nintvls, cnfine, result)
+    function _udfuns(et::SpiceDouble, value::Ptr{SpiceDouble})
+        _value = GC.@preserve value unsafe_wrap(Array{SpiceDouble}, value, 1)
+        _value[1] = udfuns(et)
+        nothing
+    end
+    udfuns_ptr = @cfunction($_udfuns, Cvoid, (SpiceDouble, Ptr{SpiceDouble}))
+    function _udqdec(_::Ptr{Cvoid}, et::SpiceDouble, value::Ptr{SpiceBoolean})
+        _value = GC.@preserve value unsafe_wrap(Array{SpiceBoolean}, value, 1)
+        _value[1] = udqdec(udfuns, et)
+        nothing
+    end
+    udqdec_ptr = @cfunction($_udqdec, Cvoid, (Ptr{Cvoid}, SpiceDouble, Ptr{SpiceBoolean}))
+    ccall((:gfuds_c, libcspice), Cvoid,
+          (Ptr{Cvoid}, Ptr{Cvoid}, Cstring, SpiceDouble, SpiceDouble, SpiceDouble, SpiceInt,
+           Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+          udfuns_ptr, udqdec_ptr, relate, refval, adjust, step, nintvls, cnfine.cell, result.cell)
+    handleerror()
+    result
+end
+
+"""
     gipool(name; start=1, room=100)
 
 Return the value of a kernel variable from the kernel pool.
@@ -805,7 +1177,7 @@ Returns an array of values if the variable exists or `nothing` if not.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gipool_c.html)
 """
-function gipool(name; start=1, room=100)
+function gipool(name; start = 1, room = 100)
     n = Ref{SpiceInt}()
     values = Array{SpiceInt}(undef, room)
     found = Ref{SpiceBoolean}()
@@ -836,7 +1208,7 @@ Returns lernel pool variables whose names match `name`.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gnpool_c.html)
 """
-function gnpool(name, start, room, lenout=128)
+function gnpool(name, start, room, lenout = 128)
     n = Ref{SpiceInt}()
     kvars = Array{SpiceChar}(undef, lenout, room)
     found = Ref{SpiceBoolean}()

@@ -55,8 +55,8 @@ a three-point estimation.
 ### Arguments ###
 
 - `udfunc`: A callable that computes the scalar value of interest,
-    e.g. `f(x::Float64) -> Float64`.
-- `x`: Independent variable of 'udfunc'
+    e.g. `f(x::Float64) -> Float64`
+- `x`: Independent variable of `udfunc`
 - `dx`: Interval from `x` for derivative calculation
 
 ### Output ###

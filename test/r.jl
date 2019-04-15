@@ -215,6 +215,7 @@ using LinearAlgebra: I
         expected_root2 = [-1.0, -sqrt(2.0)]
         @test root1 == expected_root1
         @test root2 == expected_root2
-        #= @test_throws SpiceError rquad(0.0, 0.0, 3.0) =#
+        # This test prints a funny CSPICE error message
+        # @test_throws SpiceError rquad(0.0, 0.0, 3.0)
     end
 end

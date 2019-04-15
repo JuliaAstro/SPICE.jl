@@ -18,9 +18,9 @@ using Random: randstring
             pdpool("array", exp)
             act = gdpool("array")
             @test exp == act
-            act = gdpool("array", start=8)
+            act = gdpool("array", start = 8)
             @test [8.0, 9.0, 10.0] == act
-            act = gdpool("array", room=8)
+            act = gdpool("array", room = 8)
             @test collect(1.0:8.0) == act
             @test gdpool("norbert") === nothing
         finally
@@ -62,7 +62,7 @@ using Random: randstring
         end
     end
     @testset "getfat" begin
-        arch, outtype = getfat(path(CORE, :lsk))
+    arch, outtype = getfat(path(CORE, :lsk))
         @test arch == "KPL"
         @test outtype == "LSK"
     end
@@ -85,17 +85,19 @@ using Random: randstring
             @test frame == "SC999_INST004"
             @test bsight ≈ [0.0, 1.0, 0.0]
             @test length(bounds) == 3
-            expected = [[0.0, 0.8, 0.5], [0.4, 0.8, -0.2], [-0.4, 0.8, -0.2]]
+    expected = [[0.0, 0.8, 0.5], [0.4, 0.8, -0.2], [-0.4, 0.8, -0.2]]
             @test expected ≈ bounds
         finally
             kclear()
         end
     end
-    #=  @testset "gfbail" begin =#
-    #=      @test not gfbail() =#
-    #=  @testset "gfclrh" begin =#
-    #=      gfclrh() =#
-    #=      @test not gfbail() =#
+    @testset "gfbail" begin
+        @test !Bool(SPICE.gfbail())
+    end
+    @testset "gfclrh" begin
+        SPICE.gfclrh()
+        @test !Bool(SPICE.gfbail())
+    end
     @testset "gfdist" begin
         try
             furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
@@ -123,86 +125,66 @@ using Random: randstring
             kclear()
         end
     end
-    #=  @testset "gfevnt" begin =#
-    #=      kclear() =#
-    #=      furnsh(CoreKernels.testMetaKernel) =#
-    #=      # =#
-    #=      et_start = str2et("2001 jan 01 00:00:00.000") =#
-    #=      et_end   = str2et("2001 dec 31 00:00:00.000") =#
-    #=      cnfine   = SpiceDoubleCell(2) =#
-    #=      wninsd(et_start, et_end, cnfine) =#
-    #=      result   = SpiceDoubleCell(1000) =#
-    #=      qpnams   = ["TARGET", "OBSERVER", "ABCORR"] =#
-    #=      qcpars   = ["MOON  ", "EARTH   ", "LT+S  "] =#
-    #=      # Set the step size to 1/1000 day and convert to seconds =#
-    #=      gfsstp(0.001 * spd()) =#
-    #=      # setup callbacks =#
-    #=      udstep = spiceypy.utils.callbacks.SpiceUDSTEP(gfstep) =#
-    #=      udrefn = spiceypy.utils.callbacks.SpiceUDREFN(gfrefn) =#
-    #=      udrepi = spiceypy.utils.callbacks.SpiceUDREPI(gfrepi) =#
-    #=      udrepu = spiceypy.utils.callbacks.SpiceUDREPU(gfrepu) =#
-    #=      udrepf = spiceypy.utils.callbacks.SpiceUDREPF(gfrepf) =#
-    #=      udbail = spiceypy.utils.callbacks.SpiceUDBAIL(gfbail) =#
-    #=      qdpars = np.zeros(10, dtype=np.float) =#
-    #=      qipars = np.zeros(10, dtype=np.int32) =#
-    #=      qlpars = np.zeros(10, dtype=np.int32) =#
-    #=      # call gfevnt =#
-    #=      gfevnt(udstep, udrefn, "DISTANCE", 3, 81, qpnams, qcpars, =#
-    #=                   qdpars, qipars, qlpars, "LOCMAX", 0, 1.e-6, 0, =#
-    #=                   True, udrepi, udrepu, udrepf, 10000, =#
-    #=                   True, udbail, cnfine, result) =#
-    #=  =#
-    #=      # Verify the expected results =#
-    #=      @test len(result) == 26 =#
-    #=      sTimout = "YYYY-MON-DD HR:MN:SC.###### (TDB) ::TDB ::RND" =#
-    #=      @test timout(result[0], sTimout) == "2001-JAN-24 19:22:01.418715 (TDB)" =#
-    #=      @test timout(result[1], sTimout) == "2001-JAN-24 19:22:01.418715 (TDB)" =#
-    #=      @test timout(result[2], sTimout) == "2001-FEB-20 21:52:07.900872 (TDB)" =#
-    #=      @test timout(result[3], sTimout) == "2001-FEB-20 21:52:07.900872 (TDB)" =#
-    #=      # Cleanup =#
-    #=      if gfbail(): =#
-    #=          gfclrh() =#
-    #=      gfsstp(0.5) =#
-    #=      kclear() =#
-    #=  @testset "gffove" begin =#
-    #=      kclear() =#
-    #=      furnsh(CoreKernels.testMetaKernel) =#
-    #=      furnsh(CassiniKernels.cassCk) =#
-    #=      furnsh(CassiniKernels.cassFk) =#
-    #=      furnsh(CassiniKernels.cassIk) =#
-    #=      furnsh(CassiniKernels.cassPck) =#
-    #=      furnsh(CassiniKernels.cassSclk) =#
-    #=      furnsh(CassiniKernels.cassTourSpk) =#
-    #=      furnsh(CassiniKernels.satSpk) =#
-    #=      # Cassini ISS NAC observed Enceladus on 2013-FEB-25 from ~11:00 to ~12:00 =#
-    #=      # Split confinement window, from continuous CK coverage, into two pieces =#
-    #=      et_start = str2et("2013-FEB-25 10:00:00.000") =#
-    #=      et_end   = str2et("2013-FEB-25 11:45:00.000") =#
-    #=      cnfine   = SpiceDoubleCell(2) =#
-    #=      wninsd(et_start, et_end, cnfine) =#
-    #=      result   = SpiceDoubleCell(1000) =#
-    #=      # call gffove =#
-    #=      udstep = spiceypy.utils.callbacks.SpiceUDSTEP(gfstep) =#
-    #=      udrefn = spiceypy.utils.callbacks.SpiceUDREFN(gfrefn) =#
-    #=      udrepi = spiceypy.utils.callbacks.SpiceUDREPI(gfrepi) =#
-    #=      udrepu = spiceypy.utils.callbacks.SpiceUDREPU(gfrepu) =#
-    #=      udrepf = spiceypy.utils.callbacks.SpiceUDREPF(gfrepf) =#
-    #=      udbail = spiceypy.utils.callbacks.SpiceUDBAIL(gfbail) =#
-    #=      gfsstp(1.0) =#
-    #=      gffove("CASSINI_ISS_NAC", "ELLIPSOID", [0.0, 0.0, 0.0], "ENCELADUS", "IAU_ENCELADUS", =#
-    #=                   "LT+S", "CASSINI", 1.e-6, udstep, udrefn, True, =#
-    #=                   udrepi, udrepu, udrepf, True, udbail, =#
-    #=                   cnfine, result) =#
-    #=      # Verify the expected results =#
-    #=      @test len(result) == 2 =#
-    #=      sTimout = "YYYY-MON-DD HR:MN:SC UTC ::RND" =#
-    #=      @test timout(result[0], sTimout) == "2013-FEB-25 10:42:33 UTC" =#
-    #=      @test timout(result[1], sTimout) == "2013-FEB-25 11:45:00 UTC" =#
-    #=      # Cleanup =#
-    #=      if gfbail(): =#
-    #=          gfclrh() =#
-    #=      gfsstp(0.5) =#
-    #=      kclear() =#
+    @testset "gfevnt" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
+            et_start = str2et("2001 JAN 01 00:00:00.000")
+            et_end   = str2et("2001 DEC 31 00:00:00.000")
+            cnfine   = SpiceDoubleCell(2)
+            wninsd!(cnfine, et_start, et_end)
+            result   = SpiceDoubleCell(1000)
+            qpnams   = ["TARGET", "OBSERVER", "ABCORR"]
+            qcpars   = ["MOON  ", "EARTH   ", "LT+S  "]
+            # Set the step size to 1/1000 day and convert to seconds
+            gfsstp(0.001 * spd())
+            qdpars = zeros(3)
+            qipars = zeros(Int, 3)
+            qlpars = falses(3)
+            result = gfevnt(gfstep, gfrefn, "DISTANCE", qpnams, qcpars,
+                            qdpars, qipars, qlpars, "LOCMAX", 0, 1.e-6, 0,
+                            true, gfrepi, gfrepu, gfrepf, 10000, cnfine)
+            @test length(result) == 26
+            s_timout = "YYYY-MON-DD HR:MN:SC.###### (TDB) ::TDB ::RND"
+            @test timout(result[1], s_timout) == "2001-JAN-24 19:22:01.418715 (TDB)"
+            @test timout(result[2], s_timout) == "2001-JAN-24 19:22:01.418715 (TDB)"
+            @test timout(result[3], s_timout) == "2001-FEB-20 21:52:07.900872 (TDB)"
+            @test timout(result[4], s_timout) == "2001-FEB-20 21:52:07.900872 (TDB)"
+        finally
+            gfsstp(0.5)
+            kclear()
+        end
+    end
+    @testset "gffove" begin
+        try
+            furnsh(path(CORE, :lsk),
+                   path(CORE, :pck),
+                   path(CORE, :spk),
+                   path(CASSINI, :ck),
+                   path(CASSINI, :fk),
+                   path(CASSINI, :ik),
+                   path(CASSINI, :pck),
+                   path(CASSINI, :sclk),
+                   path(CASSINI, :tour_spk),
+                   path(CASSINI, :sat_spk))
+            et_start = str2et("2013-FEB-25 10:00:00.000")
+            et_end   = str2et("2013-FEB-25 11:45:00.000")
+            cnfine   = SpiceDoubleCell(2)
+            wninsd!(cnfine, et_start, et_end)
+            result = SpiceDoubleCell(1000)
+            gfsstp(1.0)
+            gffove!("CASSINI_ISS_NAC", "ELLIPSOID", [0.0, 0.0, 0.0], "ENCELADUS",
+                    "IAU_ENCELADUS", "LT+S", "CASSINI", 1.e-6, gfstep, gfrefn, true, gfrepi,
+                    gfrepu, gfrepf, cnfine, result)
+            # Verify the expected results
+            @test length(result) == 2
+            s_timout = "YYYY-MON-DD HR:MN:SC UTC ::RND"
+            @test timout(result[1], s_timout) == "2013-FEB-25 10:42:33 UTC"
+            @test timout(result[2], s_timout) == "2013-FEB-25 11:45:00 UTC"
+        finally
+            gfsstp(0.5)
+            kclear()
+        end
+    end
     @testset "gfilum" begin
         try
             furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk),
@@ -229,37 +211,25 @@ using Random: randstring
             kclear()
         end
     end
-    #=  @testset "gfinth" begin =#
-    #=      gfinth(2) =#
-    #=      with pytest.raises(stypes.SpiceyError): =#
-    #=          gfinth(0) =#
-    #=  @testset "gfocce" begin =#
-    #=      kclear() =#
-    #=      if gfbail(): =#
-    #=          gfclrh() =#
-    #=      furnsh(CoreKernels.testMetaKernel) =#
-    #=      et0 = str2et("2001 DEC 01 00:00:00 TDB") =#
-    #=      et1 = str2et("2002 JAN 01 00:00:00 TDB") =#
-    #=      cnfine = SpiceDoubleCell(2) =#
-    #=      wninsd(et0, et1, cnfine) =#
-    #=      result = SpiceDoubleCell(1000) =#
-    #=      gfsstp(20.0) =#
-    #=      udstep = spiceypy.utils.callbacks.SpiceUDSTEP(gfstep) =#
-    #=      udrefn = spiceypy.utils.callbacks.SpiceUDREFN(gfrefn) =#
-    #=      udrepi = spiceypy.utils.callbacks.SpiceUDREPI(gfrepi) =#
-    #=      udrepu = spiceypy.utils.callbacks.SpiceUDREPU(gfrepu) =#
-    #=      udrepf = spiceypy.utils.callbacks.SpiceUDREPF(gfrepf) =#
-    #=      udbail = spiceypy.utils.callbacks.SpiceUDBAIL(gfbail) =#
-    #=      # call gfocce =#
-    #=      gfocce("Any", "moon", "ellipsoid", "iau_moon", "sun", =#
-    #=                   "ellipsoid", "iau_sun", "lt", "earth", 1.e-6, =#
-    #=                   udstep, udrefn, True, udrepi, udrepu, udrepf, =#
-    #=                   True, udbail, cnfine, result) =#
-    #=      if gfbail(): =#
-    #=          gfclrh() =#
-    #=      count = wncard(result) =#
-    #=      @test count == 1 =#
-    #=      kclear() =#
+    @testset "gfocce" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
+            et0 = str2et("2001 DEC 01 00:00:00 TDB")
+            et1 = str2et("2002 JAN 01 00:00:00 TDB")
+            cnfine = SpiceDoubleCell(2)
+            wninsd!(cnfine, et0, et1)
+            result = SpiceDoubleCell(1000)
+            gfsstp(20.0)
+            gfocce!("Any", "moon", "ellipsoid", "iau_moon", "sun",
+                    "ellipsoid", "iau_sun", "lt", "earth", 1.e-6,
+                    gfstep, gfrefn, true, gfrepi, gfrepu, gfrepf,
+                    cnfine, result)
+            @test wncard(result) == 1
+        finally
+            gfsstp(0.5)
+            kclear()
+        end
+    end
     @testset "gfoclt" begin
         try
             furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
@@ -282,8 +252,7 @@ using Random: randstring
     end
     @testset "gfpa" begin
         relate = ["=", "<", ">", "LOCMIN", "ABSMIN", "LOCMAX", "ABSMAX"]
-        expected = Dict(
-                        "=" => [
+        expected = Dict("=" => [
                                 "2006-DEC-02 13:31:34.425",
                                 "2006-DEC-02 13:31:34.425",
                                 "2006-DEC-07 14:07:55.480",
@@ -330,8 +299,7 @@ using Random: randstring
                         "ABSMAX" => [
                                      "2007-JAN-19 04:27:54.610",
                                      "2007-JAN-19 04:27:54.610",
-                                    ]
-                       )
+                                    ])
         try
             furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
             et0 = str2et("2006 DEC 01")
@@ -380,71 +348,67 @@ using Random: randstring
             kclear()
         end
     end
-    #=  @testset "gfrefn" begin =#
-    #=      s1 = [True, False] =#
-    #=      s2 = [True, False] =#
-    #=      for i in range(0, 2): =#
-    #=          for j in range(0, 2): =#
-    #=              scale = 10.0 * i + j =#
-    #=              t1 = 5.0 * scale =#
-    #=              t2 = 7.0 * scale =#
-    #=              t  = gfrefn(t1, t2, s1[i], s2[j]) =#
-    #=              @test t == pytest.approx(scale*6.0) =#
-    #=      for i in range(0, 2): =#
-    #=          for j in range(0, 2): =#
-    #=              scale = 10.0 * i + j =#
-    #=              t1 = 15.0 * scale =#
-    #=              t2 = 7.0 * scale =#
-    #=              t  = gfrefn(t1, t2, s1[i], s2[j]) =#
-    #=              @test t == pytest.approx(scale*11.0) =#
-    #=      for i in range(0, 2): =#
-    #=          for j in range(0, 2): =#
-    #=              scale = 10.0 * i + j =#
-    #=              t1 = -scale =#
-    #=              t2 = -scale =#
-    #=              t  = gfrefn(t1, t2, s1[i], s2[j]) =#
-    #=              @test t == pytest.approx(-scale) =#
-    #=  @testset "gfrepf" begin =#
-    #=      # Minimal test; gfrepf does nothing PyTest can notice =#
-    #=      gfrepf() =#
-    #=      # Pass bad argument list =#
-    #=      with pytest.raises(TypeError): =#
-    #=          gfrepf(0) =#
-    #=  @testset "gfrepi" begin =#
-    #=      window = SpiceDoubleCell(4) =#
-    #=      wninsd(0., 100., window) =#
-    #=      gfrepi(window, "x", "y") =#
-    #=      # BEGMSS or ENDMSS empty, too long, or containing non-printing characters =#
-    #=      with pytest.raises(stypes.SpiceyError): =#
-    #=          gfrepi(window, "", "y") =#
-    #=      with pytest.raises(stypes.SpiceyError): =#
-    #=          gfrepi(window, "x", "") =#
-    #=      with pytest.raises(stypes.SpiceyError): =#
-    #=          gfrepi(window, "x"*1000, "y") =#
-    #=      with pytest.raises(stypes.SpiceyError): =#
-    #=          gfrepi(window, "x", "y"*1000) =#
-    #=      with pytest.raises(stypes.SpiceyError): =#
-    #=          gfrepi(window, "y\n", "y") =#
-    #=      with pytest.raises(stypes.SpiceyError): =#
-    #=          gfrepi(window, "x", "y\n") =#
-    #=      gfrepf() =#
-    #=  @testset "gfrepu" begin =#
-    #=      window = SpiceDoubleCell(4) =#
-    #=      wninsd(0., 100., window) =#
-    #=      gfrepi(window, "x", "y") =#
-    #=      gfrepu(0., 100., 50.) =#
-    #=      gfrepu(0., 100., 100.) =#
-    #=      with pytest.raises(stypes.SpiceyError): =#
-    #=          gfrepu(100., 0., 100.) =#
-    #=      with pytest.raises(stypes.SpiceyError): =#
-    #=          gfrepu(0., 100., -1.) =#
-    #=      with pytest.raises(stypes.SpiceyError): =#
-    #=          gfrepu(0., 100., 1011.) =#
-    #=      gfrepu(0., 100., 100.) =#
-    #=      gfrepf() =#
+    @testset "gfrefn" begin
+        s1 = [true, false]
+        s2 = [true, false]
+        for i in 1:2
+            for j in 1:2
+                scale = 10.0 * i + j
+                t1 = 5.0 * scale
+                t2 = 7.0 * scale
+                t  = gfrefn(t1, t2, s1[i], s2[j])
+                @test t ≈ scale * 6.0
+            end
+        end
+        for i in 1:2
+            for j in 1:2
+                scale = 10.0 * i + j
+                t1 = 15.0 * scale
+                t2 = 7.0 * scale
+                t  = gfrefn(t1, t2, s1[i], s2[j])
+                @test t ≈ scale * 11.0
+            end
+        end
+        for i in 1:2
+            for j in 1:2
+                scale = 10.0 * i + j
+                t1 = -scale
+                t2 = -scale
+                t  = gfrefn(t1, t2, s1[i], s2[j])
+                @test t ≈ -scale
+            end
+        end
+    end
+    @testset "gfrepi" begin
+        window = SpiceDoubleCell(4)
+        wninsd!(window, 0., 100.)
+        gfrepi(window, "x", "y")
+        # BEGMSS or ENDMSS empty, too long, or containing non-printing characters
+        @test_throws SpiceError gfrepi(window, "", "y")
+        @test_throws SpiceError gfrepi(window, "x", "")
+        @test_throws SpiceError gfrepi(window, "x"^1000, "y")
+        @test_throws SpiceError gfrepi(window, "x", "y"^1000)
+        @test_throws SpiceError gfrepi(window, "y\n", "y")
+        @test_throws SpiceError gfrepi(window, "x", "y\n")
+        gfrepf()
+    end
+    @testset "gfrepu" begin
+        window = SpiceDoubleCell(4)
+        wninsd!(window, 0., 100.)
+        gfrepi(window, "x", "y")
+        gfrepu(0., 100., 50.)
+        gfrepu(0., 100., 100.)
+        @test_throws SpiceError gfrepu(100., 0., 100.)
+        @test_throws SpiceError gfrepu(0., 100., -1.)
+        @test_throws SpiceError gfrepu(0., 100., 1011.)
+        gfrepu(0., 100., 100.)
+        gfrepf()
+    end
     @testset "gfrfov" begin
         try
-            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk),
+            furnsh(path(CORE, :lsk),
+                   path(CORE, :pck),
+                   path(CORE, :spk),
                    path(CASSINI, :ck),
                    path(CASSINI, :fk),
                    path(CASSINI, :ik),
@@ -567,7 +531,7 @@ using Random: randstring
             count = wncard(result)
             @test count == 13
             results = []
-            for i in 1:count
+        for i in 1:count
                 start, stop = wnfetd(result, i)
                 @test start == stop
                 push!(results, timout(start, "YYYY-MON-DD HR:MN:SC.###### (TDB) ::TDB ::RND", 41))
@@ -629,7 +593,7 @@ using Random: randstring
     end
     @testset "gfstep/gfsstp" begin
         gfsstp(0.5)
-        @test SPICE._gfstep(0.5) == 0.5
+        @test gfstep(0.5) == 0.5
     end
     @testset "gfsubc" begin
         try
@@ -680,94 +644,85 @@ using Random: randstring
             kclear()
         end
     end
-    #=  @testset "gfudb" begin =#
-    #=      kclear() =#
-    #=      # load kernels =#
-    #=      furnsh(CoreKernels.testMetaKernel) =#
-    #=      # begin test =#
-    #=      et_start = str2et("Jan 1 2001") =#
-    #=      et_end   = str2et("Jan 1 2002") =#
-    #=      result   = SpiceDoubleCell(40000) =#
-    #=      cnfine   = SpiceDoubleCell(2) =#
-    #=      wninsd(et_start, et_end, cnfine) =#
-    #=      step = 5.0 * spd() =#
-    #=  =#
-    #=      # make a udf callback =#
-    #=      udf = spiceypy.utils.callbacks.SpiceUDFUNS(udf) =#
-    #=  =#
-    #=      # define gfq =#
-    #=      @spiceypy.utils.callbacks.SpiceUDFUNB =#
-    #=      def gfq(udfunc, et): =#
-    #=          # we are not using udfunc in this example =#
-    #=          state, lt = spkez(301, et, "IAU_EARTH", "NONE", 399) =#
-    #=          return state[2] >= 0.0 and state[5] > 0.0 =#
-    #=  =#
-    #=      # call gfudb =#
-    #=      gfudb(udf, gfq, step, cnfine, result) =#
-    #=      # count =#
-    #=      @test len(result) > 20 # true value is 28 =#
-    #=      kclear() =#
-    #=  @testset "gfudb2" begin =#
-    #=      kclear() =#
-    #=      # load kernels =#
-    #=      furnsh(CoreKernels.testMetaKernel) =#
-    #=      # begin test =#
-    #=      et_start = str2et("Jan 1 2001") =#
-    #=      et_end = str2et("Jan 1 2002") =#
-    #=      result = SpiceDoubleCell(40000) =#
-    #=      cnfine = SpiceDoubleCell(2) =#
-    #=      wninsd(et_start, et_end, cnfine) =#
-    #=      step = 60.0 * 60.0 =#
-    #=  =#
-    #=      # define gfq =#
-    #=      @spiceypy.utils.callbacks.SpiceUDFUNS =#
-    #=      def gfq(et): =#
-    #=          pos, lt = spkezp(301, et, "IAU_EARTH", "NONE", 399) =#
-    #=          return pos[2] =#
-    #=  =#
-    #=      # define gfb =#
-    #=      @spiceypy.utils.callbacks.SpiceUDFUNB =#
-    #=      def gfb(udfuns, et): =#
-    #=          value = spiceypy.utils.callbacks.CallUDFUNS(udfuns, et) =#
-    #=          return -1000.0 <= value <= 1000.0 =#
-    #=  =#
-    #=      # call gfudb =#
-    #=      gfudb(gfq, gfb, step, cnfine, result) =#
-    #=      # count =#
-    #=      @test len(result) > 50  # true value is 56 =#
-    #=      kclear() =#
-    #=  @testset "gfuds" begin =#
-    #=      relations = ["=", "<", ">", "LOCMIN", "ABSMIN", "LOCMAX", "ABSMAX"] =#
-    #=      kclear() =#
-    #=      # load kernels =#
-    #=      furnsh(CoreKernels.testMetaKernel) =#
-    #=      # begin test =#
-    #=      et_start = str2et("Jan 1 2007") =#
-    #=      et_end = str2et("Apr 1 2007") =#
-    #=      # set up some constants =#
-    #=      step = spd() =#
-    #=      adjust = 0.0 =#
-    #=      refval  = 0.3365 =#
-    #=      # declare the callbacks we will use in the test =#
-    #=      @spiceypy.utils.callbacks.SpiceUDFUNS =#
-    #=      def gfq(et): =#
-    #=          state, lt = spkez(301, et, "J2000", "NONE", 10) =#
-    #=          return dvnorm(state) =#
-    #=  =#
-    #=      @spiceypy.utils.callbacks.SpiceUDFUNB =#
-    #=      def gfdecrx(udfuns, et): =#
-    #=          return uddc(udfuns, et, 10.0) =#
-    #=  =#
-    #=      # loop through to test each relation type =#
-    #=      for i, r in enumerate(relations): =#
-    #=          result = SpiceDoubleCell(40000) =#
-    #=          cnfine = SpiceDoubleCell(2) =#
-    #=          wninsd(et_start, et_end, cnfine) =#
-    #=          # call gfuds =#
-    #=          result = gfuds(gfq, gfdecrx, r, refval, adjust, step, 20000, cnfine, result) =#
-    #=          @test len(result) > 0 =#
-    #=      # cleanup =#
-    #=      kclear() =#
+    @testset "gfudb" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
+            et_start = str2et("Jan 1 2001")
+            et_end = str2et("Jan 1 2002")
+            result = SpiceDoubleCell(40000)
+            cnfine = SpiceDoubleCell(2)
+            wninsd!(cnfine, et_start, et_end)
+            step = 5.0 * spd()
+
+            function gfq(_, et)
+                state, lt = spkez(301, et, "IAU_EARTH", "NONE", 399)
+                state[3] >= 0.0 && state[6] > 0.0
+            end
+
+            gfudb!(_ -> 0.0, gfq, step, cnfine, result)
+            @test length(result) > 20 # true value is 28
+        finally
+            kclear()
+        end
+    end
+    @testset "gfudb2" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
+            et_start = str2et("Jan 1 2001")
+            et_end = str2et("Jan 1 2002")
+            result = SpiceDoubleCell(40000)
+            cnfine = SpiceDoubleCell(2)
+            wninsd!(cnfine, et_start, et_end)
+            step = 60.0 * 60.0
+
+            function gfq(et)
+                pos, _ = spkezp(301, et, "IAU_EARTH", "NONE", 399)
+                pos[3]
+            end
+
+            function gfb(udfuns, et)
+                value = udfuns(et)
+                -1000.0 <= value <= 1000.0
+            end
+
+            gfudb!(gfq, gfb, step, cnfine, result)
+            @test length(result) > 50  # true value is 56
+        finally
+            kclear()
+        end
+    end
+    @testset "gfuds" begin
+        try
+            furnsh(path(CORE, :lsk), path(CORE, :pck), path(CORE, :spk))
+            relations = ["=", "<", ">", "LOCMIN", "ABSMIN", "LOCMAX", "ABSMAX"]
+            et_start = str2et("Jan 1 2007")
+            et_end = str2et("Apr 1 2007")
+            step = spd()
+            adjust = 0.0
+            refval  = 0.3365
+
+            function gfq(et)
+                state, _ = spkez(301, et, "J2000", "NONE", 10)
+                dvnorm(state)
+            end
+
+            function gfdecrx(udfuns, et)
+                h = 1.0
+                dx = uddf(udfuns, et, h)
+                dx < 0.0
+            end
+
+            @testset for r in relations
+                result = SpiceDoubleCell(40000)
+                cnfine = SpiceDoubleCell(2)
+                wninsd!(cnfine, et_start, et_end)
+                result = gfuds!(gfq, gfdecrx, r, refval, adjust, step, 20000, cnfine, result)
+                @test length(result) > 0
+            end
+        finally
+            kclear()
+        end
+    end
     @testset "gipool" begin
         try
             data = collect(1:10)

@@ -842,7 +842,6 @@ using LinearAlgebra: I, norm, cross, normalize
             ecc = elts[2]
             p   = elts[1] * (1.0 + ecc)
             state = state[1:3]
-            #= tp = ucrss(state, state+4) =#
             tp = normalize(cross(state, state .+ 4.0))
             pa = normalize(state)
             j2flg = 0.0
