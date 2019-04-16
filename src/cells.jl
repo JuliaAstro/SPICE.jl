@@ -47,8 +47,8 @@ mutable struct SpiceCell{S, T, N} <: AbstractArray{T, 1}
         cell = Cell{T}(length, size)
         data = init_data(T, size, length)
         self = new{T, itertype(T), dim(T)}(data, cell)
-        self.cell.base = pointer(self.data, 1)
-        self.cell.data = data_ptr(T, self.data, length)
+        self.cell.base = GC.@preserve self pointer(self.data, 1)
+        self.cell.data = GC.@preserve self data_ptr(T, self.data, length)
         self
     end
 end
