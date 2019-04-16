@@ -957,7 +957,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.dskobj!",
     "category": "method",
-    "text": "dskobj(dsk, size=100)\ndskobj!(set, dsk)\n\nFind the set of body ID codes of all objects for which topographic data are provided in a specified DSK file.\n\nArguments\n\ndsk: Name of DSK file\nset or len: Either a preallocated SpiceIntCell or the size of the output set.\n\nOutput\n\nReturns the set of ID codes of objects in the DSK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "dskobj!(set, dsk)\n\nFind the set of body ID codes of all objects for which topographic data are provided in a specified DSK file.\n\nArguments\n\ndsk: Name of DSK file\nset or len: Either a preallocated SpiceIntCell or the size of the output set.\n\nOutput\n\nReturns the set of ID codes of objects in the DSK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -989,7 +989,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.dsksrf!",
     "category": "method",
-    "text": "dsksrf(dsk, size=100)\ndsksrf!(set, dsk)\n\nFind the set of surface ID codes of all objects for which topographic data are provided in a specified DSK file.\n\nArguments\n\ndsk: Name of DSK file\nset or len: Either a preallocated SpiceIntCell or the size of the output set.\n\nOutput\n\nReturns the set of ID codes of surfaces in the DSK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "text": "dsksrf!(set, dsk)\n\nFind the set of surface ID codes of all objects for which topographic data are provided in a specified DSK file.\n\nArguments\n\ndsk: Name of DSK file\nset or len: Either a preallocated SpiceIntCell or the size of the output set.\n\nOutput\n\nReturns the set of ID codes of surfaces in the DSK file.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
