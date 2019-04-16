@@ -317,15 +317,14 @@ using LinearAlgebra: I, norm, cross, normalize
     @testset "spkcov" begin
         try
             spk = path(CORE, :spk)
-            ids = spkobj(spk)
+            ids = SpiceIntCell(1000)
+            spkobj!(ids, spk)
             temp_obj = ids[1]
-
-            cover = spkcov(spk, temp_obj)
-            expected = [-94651137.81606464, 315662463.18395346]
-            @test cover ≈ expected
 
             cover = SpiceDoubleCell(2000)
             spkcov!(cover, spk, temp_obj)
+
+            expected = [-94651137.81606464, 315662463.18395346]
             @test cover ≈ expected
         finally
             kclear()

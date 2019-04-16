@@ -912,19 +912,8 @@ function spkcls(handle)
     handle
 end
 
-function spkcov!(cover, spk, idcode)
-    ccall((:spkcov_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, Ref{Cell{SpiceDouble}}),
-          spk, idcode, cover.cell)
-    handleerror()
-    cover
-end
-
-spkcov(spk, idcode) = spkcov!(SpiceDoubleCell(2000), spk, idcode)
-
 """
     spkcov!(cover, spk, idcode)
-    spkcov(spk, idcode)
 
 Find the coverage window for a specified ephemeris object in a specified SPK file.
 
@@ -942,8 +931,15 @@ Returns the extended coverage window.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcov_c.html)
 """
-spkcov
-spkcov!
+function spkcov!(cover, spk, idcode)
+    ccall((:spkcov_c, libcspice), Cvoid,
+          (Cstring, SpiceInt, Ref{Cell{SpiceDouble}}),
+          spk, idcode, cover.cell)
+    handleerror()
+    cover
+end
+
+@deprecate spkcov spkcov!
 
 """
     spkcpo(target, et, outref, refloc, abcorr, obspos, obsctr, obsref)
@@ -1327,19 +1323,8 @@ function spkltc(targ, et, ref, abcorr, stobs)
     starg, lt[], dlt[]
 end
 
-function spkobj!(ids, spk)
-    ccall((:spkobj_c, libcspice), Cvoid,
-          (Cstring, Ref{Cell{SpiceInt}}),
-          spk, ids.cell)
-    handleerror()
-    ids
-end
-
-spkobj(spk) = spkobj!(SpiceIntCell(1000), spk)
-
 """
     spkobj!(ids, spk)
-    spkobj(spk)
 
 Find the set of ID codes of all objects in a specified SPK file.
 
@@ -1356,8 +1341,15 @@ Returns the set of id codes.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkobj_c.html)
 """
-spkobj!
-spkobj
+function spkobj!(ids, spk)
+    ccall((:spkobj_c, libcspice), Cvoid,
+          (Cstring, Ref{Cell{SpiceInt}}),
+          spk, ids.cell)
+    handleerror()
+    ids
+end
+
+@deprecate spkobj spkobj!
 
 """
     spkopa(file)
