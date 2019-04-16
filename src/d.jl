@@ -1577,7 +1577,6 @@ function dskn02(handle, dladsc, plid)
 end
 
 """
-    dskobj(dsk, size=100)
     dskobj!(set, dsk)
 
 Find the set of body ID codes of all objects for which topographic data are provided in a specified
@@ -1604,7 +1603,7 @@ function dskobj!(set, dsk)
     set
 end
 
-dskobj(dsk, length=100) = dskobj!(SpiceIntCell(length), dsk)
+@deprecate dskobj dskobj!
 
 """
     dskopn(fname, ifname, ncomch)
@@ -1702,7 +1701,6 @@ function dskrb2(vrtces, plates, corsys, corpar)
 end
 
 """
-    dsksrf(dsk, size=100)
     dsksrf!(set, dsk)
 
 Find the set of surface ID codes of all objects for which topographic data are provided in a
@@ -1729,7 +1727,7 @@ function dsksrf!(set, dsk, bodyid)
     set
 end
 
-dsksrf(dsk, bodyid, length=100) = dsksrf!(SpiceIntCell(length), dsk, bodyid)
+@deprecate dsksrf dsksrf!
 
 """
     dskstl(keywrd)

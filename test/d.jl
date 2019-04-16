@@ -412,9 +412,11 @@
     end
     @testset "dskobj/dsksrf" begin
         try
-            bodyids = dskobj(path(EXTRA, :phobos_dsk))
+            bodyids = SpiceIntCell(100)
+            dskobj!(bodyids, path(EXTRA, :phobos_dsk))
             @test 401 in bodyids
-            srfids = dsksrf(path(EXTRA, :phobos_dsk), 401)
+            srfids = SpiceIntCell(100)
+            dsksrf!(srfids, path(EXTRA, :phobos_dsk), 401)
             @test 401 in srfids
         finally
             kclear()
