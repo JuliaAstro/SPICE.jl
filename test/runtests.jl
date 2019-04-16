@@ -5,6 +5,21 @@ using Test
 const BASE_URL = "https://raw.githubusercontent.com/AndrewAnnex/SpiceyPyTestKernels/master/"
 const KERNEL_DIR = joinpath(@__DIR__, "kernels")
 
+macro stress(n::Int, expr)
+    str = string(expr)
+    quote
+        print("Stress test (n=$($n)) for `", $str, "`:   0%")
+        GC.enable(false)
+        for i = 1:$n
+            print("\b\b\b\b", lpad(round(Int, i/$n * 100), 3), "%")
+            $expr
+        end
+        println()
+        GC.enable(true)
+        GC.gc()
+    end
+end
+
 @RemoteFileSet CASSINI "Cassini Kernels" begin
     pck      = @RemoteFile BASE_URL * "cpck05Mar2004.tpc" dir=KERNEL_DIR
     sat_spk  = @RemoteFile BASE_URL * "130220AP_SE_13043_13073.bsp" dir=KERNEL_DIR
@@ -121,29 +136,29 @@ download(CORE)
         end
     end
 
-    include("a.jl")
-    include("b.jl")
-    include("c.jl")
-    include("d.jl")
-    include("e.jl")
-    include("f.jl")
-    include("g.jl")
-    include("h.jl")
-    include("i.jl")
-    include("j.jl")
-    include("k.jl")
-    include("l.jl")
-    include("m.jl")
-    include("n.jl")
-    include("o.jl")
-    include("p.jl")
-    include("q.jl")
-    include("r.jl")
-    include("s.jl")
-    include("t.jl")
-    include("u.jl")
-    include("v.jl")
-    include("w.jl")
-    include("x.jl")
+    @stress 5 include("a.jl")
+    @stress 5 include("b.jl")
+    @stress 5 include("c.jl")
+    @stress 5 include("d.jl")
+    @stress 5 include("e.jl")
+    @stress 5 include("f.jl")
+    @stress 5 include("g.jl")
+    @stress 5 include("h.jl")
+    @stress 5 include("i.jl")
+    @stress 5 include("j.jl")
+    @stress 5 include("k.jl")
+    @stress 5 include("l.jl")
+    @stress 5 include("m.jl")
+    @stress 5 include("n.jl")
+    @stress 5 include("o.jl")
+    @stress 5 include("p.jl")
+    @stress 5 include("q.jl")
+    @stress 5 include("r.jl")
+    @stress 5 include("s.jl")
+    @stress 5 include("t.jl")
+    @stress 5 include("u.jl")
+    @stress 5 include("v.jl")
+    @stress 5 include("w.jl")
+    @stress 5 include("x.jl")
 end
 
