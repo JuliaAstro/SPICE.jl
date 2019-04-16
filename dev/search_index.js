@@ -3305,11 +3305,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.spkcov",
+    "location": "api/#SPICE.spkcov!-Tuple{Any,Any,Any}",
     "page": "API",
-    "title": "SPICE.spkcov",
-    "category": "function",
-    "text": "spkcov!(cover, spk, idcode)\nspkcov(spk, idcode)\n\nFind the coverage window for a specified ephemeris object in a specified SPK file.\n\nArguments\n\ncover: Window giving coverage in spk for idcode\nspk: Name of the SPK file\nidcode: ID code of ephemeris object\n\nOutput\n\nReturns the extended coverage window.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "title": "SPICE.spkcov!",
+    "category": "method",
+    "text": "spkcov!(cover, spk, idcode)\n\nFind the coverage window for a specified ephemeris object in a specified SPK file.\n\nArguments\n\ncover: Window giving coverage in spk for idcode\nspk: Name of the SPK file\nidcode: ID code of ephemeris object\n\nOutput\n\nReturns the extended coverage window.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
@@ -3401,11 +3401,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.spkobj!",
+    "location": "api/#SPICE.spkobj!-Tuple{Any,Any}",
     "page": "API",
     "title": "SPICE.spkobj!",
-    "category": "function",
-    "text": "spkobj!(ids, spk)\nspkobj(spk)\n\nFind the set of ID codes of all objects in a specified SPK file.\n\nArguments\n\nids: A preallocated set of ID codes of objects in SPK file\nspk: Name of the SPK file\n\nOutput\n\nReturns the set of id codes.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
+    "category": "method",
+    "text": "spkobj!(ids, spk)\n\nFind the set of ID codes of all objects in a specified SPK file.\n\nArguments\n\nids: A preallocated set of ID codes of objects in SPK file\nspk: Name of the SPK file\n\nOutput\n\nReturns the set of id codes.\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
