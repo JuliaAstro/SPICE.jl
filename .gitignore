@@ -17,3 +17,4 @@ deps/windows/x64
 docs/build/
 test/kernels/
 deps/build.log
+Manifest.toml
