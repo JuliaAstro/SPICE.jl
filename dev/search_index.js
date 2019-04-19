@@ -29,7 +29,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Home",
     "title": "Quickstart",
     "category": "section",
-    "text": "# Download SPICE kernels from https://naif.jpl.nasa.gov/pub/naif/generic_kernels/\n\nusing SPICE\n\n# Load leap seconds kernel\nfurnsh(\"naif0012.tls\")\n\n# Convert the calendar date to ephemeris seconds past J2000\net = utc2et(\"2018-02-06T20:45:00\")\n\n# Load a planetary ephemeris kernel\nfurnsh(\"de430.bsp\")\n\n# Get the position of Mars at `et` w.r.t. Earth\nspkezp(\"mars\", et, \"J2000\", \"none\", \"earth\")"
+    "text": "# Download SPICE kernels from https://naif.jpl.nasa.gov/pub/naif/generic_kernels/\n\nusing SPICE\n\n# Load leap seconds kernel\nfurnsh(\"naif0012.tls\")\n\n# Convert the calendar date to ephemeris seconds past J2000\net = utc2et(\"2018-02-06T20:45:00\")\n\n# Load a planetary ephemeris kernel\nfurnsh(\"de430.bsp\")\n\n# Get the position of Mars at `et` w.r.t. Earth\nspkpos(\"mars_barycenter\", et, \"J2000\", \"none\", \"earth\")"
 },
 
 {
