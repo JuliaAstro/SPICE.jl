@@ -33,7 +33,7 @@ et = utc2et("2018-02-06T20:45:00")
 furnsh("de430.bsp")
 
 # Get the position of Mars at `et` w.r.t. Earth
-spkezp("mars", et, "J2000", "none", "earth")
+spkpos("mars_barycenter", et, "J2000", "none", "earth")
 ```
 
 ## Citing
