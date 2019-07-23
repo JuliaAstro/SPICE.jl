@@ -1138,7 +1138,7 @@ end
 """
     dpmax()
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `prevfloat(typemax(Float64))` instead.
 """
 dpmax
@@ -1152,7 +1152,7 @@ end
 """
     dpmin()
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `nextfloat(typemin(Float64))` instead.
 """
 dpmin
@@ -1166,7 +1166,7 @@ end
 """
     dpr()
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `rad2deg(1.0)` instead.
 """
 dpr

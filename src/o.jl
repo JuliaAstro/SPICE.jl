@@ -143,7 +143,7 @@ end
 """
     orderc(array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `sortperm` instead.
 """
 orderc
@@ -163,7 +163,7 @@ end
 """
     orderd(array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `sortperm` instead.
 """
 orderd
@@ -184,7 +184,7 @@ end
 """
     orderi(array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `sortperm` instead.
 """
 orderi

@@ -394,7 +394,7 @@ end
 """
     reordc(iorder, array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `array[iorder]` instead.
 """
 reordc
@@ -413,7 +413,7 @@ end
 """
     reordd(iorder, array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `array[iorder]` instead.
 """
 reordd
@@ -433,7 +433,7 @@ end
 """
     reordi(iorder, array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `array[iorder]` instead.
 """
 reordi
@@ -453,7 +453,7 @@ end
 """
     reordl(iorder, array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `array[iorder]` instead.
 """
 reordl
@@ -473,7 +473,7 @@ end
 """
     repmc(input, marker, value)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `replace(input, marker=>value)` instead.
 """
 repmc
@@ -483,7 +483,7 @@ repmc
 """
     repmct
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `replace` instead.
 """
 repmct
@@ -493,7 +493,7 @@ repmct
 """
     repmd
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `replace` instead.
 """
 repmd
@@ -503,7 +503,7 @@ repmd
 """
     repmf
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `replace` instead.
 """
 repmf
@@ -513,7 +513,7 @@ repmf
 """
     repmi
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `replace` instead.
 """
 repmi
@@ -523,7 +523,7 @@ repmi
 """
     repmot
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `replace` instead.
 """
 repmot
@@ -621,7 +621,7 @@ end
 """
     rpd()
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `deg2rad` instead.
 """
 rpd

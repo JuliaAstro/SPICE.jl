@@ -39,7 +39,7 @@ end
 """
     lastnb(str)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `findprev(!isspace, str, length(str))` instead.
 """
 lastnb
@@ -347,7 +347,7 @@ end
 """
    lparse(list, delim, nmax)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `split(list, delim, limit=nmax)` instead.
 """
 lparse
@@ -367,7 +367,7 @@ end
 """
    lparsm(list, delims, nmax)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `split(list, delim, limit=nmax, keepempty=false)` instead.
 """
 lparsm
@@ -385,7 +385,7 @@ end
 """
    lparss(list, delims)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `Set(split(list, collect(delim)))` instead.
 """
 lparss
@@ -450,7 +450,7 @@ end
 """
     lstlecd(x, array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `findfirst(item .<= array)` instead.
 """
 lstlec
@@ -458,7 +458,7 @@ lstlec
 """
     lstle[di](x, array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `searchsortedlast(array, x)` instead.
 """
 lstled
@@ -495,7 +495,7 @@ end
 """
     lstltcd(x, array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `findfirst(item .< array)` instead.
 """
 lstltc
@@ -503,7 +503,7 @@ lstltc
 """
     lstlt[di](x, array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `searchsortedlast(array, x, lt=<=)` instead.
 """
 lstltd

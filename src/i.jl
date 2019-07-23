@@ -394,7 +394,7 @@ end
 """
     intmax()
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `typemax(Cint)` instead.
 """
 intmax
@@ -408,7 +408,7 @@ end
 """
     intmin()
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `typemin(Cint)` instead.
 """
 intmin
@@ -426,7 +426,7 @@ end
 """
     invert(matrix)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `inv(matrix)` instead.
 """
 invert
@@ -444,7 +444,7 @@ end
 """
     invort(matrix)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `inv(matrix)` instead.
 """
 invort
@@ -463,7 +463,7 @@ end
 """
     isordv(vec)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `isperm(vec)` instead.
 """
 isordv
@@ -482,7 +482,7 @@ end
 """
     isrchc(value, array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `findfirst(array .== value)` instead.
 """
 isrchc
@@ -501,7 +501,7 @@ end
 """
     isrchd(value, array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `findfirst(array .== value)` instead.
 """
 isrchd
@@ -521,7 +521,7 @@ end
 """
     isrchi(value, array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `findfirst(array .== value)` instead.
 """
 isrchi
@@ -567,7 +567,7 @@ end
 """
     iswhsp(str)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `isempty(strip(str))` instead.
 """
 iswhsp

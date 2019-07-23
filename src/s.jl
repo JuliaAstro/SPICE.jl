@@ -2274,7 +2274,7 @@ end
 """
     srfxpt
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `sincpt` instead.
 """
 srfxpt
@@ -2434,7 +2434,7 @@ end
 """
     subpt
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `subpnt` instead.
 """
 subpt
@@ -2444,7 +2444,7 @@ subpt
 """
     subpt_pl02
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `subpnt` instead.
 """
 subpt_pl02
@@ -2492,7 +2492,7 @@ end
 """
     subsol
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `subslr` instead.
 """
 subsol
@@ -2502,7 +2502,7 @@ subsol
 """
     subsol_pl02
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `subslr` instead.
 """
 subsol_pl02
@@ -2517,7 +2517,7 @@ end
 """
     sumad(array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `sum(array)` instead.
 """
 sumad
@@ -2533,7 +2533,7 @@ end
 """
     sumai(array)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `sum(array)` instead.
 """
 sumai

@@ -584,7 +584,7 @@ end
 """
     cleard(array)
 
-!!! warning Deprecates
+!!! warning "Deprecated"
     Use `empty!(array)` instead.
 """
 cleard

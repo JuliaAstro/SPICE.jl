@@ -1196,7 +1196,7 @@ end
 """
     elem[c/d/i](item, cell)
 
-!!! warning Deprecated
+!!! warning "Deprecated"
     Use `item in cell` instead.
 """
 elemc
