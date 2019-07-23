@@ -453,7 +453,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.cleard",
     "category": "function",
-    "text": "cleard(array)\n\n!!! warning Deprecates     Use empty!(array) instead.\n\n\n\n\n\n"
+    "text": "cleard(array)\n\nwarning: Deprecated\nUse empty!(array) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -869,7 +869,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.dpmax",
     "category": "function",
-    "text": "dpmax()\n\n!!! warning Deprecated     Use prevfloat(typemax(Float64)) instead.\n\n\n\n\n\n"
+    "text": "dpmax()\n\nwarning: Deprecated\nUse prevfloat(typemax(Float64)) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -877,7 +877,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.dpmin",
     "category": "function",
-    "text": "dpmin()\n\n!!! warning Deprecated     Use nextfloat(typemin(Float64)) instead.\n\n\n\n\n\n"
+    "text": "dpmin()\n\nwarning: Deprecated\nUse nextfloat(typemin(Float64)) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -885,7 +885,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.dpr",
     "category": "function",
-    "text": "dpr()\n\n!!! warning Deprecated     Use rad2deg(1.0) instead.\n\n\n\n\n\n"
+    "text": "dpr()\n\nwarning: Deprecated\nUse rad2deg(1.0) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1485,7 +1485,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.elemc",
     "category": "function",
-    "text": "elem[c/d/i](item, cell)\n\n!!! warning Deprecated     Use item in cell instead.\n\n\n\n\n\n"
+    "text": "elem[c/d/i](item, cell)\n\nwarning: Deprecated\nUse item in cell instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1965,7 +1965,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.intmax",
     "category": "function",
-    "text": "intmax()\n\n!!! warning Deprecated     Use typemax(Cint) instead.\n\n\n\n\n\n"
+    "text": "intmax()\n\nwarning: Deprecated\nUse typemax(Cint) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1973,7 +1973,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.intmin",
     "category": "function",
-    "text": "intmin()\n\n!!! warning Deprecated     Use typemin(Cint) instead.\n\n\n\n\n\n"
+    "text": "intmin()\n\nwarning: Deprecated\nUse typemin(Cint) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1981,7 +1981,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.invert",
     "category": "function",
-    "text": "invert(matrix)\n\n!!! warning Deprecated     Use inv(matrix) instead.\n\n\n\n\n\n"
+    "text": "invert(matrix)\n\nwarning: Deprecated\nUse inv(matrix) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1989,7 +1989,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.invort",
     "category": "function",
-    "text": "invort(matrix)\n\n!!! warning Deprecated     Use inv(matrix) instead.\n\n\n\n\n\n"
+    "text": "invort(matrix)\n\nwarning: Deprecated\nUse inv(matrix) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -1997,7 +1997,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.isordv",
     "category": "function",
-    "text": "isordv(vec)\n\n!!! warning Deprecated     Use isperm(vec) instead.\n\n\n\n\n\n"
+    "text": "isordv(vec)\n\nwarning: Deprecated\nUse isperm(vec) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2005,7 +2005,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.isrchc",
     "category": "function",
-    "text": "isrchc(value, array)\n\n!!! warning Deprecated     Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+    "text": "isrchc(value, array)\n\nwarning: Deprecated\nUse findfirst(array .== value) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2013,7 +2013,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.isrchd",
     "category": "function",
-    "text": "isrchd(value, array)\n\n!!! warning Deprecated     Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+    "text": "isrchd(value, array)\n\nwarning: Deprecated\nUse findfirst(array .== value) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2021,7 +2021,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.isrchi",
     "category": "function",
-    "text": "isrchi(value, array)\n\n!!! warning Deprecated     Use findfirst(array .== value) instead.\n\n\n\n\n\n"
+    "text": "isrchi(value, array)\n\nwarning: Deprecated\nUse findfirst(array .== value) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2037,7 +2037,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.iswhsp",
     "category": "function",
-    "text": "iswhsp(str)\n\n!!! warning Deprecated     Use isempty(strip(str)) instead.\n\n\n\n\n\n"
+    "text": "iswhsp(str)\n\nwarning: Deprecated\nUse isempty(strip(str)) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2133,7 +2133,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lastnb",
     "category": "function",
-    "text": "lastnb(str)\n\n!!! warning Deprecated     Use findprev(!isspace, str, length(str)) instead.\n\n\n\n\n\n"
+    "text": "lastnb(str)\n\nwarning: Deprecated\nUse findprev(!isspace, str, length(str)) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2213,7 +2213,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lparse",
     "category": "function",
-    "text": "lparse(list, delim, nmax)\n\n!!! warning Deprecated     Use split(list, delim, limit=nmax) instead.\n\n\n\n\n\n"
+    "text": "lparse(list, delim, nmax)\n\nwarning: Deprecated\nUse split(list, delim, limit=nmax) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2221,7 +2221,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lparsm",
     "category": "function",
-    "text": "lparsm(list, delims, nmax)\n\n!!! warning Deprecated     Use split(list, delim, limit=nmax, keepempty=false) instead.\n\n\n\n\n\n"
+    "text": "lparsm(list, delims, nmax)\n\nwarning: Deprecated\nUse split(list, delim, limit=nmax, keepempty=false) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2229,7 +2229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lparss",
     "category": "function",
-    "text": "lparss(list, delims)\n\n!!! warning Deprecated     Use Set(split(list, collect(delim))) instead.\n\n\n\n\n\n"
+    "text": "lparss(list, delims)\n\nwarning: Deprecated\nUse Set(split(list, collect(delim))) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2245,7 +2245,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lstlec",
     "category": "function",
-    "text": "lstlecd(x, array)\n\n!!! warning Deprecated     Use findfirst(item .<= array) instead.\n\n\n\n\n\n"
+    "text": "lstlecd(x, array)\n\nwarning: Deprecated\nUse findfirst(item .<= array) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2253,7 +2253,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lstled",
     "category": "function",
-    "text": "lstle[di](x, array)\n\n!!! warning Deprecated     Use searchsortedlast(array, x) instead.\n\n\n\n\n\n"
+    "text": "lstle[di](x, array)\n\nwarning: Deprecated\nUse searchsortedlast(array, x) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2261,7 +2261,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lstltc",
     "category": "function",
-    "text": "lstltcd(x, array)\n\n!!! warning Deprecated     Use findfirst(item .< array) instead.\n\n\n\n\n\n"
+    "text": "lstltcd(x, array)\n\nwarning: Deprecated\nUse findfirst(item .< array) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2269,7 +2269,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.lstltd",
     "category": "function",
-    "text": "lstlt[di](x, array)\n\n!!! warning Deprecated     Use searchsortedlast(array, x, lt=<=) instead.\n\n\n\n\n\n"
+    "text": "lstlt[di](x, array)\n\nwarning: Deprecated\nUse searchsortedlast(array, x, lt=<=) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2581,7 +2581,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.orderc",
     "category": "function",
-    "text": "orderc(array)\n\n!!! warning Deprecated     Use sortperm instead.\n\n\n\n\n\n"
+    "text": "orderc(array)\n\nwarning: Deprecated\nUse sortperm instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2589,7 +2589,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.orderd",
     "category": "function",
-    "text": "orderd(array)\n\n!!! warning Deprecated     Use sortperm instead.\n\n\n\n\n\n"
+    "text": "orderd(array)\n\nwarning: Deprecated\nUse sortperm instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2597,7 +2597,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.orderi",
     "category": "function",
-    "text": "orderi(array)\n\n!!! warning Deprecated     Use sortperm instead.\n\n\n\n\n\n"
+    "text": "orderi(array)\n\nwarning: Deprecated\nUse sortperm instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2989,7 +2989,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.reordc",
     "category": "function",
-    "text": "reordc(iorder, array)\n\n!!! warning Deprecated     Use array[iorder] instead.\n\n\n\n\n\n"
+    "text": "reordc(iorder, array)\n\nwarning: Deprecated\nUse array[iorder] instead.\n\n\n\n\n\n"
 },
 
 {
@@ -2997,7 +2997,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.reordd",
     "category": "function",
-    "text": "reordd(iorder, array)\n\n!!! warning Deprecated     Use array[iorder] instead.\n\n\n\n\n\n"
+    "text": "reordd(iorder, array)\n\nwarning: Deprecated\nUse array[iorder] instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3005,7 +3005,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.reordi",
     "category": "function",
-    "text": "reordi(iorder, array)\n\n!!! warning Deprecated     Use array[iorder] instead.\n\n\n\n\n\n"
+    "text": "reordi(iorder, array)\n\nwarning: Deprecated\nUse array[iorder] instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3013,7 +3013,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.reordl",
     "category": "function",
-    "text": "reordl(iorder, array)\n\n!!! warning Deprecated     Use array[iorder] instead.\n\n\n\n\n\n"
+    "text": "reordl(iorder, array)\n\nwarning: Deprecated\nUse array[iorder] instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3021,7 +3021,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.repmc",
     "category": "function",
-    "text": "repmc(input, marker, value)\n\n!!! warning Deprecated     Use replace(input, marker=>value) instead.\n\n\n\n\n\n"
+    "text": "repmc(input, marker, value)\n\nwarning: Deprecated\nUse replace(input, marker=>value) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3029,7 +3029,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.repmct",
     "category": "function",
-    "text": "repmct\n\n!!! warning Deprecated     Use replace instead.\n\n\n\n\n\n"
+    "text": "repmct\n\nwarning: Deprecated\nUse replace instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3037,7 +3037,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.repmd",
     "category": "function",
-    "text": "repmd\n\n!!! warning Deprecated     Use replace instead.\n\n\n\n\n\n"
+    "text": "repmd\n\nwarning: Deprecated\nUse replace instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3045,7 +3045,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.repmf",
     "category": "function",
-    "text": "repmf\n\n!!! warning Deprecated     Use replace instead.\n\n\n\n\n\n"
+    "text": "repmf\n\nwarning: Deprecated\nUse replace instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3053,7 +3053,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.repmi",
     "category": "function",
-    "text": "repmi\n\n!!! warning Deprecated     Use replace instead.\n\n\n\n\n\n"
+    "text": "repmi\n\nwarning: Deprecated\nUse replace instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3061,7 +3061,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.repmot",
     "category": "function",
-    "text": "repmot\n\n!!! warning Deprecated     Use replace instead.\n\n\n\n\n\n"
+    "text": "repmot\n\nwarning: Deprecated\nUse replace instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3093,7 +3093,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.rpd",
     "category": "function",
-    "text": "rpd()\n\n!!! warning Deprecated     Use deg2rad instead.\n\n\n\n\n\n"
+    "text": "rpd()\n\nwarning: Deprecated\nUse deg2rad instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3677,7 +3677,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.srfxpt",
     "category": "function",
-    "text": "srfxpt\n\n!!! warning Deprecated     Use sincpt instead.\n\n\n\n\n\n"
+    "text": "srfxpt\n\nwarning: Deprecated\nUse sincpt instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3725,7 +3725,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.subpt",
     "category": "function",
-    "text": "subpt\n\n!!! warning Deprecated     Use subpnt instead.\n\n\n\n\n\n"
+    "text": "subpt\n\nwarning: Deprecated\nUse subpnt instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3733,7 +3733,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.subpt_pl02",
     "category": "function",
-    "text": "subpt_pl02\n\n!!! warning Deprecated     Use subpnt instead.\n\n\n\n\n\n"
+    "text": "subpt_pl02\n\nwarning: Deprecated\nUse subpnt instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3749,7 +3749,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.subsol",
     "category": "function",
-    "text": "subsol\n\n!!! warning Deprecated     Use subslr instead.\n\n\n\n\n\n"
+    "text": "subsol\n\nwarning: Deprecated\nUse subslr instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3757,7 +3757,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.subsol_pl02",
     "category": "function",
-    "text": "subsol_pl02\n\n!!! warning Deprecated     Use subslr instead.\n\n\n\n\n\n"
+    "text": "subsol_pl02\n\nwarning: Deprecated\nUse subslr instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3765,7 +3765,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.sumad",
     "category": "function",
-    "text": "sumad(array)\n\n!!! warning Deprecated     Use sum(array) instead.\n\n\n\n\n\n"
+    "text": "sumad(array)\n\nwarning: Deprecated\nUse sum(array) instead.\n\n\n\n\n\n"
 },
 
 {
@@ -3773,7 +3773,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.sumai",
     "category": "function",
-    "text": "sumai(array)\n\n!!! warning Deprecated     Use sum(array) instead.\n\n\n\n\n\n"
+    "text": "sumai(array)\n\nwarning: Deprecated\nUse sum(array) instead.\n\n\n\n\n\n"
 },
 
 {
