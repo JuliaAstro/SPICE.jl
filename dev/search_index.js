@@ -1901,7 +1901,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API",
     "title": "SPICE.ilumin",
     "category": "method",
-    "text": "ilumin(method, target, et, fixref, obsrvr, spoint, abcorr)\n\nFind the illumination angles (phase, solar incidence, and emission) at a specified surface point of a target body.\n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in ephemeris seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nobsrvr: Name of observing body\nspoint: Body-fixed coordinates of a target surface point\nabcorr: Aberration correction\n\nOutput\n\ntrgepc: Sub-solar point epoch\nsrfvec: Vector from observer to sub-solar point\nphase: Phase angle at the surface point\nincdnc: Solar incidence angle at the surface point\nemissn: Emission angle at the surface point\n\nReferences\n\n[NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkitdocs/C/cspice/iluminc.html\n\n\n\n\n\n"
+    "text": "ilumin(method, target, et, fixref, obsrvr, spoint, abcorr)\n\nFind the illumination angles (phase, solar incidence, and emission) at a specified surface point of a target body.\n\nArguments\n\nmethod: Computation method\ntarget: Name of target body\net: Epoch in ephemeris seconds past J2000 TDB\nfixref: Body-fixed, body-centered target body frame\nobsrvr: Name of observing body\nspoint: Body-fixed coordinates of a target surface point\nabcorr: Aberration correction\n\nOutput\n\ntrgepc: Sub-solar point epoch\nsrfvec: Vector from observer to sub-solar point\nphase: Phase angle at the surface point\nincdnc: Solar incidence angle at the surface point\nemissn: Emission angle at the surface point\n\nReferences\n\nNAIF Documentation\n\n\n\n\n\n"
 },
 
 {
