@@ -171,7 +171,7 @@ of a target body.
 
 ### References ###
 
-- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ilumin_c.html
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ilumin_c.html)
 """
 function ilumin(method, target, et, fixref, obsrvr, spoint; abcorr="NONE")
     trgepc = Ref{SpiceDouble}()
