@@ -1,6 +1,6 @@
 name = "SPICE"
 uuid = "5bab7191-041a-5c2e-a744-024b9c3a5062"
-version = "0.1.1"
+version = "0.2.0"
 
 [deps]
 CSPICE_jll = "07f52509-e9d9-513c-a20d-3b911885bf96"
