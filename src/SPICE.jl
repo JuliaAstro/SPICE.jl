@@ -1,13 +1,8 @@
 module SPICE
 
-export SpiceError
+using CSPICE_jll
 
-deps = abspath(joinpath(splitdir(@__FILE__)[1], "..", "deps", "deps.jl"))
-if isfile(deps)
-    include(deps)
-else
-    error("libcspice was not found. Please run 'Pkg.build(\"SPICE\").")
-end
+export SpiceError
 
 function __init__()
     # Set error handling to return on error
