@@ -89,7 +89,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#Base.copy-Union{Tuple{SpiceCell{T,T1,N} where N where T1}, Tuple{T}} where T",
+    "location": "api/#Base.copy-Union{Tuple{SPICE.SpiceCell{T,T1,N} where N where T1}, Tuple{T}} where T",
     "page": "API",
     "title": "Base.copy",
     "category": "method",
@@ -97,7 +97,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#Base.diff-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,SpiceCell{T,T1,N} where N where T1}} where T",
+    "location": "api/#Base.diff-Union{Tuple{T}, Tuple{SPICE.SpiceCell{T,T1,N} where N where T1,SPICE.SpiceCell{T,T1,N} where N where T1}} where T",
     "page": "API",
     "title": "Base.diff",
     "category": "method",
@@ -121,7 +121,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#Base.union-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,SpiceCell{T,T1,N} where N where T1}} where T",
+    "location": "api/#Base.union-Union{Tuple{T}, Tuple{SPICE.SpiceCell{T,T1,N} where N where T1,SPICE.SpiceCell{T,T1,N} where N where T1}} where T",
     "page": "API",
     "title": "Base.union",
     "category": "method",
@@ -1953,7 +1953,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.inter-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,SpiceCell{T,T1,N} where N where T1}} where T",
+    "location": "api/#SPICE.inter-Union{Tuple{T}, Tuple{SPICE.SpiceCell{T,T1,N} where N where T1,SPICE.SpiceCell{T,T1,N} where N where T1}} where T",
     "page": "API",
     "title": "SPICE.inter",
     "category": "method",
@@ -3113,7 +3113,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.scard!-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,Any}} where T",
+    "location": "api/#SPICE.scard!-Union{Tuple{T}, Tuple{SPICE.SpiceCell{T,T1,N} where N where T1,Any}} where T",
     "page": "API",
     "title": "SPICE.scard!",
     "category": "method",
@@ -3201,7 +3201,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.sdiff-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,SpiceCell{T,T1,N} where N where T1}} where T",
+    "location": "api/#SPICE.sdiff-Union{Tuple{T}, Tuple{SPICE.SpiceCell{T,T1,N} where N where T1,SPICE.SpiceCell{T,T1,N} where N where T1}} where T",
     "page": "API",
     "title": "SPICE.sdiff",
     "category": "method",
@@ -3209,7 +3209,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.set-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,Any,SpiceCell{T,T1,N} where N where T1}} where T",
+    "location": "api/#SPICE.set-Union{Tuple{T}, Tuple{SPICE.SpiceCell{T,T1,N} where N where T1,Any,SPICE.SpiceCell{T,T1,N} where N where T1}} where T",
     "page": "API",
     "title": "SPICE.set",
     "category": "method",
@@ -3681,7 +3681,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.ssize!-Union{Tuple{T}, Tuple{SpiceCell{T,T1,N} where N where T1,Any}} where T",
+    "location": "api/#SPICE.ssize!-Union{Tuple{T}, Tuple{SPICE.SpiceCell{T,T1,N} where N where T1,Any}} where T",
     "page": "API",
     "title": "SPICE.ssize!",
     "category": "method",
@@ -4009,7 +4009,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/#SPICE.valid!-Union{Tuple{SpiceCell{T,T1,N} where N where T1}, Tuple{T}} where T",
+    "location": "api/#SPICE.valid!-Union{Tuple{SPICE.SpiceCell{T,T1,N} where N where T1}, Tuple{T}} where T",
     "page": "API",
     "title": "SPICE.valid!",
     "category": "method",
