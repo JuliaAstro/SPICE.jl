@@ -77,7 +77,7 @@ Transform a state between coordinate systems.
 
 - `input_state`: Input state
 - `input_coord_sys`: Current (input) coordinate system
-- `output_coord_sys: Desired (output) coordinate system
+- `output_coord_sys`: Desired (output) coordinate system
 - `body`: Name or NAIF ID of body with which coordinates are associated (if applicable)
 
 ### Output ###
