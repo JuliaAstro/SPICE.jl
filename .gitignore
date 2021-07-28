@@ -18,3 +18,4 @@ docs/build/
 test/kernels/
 deps/build.log
 Manifest.toml
+.vscode/
