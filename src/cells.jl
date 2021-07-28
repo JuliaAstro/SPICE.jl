@@ -35,8 +35,8 @@ len(::Type{SpiceChar}, length) = length += 1
 dim(::Type{T}) where {T} = 1
 dim(::Type{SpiceChar}) = 2
 
-data_ptr(::Type{SpiceChar}, data, length) = GC.@preserve data pointer(data, CTRLSZ * length + 1)
-data_ptr(::Type{T}, data, _) where {T} = GC.@preserve data pointer(data, CTRLSZ + 1)
+data_ptr(::Type{SpiceChar}, data, length) = pointer(data, CTRLSZ * length + 1)
+data_ptr(::Type{T}, data, _) where {T} = pointer(data, CTRLSZ + 1)
 
 mutable struct SpiceCell{S, T, N} <: AbstractArray{T, 1}
     data::Array{S, N}
@@ -47,7 +47,7 @@ mutable struct SpiceCell{S, T, N} <: AbstractArray{T, 1}
         cell = Cell{T}(length, size)
         data = init_data(T, size, length)
         self = new{T, itertype(T), dim(T)}(data, cell)
-        self.cell.base = GC.@preserve self pointer(self.data, 1)
+        self.cell.base = pointer(self.data, 1)
         self.cell.data = data_ptr(T, self.data, length)
         self
     end
@@ -179,7 +179,7 @@ Duplicate the SpiceCell `cell`.
 """
 function Base.copy(cell::SpiceCell{T}) where {T}
     cell_copy = deepcopy(cell)
-    cell_copy.cell.base = GC.@preserve cell_copy pointer(cell_copy.data, 1)
+    cell_copy.cell.base = pointer(cell_copy.data, 1)
     cell_copy.cell.data = data_ptr(T, cell_copy.data, length)
     cell_copy
 end

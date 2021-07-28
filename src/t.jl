@@ -229,7 +229,7 @@ version string.
 """
 function tkvrsn(item=:TOOLKIT)
     out = ccall((:tkvrsn_c, libcspice), Cstring, (Cstring,), string(item))
-    GC.@preserve out unsafe_string(pointer(out))
+    return unsafe_string(out)
 end
 
 """
