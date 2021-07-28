@@ -57,7 +57,7 @@
     @testset "dafgda" begin
         try
             handle = dafopr(path(CORE, :spk))
-            elements = dafgda(handle, 1026, 1027)
+            elements = dafgda(handle, 1026, 1026)
             @test elements == [691200.0 / 2]
         finally
             kclear()
