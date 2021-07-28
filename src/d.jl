@@ -296,7 +296,7 @@ Returns the data contained between `start` and `stop`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafgda_c.html)
 """
 function dafgda(handle, start, stop)
-    data = Array{SpiceDouble}(undef, stop - start)
+    data = Array{SpiceDouble}(undef, abs(stop - start) + 1)
     ccall((:dafgda_c, libcspice), Cvoid,
           (SpiceInt, SpiceInt, SpiceInt, Ref{SpiceDouble}),
           handle, start, stop, data)
