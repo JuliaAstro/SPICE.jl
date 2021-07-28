@@ -326,14 +326,14 @@ function gfevnt(udstep, udrefn, gquant, qpnams, qcpars, qdpars, qipars, qlpars,
     _qipars = SpiceInt.(qipars)
     _qlpars = SpiceBoolean.(qlpars)
     function _udstep(et::SpiceDouble, step::Ptr{SpiceDouble})
-        _step = GC.@preserve step unsafe_wrap(Array{SpiceDouble}, step, 1)
+        _step = unsafe_wrap(Array{SpiceDouble}, step, 1)
         _step[1] = udstep(et)
         nothing
     end
     udstep_ptr = @cfunction($_udstep, Cvoid, (SpiceDouble, Ptr{SpiceDouble}))
     function _udrefn(t1::SpiceDouble, t2::SpiceDouble, s1::SpiceBoolean, s2::SpiceBoolean,
                      t::Ptr{SpiceDouble})
-        _t = GC.@preserve t unsafe_wrap(Array{SpiceDouble}, t, 1)
+        _t = unsafe_wrap(Array{SpiceDouble}, t, 1)
         _t[1] = udrefn(t1, t2, s1, s2)
         nothing
     end
@@ -342,7 +342,7 @@ function gfevnt(udstep, udrefn, gquant, qpnams, qcpars, qdpars, qipars, qlpars,
                              Ptr{SpiceDouble}))
     udrepf_ptr = @cfunction($udrepf, Cvoid, ())
     function _udrepi(window::Ptr{Cell{SpiceDouble}}, begmss::Cstring, endmss::Cstring)
-        _window = GC.@preserve window unsafe_load(window, 1)
+        _window = unsafe_load(window, 1)
         udrepi(_window, begmss, endmss)
     end
     udrepi_ptr = @cfunction($_udrepi, Cvoid, (Ptr{Cell{SpiceDouble}}, Cstring, Cstring))
@@ -400,14 +400,14 @@ function gffove!(inst, tshape, raydir, target, tframe, abcorr, obsrvr, tol, udst
                 rpt, udrepi, udrepu, udrepf, cnfine, result)
     @checkdims 3 raydir
     function _udstep(et::SpiceDouble, step::Ptr{SpiceDouble})
-        _step = GC.@preserve step unsafe_wrap(Array{SpiceDouble}, step, 1)
+        _step = unsafe_wrap(Array{SpiceDouble}, step, 1)
         _step[1] = udstep(et)
         nothing
     end
     udstep_ptr = @cfunction($_udstep, Cvoid, (SpiceDouble, Ptr{SpiceDouble}))
     function _udrefn(t1::SpiceDouble, t2::SpiceDouble, s1::SpiceBoolean, s2::SpiceBoolean,
                      t::Ptr{SpiceDouble})
-        _t = GC.@preserve t unsafe_wrap(Array{SpiceDouble}, t, 1)
+        _t = unsafe_wrap(Array{SpiceDouble}, t, 1)
         _t[1] = udrefn(t1, t2, s1, s2)
         nothing
     end
@@ -416,7 +416,7 @@ function gffove!(inst, tshape, raydir, target, tframe, abcorr, obsrvr, tol, udst
                              Ptr{SpiceDouble}))
     udrepf_ptr = @cfunction($udrepf, Cvoid, ())
     function _udrepi(window::Ptr{Cell{SpiceDouble}}, begmss::Cstring, endmss::Cstring)
-        _window = GC.@preserve window unsafe_load(window, 1)
+        _window = unsafe_load(window, 1)
         udrepi(_window, begmss, endmss)
     end
     udrepi_ptr = @cfunction($_udrepi, Cvoid, (Ptr{Cell{SpiceDouble}}, Cstring, Cstring))
@@ -517,14 +517,14 @@ Returns `result`.
 """
 function gfocce!(occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, tol, udstep, udrefn, rpt, udrepi, udrepu, udrepf, cnfine, result)
     function _udstep(et::SpiceDouble, step::Ptr{SpiceDouble})
-        _step = GC.@preserve step unsafe_wrap(Array{SpiceDouble}, step, 1)
+        _step = unsafe_wrap(Array{SpiceDouble}, step, 1)
         _step[1] = udstep(et)
         nothing
     end
     udstep_ptr = @cfunction($_udstep, Cvoid, (SpiceDouble, Ptr{SpiceDouble}))
     function _udrefn(t1::SpiceDouble, t2::SpiceDouble, s1::SpiceBoolean, s2::SpiceBoolean,
                      t::Ptr{SpiceDouble})
-        _t = GC.@preserve t unsafe_wrap(Array{SpiceDouble}, t, 1)
+        _t = unsafe_wrap(Array{SpiceDouble}, t, 1)
         _t[1] = udrefn(t1, t2, s1, s2)
         nothing
     end
@@ -533,7 +533,7 @@ function gfocce!(occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, ob
                              Ptr{SpiceDouble}))
     udrepf_ptr = @cfunction($udrepf, Cvoid, ())
     function _udrepi(window::Ptr{Cell{SpiceDouble}}, begmss::Cstring, endmss::Cstring)
-        _window = GC.@preserve window unsafe_load(window, 1)
+        _window = unsafe_load(window, 1)
         udrepi(_window, begmss, endmss)
     end
     udrepi_ptr = @cfunction($_udrepi, Cvoid, (Ptr{Cell{SpiceDouble}}, Cstring, Cstring))
@@ -1094,13 +1094,13 @@ Returns `result`.
 """
 function gfudb!(udfuns, udfunb, step, cnfine, result)
     function _udfuns(et::SpiceDouble, value::Ptr{SpiceDouble})
-        _value = GC.@preserve value unsafe_wrap(Array{SpiceDouble}, value, 1)
+        _value = unsafe_wrap(Array{SpiceDouble}, value, 1)
         _value[1] = udfuns(et)
         nothing
     end
     udfuns_ptr = @cfunction($_udfuns, Cvoid, (SpiceDouble, Ptr{SpiceDouble}))
     function _udfunb(_::Ptr{Cvoid}, et::SpiceDouble, value::Ptr{SpiceBoolean})
-        _value = GC.@preserve value unsafe_wrap(Array{SpiceBoolean}, value, 1)
+        _value = unsafe_wrap(Array{SpiceBoolean}, value, 1)
         _value[1] = udfunb(udfuns, et)
         nothing
     end
@@ -1139,13 +1139,13 @@ Returns `result`.
 """
 function gfuds!(udfuns, udqdec, relate, refval, adjust, step, nintvls, cnfine, result)
     function _udfuns(et::SpiceDouble, value::Ptr{SpiceDouble})
-        _value = GC.@preserve value unsafe_wrap(Array{SpiceDouble}, value, 1)
+        _value = unsafe_wrap(Array{SpiceDouble}, value, 1)
         _value[1] = udfuns(et)
         nothing
     end
     udfuns_ptr = @cfunction($_udfuns, Cvoid, (SpiceDouble, Ptr{SpiceDouble}))
     function _udqdec(_::Ptr{Cvoid}, et::SpiceDouble, value::Ptr{SpiceBoolean})
-        _value = GC.@preserve value unsafe_wrap(Array{SpiceBoolean}, value, 1)
+        _value = unsafe_wrap(Array{SpiceBoolean}, value, 1)
         _value[1] = udqdec(udfuns, et)
         nothing
     end

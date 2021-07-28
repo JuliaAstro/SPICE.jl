@@ -69,7 +69,7 @@ Returns the approximate derivative of `udfunc` at `x`.
 """
 function uddf(udfunc, x, dx)
     function _udfunc(et::SpiceDouble, value::Ptr{SpiceDouble})
-        value_ = GC.@preserve value unsafe_wrap(Array{SpiceDouble}, value, 1)
+        value_ = unsafe_wrap(Array{SpiceDouble}, value, 1)
         value_[1] = udfunc(et)
         nothing
     end
