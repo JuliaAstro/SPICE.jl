@@ -347,7 +347,7 @@ function dafgn(lenout=128)
 end
 
 """
-    dafgs(lenout=125)
+    dafgs(lenout=128)
 
 Return (get) the summary for the current array in the current DAF.
 
@@ -363,8 +363,9 @@ Returns the summary for the current array.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dafgs_c.html)
 """
-function dafgs(lenout=125)
-    array = zeros(125)
+function dafgs(lenout=128)
+    lenout = clamp(lenout, lenout, 128)
+    array = zeros(128)
     ccall((:dafgs_c, libcspice), Cvoid, (Ref{SpiceDouble},), array)
     handleerror()
     array[1:lenout]
