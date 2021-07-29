@@ -141,7 +141,10 @@ Returns `cell` with its cardinality set to `card`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/scard_c.html)
 """
 function scard!(cell::SpiceCell{T}, card) where T
-    ccall((:scard_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{T}}), card, cell.cell)
+    data = cell.data
+    GC.@preserve data begin
+        ccall((:scard_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{T}}), card, cell.cell)
+    end
     cell
 end
 
@@ -452,8 +455,13 @@ function sdiff(a::SpiceCell{T}, b::SpiceCell{T}) where T
     else
         out = SpiceCell{T}(size)
     end
-    ccall((:sdiff_c, libcspice), Cvoid, (Ref{Cell{T}}, Ref{Cell{T}}, Ref{Cell{T}}),
-          a.cell, b.cell, out.cell)
+    a_data = a.data
+    b_data = b.data
+    out_data = out.data
+    GC.@preserve a_data b_data out_data begin
+        ccall((:sdiff_c, libcspice), Cvoid, (Ref{Cell{T}}, Ref{Cell{T}}, Ref{Cell{T}}),
+              a.cell, b.cell, out.cell)
+    end
     handleerror()
     out
 end
@@ -478,8 +486,12 @@ Returns the result of the comparison: `a (op) b`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/set_c.html)
 """
 function set(a::SpiceCell{T}, op, b::SpiceCell{T}) where T
-    res = ccall((:set_c, libcspice), SpiceBoolean, (Ref{Cell{T}}, Cstring, Ref{Cell{T}}),
-                a.cell, op, b.cell)
+    a_data = a.data
+    b_data = b.data
+    GC.@preserve a_data b_data begin
+        res = ccall((:set_c, libcspice), SpiceBoolean, (Ref{Cell{T}}, Cstring, Ref{Cell{T}}),
+                    a.cell, op, b.cell)
+    end
     handleerror()
     Bool(res[])
 end
@@ -932,9 +944,12 @@ Returns the extended coverage window.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkcov_c.html)
 """
 function spkcov!(cover, spk, idcode)
-    ccall((:spkcov_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, Ref{Cell{SpiceDouble}}),
-          spk, idcode, cover.cell)
+    data = cover.data
+    GC.@preserve data begin
+        ccall((:spkcov_c, libcspice), Cvoid,
+              (Cstring, SpiceInt, Ref{Cell{SpiceDouble}}),
+              spk, idcode, cover.cell)
+    end
     handleerror()
     cover
 end
@@ -1342,9 +1357,12 @@ Returns the set of id codes.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkobj_c.html)
 """
 function spkobj!(ids, spk)
-    ccall((:spkobj_c, libcspice), Cvoid,
-          (Cstring, Ref{Cell{SpiceInt}}),
-          spk, ids.cell)
+    data = ids.data
+    GC.@preserve data begin
+        ccall((:spkobj_c, libcspice), Cvoid,
+              (Cstring, Ref{Cell{SpiceInt}}),
+              spk, ids.cell)
+    end
     handleerror()
     ids
 end
@@ -2298,7 +2316,10 @@ Returns the updated cell.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ssize_c.html)
 """
 function ssize!(cell::SpiceCell{T}, size) where T
-    ccall((:ssize_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{T}}), size, cell.cell)
+    data = cell.data
+    GC.@preserve data begin
+        ccall((:ssize_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{T}}), size, cell.cell)
+    end
     handleerror()
     cell
 end

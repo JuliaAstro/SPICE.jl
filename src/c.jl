@@ -227,10 +227,13 @@ Find the coverage window for a specified object in a specified CK file.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckcov_c.html)
 """
 function ckcov!(ck, idcode, needav, level, tol, timsys, cover)
-    ccall((:ckcov_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, SpiceBoolean, Cstring, SpiceDouble, Cstring,
-           Ref{Cell{SpiceDouble}}),
-          ck, idcode, needav, level, tol, timsys, cover.cell)
+    data = cover.data
+    GC.@preserve data begin
+        ccall((:ckcov_c, libcspice), Cvoid,
+              (Cstring, SpiceInt, SpiceBoolean, Cstring, SpiceDouble, Cstring,
+               Ref{Cell{SpiceDouble}}),
+              ck, idcode, needav, level, tol, timsys, cover.cell)
+    end
     handleerror()
     cover
 end
@@ -372,9 +375,12 @@ Find the set of ID codes of all objects in a specified CK file.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ckobj_c.html)
 """
 function ckobj!(ck, ids)
-    ccall((:ckobj_c, libcspice), Cvoid,
-          (Cstring, Ref{Cell{SpiceInt}}),
-          ck, ids.cell)
+    data = ids.data
+    GC.@preserve data begin
+        ccall((:ckobj_c, libcspice), Cvoid,
+              (Cstring, Ref{Cell{SpiceInt}}),
+              ck, ids.cell)
+    end
     handleerror()
     ids
 end

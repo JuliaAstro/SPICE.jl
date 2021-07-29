@@ -38,7 +38,10 @@ Return the cardinality (number of intervals) of a double precision window.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wncard_c.html)
 """
 function wncard(window)
-    ccall((:wncard_c, libcspice), SpiceInt, (Ref{Cell{SpiceDouble}},), window.cell)
+    data = window.data
+    GC.@preserve data begin
+        ccall((:wncard_c, libcspice), SpiceInt, (Ref{Cell{SpiceDouble}},), window.cell)
+    end
 end
 
 """
@@ -62,9 +65,13 @@ Returns the complement of `window` with respect to `[left,right]`.
 """
 function wncomd(window, left, right)
     result = SpiceDoubleCell(window.cell.size + 1)
-    ccall((:wncomd_c, libcspice), Cvoid,
-          (SpiceDouble, SpiceDouble, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          left, right, window.cell, result.cell)
+    window_data = window.data
+    result_data = result.data
+    GC.@preserve window_data result_data begin
+        ccall((:wncomd_c, libcspice), Cvoid,
+              (SpiceDouble, SpiceDouble, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              left, right, window.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -89,9 +96,12 @@ Returns the contracted window.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wncond_c.html)
 """
 function wncond!(window, left, right)
-    ccall((:wncond_c, libcspice), Cvoid,
-          (SpiceDouble, SpiceDouble, Ref{Cell{SpiceDouble}}),
-          left, right, window.cell)
+    data = window.data
+    GC.@preserve data begin
+        ccall((:wncond_c, libcspice), Cvoid,
+              (SpiceDouble, SpiceDouble, Ref{Cell{SpiceDouble}}),
+              left, right, window.cell)
+    end
     handleerror()
     window
 end
@@ -118,9 +128,14 @@ Returns a window containing the difference of `a` and `b`.
 """
 function wndifd(a, b)
     c = SpiceDoubleCell(2 * (wncard(a) + wncard(b)))
-    ccall((:wndifd_c, libcspice), Cvoid,
-          (Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          a.cell, b.cell, c.cell)
+    a_data = a.data
+    b_data = b.data
+    c_data = c.data
+    GC.@preserve a_data b_data c_data begin
+        ccall((:wndifd_c, libcspice), Cvoid,
+              (Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              a.cell, b.cell, c.cell)
+    end
     handleerror()
     c
 end
@@ -144,8 +159,11 @@ Returns `true` if `point` is an element of `window`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wnelmd_c.html)
 """
 function wnelmd(window, point)
-    res = ccall((:wnelmd_c, libcspice), SpiceBoolean, (SpiceDouble, Ref{Cell{SpiceDouble}}),
-                point, window.cell)
+    data = window.data
+    GC.@preserve data begin
+        res = ccall((:wnelmd_c, libcspice), SpiceBoolean, (SpiceDouble, Ref{Cell{SpiceDouble}}),
+                    point, window.cell)
+    end
     handleerror()
     Bool(res)
 end
@@ -169,9 +187,12 @@ Returns the expanded window.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wnexpd_c.html)
 """
 function wnexpd!(window, left, right)
-    ccall((:wnexpd_c, libcspice), Cvoid,
-          (SpiceDouble, SpiceDouble, Ref{Cell{SpiceDouble}}),
-          left, right, window.cell)
+    data = window.data
+    GC.@preserve data begin
+        ccall((:wnexpd_c, libcspice), Cvoid,
+              (SpiceDouble, SpiceDouble, Ref{Cell{SpiceDouble}}),
+              left, right, window.cell)
+    end
     handleerror()
     window
 end
@@ -197,8 +218,11 @@ Returns the extracted window.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wnextd_c.html)
 """
 function wnextd!(window, side)
-    ccall((:wnextd_c, libcspice), Cvoid, (SpiceChar, Ref{Cell{SpiceDouble}}),
-          first(string(side)), window.cell)
+    data = window.data
+    GC.@preserve data begin
+        ccall((:wnextd_c, libcspice), Cvoid, (SpiceChar, Ref{Cell{SpiceDouble}}),
+              first(string(side)), window.cell)
+    end
     handleerror()
     window
 end
@@ -227,9 +251,12 @@ in the input window.
 function wnfetd(window, n)
     left = Ref{SpiceDouble}()
     right = Ref{SpiceDouble}()
-    ccall((:wnfetd_c, libcspice), Cvoid,
-          (Ref{Cell{SpiceDouble}}, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
-          window.cell, n - 1, left, right)
+    data = window.data
+    GC.@preserve data begin
+        ccall((:wnfetd_c, libcspice), Cvoid,
+              (Ref{Cell{SpiceDouble}}, SpiceInt, Ref{SpiceDouble}, Ref{SpiceDouble}),
+              window.cell, n - 1, left, right)
+    end
     handleerror()
     left[], right[]
 end
@@ -253,8 +280,11 @@ Returns the updated window.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wnfild_c.html)
 """
 function wnfild!(window, small)
-    ccall((:wnfild_c, libcspice), Cvoid, (SpiceDouble, Ref{Cell{SpiceDouble}}),
-          small, window.cell)
+    data = window.data
+    GC.@preserve data begin
+        ccall((:wnfild_c, libcspice), Cvoid, (SpiceDouble, Ref{Cell{SpiceDouble}}),
+              small, window.cell)
+    end
     handleerror()
     window
 end
@@ -278,8 +308,11 @@ Returns the updated window.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wnfltd_c.html)
 """
 function wnfltd!(window, small)
-    ccall((:wnfltd_c, libcspice), Cvoid, (SpiceDouble, Ref{Cell{SpiceDouble}}),
-          small, window.cell)
+    data = window.data
+    GC.@preserve data begin
+        ccall((:wnfltd_c, libcspice), Cvoid, (SpiceDouble, Ref{Cell{SpiceDouble}}),
+              small, window.cell)
+    end
     handleerror()
     window
 end
@@ -306,9 +339,12 @@ Returns `true` when `(left, right)` is contained in `window`.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wnincd_c.html)
 """
 function wnincd(window, left, right)
-    res = ccall((:wnincd_c, libcspice), SpiceBoolean,
-                (SpiceDouble, SpiceDouble, Ref{Cell{SpiceDouble}}),
-                left, right, window.cell)
+    data = window.data
+    GC.@preserve data begin
+        res = ccall((:wnincd_c, libcspice), SpiceBoolean,
+                    (SpiceDouble, SpiceDouble, Ref{Cell{SpiceDouble}}),
+                    left, right, window.cell)
+    end
     handleerror()
     Bool(res)
 end
@@ -333,9 +369,12 @@ Returns the updated windows.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wninsd_c.html)
 """
 function wninsd!(window, left, right)
-    ccall((:wninsd_c, libcspice), Cvoid,
-          (SpiceDouble, SpiceDouble, Ref{Cell{SpiceDouble}}),
-          left, right, window.cell)
+    data = window.data
+    GC.@preserve data begin
+        ccall((:wninsd_c, libcspice), Cvoid,
+              (SpiceDouble, SpiceDouble, Ref{Cell{SpiceDouble}}),
+              left, right, window.cell)
+    end
     handleerror()
     window
 end
@@ -362,9 +401,14 @@ Returns a window containing the intersection of `a` and `b`.
 """
 function wnintd(a, b)
     c = SpiceDoubleCell(2 * (wncard(a) + wncard(b)))
-    ccall((:wnintd_c, libcspice), Cvoid,
-          (Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          a.cell, b.cell, c.cell)
+    a_data = a.data
+    b_data = b.data
+    c_data = c.data
+    GC.@preserve a_data b_data c_data begin
+        ccall((:wnintd_c, libcspice), Cvoid,
+              (Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              a.cell, b.cell, c.cell)
+    end
     handleerror()
     c
 end
@@ -400,9 +444,13 @@ function wnreld(a, op, b)
     else
         op = string(op)
     end
-    res = ccall((:wnreld_c, libcspice), SpiceBoolean,
-                (Ref{Cell{SpiceDouble}}, Cstring, Ref{Cell{SpiceDouble}}),
-                a.cell, op, b.cell)
+    a_data = a.data
+    b_data = b.data
+    GC.@preserve a_data b_data begin
+        res = ccall((:wnreld_c, libcspice), SpiceBoolean,
+                    (Ref{Cell{SpiceDouble}}, Cstring, Ref{Cell{SpiceDouble}}),
+                    a.cell, op, b.cell)
+    end
     handleerror()
     Bool(res)
 end
@@ -440,10 +488,13 @@ function wnsumd(window)
     stddev = Ref{SpiceDouble}()
     shortest = Ref{SpiceInt}()
     longest = Ref{SpiceInt}()
-    ccall((:wnsumd_c, libcspice), Cvoid,
-          (Ref{Cell{SpiceDouble}}, Ref{SpiceDouble}, Ref{SpiceDouble},
-           Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceInt}),
-          window.cell, meas, avg, stddev, shortest, longest)
+    data = window.data
+    GC.@preserve data begin
+        ccall((:wnsumd_c, libcspice), Cvoid,
+              (Ref{Cell{SpiceDouble}}, Ref{SpiceDouble}, Ref{SpiceDouble},
+               Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceInt}),
+              window.cell, meas, avg, stddev, shortest, longest)
+    end
     handleerror()
     meas[], avg[], stddev[], shortest[] + 1, longest[] + 1
 end
@@ -468,9 +519,14 @@ Returns a window containing the union of `a` and `b`.
 """
 function wnunid(a, b)
     c = SpiceDoubleCell(2 * (wncard(a) + wncard(b)))
-    ccall((:wnunid_c, libcspice), Cvoid,
-          (Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          a.cell, b.cell, c.cell)
+    a_data = a.data
+    b_data = b.data
+    c_data = c.data
+    GC.@preserve a_data b_data c_data begin
+        ccall((:wnunid_c, libcspice), Cvoid,
+              (Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              a.cell, b.cell, c.cell)
+    end
     handleerror()
     c
 end
@@ -494,9 +550,12 @@ Returns the validated window.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/wnvald_c.html)
 """
 function wnvald!(window)
-    ccall((:wnvald_c, libcspice), Cvoid,
-          (SpiceInt, SpiceInt, Ref{Cell{SpiceDouble}}),
-          window.cell.size, card(window), window.cell)
+    data = window.data
+    GC.@preserve data begin
+        ccall((:wnvald_c, libcspice), Cvoid,
+              (SpiceInt, SpiceInt, Ref{Cell{SpiceDouble}}),
+              window.cell.size, card(window), window.cell)
+    end
     handleerror()
     window
 end

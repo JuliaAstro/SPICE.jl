@@ -924,8 +924,13 @@ function Base.diff(a::SpiceCell{T}, b::SpiceCell{T}) where T
     else
         out = SpiceCell{T}(size)
     end
-    ccall((:diff_c, libcspice), Cvoid, (Ref{Cell{T}}, Ref{Cell{T}}, Ref{Cell{T}}),
-          a.cell, b.cell, out.cell)
+    a_data = a.data
+    b_data = b.data
+    out_data = out.data
+    GC.@preserve a_data b_data out_data begin
+        ccall((:diff_c, libcspice), Cvoid, (Ref{Cell{T}}, Ref{Cell{T}}, Ref{Cell{T}}),
+              a.cell, b.cell, out.cell)
+    end
     handleerror()
     out
 end
@@ -1597,9 +1602,12 @@ Returns the set of ID codes of objects in the DSK file.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dskobj_c.html)
 """
 function dskobj!(set, dsk)
-    ccall((:dskobj_c, libcspice), Cvoid,
-          (Cstring, Ref{Cell{SpiceInt}}),
-          dsk, set.cell)
+    data = set.data
+    GC.@preserve data begin
+        ccall((:dskobj_c, libcspice), Cvoid,
+              (Cstring, Ref{Cell{SpiceInt}}),
+              dsk, set.cell)
+    end
     handleerror()
     set
 end
@@ -1721,9 +1729,12 @@ Returns the set of ID codes of surfaces in the DSK file.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dsksrf_c.html)
 """
 function dsksrf!(set, dsk, bodyid)
-    ccall((:dsksrf_c, libcspice), Cvoid,
-          (Cstring, SpiceInt, Ref{Cell{SpiceInt}}),
-          dsk, bodyid, set.cell)
+    data = set.data
+    GC.@preserve data begin
+        ccall((:dsksrf_c, libcspice), Cvoid,
+              (Cstring, SpiceInt, Ref{Cell{SpiceInt}}),
+              dsk, bodyid, set.cell)
+    end
     handleerror()
     set
 end

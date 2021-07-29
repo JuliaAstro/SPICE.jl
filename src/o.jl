@@ -69,9 +69,12 @@ Returns the ordinal position or `nothing` if the items does not appear in the se
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ordc_c.html)
 """
 function ordc(set, item)
-    res = ccall((:ordc_c, libcspice), SpiceInt,
-                (Cstring, Ref{Cell{SpiceChar}}),
-                item, set.cell)
+    data = set.data
+    GC.@preserve data begin
+        res = ccall((:ordc_c, libcspice), SpiceInt,
+                    (Cstring, Ref{Cell{SpiceChar}}),
+                    item, set.cell)
+    end
     handleerror()
     res == -1 ? nothing : res + 1
 end
@@ -95,9 +98,12 @@ Returns the ordinal position or `nothing` if the items does not appear in the se
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ordd_c.html)
 """
 function ordd(set, item)
-    res = ccall((:ordd_c, libcspice), SpiceInt,
-                (SpiceDouble, Ref{Cell{SpiceDouble}}),
-                item, set.cell)
+    data = set.data
+    GC.@preserve data begin
+        res = ccall((:ordd_c, libcspice), SpiceInt,
+                    (SpiceDouble, Ref{Cell{SpiceDouble}}),
+                    item, set.cell)
+    end
     handleerror()
     res == -1 ? nothing : res + 1
 end
@@ -121,9 +127,12 @@ Returns the ordinal position or `nothing` if the items does not appear in the se
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/ordi_c.html)
 """
 function ordi(set, item)
-    res = ccall((:ordi_c, libcspice), SpiceInt,
-                (SpiceInt, Ref{Cell{SpiceInt}}),
-                item, set.cell)
+    data = set.data
+    GC.@preserve data begin
+        res = ccall((:ordi_c, libcspice), SpiceInt,
+                    (SpiceInt, Ref{Cell{SpiceInt}}),
+                    item, set.cell)
+    end
     handleerror()
     res == -1 ? nothing : res + 1
 end

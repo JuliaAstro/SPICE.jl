@@ -300,8 +300,11 @@ Returns the updated set.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/insrtc_c.html)
 """
 function insrtc!(set, item)
-    ccall((:insrtc_c, libcspice), Cvoid, (Cstring, Ref{Cell{SpiceChar}}), item, set.cell)
-    set
+    data = set.data
+    GC.@preserve data begin
+        ccall((:insrtc_c, libcspice), Cvoid, (Cstring, Ref{Cell{SpiceChar}}), item, set.cell)
+    end
+    return set
 end
 
 @deprecate insrtc insrtc!
@@ -325,8 +328,11 @@ Returns the updated set.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/insrtd_c.html)
 """
 function insrtd!(set, item)
-    ccall((:insrtd_c, libcspice), Cvoid, (SpiceDouble, Ref{Cell{SpiceDouble}}), item, set.cell)
-    set
+    data = set.data
+    GC.@preserve data begin
+        ccall((:insrtd_c, libcspice), Cvoid, (SpiceDouble, Ref{Cell{SpiceDouble}}), item, set.cell)
+    end
+    return set
 end
 
 @deprecate insrtd insrtd!
@@ -350,8 +356,11 @@ Returns the updated set.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/insrti_c.html)
 """
 function insrti!(set, item)
-    ccall((:insrti_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{SpiceInt}}), item, set.cell)
-    set
+    data = set.data
+    GC.@preserve data begin
+        ccall((:insrti_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{SpiceInt}}), item, set.cell)
+    end
+    return set
 end
 
 @deprecate insrti insrti!
@@ -378,9 +387,14 @@ function inter(a::SpiceCell{T}, b::SpiceCell{T}) where {T}
     n = card(a) + card(b)
     l = max(a.cell.length, b.cell.length)
     out = SpiceCell{T}(n, l)
-    ccall((:inter_c, libcspice), Cvoid,
-              (Ref{Cell{T}}, Ref{Cell{T}}, Ref{Cell{T}}),
-              a.cell, b.cell, out.cell)
+    a_data = a.data
+    b_data = b.data
+    out_data = out.data
+    GC.@preserve a_data b_data out_data begin
+        ccall((:inter_c, libcspice), Cvoid,
+                  (Ref{Cell{T}}, Ref{Cell{T}}, Ref{Cell{T}}),
+                  a.cell, b.cell, out.cell)
+    end
     handleerror()
     out
 end

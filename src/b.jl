@@ -94,7 +94,10 @@ Return a SPICE set containing the frame IDs of all built-in frames of a specifie
 """
 function bltfrm(frmcls)
     idset = SpiceIntCell(256)
-    ccall((:bltfrm_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{SpiceInt}}), frmcls, idset.cell)
+    data = idset.data
+    GC.@preserve data begin
+        ccall((:bltfrm_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{SpiceInt}}), frmcls, idset.cell)
+    end
     handleerror()
     idset
 end
