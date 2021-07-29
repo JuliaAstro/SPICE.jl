@@ -263,7 +263,9 @@ Returns the extended set of classical conic elements:
 """
 function oscltx(state, et, mu)
     @checkdims 6 state
-    elts = Array{SpiceDouble}(undef, 11)
+    # The length of `elts` is defined as `SPICE_OSCLTX_NELTS` and contains unused space for
+    # elements which may be added in the future, see NAIF docs under 'Parameters'.
+    elts = Array{SpiceDouble}(undef, 20)
     ccall((:oscltx_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
           state, et, mu, elts)
