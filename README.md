@@ -46,7 +46,7 @@ If you publish work that uses SPICE.jl, please cite the underlying SPICE toolkit
 
 ## Documentation
 
-Please refer to the [documentation][docs-url-stable] for additional information.
+Please refer to the [documentation](https://juliaastro.github.io/SPICE.jl/stable) for additional information.
 
 ## Acknowledgements
 
