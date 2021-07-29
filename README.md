@@ -23,9 +23,15 @@ julia> import Pkg; Pkg.add("SPICE")
 ## Quickstart
 
 ```julia
-# Download SPICE kernels from https://naif.jpl.nasa.gov/pub/naif/generic_kernels/
-
 using SPICE
+using Downloads: download
+
+const LSK = "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls"
+const SPK = "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440.bsp"
+
+# Download kernels
+download(LSK, "naif0012.tls")
+download(SPK, "de440.bsp")
 
 # Load leap seconds kernel
 furnsh("naif0012.tls")
@@ -34,7 +40,7 @@ furnsh("naif0012.tls")
 et = utc2et("2018-02-06T20:45:00")
 
 # Load a planetary ephemeris kernel
-furnsh("de430.bsp")
+furnsh("de440.bsp")
 
 # Get the position of Mars at `et` w.r.t. Earth
 spkpos("mars_barycenter", et, "J2000", "none", "earth")
