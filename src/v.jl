@@ -92,9 +92,12 @@ Returns the validated set with ordered elements and duplicates removed.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/valid_c.html)
 """
 function valid!(set::SpiceCell{T}) where T
-    ccall((:valid_c, libcspice), Cvoid,
-          (SpiceInt, SpiceInt, Ref{Cell{T}}),
-          set.cell.size, set.cell.card, set.cell)
+    data = set.data
+    GC.@preserve data begin
+        ccall((:valid_c, libcspice), Cvoid,
+              (SpiceInt, SpiceInt, Ref{Cell{T}}),
+              set.cell.size, set.cell.card, set.cell)
+    end
     handleerror()
     set
 end

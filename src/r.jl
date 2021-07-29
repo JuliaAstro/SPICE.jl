@@ -324,7 +324,10 @@ Returns the updated set.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/removc_c.html)
 """
 function removc!(set, item)
-    ccall((:removc_c, libcspice), Cvoid, (Cstring, Ref{Cell{SpiceChar}}), item, set.cell)
+    data = set.data
+    GC.@preserve data begin
+        ccall((:removc_c, libcspice), Cvoid, (Cstring, Ref{Cell{SpiceChar}}), item, set.cell)
+    end
     set
 end
 
@@ -349,7 +352,10 @@ Returns the updated set.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/removd_c.html)
 """
 function removd!(set, item)
-    ccall((:removd_c, libcspice), Cvoid, (SpiceDouble, Ref{Cell{SpiceDouble}}), item, set.cell)
+    data = set.data
+    GC.@preserve data begin
+        ccall((:removd_c, libcspice), Cvoid, (SpiceDouble, Ref{Cell{SpiceDouble}}), item, set.cell)
+    end
     set
 end
 
@@ -374,7 +380,10 @@ Returns the updated set.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/removi_c.html)
 """
 function removi!(set, item)
-    ccall((:removi_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{SpiceInt}}), item, set.cell)
+    data = set.data
+    GC.@preserve data begin
+        ccall((:removi_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{SpiceInt}}), item, set.cell)
+    end
     set
 end
 

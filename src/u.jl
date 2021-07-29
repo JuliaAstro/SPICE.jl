@@ -107,8 +107,13 @@ function Base.union(a::SpiceCell{T}, b::SpiceCell{T}) where T
     else
         out = SpiceCell{T}(size)
     end
-    ccall((:union_c, libcspice), Cvoid, (Ref{Cell{T}}, Ref{Cell{T}}, Ref{Cell{T}}),
-          a.cell, b.cell, out.cell)
+    a_data = a.data
+    b_data = b.data
+    out_data = out.data
+    GC.@preserve a_data b_data out_data begin
+        ccall((:union_c, libcspice), Cvoid, (Ref{Cell{T}}, Ref{Cell{T}}, Ref{Cell{T}}),
+              a.cell, b.cell, out.cell)
+    end
     handleerror()
     out
 end

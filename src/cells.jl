@@ -112,8 +112,10 @@ SpiceIntCell
 for (t, f) in zip((SpiceInt, SpiceDouble), ("appndi_c", "appndd_c"))
     @eval begin
         function appnd(item, cell::SpiceCell{$t, $t})
-            c = Ref(cell.cell)
-            ccall(($f, libcspice), Cvoid, ($t, Ref{Cell{$t}}), item, cell.cell)
+            data = cell.data
+            GC.@preserve data begin
+                ccall(($f, libcspice), Cvoid, ($t, Ref{Cell{$t}}), item, cell.cell)
+            end
             handleerror()
             return nothing
         end
@@ -132,7 +134,10 @@ Append an `item` to the char/double/integer SpiceCell `cell`.
 - [appndi - NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/appndi_c.html)
 """
 function appnd(item, cell::SpiceCharCell)
-    ccall((:appndc_c, libcspice), Cvoid, (Cstring, Ref{Cell{SpiceChar}}), item, cell.cell)
+    data = cell.data
+    GC.@preserve data begin
+        ccall((:appndc_c, libcspice), Cvoid, (Cstring, Ref{Cell{SpiceChar}}), item, cell.cell)
+    end
     handleerror()
     return nothing
 end

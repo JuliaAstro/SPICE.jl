@@ -374,8 +374,11 @@ lparsm
 
 function _lparss(list, delims)
     items = SpiceCharCell(length(list), length(list))
-    ccall((:lparss_c, libcspice), Cvoid, (Cstring, Cstring, Ref{Cell{SpiceChar}}),
-          list, delims, Ref(items.cell))
+    data = items.data
+    GC.@preserve data begin
+        ccall((:lparss_c, libcspice), Cvoid, (Cstring, Cstring, Ref{Cell{SpiceChar}}),
+              list, delims, items.cell)
+    end
     handleerror()
     items
 end

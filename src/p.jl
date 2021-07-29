@@ -70,8 +70,11 @@ Returns `cover` containing coverage in `pck` for `idcode`
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/pckcov_c.html)
 """
 function pckcov!(cover, pck, idcode)
-    ccall((:pckcov_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{Cell{SpiceDouble}}),
-          pck, idcode, cover.cell)
+    data = cover.data
+    GC.@preserve data begin
+        ccall((:pckcov_c, libcspice), Cvoid, (Cstring, SpiceInt, Ref{Cell{SpiceDouble}}),
+              pck, idcode, cover.cell)
+    end
     handleerror()
     cover
 end
@@ -97,8 +100,11 @@ Returns `ids` containing a set of frame class ID codes of frames in PCK file.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/pckfrm_c.html)
 """
 function pckfrm!(ids, pck)
-    ccall((:pckfrm_c, libcspice), Cvoid, (Cstring, Ref{Cell{SpiceInt}}),
-          pck, ids.cell)
+    data = ids.data
+    GC.@preserve data begin
+        ccall((:pckfrm_c, libcspice), Cvoid, (Cstring, Ref{Cell{SpiceInt}}),
+              pck, ids.cell)
+    end
     handleerror()
     ids
 end

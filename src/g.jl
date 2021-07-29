@@ -270,10 +270,14 @@ Returns a window containing the results.
 """
 function gfdist(target, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnfine)
     result = SpiceDoubleCell(nintvls * 2)
-    ccall((:gfdist_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, Cstring, SpiceDouble, SpiceDouble, SpiceDouble,
-           SpiceInt, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          target, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gfdist_c, libcspice), Cvoid,
+              (Cstring, Cstring, Cstring, Cstring, SpiceDouble, SpiceDouble, SpiceDouble,
+               SpiceInt, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              target, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -350,14 +354,18 @@ function gfevnt(udstep, udrefn, gquant, qpnams, qcpars, qdpars, qipars, qlpars,
     # Julia should handle SIGINT
     bail = false
     udbail = @cfunction(gfbail, SpiceBoolean, ())
-    ccall((:gfevnt_c, libcspice), Cvoid,
-          (Ptr{Cvoid}, Ptr{Cvoid}, Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}, Ref{SpiceChar},
-           Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceBoolean}, Cstring, SpiceDouble, SpiceDouble,
-           SpiceDouble, SpiceBoolean, Ptr{Cvoid}, Ptr{Cvoid}, Ptr{Cvoid}, SpiceInt, SpiceBoolean,
-           Ptr{Cvoid}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          udstep_ptr, udrefn_ptr, gquant, qnpars, lenvals, _qpnams, _qcpars, qdpars, _qipars,
-          _qlpars, op, refval, tol, adjust, rpt, udrepi_ptr, udrepu_ptr, udrepf_ptr, nintvls,
-          bail, udbail, cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gfevnt_c, libcspice), Cvoid,
+              (Ptr{Cvoid}, Ptr{Cvoid}, Cstring, SpiceInt, SpiceInt, Ref{SpiceChar}, Ref{SpiceChar},
+               Ref{SpiceDouble}, Ref{SpiceInt}, Ref{SpiceBoolean}, Cstring, SpiceDouble, SpiceDouble,
+               SpiceDouble, SpiceBoolean, Ptr{Cvoid}, Ptr{Cvoid}, Ptr{Cvoid}, SpiceInt, SpiceBoolean,
+               Ptr{Cvoid}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              udstep_ptr, udrefn_ptr, gquant, qnpars, lenvals, _qpnams, _qcpars, qdpars, _qipars,
+              _qlpars, op, refval, tol, adjust, rpt, udrepi_ptr, udrepu_ptr, udrepf_ptr, nintvls,
+              bail, udbail, cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -424,11 +432,16 @@ function gffove!(inst, tshape, raydir, target, tframe, abcorr, obsrvr, tol, udst
     # Julia should handle SIGINT
     bail = false
     udbail = @cfunction(gfbail, SpiceBoolean, ())
-    ccall((:gffove_c, libcspice), Cvoid,
-          (Cstring, Cstring, Ref{SpiceDouble}, Cstring, Cstring, Cstring, Cstring, SpiceDouble,
-           Ptr{Cvoid}, Ptr{Cvoid}, SpiceBoolean, Ptr{Cvoid}, Ptr{Cvoid}, Ptr{Cvoid}, SpiceBoolean,
-           Ptr{Cvoid}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          inst, tshape, raydir, target, tframe, abcorr, obsrvr, tol, udstep_ptr, udrefn_ptr, rpt, udrepi_ptr, udrepu_ptr, udrepf_ptr, bail, udbail, cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gffove_c, libcspice), Cvoid,
+              (Cstring, Cstring, Ref{SpiceDouble}, Cstring, Cstring, Cstring, Cstring, SpiceDouble,
+               Ptr{Cvoid}, Ptr{Cvoid}, SpiceBoolean, Ptr{Cvoid}, Ptr{Cvoid}, Ptr{Cvoid}, SpiceBoolean,
+               Ptr{Cvoid}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              inst, tshape, raydir, target, tframe, abcorr, obsrvr, tol, udstep_ptr, udrefn_ptr, rpt,
+              udrepi_ptr, udrepu_ptr, udrepf_ptr, bail, udbail, cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -470,12 +483,16 @@ function gfilum(method, angtyp, target, illmn, fixref, abcorr, obsrvr, spoint, r
                 adjust, step, nintvls, cnfine)
     @checkdims 3 spoint
     result = SpiceDoubleCell(nintvls * 2)
-    ccall((:gfilum_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Ref{SpiceDouble},
-           Cstring, SpiceDouble, SpiceDouble, SpiceDouble, SpiceInt,
-           Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          method, angtyp, target, illmn, fixref, abcorr, obsrvr, spoint, relate, refval, adjust,
-          step, nintvls, cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gfilum_c, libcspice), Cvoid,
+              (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Ref{SpiceDouble},
+               Cstring, SpiceDouble, SpiceDouble, SpiceDouble, SpiceInt,
+               Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              method, angtyp, target, illmn, fixref, abcorr, obsrvr, spoint, relate, refval, adjust,
+              step, nintvls, cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -541,13 +558,17 @@ function gfocce!(occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, ob
     # Julia should handle SIGINT
     bail = false
     udbail = @cfunction(gfbail, SpiceBoolean, ())
-    ccall((:gfocce_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, SpiceDouble,
-           Ptr{Cvoid}, Ptr{Cvoid}, SpiceBoolean, Ptr{Cvoid}, Ptr{Cvoid}, Ptr{Cvoid}, SpiceBoolean,
-           Ptr{Cvoid}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, tol, udstep_ptr,
-          udrefn_ptr, rpt, udrepi_ptr, udrepu_ptr, udrepf_ptr, bail, udbail,
-          cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gfocce_c, libcspice), Cvoid,
+              (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, SpiceDouble,
+               Ptr{Cvoid}, Ptr{Cvoid}, SpiceBoolean, Ptr{Cvoid}, Ptr{Cvoid}, Ptr{Cvoid}, SpiceBoolean,
+               Ptr{Cvoid}, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, tol, udstep_ptr,
+              udrefn_ptr, rpt, udrepi_ptr, udrepu_ptr, udrepf_ptr, bail, udbail,
+              cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -587,11 +608,15 @@ Returns a window containing the results.
 """
 function gfoclt(occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, step, cnfine, maxwin = 100)
     result = SpiceDoubleCell(maxwin * 2)
-    ccall((:gfoclt_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring,
-           SpiceDouble, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, step, cnfine.cell,
-          result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gfoclt_c, libcspice), Cvoid,
+              (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring,
+               SpiceDouble, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, step, cnfine.cell,
+              result.cell)
+    end
     handleerror()
     result
 end
@@ -625,12 +650,16 @@ Returns a window containing the results.
 """
 function gfpa(target, illmn, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnfine)
     result = SpiceDoubleCell(nintvls * 2)
-    ccall((:gfpa_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, Cstring, Cstring,
-           SpiceDouble, SpiceDouble, SpiceDouble,
-           SpiceInt,
-           Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          target, illmn, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gfpa_c, libcspice), Cvoid,
+              (Cstring, Cstring, Cstring, Cstring, Cstring,
+               SpiceDouble, SpiceDouble, SpiceDouble,
+               SpiceInt,
+               Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              target, illmn, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -669,11 +698,15 @@ Returns a window containing the results.
 function gfposc(target, frame, abcorr, obsrvr, crdsys, coord, relate, refval, adjust, step,
                 nintvls, cnfine)
     result = SpiceDoubleCell(nintvls * 2)
-    ccall((:gfposc_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, SpiceDouble, SpiceDouble,
-           SpiceDouble, SpiceInt, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          target, frame, abcorr, obsrvr, crdsys, coord, relate, refval, adjust, step, nintvls,
-          cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gfposc_c, libcspice), Cvoid,
+              (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, SpiceDouble, SpiceDouble,
+               SpiceDouble, SpiceInt, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              target, frame, abcorr, obsrvr, crdsys, coord, relate, refval, adjust, step, nintvls,
+              cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -737,9 +770,12 @@ Initialize a search progress report.
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/gfrepi_c.html)
 """
 function gfrepi(window::SpiceDoubleCell, begmss, endmss)
-    ccall((:gfrepi_c, libcspice), Cvoid,
-          (Ref{Cell{SpiceDouble}}, Cstring, Cstring),
-          window.cell, begmss, endmss)
+    data = window.data
+    GC.@preserve data begin
+        ccall((:gfrepi_c, libcspice), Cvoid,
+              (Ref{Cell{SpiceDouble}}, Cstring, Cstring),
+              window.cell, begmss, endmss)
+    end
     handleerror()
 end
 function gfrepi(window::Cell{SpiceDouble}, begmss, endmss)
@@ -799,10 +835,14 @@ Returns a window containing the results.
 function gfrfov(inst, raydir, rframe, abcorr, obsrvr, step, cnfine, maxwin = 10000)
     @checkdims 3 raydir
     result = SpiceDoubleCell(maxwin)
-    ccall((:gfrfov_c, libcspice), Cvoid,
-          (Cstring, Ref{SpiceDouble}, Cstring, Cstring, Cstring, SpiceDouble,
-           Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          inst, raydir, rframe, abcorr, obsrvr, step, cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gfrfov_c, libcspice), Cvoid,
+              (Cstring, Ref{SpiceDouble}, Cstring, Cstring, Cstring, SpiceDouble,
+               Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              inst, raydir, rframe, abcorr, obsrvr, step, cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -834,10 +874,14 @@ Returns a window containing the results.
 """
 function gfrr(target, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnfine)
     result = SpiceDoubleCell(nintvls * 2)
-    ccall((:gfrr_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, Cstring, SpiceDouble, SpiceDouble, SpiceDouble, SpiceInt,
-           Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          target, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gfrr_c, libcspice), Cvoid,
+              (Cstring, Cstring, Cstring, Cstring, SpiceDouble, SpiceDouble, SpiceDouble, SpiceInt,
+               Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              target, abcorr, obsrvr, relate, refval, adjust, step, nintvls, cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -875,12 +919,16 @@ Returns a window containing the results.
 function gfsep(targ1, shape1, frame1, targ2, shape2, frame2, abcorr, obsrvr, relate, refval, adjust,
                step, nintvls, cnfine)
     result = SpiceDoubleCell(nintvls * 2)
-    ccall((:gfsep_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring,
-           SpiceDouble, SpiceDouble, SpiceDouble, SpiceInt,
-           Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          targ1, shape1, frame1, targ2, shape2, frame2, abcorr, obsrvr, relate, refval, adjust,
-          step, nintvls, cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gfsep_c, libcspice), Cvoid,
+              (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring,
+               SpiceDouble, SpiceDouble, SpiceDouble, SpiceInt,
+               Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              targ1, shape1, frame1, targ2, shape2, frame2, abcorr, obsrvr, relate, refval, adjust,
+              step, nintvls, cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -922,12 +970,16 @@ function gfsntc(target, fixref, method, abcorr, obsrvr, dref, dvec, crdsys, coor
                 adjust, step, nintvls, cnfine)
     @checkdims 3 dvec
     result = SpiceDoubleCell(nintvls * 2)
-    ccall((:gfsntc_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Ref{SpiceDouble}, Cstring,
-           Cstring, Cstring, SpiceDouble, SpiceDouble, SpiceDouble, SpiceInt,
-           Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          target, fixref, method, abcorr, obsrvr, dref, dvec, crdsys, coord, relate, refval,
-          adjust, step, nintvls, cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gfsntc_c, libcspice), Cvoid,
+              (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Ref{SpiceDouble}, Cstring,
+               Cstring, Cstring, SpiceDouble, SpiceDouble, SpiceDouble, SpiceInt,
+               Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              target, fixref, method, abcorr, obsrvr, dref, dvec, crdsys, coord, relate, refval,
+              adjust, step, nintvls, cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -1026,11 +1078,15 @@ Returns a window containing the results.
 function gfsubc(target, fixref, method, abcorr, obsrvr, crdsys, coord, relate, refval, adjust, step,
                 nintvls, cnfine)
     result = SpiceDoubleCell(nintvls * 2)
-    ccall((:gfsubc_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, SpiceDouble,
-           SpiceDouble, SpiceDouble, SpiceInt, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          target, fixref, method, abcorr, obsrvr, crdsys, coord, relate, refval, adjust, step,
-          nintvls, cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gfsubc_c, libcspice), Cvoid,
+              (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, SpiceDouble,
+               SpiceDouble, SpiceDouble, SpiceInt, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              target, fixref, method, abcorr, obsrvr, crdsys, coord, relate, refval, adjust, step,
+              nintvls, cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -1063,10 +1119,14 @@ Returns a window containing the results.
 """
 function gftfov(inst, target, tshape, tframe, abcorr, obsrvr, step, nintvls, cnfine)
     result = SpiceDoubleCell(nintvls * 2)
-    ccall((:gftfov_c, libcspice), Cvoid,
-          (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, SpiceDouble,
-           Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          inst, target, tshape, tframe, abcorr, obsrvr, step, cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gftfov_c, libcspice), Cvoid,
+              (Cstring, Cstring, Cstring, Cstring, Cstring, Cstring, SpiceDouble,
+               Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              inst, target, tshape, tframe, abcorr, obsrvr, step, cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -1105,9 +1165,13 @@ function gfudb!(udfuns, udfunb, step, cnfine, result)
         nothing
     end
     udfunb_ptr = @cfunction($_udfunb, Cvoid, (Ptr{Cvoid}, SpiceDouble, Ptr{SpiceBoolean}))
-    ccall((:gfudb_c, libcspice), Cvoid,
-          (Ptr{Cvoid}, Ptr{Cvoid}, SpiceDouble, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          udfuns_ptr, udfunb_ptr, step, cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gfudb_c, libcspice), Cvoid,
+              (Ptr{Cvoid}, Ptr{Cvoid}, SpiceDouble, Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              udfuns_ptr, udfunb_ptr, step, cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end
@@ -1150,10 +1214,14 @@ function gfuds!(udfuns, udqdec, relate, refval, adjust, step, nintvls, cnfine, r
         nothing
     end
     udqdec_ptr = @cfunction($_udqdec, Cvoid, (Ptr{Cvoid}, SpiceDouble, Ptr{SpiceBoolean}))
-    ccall((:gfuds_c, libcspice), Cvoid,
-          (Ptr{Cvoid}, Ptr{Cvoid}, Cstring, SpiceDouble, SpiceDouble, SpiceDouble, SpiceInt,
-           Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
-          udfuns_ptr, udqdec_ptr, relate, refval, adjust, step, nintvls, cnfine.cell, result.cell)
+    cnfine_data = cnfine.data
+    result_data = result.data
+    GC.@preserve cnfine_data result_data begin
+        ccall((:gfuds_c, libcspice), Cvoid,
+              (Ptr{Cvoid}, Ptr{Cvoid}, Cstring, SpiceDouble, SpiceDouble, SpiceDouble, SpiceInt,
+               Ref{Cell{SpiceDouble}}, Ref{Cell{SpiceDouble}}),
+              udfuns_ptr, udqdec_ptr, relate, refval, adjust, step, nintvls, cnfine.cell, result.cell)
+    end
     handleerror()
     result
 end

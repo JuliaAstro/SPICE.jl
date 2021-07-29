@@ -119,7 +119,10 @@ Returns the set of ID codes of frames of the specified class.
 """
 function kplfrm(frmcls, size=128)
     cell = SpiceIntCell(size)
-    ccall((:kplfrm_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{SpiceInt}}), frmcls, cell.cell)
+    data = cell.data
+    GC.@preserve data begin
+        ccall((:kplfrm_c, libcspice), Cvoid, (SpiceInt, Ref{Cell{SpiceInt}}), frmcls, cell.cell)
+    end
     handleerror()
     cell
 end
