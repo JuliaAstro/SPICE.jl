@@ -258,7 +258,7 @@ is specified by an integer ID code.
 ### Arguments ###
 
 - `bodyid`: Body ID code
-- `item`: Item for which values are desired. ("RADII", "NUT_PREC_ANGLES", etc.)
+- `item`: Item for which values are desired. (`"RADII"`, `"NUT_PREC_ANGLES"`, etc.)
 - `maxn`: Maximum number of values that may be returned (default: 100)
 
 ### Output ###
@@ -286,7 +286,7 @@ Fetch from the kernel pool the double precision values of an item associated wit
 ### Arguments ###
 
 - `bodynm`: Body name
-- `item`: Item for which values are desired. ("RADII", "NUT_PREC_ANGLES", etc.)
+- `item`: Item for which values are desired. (`"RADII"`, `"NUT_PREC_ANGLES"`, etc.)
 - `maxn`: Maximum number of values that may be returned (default: 100)
 
 ### Output ###
