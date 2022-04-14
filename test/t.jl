@@ -92,7 +92,7 @@ import LinearAlgebra
         end
     end
     @testset "tkvrsn" begin
-        @test tkvrsn() == "CSPICE_N0066"
+        @test tkvrsn() == "CSPICE_N0067"
     end
     @testset "tparse" begin
         actual1 = tparse("1996-12-18T12:28:28")
