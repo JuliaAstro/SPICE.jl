@@ -106,7 +106,7 @@ end
 """
     latsph(radius, lon, lat)
 
-Convert from latitudinal coordinates to rectangular coordinates.
+Convert from latitudinal coordinates to spherical coordinates.
 
 ### Arguments ###
 
