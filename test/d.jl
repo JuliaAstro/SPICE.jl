@@ -195,6 +195,18 @@
             kclear()
         end
     end
+    @testset "dazldr" begin
+        out1 = dazldr(1.0, 1.0, 0.0, true, true)
+        exp1 = [sqrt(2.0)/2.0 sqrt(2.0)/2.0 0.0;
+                -0.5 0.5 0.0;
+                -0.0 -0.0 sqrt(2.0)/2.0]
+        out2 = dazldr(1.0, 1.0, 0.0, false, false)
+        exp2 = [sqrt(2.0)/2.0 sqrt(2.0)/2.0 0.0;
+                0.5 -0.5 -0.0;
+                0.0 0.0 -sqrt(2.0)/2.0]
+        @test out1 ≈ exp1
+        @test out2 ≈ exp2
+    end
     @testset "dcyldr" begin
         output = dcyldr(1.0, 0.0, 0.0)
         expected = [1.0 0.0 0.0;
@@ -347,6 +359,18 @@
     end
     @testset "dpr" begin
         @test SPICE._dpr() == rad2deg(1.0)
+    end
+    @testset "drdazl" begin
+        out1 = drdazl(1.0, deg2rad(45.0), 0.0, true, true)
+        exp1 = [sqrt(2.0)/2.0 -sqrt(2.0)/2.0 -0.0;
+                sqrt(2.0)/2.0 sqrt(2.0)/2.0 -0.0;
+                0.0 0.0 1.0]
+        out2 = drdazl(1.0, deg2rad(45.0), 0.0, false, false)
+        exp2 = [sqrt(2.0)/2.0 -sqrt(2.0)/2.0 -0.0;
+                -sqrt(2.0)/2.0 -sqrt(2.0)/2.0 0.0;
+                -0.0 -0.0 -1.0]
+        @test out1 ≈ exp1
+        @test out2 ≈ exp2
     end
     @testset "drdcyl" begin
         output = drdcyl(1.0, deg2rad(180.0), 1.0)
