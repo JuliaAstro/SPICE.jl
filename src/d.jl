@@ -28,6 +28,7 @@ export
     dasopr,
     dasopw,
     dasrfr,
+    dazldr,
     dcyldr,
     deltet,
     dgeodr,
@@ -43,6 +44,7 @@ export
     dpmax,
     dpmin,
     dpr,
+    drdazl,
     drdcyl,
     drdgeo,
     drdlat,
@@ -786,6 +788,36 @@ function dasrfr(handle, idwlen=128, ifnlen=256)
 end
 
 """
+    dazldr(x, y, z, azccw, elplsz)
+
+Compute the Jacobian matrix of the transformation from rectangular to azimuth/elevation coordinates.
+
+### Arguments ###
+
+- `x`: X-coordinate of point
+- `y`: Y-coordinate of point
+- `z`: Z-coordinate of point
+- `azccw`: Flag indicating how azimuth is measured
+- `elplsz`: Flag indicating how elevation is measured
+
+### Output ###
+
+Returns the matrix of partial derivatives.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dazldr_c.html)
+"""
+function dazldr(x, y, z, azccw, elplsz)
+    jacobi = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:dazldr_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, SpiceBoolean, SpiceBoolean, Ref{SpiceDouble}),
+          x, y, z, azccw, elplsz, jacobi)
+    handleerror()
+    permutedims(jacobi)
+end
+
+"""
     dcyldr(x, y, z)
 
 Compute the Jacobian of the transformation from rectangular to cylindrical coordinates.
@@ -1176,6 +1208,36 @@ end
     Use `rad2deg(1.0)` instead.
 """
 dpr
+
+"""
+    drdazl(range, az, el, azccw, elplsz)
+
+Compute the Jacobian matrix of the transformation from azimuth/elevation to rectangular coordinates.
+
+### Arguments ###
+
+- `range`: Distance of a point from the origin
+- `az`: Azimuth of input point in radians
+- `el`: Elevation of input point in radians
+- `azccw`: Flag indicating how azimuth is measured
+- `elplsz`: Flag indicating how elevation is measured
+
+### Output ###
+
+Returns the matrix of partial derivatives.
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/drdazl_c.html)
+"""
+function drdazl(range, az, el, azccw, elplsz)
+    jacobi = Array{SpiceDouble}(undef, 3, 3)
+    ccall((:drdazl_c, libcspice), Cvoid,
+          (SpiceDouble, SpiceDouble, SpiceDouble, SpiceBoolean, SpiceBoolean, Ref{SpiceDouble}),
+          range, az, el, azccw, elplsz, jacobi)
+    handleerror()
+    permutedims(jacobi)
+end
 
 """
     drdcyl(r, lon, z)

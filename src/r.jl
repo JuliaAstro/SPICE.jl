@@ -2,6 +2,7 @@ export
     radrec,
     rav2xf,
     raxisa,
+    recazl,
     reccyl,
     recgeo,
     reclat,
@@ -108,6 +109,40 @@ function raxisa(matrix)
           permutedims(matrix), axis, angle)
     handleerror()
     axis, angle[]
+end
+
+"""
+    recazl(rectan, azccw, elplsz)
+
+Convert rectangular coordinates of a point to range, azimuth and elevation.
+
+### Arguments ###
+
+- `rectan`: Rectangular coordinates of a point
+- `azccw`: Flag indicating how azimuth is measured
+- `elplsz`: Flag indicating how elevation is measured
+
+### Output ###
+
+Returns a tuple consisting of:
+
+- `range`: Distance of the point from the origin
+- `az`: Azimuth in radians
+- `el`: Elevation in radians
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/recazl_c.html)
+"""
+function recazl(rectan, azccw, elplsz)
+    @checkdims 3 rectan
+    range = Ref{SpiceDouble}()
+    az = Ref{SpiceDouble}()
+    el = Ref{SpiceDouble}()
+    ccall((:recazl_c, libcspice), Cvoid,
+          (Ref{SpiceDouble}, SpiceBoolean, SpiceBoolean, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          collect(rectan), azccw, elplsz, range, az, el)
+    range[], az[], el[]
 end
 
 """
