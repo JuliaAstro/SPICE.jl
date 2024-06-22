@@ -119,8 +119,8 @@ Convert rectangular coordinates of a point to range, azimuth and elevation.
 ### Arguments ###
 
 - `rectan`: Rectangular coordinates of a point
-- `azccw`: Flag indicating how azimuth is measured
-- `elplsz`: Flag indicating how elevation is measured
+- `azccw`: Flag indicating how azimuth is measured. If `true`, the azimuth increases in the counterclockwise direction; otherwise it increases in the clockwise direction
+- `elplsz`: Flag indicating how elevation is measured. If `true`, the elevation increases from the XY plane toward +Z; otherwise toward -Z
 
 ### Output ###
 

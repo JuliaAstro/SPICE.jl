@@ -37,8 +37,8 @@ Convert from range, azimuth and elevation of a point to rectangular coordinates.
 - `range`: Distance of the point from the origin
 - `az`: Azimuth in radians
 - `el`: Elevation in radians
-- `azccw`: Flag indicating how azimuth is measured
-- `elplsz`: Flag indicating how elevation is measured
+- `azccw`: Flag indicating how azimuth is measured. If `true`, the azimuth increases in the counterclockwise direction; otherwise it increases in the clockwise direction
+- `elplsz`: Flag indicating how elevation is measured. If `true`, the elevation increases from the XY plane toward +Z; otherwise toward -Z
 
 ### Output ###
 

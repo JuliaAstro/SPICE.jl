@@ -797,8 +797,8 @@ Compute the Jacobian matrix of the transformation from rectangular to azimuth/el
 - `x`: X-coordinate of point
 - `y`: Y-coordinate of point
 - `z`: Z-coordinate of point
-- `azccw`: Flag indicating how azimuth is measured
-- `elplsz`: Flag indicating how elevation is measured
+- `azccw`: Flag indicating how azimuth is measured. If `true`, the azimuth increases in the counterclockwise direction; otherwise it increases in the clockwise direction
+- `elplsz`: Flag indicating how elevation is measured. If `true`, the elevation increases from the XY plane toward +Z; otherwise toward -Z
 
 ### Output ###
 
@@ -1219,8 +1219,8 @@ Compute the Jacobian matrix of the transformation from azimuth/elevation to rect
 - `range`: Distance of a point from the origin
 - `az`: Azimuth of input point in radians
 - `el`: Elevation of input point in radians
-- `azccw`: Flag indicating how azimuth is measured
-- `elplsz`: Flag indicating how elevation is measured
+- `azccw`: Flag indicating how azimuth is measured. If `true`, the azimuth increases in the counterclockwise direction; otherwise it increases in the clockwise direction
+- `elplsz`: Flag indicating how elevation is measured. If `true`, the elevation increases from the XY plane toward +Z; otherwise toward -Z
 
 ### Output ###
 
