@@ -1,4 +1,4 @@
-using Documenter, SPICE
+using Documenter, SPICE, SPICEApplications
 
 makedocs(
     format = Documenter.HTML(
@@ -9,6 +9,7 @@ makedocs(
     pages = [
         "Home" => "index.md",
         "API" => "api.md",
+        "Executables" => "executables.md"
     ],
     doctest = false,
 )
