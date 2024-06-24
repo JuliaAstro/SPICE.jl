@@ -224,8 +224,8 @@ Convert from rectangular coordinates to latitudinal coordinates.
 Returns a tuple consisting of:
 
 - `rad`: Distance of the point from the origin
-- `lon`: Planetographic longitude of the point (radians)
-- `lat`: Planetographic latitude of the point (radians)
+- `lon`: Longitude of the point (radians)
+- `lat`: Latitude of the point (radians)
 
 ### References ###
 
