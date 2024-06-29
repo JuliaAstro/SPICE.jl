@@ -165,7 +165,7 @@ if get(ENV, "GROUP", "SPICE") == "SPICE"
 
 else
     import Pkg
-    Pkg.activate(joinpath(@__DIR__, "lib", ENV["GROUP"]))
+    Pkg.activate(joinpath(dirname(@__DIR__), "lib", ENV["GROUP"]))
     Pkg.instantiate()
     Pkg.test()
 end

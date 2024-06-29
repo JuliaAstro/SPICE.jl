@@ -2,6 +2,7 @@ export
     radrec,
     rav2xf,
     raxisa,
+    recazl,
     reccyl,
     recgeo,
     reclat,
@@ -111,6 +112,40 @@ function raxisa(matrix)
 end
 
 """
+    recazl(rectan, azccw, elplsz)
+
+Convert rectangular coordinates of a point to range, azimuth and elevation.
+
+### Arguments ###
+
+- `rectan`: Rectangular coordinates of a point
+- `azccw`: Flag indicating how azimuth is measured. If `true`, the azimuth increases in the counterclockwise direction; otherwise it increases in the clockwise direction
+- `elplsz`: Flag indicating how elevation is measured. If `true`, the elevation increases from the XY plane toward +Z; otherwise toward -Z
+
+### Output ###
+
+Returns a tuple consisting of:
+
+- `range`: Distance of the point from the origin
+- `az`: Azimuth in radians
+- `el`: Elevation in radians
+
+### References ###
+
+- [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/recazl_c.html)
+"""
+function recazl(rectan, azccw, elplsz)
+    @checkdims 3 rectan
+    range = Ref{SpiceDouble}()
+    az = Ref{SpiceDouble}()
+    el = Ref{SpiceDouble}()
+    ccall((:recazl_c, libcspice), Cvoid,
+          (Ref{SpiceDouble}, SpiceBoolean, SpiceBoolean, Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
+          collect(rectan), azccw, elplsz, range, az, el)
+    range[], az[], el[]
+end
+
+"""
     reccyl(rectan)
 
 Convert from rectangular to cylindrical coordinates.
@@ -189,8 +224,8 @@ Convert from rectangular coordinates to latitudinal coordinates.
 Returns a tuple consisting of:
 
 - `rad`: Distance of the point from the origin
-- `lon`: Planetographic longitude of the point (radians)
-- `lat`: Planetographic latitude of the point (radians)
+- `lon`: Longitude of the point (radians)
+- `lat`: Latitude of the point (radians)
 
 ### References ###
 
