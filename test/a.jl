@@ -6,6 +6,24 @@
         @test output ≈ expected
         @test_throws ArgumentError axisar(axis[1:2], π/2)
     end
+    @testset "azlcpo" begin
+        try
+            furnsh(path(CORE, :lsk),
+                   path(CORE, :pck),
+                   path(CORE, :spk),
+                   path(EXTRA, :earth_topo_tf),
+                   path(EXTRA, :earth_stn_spk),
+                   path(EXTRA, :earth_high_per_pck)
+            )
+            et = str2et("2003 Oct 13 06:00:00 UTC")
+            obspos = [-2353.621419700, -4641.341471700, 3677.052317800]
+            azlsta, lt = azlcpo("ELLIPSOID", "VENUS", et, "CN+S", false, true, obspos, "EARTH", "ITRF93")
+            expected = [2.45721479e8, 5.13974044, -8.54270565e-1, -4.68189831, 7.02070016e-5, -5.39579640e-5]
+            @test all(azlsta ≈ expected)
+        finally
+            kclear()
+        end
+    end
     @testset "azlrec" begin
         exp01 = [0.0, 0.0, 0.0]
         exp02 = [1.0, 0.0, 0.0]
