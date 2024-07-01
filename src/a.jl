@@ -62,6 +62,7 @@ function azlcpo(method, target, et, abcorr, azccw, elplsz, obspos, obsctr, obsre
     lt = Ref{SpiceDouble}()
     ccall((:azlcpo_c, libcspice), Cvoid, (Cstring, Cstring, SpiceDouble, Cstring, SpiceBoolean, SpiceBoolean, Ref{SpiceDouble}, Cstring, Cstring, Ref{SpiceDouble}, Ref{SpiceDouble}), 
         method, target, et, abcorr, azccw, elplsz, obspos, obsctr, obsref, azlsta, lt)
+    handleerror()
     azlsta, lt[]
 end
 
