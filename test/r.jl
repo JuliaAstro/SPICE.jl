@@ -44,17 +44,17 @@ using LinearAlgebra: I
         exp10 = [sqrt(2.0), deg2rad(270.0), deg2rad(-45.0)]
         exp11 = [sqrt(3.0), deg2rad(315.0), deg2rad(-35.264389682754654)]
 
-        @test all(recazl([0.0, 0.0, 0.0], false, false) .≈ exp01)
-        @test all(recazl([1.0, 0.0, 0.0], false, false) .≈ exp02)
-        @test all(recazl([0.0, 1.0, 0.0], false, false) .≈ exp03)
-        @test all(recazl([0.0, 0.0, 1.0], false, false) .≈ exp04)
-        @test all(recazl([-1.0, 0.0, 0.0], false, false) .≈ exp05)
-        @test all(recazl([0.0, -1.0, 0.0], false, false) .≈ exp06)
-        @test all(recazl([0.0, 0.0, -1.0], false, false) .≈ exp07)
-        @test all(recazl([1.0, 1.0, 0.0], false, false) .≈ exp08)
-        @test all(recazl([1.0, 0.0, 1.0], false, false) .≈ exp09)
-        @test all(recazl([0.0, 1.0, 1.0], false, false) .≈ exp10)
-        @test all(recazl([1.0, 1.0, 1.0], false, false) .≈ exp11)
+        @test all(recazl([0.0, 0.0, 0.0], azccw=false, elplsz=false) .≈ exp01)
+        @test all(recazl([1.0, 0.0, 0.0], azccw=false, elplsz=false) .≈ exp02)
+        @test all(recazl([0.0, 1.0, 0.0], azccw=false, elplsz=false) .≈ exp03)
+        @test all(recazl([0.0, 0.0, 1.0], azccw=false, elplsz=false) .≈ exp04)
+        @test all(recazl([-1.0, 0.0, 0.0], azccw=false, elplsz=false) .≈ exp05)
+        @test all(recazl([0.0, -1.0, 0.0], azccw=false, elplsz=false) .≈ exp06)
+        @test all(recazl([0.0, 0.0, -1.0], azccw=false, elplsz=false) .≈ exp07)
+        @test all(recazl([1.0, 1.0, 0.0], azccw=false, elplsz=false) .≈ exp08)
+        @test all(recazl([1.0, 0.0, 1.0], azccw=false, elplsz=false) .≈ exp09)
+        @test all(recazl([0.0, 1.0, 1.0], azccw=false, elplsz=false) .≈ exp10)
+        @test all(recazl([1.0, 1.0, 1.0], azccw=false, elplsz=false) .≈ exp11)
 
         exp21 = [0.0, 0.0, 0.0]
         exp22 = [1.0, 0.0, 0.0]
@@ -68,17 +68,17 @@ using LinearAlgebra: I
         exp30 = [sqrt(2.0), deg2rad(90.0), deg2rad(45.0)]
         exp31 = [sqrt(3.0), deg2rad(45.0), deg2rad(35.264389682754654)]
 
-        @test all(recazl([0.0, 0.0, 0.0], true, true) .≈ exp21)
-        @test all(recazl([1.0, 0.0, 0.0], true, true) .≈ exp22)
-        @test all(recazl([0.0, 1.0, 0.0], true, true) .≈ exp23)
-        @test all(recazl([0.0, 0.0, 1.0], true, true) .≈ exp24)
-        @test all(recazl([-1.0, 0.0, 0.0], true, true) .≈ exp25)
-        @test all(recazl([0.0, -1.0, 0.0], true, true) .≈ exp26)
-        @test all(recazl([0.0, 0.0, -1.0], true, true) .≈ exp27)
-        @test all(recazl([1.0, 1.0, 0.0], true, true) .≈ exp28)
-        @test all(recazl([1.0, 0.0, 1.0], true, true) .≈ exp29)
-        @test all(recazl([0.0, 1.0, 1.0], true, true) .≈ exp30)
-        @test all(recazl([1.0, 1.0, 1.0], true, true) .≈ exp31)
+        @test all(recazl([0.0, 0.0, 0.0]) .≈ exp21)
+        @test all(recazl([1.0, 0.0, 0.0]) .≈ exp22)
+        @test all(recazl([0.0, 1.0, 0.0]) .≈ exp23)
+        @test all(recazl([0.0, 0.0, 1.0]) .≈ exp24)
+        @test all(recazl([-1.0, 0.0, 0.0]) .≈ exp25)
+        @test all(recazl([0.0, -1.0, 0.0]) .≈ exp26)
+        @test all(recazl([0.0, 0.0, -1.0]) .≈ exp27)
+        @test all(recazl([1.0, 1.0, 0.0]) .≈ exp28)
+        @test all(recazl([1.0, 0.0, 1.0]) .≈ exp29)
+        @test all(recazl([0.0, 1.0, 1.0]) .≈ exp30)
+        @test all(recazl([1.0, 1.0, 1.0]) .≈ exp31)
     end
     @testset "reccyl" begin
         expected1 = (0.0, 0.0, 0.0)

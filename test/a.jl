@@ -17,7 +17,7 @@
             )
             et = str2et("2003 Oct 13 06:00:00 UTC")
             obspos = [-2353.621419700, -4641.341471700, 3677.052317800]
-            azlsta, lt = azlcpo("ELLIPSOID", "VENUS", et, "CN+S", false, true, obspos, "EARTH", "ITRF93")
+            azlsta, lt = azlcpo("VENUS", et, "CN+S", obspos, "EARTH", "ITRF93", azccw=false)
             expected = [2.45721479e8, 5.13974044, -8.54270565e-1, -4.68189831, 7.02070016e-5, -5.39579640e-5]
             @test all(azlsta ≈ expected)
         finally
@@ -37,17 +37,17 @@
         exp10 = [-0.0, -1.0, -1.0]
         exp11 = [1.0, -1.0, -1.0]
 
-        act01 = collect(azlrec(0.0, deg2rad(0.0), deg2rad(0.0), true, true))
-        act02 = collect(azlrec(1.0, deg2rad(0.0), deg2rad(0.0), true, true))
-        act03 = collect(azlrec(1.0, deg2rad(270.0), deg2rad(0.0), true, true))
-        act04 = collect(azlrec(1.0, deg2rad(0.0), deg2rad(-90.0), true, true))
-        act05 = collect(azlrec(1.0, deg2rad(180.0), deg2rad(0.0), true, true))
-        act06 = collect(azlrec(1.0, deg2rad(90.0), deg2rad(0.0), true, true))
-        act07 = collect(azlrec(1.0, deg2rad(0.0), deg2rad(90.0), true, true))
-        act08 = collect(azlrec(sqrt(2.0), deg2rad(315.0), deg2rad(0.0), true, true))
-        act09 = collect(azlrec(sqrt(2.0), deg2rad(0.0), deg2rad(-45.0), true, true))
-        act10 = collect(azlrec(sqrt(2.0), deg2rad(270.0), deg2rad(-45.0), true, true))
-        act11 = collect(azlrec(sqrt(3.0), deg2rad(315.0), deg2rad(-35.264389682754654), true, true))
+        act01 = collect(azlrec(0.0, deg2rad(0.0), deg2rad(0.0)))
+        act02 = collect(azlrec(1.0, deg2rad(0.0), deg2rad(0.0)))
+        act03 = collect(azlrec(1.0, deg2rad(270.0), deg2rad(0.0)))
+        act04 = collect(azlrec(1.0, deg2rad(0.0), deg2rad(-90.0)))
+        act05 = collect(azlrec(1.0, deg2rad(180.0), deg2rad(0.0)))
+        act06 = collect(azlrec(1.0, deg2rad(90.0), deg2rad(0.0)))
+        act07 = collect(azlrec(1.0, deg2rad(0.0), deg2rad(90.0)))
+        act08 = collect(azlrec(sqrt(2.0), deg2rad(315.0), deg2rad(0.0)))
+        act09 = collect(azlrec(sqrt(2.0), deg2rad(0.0), deg2rad(-45.0)))
+        act10 = collect(azlrec(sqrt(2.0), deg2rad(270.0), deg2rad(-45.0)))
+        act11 = collect(azlrec(sqrt(3.0), deg2rad(315.0), deg2rad(-35.264389682754654)))
 
         @testset for i in eachindex(act01, exp01)
             @test act01[i] ≈ exp01[i] atol=1e-16

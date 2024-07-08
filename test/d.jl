@@ -196,11 +196,11 @@
         end
     end
     @testset "dazldr" begin
-        out1 = dazldr(1.0, 1.0, 0.0, true, true)
+        out1 = dazldr(1.0, 1.0, 0.0)
         exp1 = [sqrt(2.0)/2.0 sqrt(2.0)/2.0 0.0;
                 -0.5 0.5 0.0;
                 -0.0 -0.0 sqrt(2.0)/2.0]
-        out2 = dazldr(1.0, 1.0, 0.0, false, false)
+        out2 = dazldr(1.0, 1.0, 0.0, azccw=false, elplsz=false)
         exp2 = [sqrt(2.0)/2.0 sqrt(2.0)/2.0 0.0;
                 0.5 -0.5 -0.0;
                 0.0 0.0 -sqrt(2.0)/2.0]
@@ -361,11 +361,11 @@
         @test SPICE._dpr() == rad2deg(1.0)
     end
     @testset "drdazl" begin
-        out1 = drdazl(1.0, deg2rad(45.0), 0.0, true, true)
+        out1 = drdazl(1.0, deg2rad(45.0), 0.0)
         exp1 = [sqrt(2.0)/2.0 -sqrt(2.0)/2.0 -0.0;
                 sqrt(2.0)/2.0 sqrt(2.0)/2.0 -0.0;
                 0.0 0.0 1.0]
-        out2 = drdazl(1.0, deg2rad(45.0), 0.0, false, false)
+        out2 = drdazl(1.0, deg2rad(45.0), 0.0, azccw=false, elplsz=false)
         exp2 = [sqrt(2.0)/2.0 -sqrt(2.0)/2.0 -0.0;
                 -sqrt(2.0)/2.0 -sqrt(2.0)/2.0 0.0;
                 -0.0 -0.0 -1.0]

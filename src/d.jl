@@ -788,7 +788,7 @@ function dasrfr(handle, idwlen=128, ifnlen=256)
 end
 
 """
-    dazldr(x, y, z, azccw, elplsz)
+    dazldr(x, y, z; azccw=true, elplsz=true)
 
 Compute the Jacobian matrix of the transformation from rectangular to azimuth/elevation coordinates.
 
@@ -797,8 +797,11 @@ Compute the Jacobian matrix of the transformation from rectangular to azimuth/el
 - `x`: X-coordinate of point
 - `y`: Y-coordinate of point
 - `z`: Z-coordinate of point
-- `azccw`: Flag indicating how azimuth is measured. If `true`, the azimuth increases in the counterclockwise direction; otherwise it increases in the clockwise direction
-- `elplsz`: Flag indicating how elevation is measured. If `true`, the elevation increases from the XY plane toward +Z; otherwise toward -Z
+
+### Keyword Arguments ###
+
+- `azccw`: Flag indicating how azimuth is measured. If `true` (the default), the azimuth increases in the counterclockwise direction; otherwise it increases in the clockwise direction
+- `elplsz`: Flag indicating how elevation is measured. If `true` (the default), the elevation increases from the XY plane toward +Z; otherwise toward -Z
 
 ### Output ###
 
@@ -808,7 +811,7 @@ Returns the matrix of partial derivatives.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/dazldr_c.html)
 """
-function dazldr(x, y, z, azccw, elplsz)
+function dazldr(x, y, z; azccw=true, elplsz=true)
     jacobi = Array{SpiceDouble}(undef, 3, 3)
     ccall((:dazldr_c, libcspice), Cvoid,
           (SpiceDouble, SpiceDouble, SpiceDouble, SpiceBoolean, SpiceBoolean, Ref{SpiceDouble}),
@@ -1210,7 +1213,7 @@ end
 dpr
 
 """
-    drdazl(range, az, el, azccw, elplsz)
+    drdazl(range, az, el; azccw=true, elplsz=true)
 
 Compute the Jacobian matrix of the transformation from azimuth/elevation to rectangular coordinates.
 
@@ -1219,8 +1222,11 @@ Compute the Jacobian matrix of the transformation from azimuth/elevation to rect
 - `range`: Distance of a point from the origin
 - `az`: Azimuth of input point in radians
 - `el`: Elevation of input point in radians
-- `azccw`: Flag indicating how azimuth is measured. If `true`, the azimuth increases in the counterclockwise direction; otherwise it increases in the clockwise direction
-- `elplsz`: Flag indicating how elevation is measured. If `true`, the elevation increases from the XY plane toward +Z; otherwise toward -Z
+
+### Keyword Arguments ###
+
+- `azccw`: Flag indicating how azimuth is measured. If `true` (the default), the azimuth increases in the counterclockwise direction; otherwise it increases in the clockwise direction
+- `elplsz`: Flag indicating how elevation is measured. If `true` (the default), the elevation increases from the XY plane toward +Z; otherwise toward -Z
 
 ### Output ###
 
@@ -1230,7 +1236,7 @@ Returns the matrix of partial derivatives.
 
 - [NAIF Documentation](https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/drdazl_c.html)
 """
-function drdazl(range, az, el, azccw, elplsz)
+function drdazl(range, az, el; azccw=true, elplsz=true)
     jacobi = Array{SpiceDouble}(undef, 3, 3)
     ccall((:drdazl_c, libcspice), Cvoid,
           (SpiceDouble, SpiceDouble, SpiceDouble, SpiceBoolean, SpiceBoolean, Ref{SpiceDouble}),
