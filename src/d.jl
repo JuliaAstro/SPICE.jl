@@ -2103,7 +2103,8 @@ function dsphdr(x, y, z)
     ccall((:dsphdr_c, libcspice), Cvoid,
           (SpiceDouble, SpiceDouble, SpiceDouble, Ref{SpiceDouble}),
           x, y, z, jacobi)
-    jacobi
+    handleerror()
+    permutedims(jacobi)
 end
 
 """
