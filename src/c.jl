@@ -905,4 +905,3 @@ function cylsph(r, lonc, z)
           r, lonc, z, radius, colat, lon)
     radius[], colat[], lon[]
 end
-

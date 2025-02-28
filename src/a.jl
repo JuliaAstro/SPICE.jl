@@ -29,10 +29,11 @@ function axisar(axis, angle)
 end
 
 """
-    azlcpo(target, et, abcorr, obspos, obsctr, obsref; method="ELLIPSOID", azccw=true, elplsz=true)
+    azlcpo(target, et, abcorr, obspos, obsctr, obsref;
+           method="ELLIPSOID", azccw=true, elplsz=true)
 
-Return the azimuth/elevation coordinates of a specified target relative to an "observer," 
-where the observer has constant position in a specified reference frame. 
+Return the azimuth/elevation coordinates of a specified target relative to an "observer,"
+where the observer has constant position in a specified reference frame.
 The observer's position is provided by the calling program rather than by loaded SPK files.
 
 ### Arguments ###
@@ -63,7 +64,7 @@ function azlcpo(target, et, abcorr, obspos, obsctr, obsref; method="ELLIPSOID", 
     @checkdims 3 obspos
     azlsta = Array{SpiceDouble}(undef, 6)
     lt = Ref{SpiceDouble}()
-    ccall((:azlcpo_c, libcspice), Cvoid, (Cstring, Cstring, SpiceDouble, Cstring, SpiceBoolean, SpiceBoolean, Ref{SpiceDouble}, Cstring, Cstring, Ref{SpiceDouble}, Ref{SpiceDouble}), 
+    ccall((:azlcpo_c, libcspice), Cvoid, (Cstring, Cstring, SpiceDouble, Cstring, SpiceBoolean, SpiceBoolean, Ref{SpiceDouble}, Cstring, Cstring, Ref{SpiceDouble}, Ref{SpiceDouble}),
         method, target, et, abcorr, azccw, elplsz, obspos, obsctr, obsref, azlsta, lt)
     handleerror()
     azlsta, lt[]
@@ -95,7 +96,7 @@ Convert from range, azimuth and elevation of a point to rectangular coordinates.
 """
 function azlrec(range, az, el; azccw=true, elplsz=true)
     rectan = Array{SpiceDouble}(undef, 3)
-    ccall((:azlrec_c, libcspice), Cvoid, (SpiceDouble, SpiceDouble, SpiceDouble, SpiceBoolean, SpiceBoolean, Ref{SpiceDouble}), 
+    ccall((:azlrec_c, libcspice), Cvoid, (SpiceDouble, SpiceDouble, SpiceDouble, SpiceBoolean, SpiceBoolean, Ref{SpiceDouble}),
         range, az, el, azccw, elplsz, rectan)
     rectan
 end

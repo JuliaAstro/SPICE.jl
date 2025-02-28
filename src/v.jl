@@ -777,4 +777,3 @@ end
 vzerog
 
 @deprecate vzerog(v1) iszero(v1)
-

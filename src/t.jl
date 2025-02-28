@@ -163,7 +163,7 @@ end
 """
     tipbod(ref, body, et)
 
-Return a 3x3 matrix that transforms positions in inertial coordinates to
+Return a 3×3 matrix that transforms positions in inertial coordinates to
 positions in body-equator-and-prime-meridian coordinates.
 
 ### Arguments ###
@@ -192,7 +192,7 @@ end
 """
     tisbod(ref, body, et)
 
-Return a 6x6 matrix that transforms states in inertial coordinates to
+Return a 6×6 matrix that transforms states in inertial coordinates to
 states in body-equator-and-prime-meridian coordinates.
 
 ### Arguments ###
@@ -385,4 +385,3 @@ Returns the number of seconds per tropical year.
 function tyear()
     ccall((:tyear_c, libcspice), SpiceDouble, ())
 end
-
