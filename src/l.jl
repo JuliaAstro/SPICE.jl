@@ -191,7 +191,7 @@ lcase
 @deprecate lcase(in) lowercase(in)
 
 """
-   ldpool(kernel)
+    ldpool(kernel)
 
 Load the variables contained in a NAIF ASCII kernel file into the
 kernel pool.
@@ -313,7 +313,7 @@ end
 @deprecate llgrid_pl02 latsrf
 
 """
-   lmpool(cvals)
+    lmpool(cvals)
 
 Load the variables contained in an internal buffer into the
 kernel pool.
@@ -345,7 +345,7 @@ end
 @deprecate lparse(list, delim, nmax) split(list, delim, limit=nmax)
 
 """
-   lparse(list, delim, nmax)
+    lparse(list, delim, nmax)
 
 !!! warning "Deprecated"
     Use `split(list, delim, limit=nmax)` instead.
@@ -365,7 +365,7 @@ end
 @deprecate lparsm(list, delim, nmax) split(list, delim, limit=nmax, keepempty=false)
 
 """
-   lparsm(list, delims, nmax)
+    lparsm(list, delims, nmax)
 
 !!! warning "Deprecated"
     Use `split(list, delim, limit=nmax, keepempty=false)` instead.
@@ -386,7 +386,7 @@ end
 @deprecate lparss(list, delim) Set(split(list, collect(delim)))
 
 """
-   lparss(list, delims)
+    lparss(list, delims)
 
 !!! warning "Deprecated"
     Use `Set(split(list, collect(delim)))` instead.
@@ -394,7 +394,7 @@ end
 lparss
 
 """
-   lspcn(body, et, abcorr)
+    lspcn(body, et, abcorr)
 
 Compute L_s, the planetocentric longitude of the sun, as seen
 from a specified body.
@@ -698,4 +698,3 @@ function lxqstr(string, qchar, first)
     handleerror()
     last[] + 1, nchar[]
 end
-

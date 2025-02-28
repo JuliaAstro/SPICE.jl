@@ -147,4 +147,3 @@ end
 xposeg
 
 @deprecate xposeg transpose
-

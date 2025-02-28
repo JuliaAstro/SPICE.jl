@@ -2733,4 +2733,3 @@ function szpool(name)
     Bool(found[]) || return nothing
     Int(n[])
 end
-

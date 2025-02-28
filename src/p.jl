@@ -787,7 +787,7 @@ end
 """
     pxfrm2(from, to, etfrom, etto)
 
-Return the 3x3 matrix that transforms position vectors from one specified frame at a
+Return the 3×3 matrix that transforms position vectors from one specified frame at a
 specified epoch to another specified frame at another specified epoch.
 
 ### Arguments ###
@@ -813,4 +813,3 @@ function pxfrm2(from, to, etfrom, etto)
     handleerror()
     permutedims(rot)
 end
-

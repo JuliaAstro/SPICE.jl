@@ -195,4 +195,3 @@ end
 Returns the maximum number of elements that `cell` can hold.
 """
 size_c(cell) = cell.cell.size
-

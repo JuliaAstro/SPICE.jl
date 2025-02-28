@@ -585,4 +585,3 @@ end
     Use `isempty(strip(str))` instead.
 """
 iswhsp
-
