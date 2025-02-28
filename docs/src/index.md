@@ -8,7 +8,7 @@ Please refer to its comprehensive [documentation](https://naif.jpl.nasa.gov/pub/
 
 ## Installation
 
-```julia
+```julia-repl
 julia> import Pkg; Pkg.add("SPICE")
 ```
 
