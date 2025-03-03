@@ -451,7 +451,7 @@ end
 @deprecate lstlei(item, array) searchsortedlast(array, item)
 
 """
-    lstlecd(x, array)
+    lstlec(x, array)
 
 !!! warning "Deprecated"
     Use `findfirst(item .<= array)` instead.

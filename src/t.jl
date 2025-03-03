@@ -15,6 +15,8 @@ export
     tyear
 
 """
+    termpt(method, ilusrc, target, et, fixref, abcorr, corloc, obsrvr, refvec, rolstp,
+           ncuts, schstp, soltol, maxn)
 
 Find terminator points on a target body. The caller specifies
 half-planes, bounded by the illumination source center-target center

@@ -374,6 +374,7 @@ function dafgs(lenout=128)
 end
 
 """
+    dafgsr(handle, recno, start, stop)
 
 Read a portion of the contents of a summary record in a DAF file.
 

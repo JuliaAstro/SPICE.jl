@@ -1163,6 +1163,7 @@ function ekuef(handle)
 end
 
 """
+    el2cgv(ellipse)
 
 Convert an ellipse to a center vector and two generating vectors.
 The selected generating vectors are semi-axes of the ellipse.
