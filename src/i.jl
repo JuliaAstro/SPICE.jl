@@ -409,7 +409,7 @@ end
     intmax()
 
 !!! warning "Deprecated"
-    Use `typemax(Cint)` instead.
+    Use [`typemax(Cint)`](@ref Base.typemax) instead.
 """
 intmax
 
@@ -423,7 +423,7 @@ end
     intmin()
 
 !!! warning "Deprecated"
-    Use `typemin(Cint)` instead.
+    Use [`typemin(Cint)`](@ref Base.typemin) instead.
 """
 intmin
 
@@ -441,7 +441,7 @@ end
     invert(matrix)
 
 !!! warning "Deprecated"
-    Use `inv(matrix)` instead.
+    Use [`inv(matrix)`](@ref Base.inv-Tuple{AbstractMatrix}) instead.
 """
 invert
 
@@ -459,7 +459,7 @@ end
     invort(matrix)
 
 !!! warning "Deprecated"
-    Use `inv(matrix)` instead.
+    Use [`inv(matrix)`](@ref Base.inv-Tuple{AbstractMatrix}) instead.
 """
 invort
 
@@ -478,7 +478,7 @@ end
     isordv(vec)
 
 !!! warning "Deprecated"
-    Use `isperm(vec)` instead.
+    Use [`isperm(vec)`](@ref Base.isperm) instead.
 """
 isordv
 
@@ -520,7 +520,7 @@ end
     isrchi(value, array)
 
 !!! warning "Deprecated"
-    Use `findfirst(array .== value)` instead.
+    Use [`findfirst(==(value), array)`](@ref Base.findfirst-Tuple{Function, Any}) instead.
 """
 isrchc, isrchd, isrchi
 

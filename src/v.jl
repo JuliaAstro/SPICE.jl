@@ -105,7 +105,7 @@ end
     vcrss(v1, v2)
 
 !!! warning "Deprecated"
-    Use `LinearAlgebra.cross(v1, v2)` instead.
+    Use [`LinearAlgebra.cross(v1, v2)`](@ref LinearAlgebra.cross) instead.
 """
 vcrss
 
@@ -130,7 +130,7 @@ end
     vdistg(v1, v2)
 
 !!! warning "Deprecated"
-    Use `LinearAlgebra.norm(v1 .- v2)` instead.
+    Use [`LinearAlgebra.norm(v1 - v2)`](@ref LinearAlgebra.norm) instead.
 """
 vdist, vdistg
 
@@ -153,7 +153,7 @@ end
     vdotg(v1, v2)
 
 !!! warning "Deprecated"
-    Use `LinearAlgebra.dot(v1, v2)` instead.
+    Use [`LinearAlgebra.dot(v1, v2)`](@ref LinearAlgebra.dot) instead.
 """
 vdot, vdotg
 
@@ -686,6 +686,6 @@ end
     vzerog(v1, v2)
 
 !!! warning "Deprecated"
-    Use `iszero(v1)` instead.
+    Use [`Base.iszero(v1)`](@ref Base.iszero) instead.
 """
 vzero, vzerog

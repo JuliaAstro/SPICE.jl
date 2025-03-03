@@ -184,7 +184,7 @@ end
     lcase(in)
 
 !!! warning "Deprecated"
-    Use `lowercase(in)` instead.
+    Use [`lowercase(in)`](@ref Base.Unicode.lowercase) instead.
 """
 lcase
 
@@ -348,7 +348,7 @@ end
     lparse(list, delim, nmax)
 
 !!! warning "Deprecated"
-    Use `split(list, delim, limit=nmax)` instead.
+    Use [`split(list, delim, limit=nmax)`](@ref Base.split) instead.
 """
 lparse
 
@@ -368,7 +368,7 @@ end
     lparsm(list, delims, nmax)
 
 !!! warning "Deprecated"
-    Use `split(list, delim, limit=nmax, keepempty=false)` instead.
+    Use [`split(list, delim, limit=nmax, keepempty=false)`](@ref Base.split) instead.
 """
 lparsm
 
@@ -389,7 +389,7 @@ end
     lparss(list, delims)
 
 !!! warning "Deprecated"
-    Use `Set(split(list, collect(delim)))` instead.
+    Use [`Set(split(list, collect(delim)))`](@ref Base.split) instead.
 """
 lparss
 
@@ -463,7 +463,7 @@ lstlec
     lstlei(x, array)
 
 !!! warning "Deprecated"
-    Use `searchsortedlast(array, x)` instead.
+    Use [`searchsortedlast(array, x)`](@ref Base.Sort.searchsortedlast) instead.
 """
 lstled, lstlei
 
@@ -508,7 +508,7 @@ lstltc
     lstlti(x, array)
 
 !!! warning "Deprecated"
-    Use `searchsortedlast(array, x, lt=<=)` instead.
+    Use [`searchsortedlast(array, x, lt=<=)`](@ref Base.Sort.searchsortedlast) instead.
 """
 lstltd, lstlti
 

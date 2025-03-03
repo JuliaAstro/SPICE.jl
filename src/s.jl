@@ -534,7 +534,7 @@ end
     shelli(array)
 
 !!! warning "Deprecated"
-    Use `sort!(array)` instead.
+    Use [`Base.sort!(array)`](@ref Base.sort!) instead.
 """
 shellc, shelld, shelli
 
@@ -2277,7 +2277,7 @@ end
     srfxpt
 
 !!! warning "Deprecated"
-    Use `sincpt` instead.
+    Use [`sincpt`](@ref) instead.
 """
 srfxpt
 
@@ -2440,7 +2440,7 @@ end
     subpt
 
 !!! warning "Deprecated"
-    Use `subpnt` instead.
+    Use [`subpnt`](@ref) instead.
 """
 subpt
 
@@ -2450,7 +2450,7 @@ subpt
     subpt_pl02
 
 !!! warning "Deprecated"
-    Use `subpnt` instead.
+    Use [`subpnt`](@ref) instead.
 """
 subpt_pl02
 
@@ -2498,7 +2498,7 @@ end
     subsol
 
 !!! warning "Deprecated"
-    Use `subslr` instead.
+    Use [`subslr`](@ref) instead.
 """
 subsol
 
@@ -2508,7 +2508,7 @@ subsol
     subsol_pl02
 
 !!! warning "Deprecated"
-    Use `subslr` instead.
+    Use [`subslr`](@ref) instead.
 """
 subsol_pl02
 
@@ -2531,7 +2531,7 @@ end
     sumai(array)
 
 !!! warning "Deprecated"
-    Use `sum(array)` instead.
+    Use [`Base.sum(array)`](@ref Base.sum) instead.
 """
 sumad, sumai
 

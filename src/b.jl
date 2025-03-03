@@ -324,7 +324,7 @@ end
     brckti(number, e1, e2)
 
 !!! warning "Deprecated"
-    Use `clamp` from Julia's standard library instead.
+    Use [`Base.clamp()`](@ref Base.clamp) from Julia's standard library instead.
 """
 brcktd, brckti
 
@@ -357,7 +357,7 @@ end
     bschoi(value, array, order)
 
 !!! warning "Deprecated"
-    Use `findfirst(array .== value)` instead.
+    Use [`Base.findfirst(==(value), array)`](@ref Base.findfirst-Tuple{Function, Any}) instead.
 """
 bschoc, bschoi
 
@@ -399,6 +399,6 @@ end
     bsrchi(value, array)
 
 !!! warning "Deprecated"
-    Use `findfirst(array .== value)` instead.
+    Use [`Base.findfirst(==(value), array)`](@ref Base.findfirst-Tuple{Function, Any}) instead.
 """
 bsrchc, bsrchd, bsrchi

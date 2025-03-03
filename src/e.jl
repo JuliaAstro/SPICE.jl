@@ -1200,7 +1200,7 @@ end
     elemi(item, cell)
 
 !!! warning "Deprecated"
-    Use `item in cell` instead.
+    Use [`item in cell`](@ref Base.in) instead.
 """
 elemc, elemd, elemi
 

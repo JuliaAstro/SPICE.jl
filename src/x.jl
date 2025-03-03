@@ -128,6 +128,6 @@ end
     xposeg(matrix)
 
 !!! warning "Deprecated"
-    Use `transpose(matrix)` instead.
+    Use [`Base.transpose(matrix)`](@ref Base.transpose) instead.
 """
 xpose, xpose6, xposeg
