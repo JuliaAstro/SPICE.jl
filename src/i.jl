@@ -561,12 +561,12 @@ function _iswhsp(str)
     Bool(res[])
 end
 
-@deprecate iswhsp(str) isempty(strip(str))
+@deprecate iswhsp(str) all(isspace, str)
 
 """
     iswhsp(str)
 
 !!! warning "Deprecated"
-    Use `isempty(strip(str))` instead.
+    Use `all(isspace, str)` instead.
 """
 iswhsp

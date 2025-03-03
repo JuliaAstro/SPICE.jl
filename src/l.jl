@@ -40,7 +40,7 @@ end
     lastnb(str)
 
 !!! warning "Deprecated"
-    Use `findprev(!isspace, str, length(str))` instead.
+    Use [`findlast(!isspace, str)`](@ref Base.findlast-Tuple{Function, Any}) instead.
 """
 lastnb
 
@@ -446,7 +446,7 @@ function _lstle(x::Signed, array)
     out + 1
 end
 
-@deprecate lstlec(item, array) findfirst(item .<= array)
+@deprecate lstlec(item, array) findfirst(>(item), array)
 @deprecate lstled(item, array) searchsortedlast(array, item)
 @deprecate lstlei(item, array) searchsortedlast(array, item)
 
@@ -454,7 +454,7 @@ end
     lstlec(x, array)
 
 !!! warning "Deprecated"
-    Use `findfirst(item .<= array)` instead.
+    Use [`findfirst(>(item), array)`](@ref Base.findfirst-Tuple{Function, Any}) instead.
 """
 lstlec
 
@@ -499,7 +499,7 @@ end
     lstltcd(x, array)
 
 !!! warning "Deprecated"
-    Use `findfirst(item .< array)` instead.
+    Use [`findfirst(>=(item), array)`](@ref Base.findfirst-Tuple{Function, Any}) instead.
 """
 lstltc
 
