@@ -525,7 +525,7 @@ time between transmit and receive is also returned.
 
 - `etobs`: Epoch of a signal at some observer
 - `obs`: NAIF ID of some observer
-- `dir`: Direction the signal travels ( "->" or "<-" )
+- `dir`: Direction the signal travels ( `"->"` or `"<-"` )
 - `targ`: Time between transmit and receipt of the signal
 
 ### Output ###
@@ -560,7 +560,7 @@ end of a decimal number.
 ### Output ###
 
 - `last`: Last character that is part of a decimal number. If there is no such
-          character, last will be returned with the value first-1.
+          character, `last` will be returned with the value `first-1`.
 - `nchar`: Number of characters in the decimal number
 
 ### References ###
@@ -591,7 +591,7 @@ end of a number.
 ### Output ###
 
 - `last`: Last character that is part of a number. If there is no such
-          character, last will be returned with the value first-1.
+          character, `last` will be returned with the value `first-1`.
 - `nchar`: Number of characters in the number
 
 ### References ###
@@ -621,7 +621,7 @@ Scan a string from a specified starting position for the end of a signed integer
 ### Output ###
 
 - `last`: Last character that is part of a signed integer. If there is no such
-          character, last will be returned with the value first-1.
+          character, `last` will be returned with the value `first-1`.
 - `nchar`: Number of characters in the signed integer
 
 ### References ###
@@ -652,7 +652,7 @@ end of a unsigned integer.
 ### Output ###
 
 - `last`: Last character that is part of an unsigned integer. If there is no such
-          character, last will be returned with the value first-1.
+          character, `last` will be returned with the value `first-1`.
 - `nchar`: Number of characters in the unsigned integer
 
 ### References ###

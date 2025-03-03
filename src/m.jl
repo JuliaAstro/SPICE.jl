@@ -346,7 +346,7 @@ Find a unit quaternion corresponding to a specified rotation matrix.
 
 ### Output ###
 
-A unit quaternion representing `r'
+A unit quaternion representing `r`
 
 ### References ###
 
