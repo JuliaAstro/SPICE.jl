@@ -598,7 +598,7 @@ cleard
 """
     clight()
 
-Returns the speed of light in vacuo (km/sec).
+Returns the speed of light in vacuum (km/sec).
 
 ### References ###
 
