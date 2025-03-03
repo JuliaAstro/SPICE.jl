@@ -113,44 +113,26 @@ function _maxd(args...)
     @eval ccall((:maxd_c, libcspice), SpiceDouble, (SpiceInt, SpiceDouble...), $n, $(args...))
 end
 
-"""
-    maxd(args...)
-
-!!! warning "Deprecated"
-    Use `max(args...)` instead.
-"""
-maxd
-
-@deprecate maxd max
-
 function _maxi(args...)
     n = length(args)
     @eval ccall((:maxi_c, libcspice), SpiceInt, (SpiceInt, SpiceInt...), $n, $(args...))
 end
 
+@deprecate maxd max
+@deprecate maxi max
+
 """
+    maxd(args...)
     maxi(args...)
 
 !!! warning "Deprecated"
     Use `max(args...)` instead.
 """
-maxi
-
-@deprecate maxi max
+maxd, maxi
 
 function _mequ(a, b)
     ccall((:mequ_c, libcspice), Cvoid, (Ref{SpiceDouble}, Ref{SpiceDouble}), a, b)
 end
-
-"""
-    mequ(m1, mout)
-
-!!! warning "Deprecated"
-    Use `mout .= m1` instead.
-"""
-mequ
-
-@deprecate mequ(m1, mout) mout .= m1
 
 function _mequg(a, b)
     m, n = size(a)
@@ -158,45 +140,39 @@ function _mequg(a, b)
           (Ref{SpiceDouble}, SpiceInt, SpiceInt, Ref{SpiceDouble}), a, m, n, b)
 end
 
+@deprecate mequ(m1, mout) mout .= m1
+@deprecate mequg(m1, mout) mout .= m1
+
 """
+    mequ(m1, mout)
     mequg(m1, mout)
 
 !!! warning "Deprecated"
     Use `mout .= m1` instead.
 """
-mequg
-
-@deprecate mequg(m1, mout) mout .= m1
+mequ, mequg
 
 function _mind(args...)
     n = length(args)
     @eval ccall((:mind_c, libcspice), SpiceDouble, (SpiceInt, SpiceDouble...), $n, $(args...))
 end
 
-"""
-    mind(args...)
-
-!!! warning "Deprecated"
-    Use `min(args...)` instead.
-"""
-mind
-
-@deprecate mind min
-
 function _mini(args...)
     n = length(args)
     @eval ccall((:mini_c, libcspice), SpiceInt, (SpiceInt, SpiceInt...), $n, $(args...))
 end
 
+@deprecate mind min
+@deprecate mini min
+
 """
+    mind(args...)
     mini(args...)
 
 !!! warning "Deprecated"
     Use `min(args...)` instead.
 """
-mini
-
-@deprecate mini min
+mind, mini
 
 function _mtxm(m1, m2)
     mout = Array{SpiceDouble}(undef, 3, 3)
@@ -205,16 +181,6 @@ function _mtxm(m1, m2)
           permutedims(m1), permutedims(m2), mout)
     permutedims(mout)
 end
-
-"""
-    mtxm(m1, m2)
-
-!!! warning "Deprecated"
-    Use `m1' * m2` instead.
-"""
-mtxm
-
-@deprecate mtxm(m1, m2) m1' * m2
 
 function _mtxmg(m1, m2)
     l1, n = size(m1)
@@ -227,15 +193,17 @@ function _mtxmg(m1, m2)
     permutedims(mout)
 end
 
+@deprecate mtxm(m1, m2)  m1' * m2
+@deprecate mtxmg(m1, m2) m1' * m2
+
 """
+    mtxm(m1, m2)
     mtxmg(m1, m2)
 
 !!! warning "Deprecated"
     Use `m1' * m2` instead.
 """
-mtxmg
-
-@deprecate mtxmg(m1, m2) m1' * m2
+mtxm, mtxmg
 
 function _mtxv(m1, v2)
     vout = Array{Float64}(undef, 3)
@@ -245,14 +213,6 @@ function _mtxv(m1, v2)
     handleerror()
     vout
 end
-
-"""
-    mtxv(m1,v2)
-
-!!! warning "Deprecated"
-    Use `m1' * v2` instead.
-"""
-mtxv
 
 @deprecate mtxv(m1, v2) m1' * v2
 
@@ -268,15 +228,16 @@ function _mtxvg(m1, v2)
     vout
 end
 
+@deprecate mtxvg(m1, v2) m1' * v2
+
 """
+    mtxv(m1,v2)
     mtxvg(m1,v2)
 
 !!! warning "Deprecated"
     Use `m1' * v2` instead.
 """
-mtxvg
-
-@deprecate mtxvg(m1, v2) m1' * v2
+mtxv, mtxvg
 
 function _mxm(m1, m2)
     mout = Array{SpiceDouble}(undef, 3, 3)
@@ -285,16 +246,6 @@ function _mxm(m1, m2)
           permutedims(m1), permutedims(m2), mout)
     permutedims(mout)
 end
-
-"""
-    mxm(m1, m2)
-
-!!! warning "Deprecated"
-    Use `m1 * m2` instead.
-"""
-mxm
-
-@deprecate mxm(m1, m2) m1 * m2
 
 function _mxmg(m1, m2)
     n, l1 = size(m1)
@@ -307,15 +258,18 @@ function _mxmg(m1, m2)
     permutedims(mout)
 end
 
+@deprecate mxm(m1, m2) m1 * m2
+@deprecate mxmg(m1, m2) m1 * m2
+
 """
+    mxm(m1, m2)
     mxmg(m1, m2)
 
 !!! warning "Deprecated"
     Use `m1 * m2` instead.
 """
-mxmg
+mxm, mxmg
 
-@deprecate mxmg(m1, m2) m1 * m2
 
 function _mxmt(m1, m2)
     mout = Array{SpiceDouble}(undef, 3, 3)
@@ -324,16 +278,6 @@ function _mxmt(m1, m2)
           permutedims(m1), permutedims(m2), mout)
     permutedims(mout)
 end
-
-"""
-    mxmt(m1, m2)
-
-!!! warning "Deprecated"
-    Use `m1 * m2'` instead.
-"""
-mxmt
-
-@deprecate mxmt(m1, m2) m1 * m2'
 
 function _mxmtg(m1, m2)
     n, l1 = size(m1)
@@ -346,15 +290,17 @@ function _mxmtg(m1, m2)
     permutedims(mout)
 end
 
+@deprecate mxmt(m1, m2)  m1 * m2'
+@deprecate mxmtg(m1, m2) m1 * m2'
+
 """
+    mxmt(m1, m2)
     mxmtg(m1, m2)
 
 !!! warning "Deprecated"
     Use `m1 * m2'` instead.
 """
-mxmtg
-
-@deprecate mxmtg(m1, m2) m1 * m2'
+mxmt, mxmtg
 
 function _mxv(m1, v2)
     vout = Array{Float64}(undef, 3)
@@ -364,16 +310,6 @@ function _mxv(m1, v2)
     handleerror()
     vout
 end
-
-"""
-    mxv(m1,v2)
-
-!!! warning "Deprecated"
-    Use `m1 * v2` instead.
-"""
-mxv
-
-@deprecate mxv(m1, v2) m1 * v2
 
 function _mxvg(m1, v2)
     lm1, lm2 = size(m1)
@@ -387,15 +323,17 @@ function _mxvg(m1, v2)
     vout
 end
 
+@deprecate mxv(m1, v2) m1 * v2
+@deprecate mxvg(m1, v2) m1 * v2
+
 """
+    mxv(m1,v2)
     mxvg(m1,v2)
 
 !!! warning "Deprecated"
     Use `m1 * v2` instead.
 """
-mxvg
-
-@deprecate mxvg(m1, v2) m1 * v2
+mxv, mxvg
 
 """
     m2q(r)

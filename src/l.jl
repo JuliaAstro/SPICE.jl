@@ -459,13 +459,13 @@ end
 lstlec
 
 """
-    lstle[di](x, array)
+    lstled(x, array)
+    lstlei(x, array)
 
 !!! warning "Deprecated"
     Use `searchsortedlast(array, x)` instead.
 """
-lstled
-lstlei
+lstled, lstlei
 
 function _lstlt(string::AbstractString, array)
     n = length(array)
@@ -504,13 +504,13 @@ end
 lstltc
 
 """
-    lstlt[di](x, array)
+    lstltd(x, array)
+    lstlti(x, array)
 
 !!! warning "Deprecated"
     Use `searchsortedlast(array, x, lt=<=)` instead.
 """
-lstltd
-lstlti
+lstltd, lstlti
 
 
 """

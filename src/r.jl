@@ -436,16 +436,6 @@ function _reordc(iorder, array)
     chararray_to_string(array_, m)
 end
 
-@deprecate reordc(iorder, array) array[iorder]
-
-"""
-    reordc(iorder, array)
-
-!!! warning "Deprecated"
-    Use `array[iorder]` instead.
-"""
-reordc
-
 function _reordd(iorder, array)
     iorder_ = SpiceInt.(iorder .- 1)
     n = length(iorder)
@@ -454,16 +444,6 @@ function _reordd(iorder, array)
           iorder_, n, array)
     array
 end
-
-@deprecate reordd(iorder, array) array[iorder]
-
-"""
-    reordd(iorder, array)
-
-!!! warning "Deprecated"
-    Use `array[iorder]` instead.
-"""
-reordd
 
 function _reordi(iorder, array)
     iorder_ = SpiceInt.(iorder .- 1)
@@ -475,16 +455,6 @@ function _reordi(iorder, array)
     Int.(array_)
 end
 
-@deprecate reordi(iorder, array) array[iorder]
-
-"""
-    reordi(iorder, array)
-
-!!! warning "Deprecated"
-    Use `array[iorder]` instead.
-"""
-reordi
-
 function _reordl(iorder, array)
     iorder_ = SpiceInt.(iorder .- 1)
     array_ = SpiceBoolean.(array)
@@ -495,15 +465,21 @@ function _reordl(iorder, array)
     Bool.(array_)
 end
 
+@deprecate reordc(iorder, array) array[iorder]
+@deprecate reordd(iorder, array) array[iorder]
+@deprecate reordi(iorder, array) array[iorder]
 @deprecate reordl(iorder, array) array[iorder]
 
 """
+    reordc(iorder, array)
+    reordd(iorder, array)
+    reordi(iorder, array)
     reordl(iorder, array)
 
 !!! warning "Deprecated"
     Use `array[iorder]` instead.
 """
-reordl
+reordc, reordd, reordi, reordl
 
 function _repmc(input, marker, value)
     lenout = length(input) - length(marker) + length(value) + 1
@@ -526,54 +502,22 @@ end
 repmc
 
 @deprecate repmct replace
-
-"""
-    repmct
-
-!!! warning "Deprecated"
-    Use `replace` instead.
-"""
-repmct
-
 @deprecate repmd replace
-
-"""
-    repmd
-
-!!! warning "Deprecated"
-    Use `replace` instead.
-"""
-repmd
-
 @deprecate repmf replace
-
-"""
-    repmf
-
-!!! warning "Deprecated"
-    Use `replace` instead.
-"""
-repmf
-
 @deprecate repmi replace
-
-"""
-    repmi
-
-!!! warning "Deprecated"
-    Use `replace` instead.
-"""
-repmi
-
 @deprecate repmot replace
 
 """
+    repmct
+    repmd
+    repmf
+    repmi
     repmot
 
 !!! warning "Deprecated"
     Use `replace` instead.
 """
-repmot
+repmct, repmd, repmf, repmi, repmot
 
 """
     rotate(angle, iaxis)

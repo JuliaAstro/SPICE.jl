@@ -491,16 +491,6 @@ function _isrchc(value, array)
     res[] + 1
 end
 
-@deprecate isrchc(value, array) findfirst(array .== item)
-
-"""
-    isrchc(value, array)
-
-!!! warning "Deprecated"
-    Use `findfirst(array .== value)` instead.
-"""
-isrchc
-
 function _isrchd(value, array)
     n = length(array)
     res = ccall((:isrchd_c, libcspice), SpiceBoolean,
@@ -509,16 +499,6 @@ function _isrchd(value, array)
     handleerror()
     res[] + 1
 end
-
-@deprecate isrchd(value, array) findfirst(array .== item)
-
-"""
-    isrchd(value, array)
-
-!!! warning "Deprecated"
-    Use `findfirst(array .== value)` instead.
-"""
-isrchd
 
 function _isrchi(value, array)
     array_ = SpiceInt.(array)
@@ -530,15 +510,20 @@ function _isrchi(value, array)
     res[] + 1
 end
 
+@deprecate isrchc(value, array) findfirst(array .== item)
+@deprecate isrchd(value, array) findfirst(array .== item)
 @deprecate isrchi(value, array) findfirst(array .== item)
 
 """
+    isrchc(value, array)
+    isrchd(value, array)
     isrchi(value, array)
 
 !!! warning "Deprecated"
     Use `findfirst(array .== value)` instead.
 """
-isrchi
+isrchc, isrchd, isrchi
+
 
 """
     isrot(m, ntol, dtol)

@@ -1194,14 +1194,14 @@ end
 @deprecate elemi(item, cell) item in cell
 
 """
-    elem[c/d/i](item, cell)
+    elemc(item, cell)
+    elemd(item, cell)
+    elemi(item, cell)
 
 !!! warning "Deprecated"
     Use `item in cell` instead.
 """
-elemc
-elemd
-elemi
+elemc, elemd, elemi
 
 """
     eqstr(a, b)
@@ -1471,4 +1471,3 @@ function expool(name)
     handleerror()
     Bool(found[])
 end
-

@@ -311,30 +311,22 @@ function _brcktd(number, e1, e2)
         number, e1, e2)
 end
 
-"""
-    brcktd(number, e1, e2)
-
-!!! warning "Deprecated"
-    Use `clamp` from Julia's standard library instead.
-"""
-brcktd
-
-@deprecate brcktd clamp
-
 function _brckti(number, e1, e2)
     ccall((:brckti_c, libcspice), SpiceInt, (SpiceInt, SpiceInt, SpiceInt),
         number, e1, e2)
 end
 
+@deprecate brcktd clamp
+@deprecate brckti clamp
+
 """
+    brcktd(number, e1, e2)
     brckti(number, e1, e2)
 
 !!! warning "Deprecated"
     Use `clamp` from Julia's standard library instead.
 """
-brckti
-
-@deprecate brckti clamp
+brcktd, brckti
 
 function _bschoc(value, array, order)
     array_, m, n = chararray(array)
@@ -345,16 +337,6 @@ function _bschoc(value, array, order)
     handleerror()
     return idx == -1 ? idx : idx + 1
 end
-
-"""
-    bschoc(value, array, order)
-
-!!! warning "Deprecated"
-    Use `findfirst(array .== value)` instead.
-"""
-bschoc
-
-@deprecate bschoc(value, array, order) findfirst(array .== value)
 
 function _bschoi(value, array, order)
     array_ = SpiceInt.(array)
@@ -367,15 +349,17 @@ function _bschoi(value, array, order)
     return idx == -1 ? idx : idx + 1
 end
 
+@deprecate bschoc(value, array, order) findfirst(array .== value)
+@deprecate bschoi(value, array, order) findfirst(array .== value)
+
 """
+    bschoc(value, array, order)
     bschoi(value, array, order)
 
 !!! warning "Deprecated"
     Use `findfirst(array .== value)` instead.
 """
-bschoi
-
-@deprecate bschoi(value, array, order) findfirst(array .== value)
+bschoc, bschoi
 
 function _bsrchc(value, array)
     array_, m, n = chararray(array)
@@ -386,16 +370,6 @@ function _bsrchc(value, array)
     return idx == -1 ? idx : idx + 1
 end
 
-"""
-    bsrchc(value, array)
-
-!!! warning "Deprecated"
-    Use `findfirst(array .== value)` instead.
-"""
-bsrchc
-
-@deprecate bsrchc(value, array) findfirst(array .== value)
-
 function _bsrchd(value, array)
     n = length(array)
     idx = ccall((:bsrchd_c, libcspice), SpiceInt,
@@ -404,16 +378,6 @@ function _bsrchd(value, array)
     handleerror()
     return idx == -1 ? idx : idx + 1
 end
-
-"""
-    bsrchd(value, array)
-
-!!! warning "Deprecated"
-    Use `findfirst(array .== value)` instead.
-"""
-bsrchd
-
-@deprecate bsrchd(value, array) findfirst(array .== value)
 
 function _bsrchi(value, array)
     array_ = SpiceInt.(array)
@@ -425,12 +389,16 @@ function _bsrchi(value, array)
     return idx == -1 ? idx : idx + 1
 end
 
+@deprecate bsrchc(value, array) findfirst(array .== value)
+@deprecate bsrchd(value, array) findfirst(array .== value)
+@deprecate bsrchi(value, array) findfirst(array .== value)
+
 """
+    bsrchc(value, array)
+    bsrchd(value, array)
     bsrchi(value, array)
 
 !!! warning "Deprecated"
     Use `findfirst(array .== value)` instead.
 """
-bsrchi
-
-@deprecate bsrchi(value, array) findfirst(array .== value)
+bsrchc, bsrchd, bsrchi
