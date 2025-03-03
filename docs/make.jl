@@ -2,6 +2,11 @@ using SPICE
 using SPICEApplications
 using Documenter
 using Documenter.Remotes: GitHub
+using DocumenterInterLinks
+
+links = InterLinks(
+    "Julia" => "https://docs.julialang.org/en/v1/",
+)
 
 makedocs(
     format = Documenter.HTML(
@@ -16,7 +21,7 @@ makedocs(
         "API" => "api.md",
         "Executables" => "executables.md"
     ],
-    doctest = false,
+    plugins = [links],
 )
 
 deploydocs(
