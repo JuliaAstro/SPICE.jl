@@ -864,8 +864,8 @@ Parse the SELECT clause of an EK query, returning full particulars concerning ea
 
 - `query`: EK query
 - `msglen`: Available space in the output error message string (default: 256)
-- `tablen`: Length of strings in `tabs' output array (default: 256)
-- `collen`: Length of strings in `cols' output array (default: 256)
+- `tablen`: Length of strings in `tabs` output array (default: 256)
+- `collen`: Length of strings in `cols` output array (default: 256)
 
 ### Output ###
 
@@ -1299,7 +1299,7 @@ specified longitude.
 - `lon`: Longitude of surface point (radians)
 - `typ`: Type of longitude "PLANETOCENTRIC", etc
 - `timlen`: Available room in output time string (default: 128)
-- `ampmlen`: Available room in output `ampm' string (default: 128)
+- `ampmlen`: Available room in output `ampm` string (default: 128)
 
 ### Output ###
 

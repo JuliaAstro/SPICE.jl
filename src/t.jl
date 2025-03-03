@@ -317,7 +317,7 @@ Set the lower bound on the 100 year range.
 
 ### Arguments ###
 
--`year`: Lower bound on the 100 year interval of expansion
+- `year`: Lower bound on the 100 year interval of expansion
 
 ### References ###
 

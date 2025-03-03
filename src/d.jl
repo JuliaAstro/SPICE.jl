@@ -491,7 +491,7 @@ Read the contents of the file record of a DAF.
 ### Arguments ###
 
 - `handle`: Handle of an open DAF file
-- `lenout`: Available room in the output string `ifname' (default: 128)
+- `lenout`: Available room in the output string `ifname` (default: 128)
 
 ### Output ###
 

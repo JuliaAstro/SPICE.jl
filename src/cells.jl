@@ -64,7 +64,7 @@ Base.lastindex(cell::SpiceCell) = cell.cell.card
 """
     SpiceCharCell(size, length)
 
-Create a SpiceCharCell that can contain up to `size` strings with `length` characters.
+Create a `SpiceCharCell` that can contain up to `size` strings with `length` characters.
 """
 SpiceCharCell
 
@@ -98,14 +98,14 @@ end
 """
     SpiceDoubleCell(size)
 
-Create a SpiceDoubleCell that can contain up to `size` elements.
+Create a `SpiceDoubleCell` that can contain up to `size` elements.
 """
 SpiceDoubleCell
 
 """
     SpiceIntCell(size)
 
-Create a SpiceIntCell that can contain up to `size` elements.
+Create a `SpiceIntCell` that can contain up to `size` elements.
 """
 SpiceIntCell
 
@@ -180,7 +180,7 @@ size(cell::SpiceCell) = (card(cell),)
 """
     copy(cell::SpiceCell)
 
-Duplicate the SpiceCell `cell`.
+Duplicate the `SpiceCell` `cell`.
 """
 function Base.copy(cell::SpiceCell{T}) where {T}
     cell_copy = deepcopy(cell)

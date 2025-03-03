@@ -39,7 +39,7 @@ Multiply two quaternions.
 
 ### Output ###
 
-A quaternion corresponding to the product of `q1' and `q2'
+A quaternion corresponding to the product of `q1` and `q2`
 
 ### References ###
 
@@ -63,11 +63,11 @@ with respect to time.
 ### Arguments ###
 
 - `q`: Unit SPICE quaternion (as any kind of iterable with four elements)
-- `dq`: Derivative of `q' with respect to time
+- `dq`: Derivative of `q` with respect to time
 
 ### Output ###
 
-Angular velocity vector defined by `q' and `dq'
+Angular velocity vector defined by `q` and `dq`
 
 ### References ###
 
@@ -81,4 +81,3 @@ function qdq2av(q,dq)
           q, dq, av)
     av
 end
-

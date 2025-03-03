@@ -183,7 +183,7 @@ Determine whether values exist for some item for any body in the kernel pool.
 ### Arguments ###
 
 - `body`: ID code of body
-- `item`: Item to find ("RADII", "NUT_AMP_RA", etc.)
+- `item`: Item to find (`"RADII"`, `"NUT_AMP_RA"`, etc.)
 
 ### Output ###
 
