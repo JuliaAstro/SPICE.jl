@@ -1,9 +1,14 @@
-using Documenter, SPICE, SPICEApplications
+using SPICE
+using SPICEApplications
+using Documenter
+using Documenter.Remotes: GitHub
 
 makedocs(
     format = Documenter.HTML(
         prettyurls = get(ENV, "CI", nothing) == "true",
+        size_threshold = 800*1024,
     ),
+    repo = GitHub("JuliaAstro/SPICE.jl"),
     sitename = "SPICE.jl",
     authors = "Helge Eichhorn",
     pages = [
