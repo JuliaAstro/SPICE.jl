@@ -371,8 +371,8 @@ function gfevnt(udstep, udrefn, gquant, qpnams, qcpars, qdpars, qipars, qlpars,
 end
 
 """
-    gffove!(inst, tshape, raydir, target, tframe, abcorr, obsrvr, tol, udstep, udrefn,
-                rpt, udrepi, udrepu, udrepf, cnfine, result)
+    gffove!(inst, tshape, raydir, target, tframe, abcorr, obsrvr, tol,
+            udstep, udrefn, rpt, udrepi, udrepu, udrepf, cnfine, result)
 
 Determine time intervals when a specified target body or ray intersects the space bounded by the
 field-of-view (FOV) of a specified instrument.
@@ -498,8 +498,8 @@ function gfilum(method, angtyp, target, illmn, fixref, abcorr, obsrvr, spoint, r
 end
 
 """
-    function gfocce!(occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, tol,
-        udstep, udrefn, rpt, udrepi, udrepu, udrepf, cnfine, result)
+    gfocce!(occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, obsrvr, tol,
+            udstep, udrefn, rpt, udrepi, udrepu, udrepf, cnfine, result)
 
 Determine time intervals when an observer sees one target occulted by another.
 
@@ -1288,4 +1288,3 @@ function gnpool(name, start, room, lenout = 128)
     Bool(found[]) || return nothing
     chararray_to_string(kvars)[1:n[]]
 end
-
