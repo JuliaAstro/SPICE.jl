@@ -909,11 +909,11 @@ end
 """
     diags2(symmat)
 
-Diagonalize a symmetric 2x2 matrix.
+Diagonalize a symmetric 2×2 matrix.
 
 ### Arguments ###
 
-- `symmat`: A symmetric 2x2 matrix
+- `symmat`: A symmetric 2×2 matrix
 
 ### Output ###
 
