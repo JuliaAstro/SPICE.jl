@@ -528,7 +528,7 @@ isrchc, isrchd, isrchi
 """
     isrot(m, ntol, dtol)
 
-Indicate whether a 3x3 matrix is a rotation matrix.
+Indicate whether a 3×3 matrix is a rotation matrix.
 
 ### Arguments ###
 
