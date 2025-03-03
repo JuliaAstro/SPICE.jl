@@ -178,7 +178,7 @@ end
     orderi(array)
 
 !!! warning "Deprecated"
-    Use `sortperm` instead.
+    Use [`Base.sortperm()`](@ref Base.sortperm) instead.
 """
 orderc, orderd, orderi
 

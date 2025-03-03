@@ -22,7 +22,7 @@ end
     ucase(in)
 
 !!! warning "Deprecated"
-    Use `uppercase(in)` instead.
+    Use [`uppercase(in)`](@ref Base.Unicode.uppercase) instead.
 """
 ucase
 
@@ -238,4 +238,3 @@ function utc2et(utcstr)
     handleerror()
     et[]
 end
-
