@@ -45,16 +45,6 @@ function _vadd(v1, v2)
     vout
 end
 
-"""
-    vadd(v1, v2)
-
-!!! warning "Deprecated"
-    Use `v1 .+ v2` instead.
-"""
-vadd
-
-@deprecate vadd(v1, v2) v1 .+ v2
-
 function _vaddg(v1, v2)
     ndim = length(v1)
     vout = Array{SpiceDouble}(undef, ndim)
@@ -64,15 +54,17 @@ function _vaddg(v1, v2)
     vout
 end
 
+@deprecate vadd(v1, v2) v1 .+ v2
+@deprecate vaddg(v1, v2) v1 .+ v2
+
 """
+    vadd(v1, v2)
     vaddg(v1, v2)
 
 !!! warning "Deprecated"
     Use `v1 .+ v2` instead.
 """
-vaddg
-
-@deprecate vaddg(v1, v2) v1 .+ v2
+vadd, vaddg
 
 """
     valid!(set::SpiceCell{T}) where T
@@ -124,46 +116,28 @@ function _vdist(v1, v2)
           (Ref{SpiceDouble}, Ref{SpiceDouble}), v1, v2)
 end
 
-"""
-    vdist(v1, v2)
-
-!!! warning "Deprecated"
-    Use `LinearAlgebra.norm(v1 .- v2)` instead.
-"""
-vdist
-
-@deprecate vdist(v1, v2) LinearAlgebra.norm(v1 .- v2)
-
 function _vdistg(v1, v2)
     ndim = length(v1)
     ccall((:vdistg_c, libcspice), SpiceDouble,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt), v1, v2, ndim)
 end
 
+@deprecate vdist(v1, v2)  LinearAlgebra.norm(v1 .- v2)
+@deprecate vdistg(v1, v2) LinearAlgebra.norm(v1 .- v2)
+
 """
+    vdist(v1, v2)
     vdistg(v1, v2)
 
 !!! warning "Deprecated"
     Use `LinearAlgebra.norm(v1 .- v2)` instead.
 """
-vdistg
-
-@deprecate vdistg(v1, v2) LinearAlgebra.norm(v1 .- v2)
+vdist, vdistg
 
 function _vdot(v1, v2)
     ccall((:vdot_c, libcspice), SpiceDouble,
           (Ref{SpiceDouble}, Ref{SpiceDouble}), v1, v2)
 end
-
-"""
-    vdot(v1, v2)
-
-!!! warning "Deprecated"
-    Use `LinearAlgebra.dot(v1, v2)` instead.
-"""
-vdot
-
-@deprecate vdot(v1, v2) LinearAlgebra.dot(v1, v2)
 
 function _vdotg(v1, v2)
     ndim = length(v1)
@@ -171,30 +145,22 @@ function _vdotg(v1, v2)
           (Ref{SpiceDouble}, Ref{SpiceDouble}, SpiceInt), v1, v2, ndim)
 end
 
+@deprecate vdot(v1, v2)  LinearAlgebra.dot(v1, v2)
+@deprecate vdotg(v1, v2) LinearAlgebra.dot(v1, v2)
+
 """
+    vdot(v1, v2)
     vdotg(v1, v2)
 
 !!! warning "Deprecated"
     Use `LinearAlgebra.dot(v1, v2)` instead.
 """
-vdotg
-
-@deprecate vdotg(v1, v2) LinearAlgebra.dot(v1, v2)
+vdot, vdotg
 
 function _vequ(v1, v2)
     ccall((:vequ_c, libcspice), Cvoid,
           (Ref{SpiceDouble}, Ref{SpiceDouble}), v1, v2)
 end
-
-"""
-    vequ(v1, v2)
-
-!!! warning "Deprecated"
-    Use `v1 .= v2` instead.
-"""
-vequ
-
-@deprecate vequ(v1, v2) v1 .= v2
 
 function _vequg(v1, v2)
     ndim = length(v1)
@@ -202,15 +168,17 @@ function _vequg(v1, v2)
           (Ref{SpiceDouble}, SpiceInt, Ref{SpiceDouble}), v1, ndim, v2)
 end
 
+@deprecate vequ(v1, v2) v1 .= v2
+@deprecate vequg(v1, v2) v1 .= v2
+
 """
+    vequ(v1, v2)
     vequg(v1, v2)
 
 !!! warning "Deprecated"
     Use `v1 .= v2` instead.
 """
-vequg
-
-@deprecate vequg(v1, v2) v1 .= v2
+vequ, vequg
 
 function _vhat(v1)
     vout = Array{SpiceDouble}(undef, 3)
@@ -218,16 +186,6 @@ function _vhat(v1)
           (Ref{SpiceDouble}, Ref{SpiceDouble}), v1, vout)
     vout
 end
-
-"""
-    vhat(v1)
-
-!!! warning "Deprecated"
-    Use `LinearAlgebra.normalize(v1)` instead.
-"""
-vhat
-
-@deprecate vhat(v1) LinearAlgebra.normalize(v1)
 
 function _vhatg(v1)
     ndim = length(v1)
@@ -237,15 +195,17 @@ function _vhatg(v1)
     vout
 end
 
+@deprecate vhat(v1) LinearAlgebra.normalize(v1)
+@deprecate vhatg(v1) LinearAlgebra.normalize(v1)
+
 """
+    vhat(v1)
     vhatg(v1)
 
 !!! warning "Deprecated"
-    Use `LinearAlgebra.normalize(v1)` instead.
+    Use [`LinearAlgebra.normalize(v1)`](@ref LinearAlgebra.normalize) instead.
 """
-vhatg
-
-@deprecate vhatg(v1) LinearAlgebra.normalize(v1)
+vhat, vhatg
 
 function _vlcom3(a, v1, b, v2, c, v3)
     sum = Array{SpiceDouble}(undef, 3)
@@ -274,16 +234,6 @@ function _vlcom(a, v1, b, v2)
     sum
 end
 
-"""
-    vlcom(a, v1, b, v2)
-
-!!! warning "Deprecated"
-    Use `a .* v1 .+ b .* v2` instead.
-"""
-vlcom
-
-@deprecate vlcom(a, v1, b, v2) a .* v1 .+ b .* v2
-
 function _vlcomg(a, v1, b, v2)
     n = length(v1)
     sum = Array{SpiceDouble}(undef, n)
@@ -293,15 +243,17 @@ function _vlcomg(a, v1, b, v2)
     sum
 end
 
+@deprecate vlcom(a, v1, b, v2) a .* v1 .+ b .* v2
+@deprecate vlcomg(a, v1, b, v2) a .* v1 .+ b .* v2
+
 """
+    vlcom(a, v1, b, v2)
     vlcomg(a, v1, b, v2)
 
 !!! warning "Deprecated"
     Use `a .* v1 .+ b .* v2` instead.
 """
-vlcomg
-
-@deprecate vlcomg(a, v1, b, v2) a .* v1 .+ b .* v2
+vlcom, vlcomg
 
 function _vminug(vin)
     n = length(vin)
@@ -312,16 +264,6 @@ function _vminug(vin)
     vout
 end
 
-"""
-    vminug(vin)
-
-!!! warning "Deprecated"
-    Use `-vin` instead.
-"""
-vminug
-
-@deprecate vminug(vin) -vin
-
 function _vminus(vin)
     vout = Array{SpiceDouble}(undef, 3)
     ccall((:vminus_c, libcspice), Cvoid,
@@ -329,29 +271,21 @@ function _vminus(vin)
     vout
 end
 
+@deprecate vminug(vin) -vin
+@deprecate vminus(vin) -vin
+
 """
+    vminug(vin)
     vminus(vin)
 
 !!! warning "Deprecated"
     Use `-vin` instead.
 """
-vminus
-
-@deprecate vminus(vin) -vin
+vminug, vminus
 
 function _vnorm(v1)
     ccall((:vnorm_c, libcspice), SpiceDouble, (Ref{SpiceDouble},), v1)
 end
-
-"""
-    vnorm(v1)
-
-!!! warning "Deprecated"
-    Use `LinearAlgebra.norm(v1)` instead.
-"""
-vnorm
-
-@deprecate vnorm(v1) LinearAlgebra.norm(v1)
 
 function _vnormg(v1)
     ndim = length(v1)
@@ -359,15 +293,17 @@ function _vnormg(v1)
           (Ref{SpiceDouble}, SpiceInt), v1, ndim)
 end
 
+@deprecate vnorm(v1) LinearAlgebra.norm(v1)
+@deprecate vnormg(v1) LinearAlgebra.norm(v1)
+
 """
-    vnormg(v1, v2)
+    vnorm(v1)
+    vnormg(v1)
 
 !!! warning "Deprecated"
-    Use `LinearAlgebra.norm(v1)` instead.
+    Use [`LinearAlgebra.norm(v1)`](@ref LinearAlgebra.norm) instead.
 """
-vnormg
-
-@deprecate vnormg(v1) LinearAlgebra.norm(v1)
+vnorm, vnormg
 
 function _vpack(x, y, z)
     v = Array{SpiceDouble}(undef, 3)
@@ -666,16 +602,6 @@ function _vsub(v1, v2)
     vout
 end
 
-"""
-    vsub(v1, v2)
-
-!!! warning "Deprecated"
-    Use `v1 .- v2` instead.
-"""
-vsub
-
-@deprecate vsub(v1, v2) v1 .- v2
-
 function _vsubg(v1, v2)
     ndim = length(v1)
     vout = Array{SpiceDouble}(undef, ndim)
@@ -685,31 +611,23 @@ function _vsubg(v1, v2)
     vout
 end
 
+@deprecate vsub(v1, v2) v1 .- v2
+@deprecate vsubg(v1, v2) v1 .- v2
+
 """
+    vsub(v1, v2)
     vsubg(v1, v2)
 
 !!! warning "Deprecated"
     Use `v1 .- v2` instead.
 """
-vsubg
-
-@deprecate vsubg(v1, v2) v1 .- v2
+vsub, vsubg
 
 function _vtmv(v1, matrix, v2)
     ccall((:vtmv_c, libcspice), SpiceDouble,
           (Ref{SpiceDouble}, Ref{SpiceDouble}, Ref{SpiceDouble}),
           v1, permutedims(matrix), v2)
 end
-
-"""
-    vtmv(v1, matrix, v2)
-
-!!! warning "Deprecated"
-    Use `v1' * matrix * v2` instead.
-"""
-vtmv
-
-@deprecate vtmv(v1, matrix, v2) v1' * matrix * v2
 
 function _vtmvg(v1, matrix, v2)
     m, n = size(matrix)
@@ -718,15 +636,17 @@ function _vtmvg(v1, matrix, v2)
           v1, permutedims(matrix), v2, n, m)
 end
 
+@deprecate vtmv(v1, matrix, v2)  v1' * matrix * v2
+@deprecate vtmvg(v1, matrix, v2) v1' * matrix * v2
+
 """
+    vtmv(v1, matrix, v2)
     vtmvg(v1, matrix, v2)
 
 !!! warning "Deprecated"
     Use `v1' * matrix * v2` instead.
 """
-vtmvg
-
-@deprecate vtmvg(v1, matrix, v2) v1' * matrix * v2
+vtmv, vtmvg
 
 function _vupack(v)
     x = Ref{SpiceDouble}()
@@ -752,28 +672,20 @@ function _vzero(v1)
     Bool(ccall((:vzero_c, libcspice), SpiceBoolean, (Ref{SpiceDouble},), v1))
 end
 
-"""
-    vzero(v1)
-
-!!! warning "Deprecated"
-    Use `iszero(v1)` instead.
-"""
-vzero
-
-@deprecate vzero(v1) iszero(v1)
-
 function _vzerog(v1)
     ndim = length(v1)
     Bool(ccall((:vzerog_c, libcspice), SpiceBoolean,
                (Ref{SpiceDouble}, SpiceInt), v1, ndim))
 end
 
+@deprecate vzero(v1)  iszero(v1)
+@deprecate vzerog(v1) iszero(v1)
+
 """
+    vzero(v1)
     vzerog(v1, v2)
 
 !!! warning "Deprecated"
     Use `iszero(v1)` instead.
 """
-vzerog
-
-@deprecate vzerog(v1) iszero(v1)
+vzero, vzerog

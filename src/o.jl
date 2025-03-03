@@ -147,16 +147,6 @@ function _orderc(array)
     Int.(iorder) .+ 1
 end
 
-@deprecate orderc sortperm
-
-"""
-    orderc(array)
-
-!!! warning "Deprecated"
-    Use `sortperm` instead.
-"""
-orderc
-
 function _orderd(array)
     ndim = length(array)
     iorder = Array{SpiceInt}(undef, ndim)
@@ -166,16 +156,6 @@ function _orderd(array)
     handleerror()
     Int.(iorder) .+ 1
 end
-
-@deprecate orderd sortperm
-
-"""
-    orderd(array)
-
-!!! warning "Deprecated"
-    Use `sortperm` instead.
-"""
-orderd
 
 function _orderi(array)
     array_ = SpiceInt.(array)
@@ -188,15 +168,19 @@ function _orderi(array)
     Int.(iorder) .+ 1
 end
 
+@deprecate orderc sortperm
+@deprecate orderd sortperm
 @deprecate orderi sortperm
 
 """
+    orderc(array)
+    orderd(array)
     orderi(array)
 
 !!! warning "Deprecated"
     Use `sortperm` instead.
 """
-orderi
+orderc, orderd, orderi
 
 """
     oscelt(state, et, mu)
@@ -281,4 +265,3 @@ function oscltx(state, et, mu)
     handleerror()
     elts
 end
-

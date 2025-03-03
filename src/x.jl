@@ -104,31 +104,11 @@ function _xpose6(m)
     mout
 end
 
-"""
-    xpose6(matrix)
-
-!!! warning "Deprecated"
-    Use `transpose(matrix)` instead.
-"""
-xpose6
-
-@deprecate xpose6 transpose
-
 function _xpose(m)
     mout = Array{SpiceDouble}(undef, 3, 3)
     ccall((:xpose_c, libcspice), Cvoid, (Ref{SpiceDouble}, Ref{SpiceDouble}), m, mout)
     mout
 end
-
-"""
-    xpose(matrix)
-
-!!! warning "Deprecated"
-    Use `transpose(matrix)` instead.
-"""
-xpose
-
-@deprecate xpose transpose
 
 function _xposeg(matrix)
     m, n = size(matrix)
@@ -138,12 +118,16 @@ function _xposeg(matrix)
     mout
 end
 
+@deprecate xpose transpose
+@deprecate xpose6 transpose
+@deprecate xposeg transpose
+
 """
+    xpose(matrix)
+    xpose6(matrix)
     xposeg(matrix)
 
 !!! warning "Deprecated"
     Use `transpose(matrix)` instead.
 """
-xposeg
-
-@deprecate xposeg transpose
+xpose, xpose6, xposeg

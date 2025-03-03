@@ -505,16 +505,6 @@ function _shellc(array)
     array[:] .= chararray_to_string(array_, m)
 end
 
-"""
-    shellc(array)
-
-!!! warning "Deprecated"
-    Use `sort!(array)` instead.
-"""
-shellc
-
-@deprecate shellc(array) sort!(array)
-
 function _shelld(array)
     n = length(array)
     ccall((:shelld_c, libcspice), Cvoid,
@@ -523,16 +513,6 @@ function _shelld(array)
     handleerror()
     array
 end
-
-"""
-    shelld(array)
-
-!!! warning "Deprecated"
-    Use `sort!(array)` instead.
-"""
-shelld
-
-@deprecate shelld(array) sort!(array)
 
 function _shelli(array)
     n = length(array)
@@ -544,15 +524,19 @@ function _shelli(array)
     Int.(array_)
 end
 
+@deprecate shellc(array) sort!(array)
+@deprecate shelld(array) sort!(array)
+@deprecate shelli(array) sort!(array)
+
 """
+    shellc(array)
+    shelld(array)
     shelli(array)
 
 !!! warning "Deprecated"
     Use `sort!(array)` instead.
 """
-shelli
-
-@deprecate shelli(array) sort!(array)
+shellc, shelld, shelli
 
 """
     sincpt(method, target, et, fixref, abcorr, obsrvr, dref, dvec)
@@ -2533,31 +2517,23 @@ function _sumad(array)
     ccall((:sumad_c, libcspice), SpiceDouble, (Ref{SpiceDouble}, SpiceInt), array, n)
 end
 
-@deprecate sumad sum
-
-"""
-    sumad(array)
-
-!!! warning "Deprecated"
-    Use `sum(array)` instead.
-"""
-sumad
-
 function _sumai(array)
     n = length(array)
     array_ = SpiceInt.(array)
     ccall((:sumai_c, libcspice), SpiceInt, (Ref{SpiceInt}, SpiceInt), array_, n)
 end
 
+@deprecate sumad sum
 @deprecate sumai sum
 
 """
+    sumad(array)
     sumai(array)
 
 !!! warning "Deprecated"
     Use `sum(array)` instead.
 """
-sumai
+sumad, sumai
 
 """
     surfnm(a, b, c, point)
