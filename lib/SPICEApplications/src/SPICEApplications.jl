@@ -47,44 +47,45 @@ using DocStringExtensions
 include("docstrings.jl")
 
 """
-BRIEF is a command-line utility program that displays a contents and time coverage summary for one or more binary SPK or binary PCK files.
+BRIEF is a command-line utility program that displays a contents and time
+coverage summary for one or more binary SPK or binary PCK files.
 
 # Extended Help
 
 !!! warning
     All descriptions below were manually parsed from the commandline program's help/usage output.
 
-| Argument | Equivalent | Description | 
-| :--- | :--- | :--- |
-| `tabular` | `-t` | Display summary in a tabular format |
-| `single` | `-a` | Treat all files as a single file | 
-| `centers` | `-c` | Displays centers of motion/relative-to frames | 
-| `utc` | `-utc` | Display times in UTC calendar date format (needs LSK) | 
-| `utcdoy` | `-utcdoy` | Display times in UTC day-of-year format (needs LSK) |
-| `etsec` | `-etsec` | Display times as ET seconds past J2000 | 
-| `sec` | `-sec` | Display times "rounded inward" to second | 
-| `min` | `-min` | Display times "rounded inward" to minute | 
-| `hour` | `-hour` | Display times "rounded inward" to hour | 
-| `day` | `-day` | Display times "rounded inward" to day | 
-| `bytime` | `-s` | Display summary sorted by start time for each body/frame | 
-| `bycoverage` | `-g` | Display summary grouped by coverage | 
-| `byid` | `-n` | Display bodies/frames using numeric id-codes | 
-| `byname` | `-o` | Display summary ordered by body/frame name | 
-| `body` | `-sb[bod]` | Display summary for body [bod] |
-| `center` | `-sc[cen]` | Display summary for center of motion/relative-to frame [cen] | 
-| `at` | `-at [time]` | Display summary if coverage contains epoch [time] |
-| `from` | `-from [beg]` | Display summary if coverage contains interval [beg]:[end] |
-| `to` | `-to [end]` | Display summary if coverage contains interval [beg]:[end] |
-| `listfile` | `-f [list]` | Summarize kernels listed in the [list] file | 
-| `help` | `-h` | Display help | 
-| `version` | `-v` | Display version| 
+| Argument     | Equivalent    | Description                                                  |
+| :---         | :---          | :---                                                         |
+| `tabular`    | `-t`          | Display summary in a tabular format                          |
+| `single`     | `-a`          | Treat all files as a single file                             |
+| `centers`    | `-c`          | Displays centers of motion/relative-to frames                |
+| `utc`        | `-utc`        | Display times in UTC calendar date format (needs LSK)        |
+| `utcdoy`     | `-utcdoy`     | Display times in UTC day-of-year format (needs LSK)          |
+| `etsec`      | `-etsec`      | Display times as ET seconds past J2000                       |
+| `sec`        | `-sec`        | Display times "rounded inward" to second                     |
+| `min`        | `-min`        | Display times "rounded inward" to minute                     |
+| `hour`       | `-hour`       | Display times "rounded inward" to hour                       |
+| `day`        | `-day`        | Display times "rounded inward" to day                        |
+| `bytime`     | `-s`          | Display summary sorted by start time for each body/frame     |
+| `bycoverage` | `-g`          | Display summary grouped by coverage                          |
+| `byid`       | `-n`          | Display bodies/frames using numeric id-codes                 |
+| `byname`     | `-o`          | Display summary ordered by body/frame name                   |
+| `body`       | `-sb[bod]`    | Display summary for body [bod]                               |
+| `center`     | `-sc[cen]`    | Display summary for center of motion/relative-to frame [cen] |
+| `at`         | `-at [time]`  | Display summary if coverage contains epoch [time]            |
+| `from`       | `-from [beg]` | Display summary if coverage contains interval [beg]:[end]    |
+| `to`         | `-to [end]`   | Display summary if coverage contains interval [beg]:[end]    |
+| `listfile`   | `-f [list]`   | Summarize kernels listed in the [list] file                  |
+| `help`       | `-h`          | Display help                                                 |
+| `version`    | `-v`          | Display version                                              |
 """
 function brief(
     file::AbstractString...;
     tabular=false, single=false, centers=false, utc=false, utcdoy=false, etsec=false,
     sec=false, min=false, hour=false, day=false, bytime=false, bycoverage=false,
     byid=false, byname=false, body=nothing, center=nothing, at=nothing, from=nothing,
-    to=nothing, listfile=nothing, help=false, version=false, 
+    to=nothing, listfile=nothing, help=false, version=false,
     stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true,
 )
     args = String[]
@@ -118,7 +119,7 @@ function brief(
     args = join(args, " ")
     files = join(file, " ")
     cmd = `$(CSPICE_jll.brief()) $args $files`
-    
+
     if wait
         cmd = pipeline(cmd; stdout=stdout, stderr=stderr, stdin=stdin, append=append)
     end
@@ -137,23 +138,23 @@ CHRONOS is a command-line program that converts between several time systems and
 !!! warning
     All descriptions below were manually parsed from the commandline program's help/usage output.
 
-| Argument | Equivalent | Description | 
-| :--- | :--- | :--- |
-| `from` | `-FROM <"from" time system>` | "from" time system |
-| `fromtype` | `-FROMTYPE <"from" time system type>` | "from" time system type|
-| `to` | `-TO <"to" time system>` | "to" time system |
-| `totype` | `-TOTYPE <"to" time system type>` | "to" time system  type |
-| `format` | `-FORMAT <output time format picture>` | output time format picture|
-| `time` | `-TIME <input time>` | intput time|
-| `sc` | `-SC <sc ID>` | sc ID|
-| `center` | `-CENTER <cental body ID>` | cental body ID|
-|`landingtime` | `-LANDINGTIME <UTC time of the landing>` | UTC time of the landing |
-| `sol1index` | `-SOL1INDEX <index of the first SOL>` | index of the first SOL |
-| `nolabel` | `-NOLABEL` | |
-| `trace` | `-TRACE` | |
-| `help` | `-HELP` | display help |
-| `usage` | `-USAGE` | display usage |
-| `template` | `-TEMPLATE` | display setup file template |
+| Argument      | Equivalent            | Description                 |
+| :---          | :---                  | :---                        |
+| `from`        | `-FROM <arg>`         | "from" time system          |
+| `fromtype`    | `-FROMTYPE <arg>`     | "from" time system type     |
+| `to`          | `-TO <arg>`           | "to" time system            |
+| `totype`      | `-TOTYPE <arg>`       | "to" time system  type      |
+| `format`      | `-FORMAT <arg>`       | output time format picture  |
+| `time`        | `-TIME <time>`        | input time                  |
+| `sc`          | `-SC <ID>`            | sc ID                       |
+| `center`      | `-CENTER <ID>`        | central body ID             |
+| `landingtime` | `-LANDINGTIME <time>` | UTC time of the landing     |
+| `sol1index`   | `-SOL1INDEX <index>`  | index of the first SOL      |
+| `nolabel`     | `-NOLABEL`            |                             |
+| `trace`       | `-TRACE`              |                             |
+| `help`        | `-HELP`               | display help                |
+| `usage`       | `-USAGE`              | display usage               |
+| `template`    | `-TEMPLATE`           | display setup file template |
 """
 function chronos(
     file::AbstractString...;
@@ -202,23 +203,23 @@ CKBRIEF is a command-line utility program that displays a contents and time cove
 !!! warning
     All descriptions below were manually parsed from the commandline program's help/usage output.
 
-| Argument | Equivalent | Description | 
-| :--- | :--- | :--- |
-| `dump` | `-dump` | display interpolation intervals boundaries |
-| `boundaries` | `-nm` | display segment boundaries |
-| `relframes` | `-rel` | display relative-to frames |
-| `idframes` | `-n` | display frames associated with structure IDs | 
-| `tabular` | `-t` | display summary in a tabular format |
-| `single` | `-a` | treat all files as a single file |
-| `bycoverage` | `-g` | display summary grouped by coverage |
-| `utc` | `-utc` | display times in UTC calendar date format |
-| `utcdoy` | `-utcdoy` | display times in UTC day-of-year format |
-| `sclk` | `-sclk` | display times as SCLK strings |
-| `dpsclk` | `-dpsclk` | display times as SCLK ticks |
-| `id` | `[ID]` | display summmary for structure with [ID] | 
-| `summarize` | `-f` | summarize kernels listed in the `[list]` file |
-| `help` | `-h` | display help |
-| `version` | `-v` | display version |
+| Argument     | Equivalent | Description                                   |
+| :---         | :---       | :---                                          |
+| `dump`       | `-dump`    | display interpolation intervals boundaries    |
+| `boundaries` | `-nm`      | display segment boundaries                    |
+| `relframes`  | `-rel`     | display relative-to frames                    |
+| `idframes`   | `-n`       | display frames associated with structure IDs  |
+| `tabular`    | `-t`       | display summary in a tabular format           |
+| `single`     | `-a`       | treat all files as a single file              |
+| `bycoverage` | `-g`       | display summary grouped by coverage           |
+| `utc`        | `-utc`     | display times in UTC calendar date format     |
+| `utcdoy`     | `-utcdoy`  | display times in UTC day-of-year format       |
+| `sclk`       | `-sclk`    | display times as SCLK strings                 |
+| `dpsclk`     | `-dpsclk`  | display times as SCLK ticks                   |
+| `id`         | `[ID]`     | display summmary for structure with [ID]      |
+| `summarize`  | `-f`       | summarize kernels listed in the `[list]` file |
+| `help`       | `-h`       | display help                                  |
+| `version`    | `-v`       | display version                               |
 """
 function ckbrief(
     file::AbstractString...;
@@ -240,7 +241,7 @@ function ckbrief(
     utcdoy && push!(args, "-utcdoy")
     sclk && push!(args, "-sclk")
     dpsclk && push!(args , "-dpsclk")
-    
+
     !isnothing(id) &&  push!(args, id)
     !isnothing(summarize) && push!(args, "-f $summarize")
 
@@ -254,7 +255,7 @@ function ckbrief(
     if wait
         cmd = pipeline(cmd; stdout=stdout, stderr=stderr, stdin=stdin, append=append)
     end
-    
+
     result = run(cmd; wait=wait)
 
     return result
@@ -269,19 +270,19 @@ COMMNT is a command-line program that reads, adds, extracts, or deletes comments
 !!! warning
     All descriptions below were manually parsed from the commandline program's help/usage output.
 
-| Argument | Equivalent | Description | 
-| :--- | :--- | :--- |
-| `add` | `-a` | add comments to binary kernel |
-| `extract` | `-e` | extract comments from a binary kernel |
-| `read` | `-r` | read the comments in a binary kernel | 
-| `delete` | `-d`| delete the comments from the binary kernel | 
-| `help` | `-h` | display the help message |
+| Argument  | Equivalent | Description                                |
+| :---      | :---       | :---                                       |
+| `add`     | `-a`       | add comments to binary kernel              |
+| `extract` | `-e`       | extract comments from a binary kernel      |
+| `read`    | `-r`       | read the comments in a binary kernel       |
+| `delete`  | `-d`       | delete the comments from the binary kernel |
+| `help`    | `-h`       | display the help message                   |
 """
 function commnt(
     kernelfile::Union{<:AbstractString,Nothing} = nothing, commentfile::Union{<:AbstractString,Nothing} = nothing;
     add=false, extract=false, read=false, delete=false, help=false,
     stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true,
-) 
+)
     args = String[]
 
     add && push!(args, "-a")
@@ -307,31 +308,33 @@ end
 
 
 """
-DSKBRIEF is a command-line utility program that displays a summary of the spatial coverage and additional attributes of one or more binary Digital Shape Kernel (DSK) files.
+DSKBRIEF is a command-line utility program that displays a summary of the
+spatial coverage and additional attributes of one or more binary Digital Shape
+Kernel (DSK) files.
 
 # Extended Help
 
 !!! warning
     All descriptions below were manually parsed from the commandline program's help/usage output.
 
-| Argument | Equivalent | Description | 
-| :--- | :--- | :--- |
-| `single` | `-a` | treat all DSK files as a single file |
-| `gaps` | `-gaps` | display coverage gaps (aplies only when `-a` is used) |
-| `extended` | `-ext` | display extended summaries: these include data type, data class, and time bounds | 
-| `timebounds` | `-tg` | require segment time bounds to match when grouping segments | 
-| `full` | `-full` | display a detailed summary for each segment, including data-type-specific parameters |
-| `sigdigs` | `-d <n>` | display `n` significant digits of floating point values | 
-| `version` | `-v` | display the version of the program | 
-| `help` | `-h` | display help text |
-| `usage` | `-u` | display usage text |
+| Argument     | Equivalent | Description                                                                          |
+| :---         | :---       | :---                                                                                 |
+| `single`     | `-a`       | treat all DSK files as a single file                                                 |
+| `gaps`       | `-gaps`    | display coverage gaps (aplies only when `-a` is used)                                |
+| `extended`   | `-ext`     | display extended summaries: these include data type, data class, and time bounds     |
+| `timebounds` | `-tg`      | require segment time bounds to match when grouping segments                          |
+| `full`       | `-full`    | display a detailed summary for each segment, including data-type-specific parameters |
+| `sigdigs`    | `-d <n>`   | display `n` significant digits of floating point values                              |
+| `version`    | `-v`       | display the version of the program                                                   |
+| `help`       | `-h`       | display help text                                                                    |
+| `usage`      | `-u`       | display usage text                                                                   |
 """
 function dskbrief(
     file::AbstractString...;
     single=false, gaps=false, extended=false, timebounds=false, bysegment=false,
     full=false, sigdigs=nothing, version=false, help=false, usage=false,
     stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true,
-) 
+)
     args = String[]
 
     single && push!(args, "-a")
@@ -340,7 +343,7 @@ function dskbrief(
     timebounds && push!(args, "-tg")
     bysegment && push!(args, "-tg")
     full && push!(args, "-full")
-    
+
     !isnothing(sigdigs) && push!(args, "-d $sigdigs")
     version && push!(args, "-v")
     help && push!(args, "-h")
@@ -368,17 +371,17 @@ DSKEXP is a command-line program that exports data from DSK files to text files.
 !!! warning
     All descriptions below were manually parsed from the commandline program's help/usage output.
 
-| Argument | Equivalent | Description | 
-| :--- | :--- | :--- |
-| `dsk` | `-dsk <dsk>` | DSK kernel |
-| `text` | `-text <output name>` | output name |
-| `format` | `-format <MKDSK format code/name>` | MKSDK format code/name | 
-| `precision` | `-prec <# of vertex mantissa digits (1:17)` | number of vertex mantissa digits |
+| Argument    | Equivalent       | Description                      |
+| :---        | :---             | :---                             |
+| `dsk`       | `-dsk <arg>`     | DSK kernel                       |
+| `text`      | `-text <name>`   | output name                      |
+| `format`    | `-format <arg>`  | MKSDK format code/name           |
+| `precision` | `-prec <number>` | number of vertex mantissa digits |
 """
 function dskexp(
     ; dsk=nothing, text=nothing, format=nothing, precision=nothing,
       stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true,
-) 
+)
     args = String[]
 
     !isnothing(dsk) && push!(args, "-dsk $dsk")
@@ -407,36 +410,36 @@ FRMDIFF is a program that samples orientation of a reference frame known to SPIC
 !!! warning
     All descriptions below were manually parsed from the commandline program's help/usage output.
 
-| Argument | Equivalent | Description | 
-| :--- | :--- | :--- |
-| `kernels` | `-k  <supporting kernel(s) name(s)>` | supporting kernel(s) name(s)> |
-|  `from1` | `-f1 <first ``from'' frame, name or ID>` | first "from" frame, name or ID |
-|  `to1` | `-t1 <first ``to'' frame, name or ID>` | first "to" frame, name or ID |
-|  `frame1` | `-c1 <first frame for coverage look up, name or ID>` | first frame for coverage look up, name or ID |
-|  `supporting_kernels1` | `-k1 <additional supporting kernel(s) for first file>` | additional supporting kernel(s) for first file |
-|  `from2` | `-f2 <second ``from'' frame, name or ID>` | second "from" frame, name or ID |
-|  `to2` | `-t2 <second ``to'' frame, name or ID>` | second "to" frame, name or ID |
-|  `frame2` | `-c2 <second frame for coverage look up, name or ID>` | second frame for coverage look up, name or ID |
-|  `supporting_kernels2` | `-k2 <additional supporting kernel(s) for second file>` | additional supporting kernel(s) for second file |
-| `angular`  | `-a  <compare angular velocities: yes│no (default: no)>` | compare angular velocities |
-|  `angularframe` | `-m  <frame for angular velocities: from│to (default: from)>` | frame for angular velocities |
-|  `start` | `-b  <interval start time>` | interval start time |
-|  `stop` | `-e  <interval stop time>` | interval stop time |
-|  `numpoints` | `-n  <number of points: 1 to 1000000 (default: 1000)>` | number of points |
-|  `timestep` | `-s  <time step in seconds>` | time step in seconds |
-|  `timeformat` | `-f  <time format: et│sclk│sclkd│ticks│picture_for_TIMOUT (default: et)>` | time format |
-|  `report` | `-t  <report: basic│stats│dumpaa│dumpm│dumpqs│dumpqo│dumpea│dumpc│dumpg>` | report |
-|  `rotation` | `-o  <rotation axes order (default: z y x)>` | rotation axes order |
-| `units`  | `-x  <units for output angles> (only for -t dumpaa and -t dumpea)` | units for output angles |
-| `sigdigs`  | `-d  <number of significant digits: 6 to 17 (default: 14)>` | number of significant digits |
+| Argument              | Equivalent             | Description                                     |
+| :---                  | :---                   | :---                                            |
+| `kernels`             | `-k  <kernels>`        | supporting kernel(s) name(s)                    |
+| `from1`               | `-f1 <arg>`            | first "from" frame, name or ID                  |
+| `to1`                 | `-t1 <arg>`            | first "to" frame, name or ID                    |
+| `frame1`              | `-c1 <arg>`            | first frame for coverage look up, name or ID    |
+| `supporting_kernels1` | `-k1 <kernels>`        | additional supporting kernel(s) for first file  |
+| `from2`               | `-f2 <arg>`            | second "from" frame, name or ID                 |
+| `to2`                 | `-t2 <arg>`            | second "to" frame, name or ID                   |
+| `frame2`              | `-c2 <arg>`            | second frame for coverage look up, name or ID   |
+| `supporting_kernels2` | `-k2 <kernels>`        | additional supporting kernel(s) for second file |
+| `angular`             | `-a  <yes|no>`         | compare angular velocities (default: no)        |
+| `angularframe`        | `-m  <from|to>`        | frame for angular velocities (default: from)    |
+| `start`               | `-b  <start>`          | interval start time                             |
+| `stop`                | `-e  <stop>`           | interval stop time                              |
+| `numpoints`           | `-n  <number>`         | number of points 1 to 1000000 (default: 1000)   |
+| `timestep`            | `-s  <time step>`      | time step in seconds                            |
+| `timeformat`          | `-f  <format>`         | time format: one of `et`, `sclk`, `sclkd`, `ticks`, `picture_for_TIMOUT`, (default: `et`) |
+| `report`              | `-t  <report options>` | report options: `basic`, `stats`, `dumpaa`, `dumpm`, `dumpqs`, `dumpqo`, `dumpea`, `dumpc`, `dumpg` |
+| `rotation`            | `-o  <order>`          | rotation axes order (default: z y x)                           |
+| `units`               | `-x  <units>`          | units for output angles (only for `-t dumpaa` and `-t dumpea`) |
+| `sigdigs`             | `-d  <num>`            | number of significant digits (6 to 17, default 14)             |
 """
 function frmdiff(
     ; kernels=nothing, from1=nothing, to1=nothing, frame1=nothing, supporting_kernels1=nothing,
-    from2=nothing, to2=nothing, frame2=nothing, supporting_kernels2=nothing, angular=false, 
-    angularframe=nothing, start=nothing, stop=nothing, numpoints=nothing, timestep=nothing, 
+    from2=nothing, to2=nothing, frame2=nothing, supporting_kernels2=nothing, angular=false,
+    angularframe=nothing, start=nothing, stop=nothing, numpoints=nothing, timestep=nothing,
     timeformat=nothing, report=nothing, rotation=nothing, units=nothing, sigdigs=nothing,
     stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true,
-) 
+)
     args = String[]
 
     additems!(collection, key::AbstractString) = push!(collection, key)
@@ -485,7 +488,7 @@ function frmdiff(
         cmd = pipeline(cmd; stdout=stdout, stderr=stderr, stdin=stdin, append=append)
     end
 
-    
+
     result = run(cmd; wait=wait)
 
     return result
@@ -495,9 +498,9 @@ end
 """
 INSPEKT is an interactive program that examines the contents of an events component (ESQ) of an E-kernel.
 """
-function inspekt(; stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true,) 
+function inspekt(; stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true,)
     cmd = pipeline(`$(CSPICE_jll.inspekt())`; stdout=stdout, stderr=stderr, stdin=stdin, append=append)
-    
+
     result = run(cmd; wait=wait)
 
     return result
@@ -505,28 +508,29 @@ end
 
 
 """
-MKDSK is a utility program that creates a SPICE Digital Shape Kernel (DSK) file from a text file containing shape data for an extended object.
+MKDSK is a utility program that creates a SPICE Digital Shape Kernel (DSK) file
+from a text file containing shape data for an extended object.
 
 # Extended Help
 
 !!! warning
     All descriptions below were manually parsed from the commandline program's help/usage output.
 
-| Argument | Equivalent | Description | 
-| :--- | :--- | :--- |
-| `setup` | `-setup <setup file name>` | setup file name |
-| `input` | `-input <input shape data file name>` | input shape data file name | 
-| `output` | `-output <output DSK file name>` | output DSK file name |
-| `help` | `-h│-help` | display help |
-| `template` | `-t│-template` | display template |
-| `usage` | `-u│-usage` | display usage |
-| `version` | `-v│-version` | display version | 
+| Argument   | Equivalent           | Description                |
+|:---        |:---                  |:---                        |
+| `setup`    | `-setup <filename>`  | setup file name            |
+| `input`    | `-input <filename>`  | input shape data file name |
+| `output`   | `-output <filename>` | output DSK file name       |
+| `help`     | `-h`,`-help`         | display help               |
+| `template` | `-t`,`-template`     | display template           |
+| `usage`    | `-u`,`-usage`        | display usage              |
+| `version`  | `-v`,`-version`      | display version            |
 """
 function mkdsk(
     ; setup=nothing, input=nothing, output=nothing, help=false,
       template=nothing, usage=false, version=false,
       stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true,
-) 
+)
     args = String[]
     !isnothing(setup) && push!(args, "-setup $setup")
     !isnothing(input) && push!(args, "-input $input")
@@ -559,18 +563,18 @@ MKSPK is a program that creates an SPK file from a text file containing trajecto
 !!! warning
     All descriptions below were manually parsed from the commandline program's help/usage output.
 
-| Argument | Equivalent | Description | 
-| :--- | :--- | :--- |
-| `setup` | `-setup <setup file name>` | setup file name |
-| `input` | `-input <input shape data file name>` | input shape data file name | 
-| `output` | `-output <output DSK file name>` | output DSK file name |
-| `add` | `-append` | append; output file must be new |
-| `help` | `-h│-help` | display help |
-| `template` | `-t│-template` | display template |
-| `usage` | `-u│-usage` | display usage |
+| Argument   | Equivalent           | Description                     |
+|:---        |:---                  |:---                             |
+| `setup`    | `-setup <filename>`  | setup file name                 |
+| `input`    | `-input <filename>`  | input shape data file name      |
+| `output`   | `-output <filename>` | output DSK file name            |
+| `add`      | `-append`            | append; output file must be new |
+| `help`     | `-h`,`-help`         | display help                    |
+| `template` | `-t`,`-template`     | display template                |
+| `usage`    | `-u`,`-usage`        | display usage                   |
 """
 function mkspk(
-    ; setup=nothing, input=nothing, output=nothing, add=false, 
+    ; setup=nothing, input=nothing, output=nothing, add=false,
       usage=false, help=false, template=nothing,
       stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true,
 )
@@ -598,12 +602,15 @@ end
 
 
 """
-MSOPCK is a command-line program that converts attitude data provided in a text file as UTC, SCLK, or ET-tagged quaternions, Euler angles, or matrices, optionally accompanied by angular velocities, into a type 1, 2, or 3 SPICE C-kernel.
+MSOPCK is a command-line program that converts attitude data provided in a text
+file as UTC, SCLK, or ET-tagged quaternions, Euler angles, or matrices,
+optionally accompanied by angular velocities, into a type 1, 2, or 3 SPICE
+C-kernel.
 """
 function msopck(
     ; setup=nothing, input=nothing, output=nothing,
       stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true,
-) 
+)
     args = String[]
     !isnothing(setup) && push!(args, "-setup $setup")
     !isnothing(input) && push!(args, "-input $input")
@@ -615,7 +622,7 @@ function msopck(
     if wait
         cmd = pipeline(cmd; stdout=stdout, stderr=stderr, stdin=stdin, append=append)
     end
-    
+
     result = run(cmd; wait=wait)
 
     return result
@@ -623,9 +630,11 @@ end
 
 
 """
-SPACIT is an interactive program that converts kernels in transfer format to binary format, converts binary kernels to transfer format, and summarizes the contents of binary kernels.
+SPACIT is an interactive program that converts kernels in transfer format to
+binary format, converts binary kernels to transfer format, and summarizes the
+contents of binary kernels.
 """
-function spacit(; stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true) 
+function spacit(; stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true)
     cmd = `$(CSPICE_jll.spacit())`
 
     if wait
@@ -639,37 +648,38 @@ end
 
 
 """
-SPKDIFF provides means for comparing the trajectories of two bodies or sampling the trajectory of a single body using data from SPICE kernels.
+SPKDIFF provides means for comparing the trajectories of two bodies or sampling
+the trajectory of a single body using data from SPICE kernels.
 # Extended Help
 
 !!! warning
     All descriptions below were manually parsed from the commandline program's help/usage output.
 
-| Argument | Equivalent | Description | 
-| :--- | :--- | :--- |
-| `kernels` | `-k  <supporting kernel(s) name(s)>` | -k  <supporting kernel(s) name(s)> |
-| `body1` | `-b1 <first body name or ID>` | -b1 <first body name or ID> |
-| `center1` | `-c1 <first center name or ID>` | -c1 <first center name or ID> |
-| `frame1` | `-r1 <first reference frame name>` | -r1 <first reference frame name> |
-| `supporting_kernels1` | `-k1 <additional supporting kernel(s) for first SPK>` | -k1 <additional supporting kernel(s) for first SPK> |
-| `body2` | `-b2 <second body name or ID>` | -b2 <second body name or ID> |
-| `center2` | `-c2 <second center name or ID>` | -c2 <second center name or ID> |
-| `frame2` | `-r2 <second reference frame name>` | -r2 <second reference frame name> |
-| `supporting_kernels2` | `-k2 <additional supporting kernel(s) for second SPK>` | -k2 <additional supporting kernel(s) for second SPK> |
-| `start` | `-b  <interval start time>` | -b  <interval start time> |
-| `stop` | `-e  <interval stop time>` | -e  <interval stop time> |
-| `timestep` | `-s  <time step in seconds>` | -s  <time step in seconds> |
-| `numstates` | `-n  <number of states: 2 to 1000000 (default: 1000)>` | -n  <number of states: 2 to 1000000 (default: 1000)> |
-| `timeformat` | `-f  <output time format (default: TDB seconds past J2000)>` | -f  <output time format (default: TDB seconds past J2000)> |
-| `sigdigs1 | `-d  <number of significant digits: 6 to 17 (default: 14)>` | -d  <number of significant digits: 6 to 17 (default: 14)> |
-| `report` | `-t  <report type: basic│stats│dump│dumpvf│dumpc│dumpg (def.: basic│dump)>` | -t  <report type: basic│stats│dump│dumpvf│dumpc│dumpg (def.: basic│dump)> |
+| Argument              | Equivalent        | Description                                          |
+|:---                   |:---               |:---                                                  |
+| `kernels`             | `-k  <kernels>`   | supporting kernel(s) name(s)                         |
+| `body1`               | `-b1 <arg>`       | first body name or ID                                |
+| `center1`             | `-c1 <arg>`       | first center name or ID                              |
+| `frame1`              | `-r1 <arg>`       | first reference frame name                           |
+| `supporting_kernels1` | `-k1 <kernels>`   | additional supporting kernel(s) for first SPK        |
+| `body2`               | `-b2 <arg>`       | second body name or ID                               |
+| `center2`             | `-c2 <arg>`       | second center name or ID                             |
+| `frame2`              | `-r2 <arg>`       | second reference frame name                          |
+| `supporting_kernels2` | `-k2 <kernels>`   | additional supporting kernel(s) for second SPK       |
+| `start`               | `-b  <start>`     | interval start time                                  |
+| `stop`                | `-e  <stop>`      | interval stop time                                   |
+| `timestep`            | `-s  <time step>` | time step in seconds                                 |
+| `numstates`           | `-n  <number>`    | number of states: 2 to 1000000 (default: 1000)       |
+| `timeformat`          | `-f  <arg>`       | output time format (default: TDB seconds past J2000) |
+| `sigdigs1`            | `-d  <arg>`       | number of significant digits: 6 to 17 (default: 14)  |
+| `report`              | `-t  <type>`      | report type: `basic`,`stats`,`dump`,`dumpvf`,`dumpc`,`dumpg` (def.: `basic`,`dump`) |
 """
 function spkdiff(
     ; kernels=nothing, body1=nothing, center1=nothing, frame1=nothing, supporting_kernels1=nothing,
-      body2=nothing, center2=nothing, frame2=nothing, supporting_kernels2=nothing, 
-      start=nothing, stop=nothing, timestep=nothing, numstates=nothing, timeformat=nothing, 
+      body2=nothing, center2=nothing, frame2=nothing, supporting_kernels2=nothing,
+      start=nothing, stop=nothing, timestep=nothing, numstates=nothing, timeformat=nothing,
       sigdigs=nothing, report=nothing, stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true,
-) 
+)
     args = String[]
 
     additems!(collection, key::AbstractString) = push!(collection, key)
@@ -713,7 +723,7 @@ function spkdiff(
         cmd = pipeline(cmd; stdout=stdout, stderr=stderr, stdin=stdin, append=append)
     end
 
-    
+
     result = run(cmd; wait=wait)
 
     return result
@@ -723,13 +733,15 @@ end
 """
 SPKMERGE is a program that subsets or merges one or more SPK files into a single SPK file.
 """
-function spkmerge(commandfile=nothing; stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true) 
+function spkmerge(commandfile=nothing;
+                  stdout=stdout, stderr=stderr, stdin=stdin,
+                  append=false, wait=true)
     cmd = `$(CSPICE_jll.spkmerge()) $(isnothing(commandfile) ? "" : commandfile)`
-        
+
     if wait
         cmd = pipeline(cmd; stdout=stdout, stderr=stderr, stdin=stdin, append=append)
     end
-    
+
     result = run(cmd; wait=wait)
 
     return result
@@ -739,9 +751,11 @@ end
 """
 TOBIN is a command-line program that converts transfer format SPK, CK, PCK, DSK and EK files to binary format.
 """
-function tobin(kernelfile=nothing; stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true) 
+function tobin(kernelfile=nothing;
+               stdout=stdout, stderr=stderr, stdin=stdin,
+               append=false, wait=true)
     cmd = `$(CSPICE_jll.tobin()) $(isnothing(kernelfile) ? "" : kernelfile)`
-        
+
     if wait
         cmd = pipeline(cmd; stdout=stdout, stderr=stderr, stdin=stdin, append=append)
     end
@@ -755,13 +769,15 @@ end
 """
 TOXFR is a command-line program that converts binary format SPK, CK, PCK, DSK and EK files to transfer format.
 """
-function toxfr(kernelfile=nothing; stdout=stdout, stderr=stderr, stdin=stdin, append=false, wait=true) 
+function toxfr(kernelfile=nothing;
+               stdout=stdout, stderr=stderr, stdin=stdin,
+               append=false, wait=true)
     cmd = `$(CSPICE_jll.toxfr()) $(isnothing(kernelfile) ? "" : kernelfile)`
 
     if wait
         cmd = pipeline(cmd; stdout=stdout, stderr=stderr, stdin=stdin, append=append)
     end
-    
+
     result = run(cmd; wait=wait)
 
     return result
