@@ -12,6 +12,7 @@ makedocs(
     format = Documenter.HTML(
         prettyurls = get(ENV, "CI", nothing) == "true",
         size_threshold = 800*1024,
+        canonical="https://juliaastro.org/SPICE/stable/",
     ),
     repo = GitHub("JuliaAstro/SPICE.jl"),
     sitename = "SPICE.jl",
@@ -26,5 +27,6 @@ makedocs(
 
 deploydocs(
     repo = "github.com/JuliaAstro/SPICE.jl.git",
-    target = "build",
+    push_preview = true,
+    versions = ["stable" => "v^", "v#.#"], # Restrict to minor releases
 )

@@ -1,12 +1,12 @@
 # SPICE.jl
 
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaastro.org/SPICE/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliaastro.org/SPICE.jl/dev)
+
 *Julia wrapper for NASA NAIF's SPICE toolkit*
 
-[![Build Status](https://github.com/juliaastro/SPICE.jl/workflows/CI/badge.svg)](https://github.com/juliaastro/SPICE.jl/actions)
-[![Coverage](https://codecov.io/gh/juliaastro/SPICE.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/juliaastro/SPICE.jl)
-
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaastro.github.io/SPICE.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliaastro.github.io/SPICE.jl/dev)
+[![CI](https://github.com/JuliaAstro/SPICE.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/JuliaAstro/SPICE.jl/actions/workflows/CI.yml)
+[![codecov](https://codecov.io/gh/juliaastro/SPICE.jl/graph/badge.svg?token=AeeqcFrGBM)](https://codecov.io/gh/juliaastro/SPICE.jl)
 
 **SPICE.jl** is a Julia wrapper for the [SPICE toolkit](https://naif.jpl.nasa.gov/naif/index.html) which is provided by NASA's Navigation and Ancillary Information Facility (NAIF).
 It provides functionality to read SPICE data files and compute derived observation geometry such as altitude, latitude/longitude and lighting angles.
