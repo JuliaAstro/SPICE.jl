@@ -8,7 +8,7 @@ end
     halfpi()
 
 !!! warning "Deprecated"
-    Use [`π/2`](@ref Base.MathConstants.pi) instead.
+    Use [`π/2`](@extref Base.MathConstants.pi) instead.
 """
 halfpi
 

@@ -126,7 +126,7 @@ end
     maxi(args...)
 
 !!! warning "Deprecated"
-    Use [`maximum(args)`](@ref Base.maximum) instead.
+    Use [`maximum(args)`](@extref Base.maximum) instead.
 """
 maxd, maxi
 
@@ -170,7 +170,7 @@ end
     mini(args...)
 
 !!! warning "Deprecated"
-    Use [`minimum(args)`](@ref Base.minimum) instead.
+    Use [`minimum(args)`](@extref Base.minimum) instead.
 """
 mind, mini
 
