@@ -306,7 +306,7 @@ end
     trace(matrix)
 
 !!! warning "Deprecated"
-    Use [`LinearAlgebra.tr(matrix)`](@ref LinearAlgebra.tr) instead.
+    Use [`LinearAlgebra.tr(matrix)`](@extref LinearAlgebra.tr) instead.
 """
 trace
 

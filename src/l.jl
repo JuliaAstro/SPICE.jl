@@ -40,7 +40,7 @@ end
     lastnb(str)
 
 !!! warning "Deprecated"
-    Use [`findlast(!isspace, str)`](@ref Base.findlast-Tuple{Function, Any}) instead.
+    Use [`findlast(!isspace, str)`](@extref Base.findlast-Tuple{Function, Any}) instead.
 """
 lastnb
 
@@ -184,7 +184,7 @@ end
     lcase(in)
 
 !!! warning "Deprecated"
-    Use [`lowercase(in)`](@ref Base.Unicode.lowercase) instead.
+    Use [`lowercase(in)`](@extref Base.Unicode.lowercase) instead.
 """
 lcase
 
@@ -348,7 +348,7 @@ end
     lparse(list, delim, nmax)
 
 !!! warning "Deprecated"
-    Use [`split(list, delim, limit=nmax)`](@ref Base.split) instead.
+    Use [`split(list, delim, limit=nmax)`](@extref Base.split) instead.
 """
 lparse
 
@@ -368,7 +368,7 @@ end
     lparsm(list, delims, nmax)
 
 !!! warning "Deprecated"
-    Use [`split(list, delim, limit=nmax, keepempty=false)`](@ref Base.split) instead.
+    Use [`split(list, delim, limit=nmax, keepempty=false)`](@extref Base.split) instead.
 """
 lparsm
 
@@ -389,7 +389,7 @@ end
     lparss(list, delims)
 
 !!! warning "Deprecated"
-    Use [`Set(split(list, collect(delim)))`](@ref Base.split) instead.
+    Use [`Set(split(list, collect(delim)))`](@extref Base.split) instead.
 """
 lparss
 
@@ -454,7 +454,7 @@ end
     lstlec(x, array)
 
 !!! warning "Deprecated"
-    Use [`findfirst(>(item), array)`](@ref Base.findfirst-Tuple{Function, Any}) instead.
+    Use [`findfirst(>(item), array)`](@extref Base.findfirst-Tuple{Function, Any}) instead.
 """
 lstlec
 
@@ -463,7 +463,7 @@ lstlec
     lstlei(x, array)
 
 !!! warning "Deprecated"
-    Use [`searchsortedlast(array, x)`](@ref Base.Sort.searchsortedlast) instead.
+    Use [`searchsortedlast(array, x)`](@extref Base.Sort.searchsortedlast) instead.
 """
 lstled, lstlei
 
@@ -499,7 +499,7 @@ end
     lstltcd(x, array)
 
 !!! warning "Deprecated"
-    Use [`findfirst(>=(item), array)`](@ref Base.findfirst-Tuple{Function, Any}) instead.
+    Use [`findfirst(>=(item), array)`](@extref Base.findfirst-Tuple{Function, Any}) instead.
 """
 lstltc
 
@@ -508,7 +508,7 @@ lstltc
     lstlti(x, array)
 
 !!! warning "Deprecated"
-    Use [`searchsortedlast(array, x, lt=<=)`](@ref Base.Sort.searchsortedlast) instead.
+    Use [`searchsortedlast(array, x, lt=<=)`](@extref Base.Sort.searchsortedlast) instead.
 """
 lstltd, lstlti
 

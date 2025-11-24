@@ -22,7 +22,7 @@ end
     ucase(in)
 
 !!! warning "Deprecated"
-    Use [`uppercase(in)`](@ref Base.Unicode.uppercase) instead.
+    Use [`uppercase(in)`](@extref Base.Unicode.uppercase) instead.
 """
 ucase
 

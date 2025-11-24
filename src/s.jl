@@ -534,7 +534,7 @@ end
     shelli(array)
 
 !!! warning "Deprecated"
-    Use [`Base.sort!(array)`](@ref Base.sort!) instead.
+    Use [`Base.sort!(array)`](@extref Base.sort!) instead.
 """
 shellc, shelld, shelli
 
@@ -2531,7 +2531,7 @@ end
     sumai(array)
 
 !!! warning "Deprecated"
-    Use [`Base.sum(array)`](@ref Base.sum) instead.
+    Use [`Base.sum(array)`](@extref Base.sum) instead.
 """
 sumad, sumai
 

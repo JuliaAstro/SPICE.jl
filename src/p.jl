@@ -708,7 +708,7 @@ end
     prsdp(str)
 
 !!! warning "Deprecated"
-    Use [`parse(Float64, str)`](@ref Base.parse) instead.
+    Use [`parse(Float64, str)`](@extref Base.parse) instead.
 """
 prsdp
 
@@ -724,7 +724,7 @@ end
     prsint(str)
 
 !!! warning "Deprecated"
-    Use [`parse(Int, str)`](@ref Base.parse) instead.
+    Use [`parse(Int, str)`](@extref Base.parse) instead.
 """
 prsint
 
