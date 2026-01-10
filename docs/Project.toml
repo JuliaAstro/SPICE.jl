@@ -10,3 +10,4 @@ SPICEApplications = {path = "../lib/SPICEApplications"}
 
 [compat]
 Documenter = "1"
+SPICE = "0.2.5"
