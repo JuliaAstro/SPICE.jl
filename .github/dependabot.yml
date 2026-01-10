@@ -5,3 +5,8 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+
+  - package-ecosystem: "julia"
+    directories: ["/", "/lib/SPICEApplications", "/docs"]
+    schedule:
+      interval: "weekly"
