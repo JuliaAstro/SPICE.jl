@@ -10,3 +10,4 @@ SPICEApplications = {path = "../lib/SPICEApplications"}
 
 [compat]
 Documenter = "1"
+DocumenterInterLinks = "1.1.0"
